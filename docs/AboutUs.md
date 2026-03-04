@@ -9,34 +9,23 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Dao Khac Hoang Vu
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/hoangvu123456.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Project Advisor
-
-### Jane Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Team Lead
-* Responsibilities: UI
-
-### Johnny Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](https://github.com/HoangVu123456)]
 
 * Role: Developer
-* Responsibilities: Data
+* Responsibilities: Team Lead, Scheduling and Tracking, Deliverables and Deadlines
+
+### Hsu Myat Noe
+
+<img src="images/zealousginger.png" width="200px">
+
+[[github](https://github.com/ZealousGinger)]
+
+* Role: Developer
+* Responsibilities: Testing, Git expert
 
 ### Kevin Frederick Benzlim
 
@@ -46,3 +35,12 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: Integration
+
+### Xu Jiaqi
+
+<img src="images/jiaqixu1.png" width="200px">
+
+[[github](http://github.com/jiaqixu1)]
+
+* Role: Developer
+* Responsibilities: Documentation, Code Quality

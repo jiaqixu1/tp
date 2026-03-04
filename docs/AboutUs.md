@@ -9,6 +9,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
+### Dao Khac Hoang Vu
+
+<img src="images/hoangvu123456.png" width="200px">
+
+[[github](https://github.com/HoangVu123456)]
+
+* Role: Developer
+* Responsibilities: Team Lead, Scheduling and Tracking, Deliverables and Deadlines
+
 ### Hsu Myat Noe
 
 <img src="images/zealousginger.png" width="200px">

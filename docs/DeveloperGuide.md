@@ -317,11 +317,55 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+#### Usability
+1. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+2. A user should be able to use the app without mouse / button interactions.
+3. The GUI should display correctly without resolution-related issues on screen resolutions 1920×1080 and higher with 100% and 125% screen scaling. The system should remain usable (all functions accessible even if the layout is not optimal) on resolutions 1280×720 and higher with 150% screen scaling.
+4. The product should be for a single user.
 
-*{More to be added}*
+#### Technical
+1. The product should work on any mainstream OS as long as it has Java 17.
+2. The product should not depend on external remote servers.
+
+#### Constraints
+1. The product needs to be developed in a breadth-first incremental manner over the project duration.
+
+#### Data
+1. All data is stored locally in a human editable file.
+2. The product should not use a Database management system  to store data.
+
+#### Process
+1. Every PR need to pass the CI and page deployment checks before merging.
+2. The product should be packaged into 1 JAR file only.
+
+#### Portability
+1. The app should run without requiring any installation (excepting for Java 17 installation).
+
+#### Performance
+1. The system should respond to user commands within 5 seconds under normal usage conditions.
+2. Starting the application requires less than 5 seconds.
+
+#### Capacity
+1. The system should be able to handle at least 100 contacts and 1000 tasks without noticeable performance degradation.
+2. The product JAR/ZIP file should be at maximum 100MB and each document should be at maximum 15MB.
+
+#### Security
+1. The system should store user data locally and should not transmit information over a network.
+
+#### Robustness
+1. The system should handle invalid user inputs gracefully, displaying appropriate error messages instead of crashing.
+
+#### Testability
+1. The system should support automated unit tests and integration tests to verify system functionality.
+
+#### Reliability
+1. The system should not lose stored data during normal operation.
+2. The system should not corrupt data on unexpected shutdown.
+
+#### Maintainability
+1. The code should follow good Object-Oriented Programming principles.
+2. The code should maintain a good approach in coding standard.
+3. The developer guide and user guide should be PDF-friendly.
 
 ### Glossary
 

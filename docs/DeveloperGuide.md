@@ -262,12 +262,13 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* Tech project managers and team leads who manage multiple ongoing projects and team members, regularly update team information and task assignments, and prefer efficient keyboard-driven workflows over traditional GUI-heavy tools.
+* Has a need to manage a significant number of team members and their task assignments (mainly project managers)
+* Prefer desktop apps over other types
+* Can type fast
+* Prefers keyboard-driven workflows over traditional GUI-heavy tools
+* Example: Tech lead and project managers who prefer efficient keyboard-driven workflows, comfortable working with CLI commands and need to manage multiple projects and team members regularly.
 
-Tech lead and project managers who prefer efficient keyboard-driven workflows, comfortable with working with CLI commands and need to manage multiple projects and team members regularly.
-
-**Value proposition**: manage tasks/projects more efficiently. A project management system supports dynamic task tracking and human resource management.
-
+**Value proposition**: manage tasks and projects more efficiently with keyboard-based interaction rather than GUI. This project management system supports dynamic task tracking and human resource management.
 
 ### User stories
 

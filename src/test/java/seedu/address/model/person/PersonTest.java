@@ -85,7 +85,7 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different tags -> returns false
+        // different tasks -> returns false
         editedAlice = new PersonBuilder(ALICE).withTasks(VALID_TASK_REFACTOR).build();
         assertFalse(ALICE.equals(editedAlice));
     }

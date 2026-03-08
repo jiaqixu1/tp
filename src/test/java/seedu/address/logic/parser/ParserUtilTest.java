@@ -154,21 +154,21 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseTag_invalidValue_throwsParseException() {
+    public void parseTask_invalidValue_throwsParseException() {
         assertThrows(ParseException.class, () -> ParserUtil.parseTask(INVALID_TASK));
     }
 
     @Test
-    public void parseTag_validValueWithoutWhitespace_returnsTask() throws Exception {
-        Task expectedTag = new Task(VALID_TASK_1);
-        assertEquals(expectedTag, ParserUtil.parseTask(VALID_TASK_1));
+    public void parseTask_validValueWithoutWhitespace_returnsTask() throws Exception {
+        Task expectedTask = new Task(VALID_TASK_1);
+        assertEquals(expectedTask, ParserUtil.parseTask(VALID_TASK_1));
     }
 
     @Test
-    public void parseTag_validValueWithWhitespace_returnsTrimmedTask() throws Exception {
-        String tagWithWhitespace = WHITESPACE + VALID_TASK_1 + WHITESPACE;
-        Task expectedTag = new Task(VALID_TASK_1);
-        assertEquals(expectedTag, ParserUtil.parseTask(tagWithWhitespace));
+    public void parseTask_validValueWithWhitespace_returnsTrimmedTask() throws Exception {
+        String taskWithWhitespace = WHITESPACE + VALID_TASK_1 + WHITESPACE;
+        Task expectedTask = new Task(VALID_TASK_1);
+        assertEquals(expectedTask, ParserUtil.parseTask(taskWithWhitespace));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseTags_collectionWithInvalidTags_throwsParseException() {
+    public void parseTasks_collectionWithInvalidTasks_throwsParseException() {
         assertThrows(ParseException.class, () -> ParserUtil.parseTasks(Arrays.asList(VALID_TASK_1, INVALID_TASK)));
     }
 
@@ -187,10 +187,10 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseTags_collectionWithValidTasks_returnsTaskSet() throws Exception {
-        Set<Task> actualTagSet = ParserUtil.parseTasks(Arrays.asList(VALID_TASK_1, VALID_TASK_2));
-        Set<Task> expectedTagSet = new HashSet<Task>(Arrays.asList(new Task(VALID_TASK_1), new Task(VALID_TASK_2)));
+    public void parseTasks_collectionWithValidTasks_returnsTaskSet() throws Exception {
+        Set<Task> actualTaskSet = ParserUtil.parseTasks(Arrays.asList(VALID_TASK_1, VALID_TASK_2));
+        Set<Task> expectedTaskSet = new HashSet<Task>(Arrays.asList(new Task(VALID_TASK_1), new Task(VALID_TASK_2)));
 
-        assertEquals(expectedTagSet, actualTagSet);
+        assertEquals(expectedTaskSet, actualTaskSet);
     }
 }

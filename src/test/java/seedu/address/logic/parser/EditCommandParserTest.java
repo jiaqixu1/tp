@@ -92,7 +92,7 @@ public class EditCommandParserTest {
         // invalid phone followed by valid email
         assertParseFailure(parser, "1" + INVALID_PHONE_DESC + EMAIL_DESC_AMY, Phone.MESSAGE_CONSTRAINTS);
 
-        // while parsing {@code PREFIX_TASK} alone will reset the tags of the {@code Person} being edited,
+        // while parsing {@code PREFIX_TASK} alone will reset the tasks of the {@code Person} being edited,
         // parsing it together with a valid task results in error
         assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR + TASK_DESC_REFACTOR + TASK_EMPTY, Task.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR + TASK_EMPTY + TASK_DESC_REFACTOR, Task.MESSAGE_CONSTRAINTS);
@@ -156,7 +156,7 @@ public class EditCommandParserTest {
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
-        // tags
+        // tasks
         userInput = targetIndex.getOneBased() + TASK_DESC_FIX_ERROR;
         descriptor = new EditPersonDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
@@ -166,7 +166,7 @@ public class EditCommandParserTest {
     @Test
     public void parse_multipleRepeatedFields_failure() {
         // More extensive testing of duplicate parameter detections is done in
-        // AddCommandParserTest#parse_repeatedNonTagValue_failure()
+        // AddCommandParserTest#parse_repeatedNonTaskValue_failure()
 
         // valid followed by invalid
         Index targetIndex = INDEX_FIRST_PERSON;
@@ -196,7 +196,7 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void parse_resetTags_success() {
+    public void parse_resetTasks_success() {
         Index targetIndex = INDEX_THIRD_PERSON;
         String userInput = targetIndex.getOneBased() + TASK_EMPTY;
 

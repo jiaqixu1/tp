@@ -50,11 +50,11 @@ public class PersonUtil {
         descriptor.getEmail().ifPresent(email -> sb.append(PREFIX_EMAIL).append(email.value).append(" "));
         descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         if (descriptor.getTasks().isPresent()) {
-            Set<Task> tags = descriptor.getTasks().get();
-            if (tags.isEmpty()) {
+            Set<Task> tasks = descriptor.getTasks().get();
+            if (tasks.isEmpty()) {
                 sb.append(PREFIX_TASK);
             } else {
-                tags.forEach(s -> sb.append(PREFIX_TASK).append(s.taskName).append(" "));
+                tasks.forEach(s -> sb.append(PREFIX_TASK).append(s.taskName).append(" "));
             }
         }
         return sb.toString();

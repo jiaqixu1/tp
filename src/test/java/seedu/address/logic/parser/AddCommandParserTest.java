@@ -57,16 +57,16 @@ public class AddCommandParserTest {
                 + ADDRESS_DESC_BOB + TASK_DESC_FIX_ERROR, new AddCommand(expectedPerson));
 
 
-        // multiple tags - all accepted
-        Person expectedPersonMultipleTags = new PersonBuilder(BOB).withTasks(VALID_TASK_FIX_ERROR, VALID_TASK_REFACTOR)
+        // multiple tasks - all accepted
+        Person expectedPersonMultipleTasks = new PersonBuilder(BOB).withTasks(VALID_TASK_FIX_ERROR, VALID_TASK_REFACTOR)
                 .build();
         assertParseSuccess(parser,
                 NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TASK_DESC_REFACTOR + TASK_DESC_FIX_ERROR,
-                new AddCommand(expectedPersonMultipleTags));
+                new AddCommand(expectedPersonMultipleTasks));
     }
 
     @Test
-    public void parse_repeatedNonTagValue_failure() {
+    public void parse_repeatedNonTaskValue_failure() {
         String validExpectedPersonString = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + TASK_DESC_FIX_ERROR;
 
@@ -131,7 +131,7 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_optionalFieldsMissing_success() {
-        // zero tags
+        // zero tasks
         Person expectedPerson = new PersonBuilder(AMY).withTasks().build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY,
                 new AddCommand(expectedPerson));

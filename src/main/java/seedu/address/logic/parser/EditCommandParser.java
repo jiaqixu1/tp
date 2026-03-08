@@ -70,7 +70,7 @@ public class EditCommandParser implements Parser<EditCommand> {
     /**
      * Parses {@code Collection<String> tasks} into a {@code Set<Task>} if {@code tasks} is non-empty.
      * If {@code tasks} contain only one element which is an empty string, it will be parsed into a
-     * {@code Set<Tag>} containing zero tasks.
+     * {@code Set<Task>} containing zero tasks.
      */
     private Optional<Set<Task>> parseTasksForEdit(Collection<String> tasks) throws ParseException {
         assert tasks != null;

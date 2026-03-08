@@ -94,13 +94,16 @@ public class EditCommandParserTest {
 
         // while parsing {@code PREFIX_TASK} alone will reset the tasks of the {@code Person} being edited,
         // parsing it together with a valid task results in error
-        assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR + TASK_DESC_REFACTOR + TASK_EMPTY, Task.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR + TASK_EMPTY + TASK_DESC_REFACTOR, Task.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + TASK_EMPTY + TASK_DESC_FIX_ERROR + TASK_DESC_REFACTOR, Task.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR
+                + TASK_DESC_REFACTOR + TASK_EMPTY, Task.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR
+                + TASK_EMPTY + TASK_DESC_REFACTOR, Task.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + TASK_EMPTY
+                + TASK_DESC_FIX_ERROR + TASK_DESC_REFACTOR, Task.MESSAGE_CONSTRAINTS);
 
         // multiple invalid values, but only the first invalid value is captured
-        assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC + VALID_ADDRESS_AMY + VALID_PHONE_AMY,
-                Name.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC
+                + VALID_ADDRESS_AMY + VALID_PHONE_AMY, Name.MESSAGE_CONSTRAINTS);
     }
 
     @Test
@@ -180,16 +183,17 @@ public class EditCommandParserTest {
         assertParseFailure(parser, userInput, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
         // mulltiple valid fields repeated
-        userInput = targetIndex.getOneBased() + PHONE_DESC_AMY + ADDRESS_DESC_AMY + EMAIL_DESC_AMY
-                + TASK_DESC_FIX_ERROR + PHONE_DESC_AMY + ADDRESS_DESC_AMY + EMAIL_DESC_AMY + TASK_DESC_FIX_ERROR
-                + PHONE_DESC_BOB + ADDRESS_DESC_BOB + EMAIL_DESC_BOB + TASK_DESC_REFACTOR;
+        userInput = targetIndex.getOneBased() + PHONE_DESC_AMY + ADDRESS_DESC_AMY
+                + EMAIL_DESC_AMY + TASK_DESC_FIX_ERROR + PHONE_DESC_AMY + ADDRESS_DESC_AMY
+                + EMAIL_DESC_AMY + TASK_DESC_FIX_ERROR + PHONE_DESC_BOB + ADDRESS_DESC_BOB
+                + EMAIL_DESC_BOB + TASK_DESC_REFACTOR;
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS));
 
         // multiple invalid values
-        userInput = targetIndex.getOneBased() + INVALID_PHONE_DESC + INVALID_ADDRESS_DESC + INVALID_EMAIL_DESC
-                + INVALID_PHONE_DESC + INVALID_ADDRESS_DESC + INVALID_EMAIL_DESC;
+        userInput = targetIndex.getOneBased() + INVALID_PHONE_DESC + INVALID_ADDRESS_DESC
+                + INVALID_EMAIL_DESC + INVALID_PHONE_DESC + INVALID_ADDRESS_DESC + INVALID_EMAIL_DESC;
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS));

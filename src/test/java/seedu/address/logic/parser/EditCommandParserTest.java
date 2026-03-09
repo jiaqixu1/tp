@@ -13,8 +13,8 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_TASK_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.TASK_DESC_FIX_ERROR;
-import static seedu.address.logic.commands.CommandTestUtil.TASK_DESC_REFACTOR;
+import static seedu.address.logic.commands.CommandTestUtil.TASK_FIX_ERROR;
+import static seedu.address.logic.commands.CommandTestUtil.TASK_REFACTOR;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
@@ -95,12 +95,12 @@ public class EditCommandParserTest {
 
         // while parsing {@code PREFIX_TASK} alone will reset the tasks of the {@code Person} being edited,
         // parsing it together with a valid task results in error
-        assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR
-                + TASK_DESC_REFACTOR + TASK_EMPTY, Task.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + TASK_DESC_FIX_ERROR
-                + TASK_EMPTY + TASK_DESC_REFACTOR, Task.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + TASK_FIX_ERROR
+                + TASK_REFACTOR + TASK_EMPTY, Task.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + TASK_FIX_ERROR
+                + TASK_EMPTY + TASK_REFACTOR, Task.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "1" + TASK_EMPTY
-                + TASK_DESC_FIX_ERROR + TASK_DESC_REFACTOR, Task.MESSAGE_CONSTRAINTS);
+                + TASK_FIX_ERROR + TASK_REFACTOR, Task.MESSAGE_CONSTRAINTS);
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC
@@ -110,8 +110,8 @@ public class EditCommandParserTest {
     @Test
     public void parse_allFieldsSpecified_success() {
         Index targetIndex = INDEX_SECOND_PERSON;
-        String userInput = targetIndex.getOneBased() + PHONE_DESC_BOB + TASK_DESC_REFACTOR
-                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + NAME_DESC_AMY + TASK_DESC_FIX_ERROR;
+        String userInput = targetIndex.getOneBased() + PHONE_DESC_BOB + TASK_REFACTOR
+                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + NAME_DESC_AMY + TASK_FIX_ERROR;
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
@@ -161,7 +161,7 @@ public class EditCommandParserTest {
         assertParseSuccess(parser, userInput, expectedCommand);
 
         // tasks
-        userInput = targetIndex.getOneBased() + TASK_DESC_FIX_ERROR;
+        userInput = targetIndex.getOneBased() + TASK_FIX_ERROR;
         descriptor = new EditPersonDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -185,9 +185,9 @@ public class EditCommandParserTest {
 
         // mulltiple valid fields repeated
         userInput = targetIndex.getOneBased() + PHONE_DESC_AMY + ADDRESS_DESC_AMY
-                + EMAIL_DESC_AMY + TASK_DESC_FIX_ERROR + PHONE_DESC_AMY + ADDRESS_DESC_AMY
-                + EMAIL_DESC_AMY + TASK_DESC_FIX_ERROR + PHONE_DESC_BOB + ADDRESS_DESC_BOB
-                + EMAIL_DESC_BOB + TASK_DESC_REFACTOR;
+                + EMAIL_DESC_AMY + TASK_FIX_ERROR + PHONE_DESC_AMY + ADDRESS_DESC_AMY
+                + EMAIL_DESC_AMY + TASK_FIX_ERROR + PHONE_DESC_BOB + ADDRESS_DESC_BOB
+                + EMAIL_DESC_BOB + TASK_REFACTOR;
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS));

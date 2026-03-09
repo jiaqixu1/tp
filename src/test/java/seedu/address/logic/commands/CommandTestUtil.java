@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
@@ -35,8 +36,11 @@ public class CommandTestUtil {
     public static final String VALID_EMAIL_BOB = "bob@example.com";
     public static final String VALID_ADDRESS_AMY = "Block 312, Amy Street 1";
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
-    public static final String VALID_TASK_REFACTOR = "refactor";
-    public static final String VALID_TASK_FIX_ERROR = "fix error";
+    public static final String VALID_TASK_REFACTOR = "refactor code";
+    public static final String VALID_TASK_FIX_ERROR = "fix error in tp project";
+    public static final String VALID_TASK_IMPLEMENT_X = "implement feature x";
+    public static final String VALID_TASK_IMPLEMENT_Y = "implement feature y";
+    public static final String VALID_TASK_IMPLEMENT_Z = "implement feature z";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -46,15 +50,21 @@ public class CommandTestUtil {
     public static final String EMAIL_DESC_BOB = " " + PREFIX_EMAIL + VALID_EMAIL_BOB;
     public static final String ADDRESS_DESC_AMY = " " + PREFIX_ADDRESS + VALID_ADDRESS_AMY;
     public static final String ADDRESS_DESC_BOB = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOB;
-    public static final String TASK_DESC_FIX_ERROR = " " + PREFIX_TASK + VALID_TASK_FIX_ERROR;
-    public static final String TASK_DESC_REFACTOR = " " + PREFIX_TASK + VALID_TASK_REFACTOR;
+    public static final String TASK_FIX_ERROR = " " + PREFIX_TASK + VALID_TASK_FIX_ERROR;
+    public static final String TASK_REFACTOR = " " + PREFIX_TASK + VALID_TASK_REFACTOR;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_TASK_DESC = " " + PREFIX_TASK + "hubby*"; // '*' not allowed in tasks
+    
+    // For task related commands not person related
+    public static final String TASK_DESC_IMPLEMENT_X = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_IMPLEMENT_X;
+    public static final String TASK_DESC_IMPLEMENT_Y = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_IMPLEMENT_Y;
+    public static final String TASK_DESC_IMPLEMENT_Z = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_IMPLEMENT_Z;
 
+    public static final String INVALID_TASK_DESC_ADD = " " + PREFIX_TASK_DESCRIPTION + "hubby*"; // '*' not allowed in tasks
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";

@@ -1,11 +1,11 @@
 package seedu.taskforge.commons.util;
 
-import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.commons.util.AppUtil.checkArgument;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+
+import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.commons.util.AppUtil.checkArgument;
 
 /**
  * Helper functions for handling strings.

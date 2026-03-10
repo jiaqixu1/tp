@@ -1,10 +1,10 @@
 package seedu.taskforge.model.person;
 
-import java.util.List;
-import java.util.function.Predicate;
-
 import seedu.taskforge.commons.util.StringUtil;
 import seedu.taskforge.commons.util.ToStringBuilder;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.

@@ -1,17 +1,13 @@
 package seedu.taskforge.model.util;
 
+import seedu.taskforge.model.ReadOnlyTaskForge;
+import seedu.taskforge.model.TaskForge;
+import seedu.taskforge.model.person.*;
+import seedu.taskforge.model.tag.Tag;
+
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import seedu.taskforge.model.ReadOnlyTaskForge;
-import seedu.taskforge.model.TaskForge;
-import seedu.taskforge.model.person.Address;
-import seedu.taskforge.model.person.Email;
-import seedu.taskforge.model.person.Name;
-import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.person.Phone;
-import seedu.taskforge.model.tag.Tag;
 
 /**
  * Contains utility methods for populating {@code AddressBook} with sample data.

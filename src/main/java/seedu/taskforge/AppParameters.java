@@ -1,15 +1,15 @@
 package seedu.taskforge;
 
+import javafx.application.Application;
+import seedu.taskforge.commons.core.LogsCenter;
+import seedu.taskforge.commons.util.FileUtil;
+import seedu.taskforge.commons.util.ToStringBuilder;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
-
-import javafx.application.Application;
-import seedu.taskforge.commons.core.LogsCenter;
-import seedu.taskforge.commons.util.FileUtil;
-import seedu.taskforge.commons.util.ToStringBuilder;
 
 /**
  * Represents the parsed command-line parameters given to the application.

@@ -1,11 +1,11 @@
 package seedu.taskforge.logic;
 
+import seedu.taskforge.logic.parser.Prefix;
+import seedu.taskforge.model.person.Person;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import seedu.taskforge.logic.parser.Prefix;
-import seedu.taskforge.model.person.Person;
 
 /**
  * Container for user visible messages.

@@ -1,11 +1,11 @@
 package seedu.taskforge.model;
 
-import java.nio.file.Path;
-import java.util.function.Predicate;
-
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.model.person.Person;
+
+import java.nio.file.Path;
+import java.util.function.Predicate;
 
 /**
  * The API of the Model component.

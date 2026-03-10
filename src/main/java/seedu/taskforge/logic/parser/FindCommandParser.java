@@ -1,12 +1,12 @@
 package seedu.taskforge.logic.parser;
 
-import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-
-import java.util.Arrays;
-
 import seedu.taskforge.logic.commands.FindCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
+
+import java.util.Arrays;
+
+import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 /**
  * Parses input arguments and creates a new FindCommand object

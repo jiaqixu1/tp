@@ -1,9 +1,9 @@
 package seedu.taskforge.logic.commands;
 
+import seedu.taskforge.model.Model;
+
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
-
-import seedu.taskforge.model.Model;
 
 /**
  * Lists all persons in the address book to the user.

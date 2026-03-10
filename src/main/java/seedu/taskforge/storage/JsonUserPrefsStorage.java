@@ -1,13 +1,13 @@
 package seedu.taskforge.storage;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Optional;
-
 import seedu.taskforge.commons.exceptions.DataLoadingException;
 import seedu.taskforge.commons.util.JsonUtil;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.UserPrefs;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * A class to access UserPrefs stored in the hard disk as a json file

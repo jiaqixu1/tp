@@ -1,10 +1,5 @@
 package seedu.taskforge.logic;
 
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Path;
-import java.util.logging.Logger;
-
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.commons.core.LogsCenter;
@@ -17,6 +12,11 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ReadOnlyTaskForge;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.storage.Storage;
+
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.Path;
+import java.util.logging.Logger;
 
 /**
  * The main LogicManager of the app.

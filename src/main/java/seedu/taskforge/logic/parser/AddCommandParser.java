@@ -1,23 +1,15 @@
 package seedu.taskforge.logic.parser;
 
-import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TAG;
+import seedu.taskforge.logic.commands.AddCommand;
+import seedu.taskforge.logic.parser.exceptions.ParseException;
+import seedu.taskforge.model.person.*;
+import seedu.taskforge.model.tag.Tag;
 
 import java.util.Set;
 import java.util.stream.Stream;
 
-import seedu.taskforge.logic.commands.AddCommand;
-import seedu.taskforge.logic.parser.exceptions.ParseException;
-import seedu.taskforge.model.person.Address;
-import seedu.taskforge.model.person.Email;
-import seedu.taskforge.model.person.Name;
-import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.person.Phone;
-import seedu.taskforge.model.tag.Tag;
+import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.taskforge.logic.parser.CliSyntax.*;
 
 /**
  * Parses input arguments and creates a new AddCommand object

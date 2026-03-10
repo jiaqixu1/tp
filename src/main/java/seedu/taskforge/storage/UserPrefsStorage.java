@@ -1,12 +1,12 @@
 package seedu.taskforge.storage;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Optional;
-
 import seedu.taskforge.commons.exceptions.DataLoadingException;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.UserPrefs;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * Represents a storage for {@link seedu.taskforge.model.UserPrefs}.

@@ -1,17 +1,13 @@
 package seedu.taskforge.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TAG;
-
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.Person;
+
+import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.*;
 
 /**
  * Adds a person to the address book.

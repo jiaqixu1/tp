@@ -1,13 +1,13 @@
 package seedu.taskforge.storage;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Optional;
-
 import seedu.taskforge.commons.exceptions.DataLoadingException;
 import seedu.taskforge.model.ReadOnlyTaskForge;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.UserPrefs;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * API of the Storage component

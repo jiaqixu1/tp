@@ -1,9 +1,9 @@
 package seedu.taskforge.commons.util;
 
-import static java.util.Objects.requireNonNull;
-
 import javafx.scene.image.Image;
 import seedu.taskforge.MainApp;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A container for App specific utility functions

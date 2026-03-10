@@ -1,23 +1,15 @@
 package seedu.taskforge.logic.parser;
 
-import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
+import seedu.taskforge.commons.core.LogsCenter;
+import seedu.taskforge.logic.commands.*;
+import seedu.taskforge.logic.parser.exceptions.ParseException;
 
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import seedu.taskforge.commons.core.LogsCenter;
-import seedu.taskforge.logic.commands.AddCommand;
-import seedu.taskforge.logic.commands.ClearCommand;
-import seedu.taskforge.logic.commands.Command;
-import seedu.taskforge.logic.commands.DeleteCommand;
-import seedu.taskforge.logic.commands.EditCommand;
-import seedu.taskforge.logic.commands.ExitCommand;
-import seedu.taskforge.logic.commands.FindCommand;
-import seedu.taskforge.logic.commands.HelpCommand;
-import seedu.taskforge.logic.commands.ListCommand;
-import seedu.taskforge.logic.parser.exceptions.ParseException;
+import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.taskforge.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 
 /**
  * Parses user input.

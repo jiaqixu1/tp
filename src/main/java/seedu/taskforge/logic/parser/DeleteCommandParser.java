@@ -1,10 +1,10 @@
 package seedu.taskforge.logic.parser;
 
-import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.DeleteCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
+
+import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 /**
  * Parses input arguments and creates a new DeleteCommand object

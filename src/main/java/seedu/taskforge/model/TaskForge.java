@@ -1,13 +1,13 @@
 package seedu.taskforge.model;
 
-import static java.util.Objects.requireNonNull;
-
-import java.util.List;
-
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.UniquePersonList;
+
+import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Wraps all data at the address-book level

@@ -1,11 +1,11 @@
 package seedu.taskforge.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.logic.Messages;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.

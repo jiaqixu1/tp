@@ -1,7 +1,5 @@
 package seedu.taskforge.logic;
 
-import java.nio.file.Path;
-
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.logic.commands.CommandResult;
@@ -9,6 +7,8 @@ import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.ReadOnlyTaskForge;
 import seedu.taskforge.model.person.Person;
+
+import java.nio.file.Path;
 
 /**
  * API of the Logic component

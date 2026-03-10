@@ -1,17 +1,17 @@
 package seedu.taskforge.model;
 
-import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.commons.util.CollectionUtil.requireAllNonNull;
-
-import java.nio.file.Path;
-import java.util.function.Predicate;
-import java.util.logging.Logger;
-
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.commons.core.LogsCenter;
 import seedu.taskforge.model.person.Person;
+
+import java.nio.file.Path;
+import java.util.function.Predicate;
+import java.util.logging.Logger;
+
+import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.commons.util.CollectionUtil.requireAllNonNull;
 
 /**
  * Represents the in-memory model of the address book data.

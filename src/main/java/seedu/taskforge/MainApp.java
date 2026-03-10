@@ -1,10 +1,5 @@
 package seedu.taskforge;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Optional;
-import java.util.logging.Logger;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import seedu.taskforge.commons.core.Config;
@@ -15,21 +10,16 @@ import seedu.taskforge.commons.util.ConfigUtil;
 import seedu.taskforge.commons.util.StringUtil;
 import seedu.taskforge.logic.Logic;
 import seedu.taskforge.logic.LogicManager;
-import seedu.taskforge.model.Model;
-import seedu.taskforge.model.ModelManager;
-import seedu.taskforge.model.ReadOnlyTaskForge;
-import seedu.taskforge.model.ReadOnlyUserPrefs;
-import seedu.taskforge.model.TaskForge;
-import seedu.taskforge.model.UserPrefs;
+import seedu.taskforge.model.*;
 import seedu.taskforge.model.util.SampleDataUtil;
-import seedu.taskforge.storage.JsonTaskForgeStorage;
-import seedu.taskforge.storage.JsonUserPrefsStorage;
-import seedu.taskforge.storage.Storage;
-import seedu.taskforge.storage.StorageManager;
-import seedu.taskforge.storage.TaskForgeStorage;
-import seedu.taskforge.storage.UserPrefsStorage;
+import seedu.taskforge.storage.*;
 import seedu.taskforge.ui.Ui;
 import seedu.taskforge.ui.UiManager;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * Runs the application.

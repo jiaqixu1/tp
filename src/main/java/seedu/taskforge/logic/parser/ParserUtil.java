@@ -1,11 +1,5 @@
 package seedu.taskforge.logic.parser;
 
-import static java.util.Objects.requireNonNull;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.StringUtil;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
@@ -14,6 +8,12 @@ import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.tag.Tag;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.

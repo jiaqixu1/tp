@@ -1,11 +1,11 @@
 package seedu.taskforge.commons.util;
 
+import seedu.taskforge.commons.core.Config;
+import seedu.taskforge.commons.exceptions.DataLoadingException;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-
-import seedu.taskforge.commons.core.Config;
-import seedu.taskforge.commons.exceptions.DataLoadingException;
 
 /**
  * A class for accessing the Config File.

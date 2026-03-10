@@ -61,10 +61,9 @@ public class AddCommandParserTest {
         // multiple tasks - all accepted
         Person expectedPersonMultipleTasks = new PersonBuilder(BOB).withTasks(
                 VALID_TASK_FIX_ERROR, VALID_TASK_REFACTOR).build();
-        assertParseSuccess(parser,
-                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                        + TASK_REFACTOR + TASK_FIX_ERROR,
-                new AddCommand(expectedPersonMultipleTasks));
+
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                + TASK_REFACTOR + TASK_FIX_ERROR, new AddCommand(expectedPersonMultipleTasks));
     }
 
     @Test

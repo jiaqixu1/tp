@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.person.EditCommand;
 import seedu.address.logic.commands.task.AddTaskCommand;
 import seedu.address.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
 import seedu.address.logic.parser.ArgumentMultimap;
@@ -20,8 +19,16 @@ import seedu.address.logic.parser.ParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.task.Task;
 
+/**
+ * Parses input arguments and creates a new AddTaskCommand object
+ */
 public class AddTaskCommandParser implements Parser<AddTaskCommand> {
 
+    /**
+     * Parses the given {@code String} of arguments in the context of the AddTaskCommand
+     * and returns an AddTaskCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
     public AddTaskCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =

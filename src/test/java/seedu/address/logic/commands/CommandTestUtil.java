@@ -57,14 +57,16 @@ public class CommandTestUtil {
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
-    public static final String INVALID_TASK_DESC = " " + PREFIX_TASK + "hubby*"; // '*' not allowed in tasks
-    
+    public static final String INVALID_TASK_DESC = " " + PREFIX_TASK
+            + "refactor code*"; // '*' not allowed in tasks
+
     // For task related commands not person related
     public static final String TASK_DESC_IMPLEMENT_X = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_IMPLEMENT_X;
     public static final String TASK_DESC_IMPLEMENT_Y = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_IMPLEMENT_Y;
     public static final String TASK_DESC_IMPLEMENT_Z = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_IMPLEMENT_Z;
 
-    public static final String INVALID_TASK_DESC_ADD = " " + PREFIX_TASK_DESCRIPTION + "hubby*"; // '*' not allowed in tasks
+    public static final String INVALID_TASK_DESC_ADD = " " + PREFIX_TASK_DESCRIPTION
+            + "refactor code*"; // '*' not allowed in tasks
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";

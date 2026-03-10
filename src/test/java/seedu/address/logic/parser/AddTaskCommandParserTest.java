@@ -62,8 +62,8 @@ public class AddTaskCommandParserTest {
         assertParseFailure(parser, "1" + INVALID_TASK_DESC_ADD, Task.MESSAGE_CONSTRAINTS); // invalid task
 
         // multiple invalid values, but only the first invalid value is captured
-        assertParseFailure(parser, "1" + TASK_DESC_IMPLEMENT_X + INVALID_TASK_DESC_ADD
-                , Task.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + TASK_DESC_IMPLEMENT_X
+                + INVALID_TASK_DESC_ADD, Task.MESSAGE_CONSTRAINTS);
     }
 
     @Test

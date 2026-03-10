@@ -3,13 +3,14 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.index.Index;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.project.Project;
 
 /**
  * A list of persons that enforces uniqueness between its elements and does not allow nulls.
@@ -66,6 +67,54 @@ public class UniquePersonList implements Iterable<Person> {
         }
 
         internalList.set(index, editedPerson);
+    }
+
+    public void assignProject(Person target, Project project) {
+        requireAllNonNull(target, project);
+
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+
+        List<Project> updatedProjects = new ArrayList<>(target.getProjects());
+        updatedProjects.add(project);
+
+        Person updatedPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                target.getAddress(),
+                target.getTags(),
+                updatedProjects
+        );
+
+        internalList.set(index, updatedPerson);
+    }
+
+    public Project deleteProject(Person target, Index projectIndex) {
+        requireAllNonNull(target, projectIndex);
+
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+
+        List<Project> updatedProjects = new ArrayList<>(target.getProjects());
+        Project deletedProject = updatedProjects.remove(projectIndex.getZeroBased());
+
+        Person updatedPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                target.getAddress(),
+                target.getTags(),
+                updatedProjects
+        );
+
+        internalList.set(index, updatedPerson);
+
+        return deletedProject;
     }
 
     /**

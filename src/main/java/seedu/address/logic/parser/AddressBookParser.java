@@ -8,15 +8,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.logic.commands.AddCommand;
-import seedu.address.logic.commands.ClearCommand;
-import seedu.address.logic.commands.Command;
-import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.FindCommand;
-import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.*;
+import seedu.address.logic.commands.projectcommand.ProjectAddCommand;
+import seedu.address.logic.commands.projectcommand.ProjectCommand;
+import seedu.address.logic.commands.projectcommand.ProjectDeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -77,9 +72,35 @@ public class AddressBookParser {
         case HelpCommand.COMMAND_WORD:
             return new HelpCommand();
 
+        case ProjectCommand.COMMAND_WORD:
+            return handleProject(arguments);
+
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
+        }
+    }
+
+    private ProjectCommand handleProject(String subinput) throws ParseException {
+        final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(subinput.trim());
+        if (!matcher.matches()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ProjectCommand.MESSAGE_USAGE));
+        }
+
+        final String subcommandWord = matcher.group("commandWord");
+        final String arguments = matcher.group("arguments");
+
+        switch (subcommandWord) {
+
+        case ProjectAddCommand.SUBCOMMAND_WORD:
+            return new ProjectAddCommandParser().parse(arguments);
+
+        case ProjectDeleteCommand.SUBCOMMAND_WORD:
+            return new ProjectDeleteCommandParser().parse(arguments);
+
+        default:
+            logger.finer("This user input caused a ParseException: project " + subinput);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ProjectCommand.MESSAGE_USAGE));
         }
     }
 

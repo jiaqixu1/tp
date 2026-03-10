@@ -1,13 +1,16 @@
 package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.List;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
+import seedu.address.model.project.Project;
 
 /**
  * Wraps all data at the address-book level
@@ -84,6 +87,18 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(editedPerson);
 
         persons.setPerson(target, editedPerson);
+    }
+
+    public void assignProject(Person target, Project project) {
+        requireNonNull(project);
+
+        persons.assignProject(target, project);
+    }
+
+    public Project deleteProject(Person target, Index projectIndex) {
+        requireAllNonNull(projectIndex);
+
+        return persons.deleteProject(target, projectIndex);
     }
 
     /**

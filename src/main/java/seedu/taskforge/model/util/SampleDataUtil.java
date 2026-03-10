@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import seedu.taskforge.model.TaskForge;
 import seedu.taskforge.model.ReadOnlyTaskForge;
+import seedu.taskforge.model.TaskForge;
 import seedu.taskforge.model.person.Address;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;

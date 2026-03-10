@@ -121,4 +121,18 @@ public class ParserUtil {
         }
         return taskSet;
     }
+
+    /**
+     * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
+     * trimmed.
+     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     */
+    public static List<Index> parseTaskIndexes(Collection<String> oneBasedIndexes) throws ParseException {
+        requireNonNull(oneBasedIndexes);
+        final List<Index> taskIndexSet = new ArrayList<>();
+        for (String oneBasedIndex : oneBasedIndexes) {
+            taskIndexSet.add(parseIndex(oneBasedIndex));
+        }
+        return taskIndexSet;
+    }
 }

@@ -3,6 +3,7 @@ package seedu.address.model.tag;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -115,12 +116,12 @@ public class UniqueTagList implements Iterable<Tag> {
         }
 
         UniqueTagList otherUniqueTagList = (UniqueTagList) other;
-        return internalList.equals(otherUniqueTagList.internalList);
+        return new HashSet<>(internalList).equals(new HashSet<>(otherUniqueTagList.internalList));
     }
 
     @Override
     public int hashCode() {
-        return internalList.hashCode();
+        return new HashSet<>(internalList).hashCode();
     }
 
     @Override

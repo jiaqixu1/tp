@@ -13,15 +13,13 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_PROJECT_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.PROJECT_DESC_BETA;
 import static seedu.address.logic.commands.CommandTestUtil.PROJECT_DESC_ALPHA;
+import static seedu.address.logic.commands.CommandTestUtil.PROJECT_DESC_BETA;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
@@ -94,12 +92,16 @@ public class EditCommandParserTest {
 
         // while parsing {@code PREFIX_PROJECT_TITLE} alone will reset the tags of the {@code Person} being edited,
         // parsing it together with a valid tag results in error
-        assertParseFailure(parser, "1" + PROJECT_DESC_BETA + PROJECT_DESC_ALPHA + PROJECT_EMPTY, Project.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + PROJECT_DESC_BETA + PROJECT_EMPTY + PROJECT_DESC_ALPHA, Project.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + PROJECT_EMPTY + PROJECT_DESC_BETA + PROJECT_DESC_ALPHA, Project.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + PROJECT_DESC_BETA + PROJECT_DESC_ALPHA + PROJECT_EMPTY,
+                Project.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + PROJECT_DESC_BETA + PROJECT_EMPTY + PROJECT_DESC_ALPHA,
+                Project.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + PROJECT_EMPTY + PROJECT_DESC_BETA + PROJECT_DESC_ALPHA,
+                Project.MESSAGE_CONSTRAINTS);
 
         // multiple invalid values, but only the first invalid value is captured
-        assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC + VALID_ADDRESS_AMY + VALID_PHONE_AMY,
+        assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC + VALID_ADDRESS_AMY
+                        + VALID_PHONE_AMY,
                 Name.MESSAGE_CONSTRAINTS);
     }
 

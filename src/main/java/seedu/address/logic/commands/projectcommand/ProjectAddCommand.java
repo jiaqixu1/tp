@@ -13,6 +13,9 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.project.Project;
 
+/**
+ * Adds a project to an existing person in the address book.
+ */
 public class ProjectAddCommand extends ProjectCommand {
 
     public static final String SUBCOMMAND_WORD = "add";
@@ -25,12 +28,26 @@ public class ProjectAddCommand extends ProjectCommand {
     private final Index targetIndex;
     private final Project project;
 
+    /**
+     * Creates a ProjectAddCommand to add the specified {@code Project} to the person
+     * at the specified {@code Index}.
+     *
+     * @param targetIndex The index of the person in the filtered person list to add the project to.
+     * @param project The project to be added to the person.
+     */
     public ProjectAddCommand(Index targetIndex, Project project) {
         super();
         this.targetIndex = targetIndex;
         this.project = project;
     }
 
+    /**
+     * Executes the command to add a project to the specified person.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return A {@code CommandResult} with the success message.
+     * @throws CommandException If the specified index is invalid or if any other error occurs during execution.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

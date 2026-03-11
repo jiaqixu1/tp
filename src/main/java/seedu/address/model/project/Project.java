@@ -1,17 +1,26 @@
 package seedu.address.model.project;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+/**
+ * Represents a Project in the address book.
+ * Guarantees: immutable; title is valid as declared in {@link #isValidProjectName(String)}
+ */
 public class Project {
     public static final String MESSAGE_CONSTRAINTS = "Project title should be alphanumeric";
     public static final String VALIDATION_REGEX = "^[a-zA-Z0-9 ]{1,64}$";
 
     public final String title;
 
+    /**
+     * Constructs a {@code Project}.
+     *
+     * @param title A valid project title.
+     */
     public Project(String title) {
         requireNonNull(title);
         checkArgument(isValidProjectName(title), MESSAGE_CONSTRAINTS);

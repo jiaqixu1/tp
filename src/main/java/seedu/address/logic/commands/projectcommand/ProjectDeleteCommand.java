@@ -13,6 +13,9 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.project.Project;
 
+/**
+ * Deletes a project from an existing person in the address book.
+ */
 public class ProjectDeleteCommand extends ProjectCommand {
 
     public static final String SUBCOMMAND_WORD = "delete";
@@ -26,12 +29,26 @@ public class ProjectDeleteCommand extends ProjectCommand {
     private final Index targetPersonIndex;
     private final Index targetProjectIndex;
 
+    /**
+     * Creates a ProjectDeleteCommand to delete the specified {@code Project} from the person
+     * at the specified {@code Index}.
+     *
+     * @param targetPersonIndex The index of the person in the filtered person list whose project is to be deleted.
+     * @param targetProjectIndex The index of the project in the person's project list to be deleted.
+     */
     public ProjectDeleteCommand(Index targetPersonIndex, Index targetProjectIndex) {
         super();
         this.targetPersonIndex = targetPersonIndex;
         this.targetProjectIndex = targetProjectIndex;
     }
 
+    /**
+     * Executes the command to delete a project from the specified person.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return A {@code CommandResult} with the success message containing the deleted project.
+     * @throws CommandException If either the person index or project index is invalid.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

@@ -6,7 +6,6 @@ import java.util.*;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.project.Project;
-import seedu.address.model.tag.Tag;
 
 /**
  * Represents a Person in the address book.
@@ -21,7 +20,6 @@ public class Person {
 
     // Data fields
     private final Address address;
-    private final Set<Tag> tags = new HashSet<>();
 
     // Task and project fields
     private final List<Project> projects = new ArrayList<>();
@@ -29,22 +27,20 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name, Phone phone, Email email, Address address) {
+        requireAllNonNull(name, phone, email, address);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.tags.addAll(tags);
     }
 
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, List<Project> projects) {
-        requireAllNonNull(name, phone, email, address, tags, projects);
+    public Person(Name name, Phone phone, Email email, Address address, List<Project> projects) {
+        requireAllNonNull(name, phone, email, address, projects);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.tags.addAll(tags);
         this.projects.addAll(projects);
     }
 
@@ -68,10 +64,6 @@ public class Person {
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
-    }
-
     public List<Project> getProjects() {
         return Collections.unmodifiableList(projects);
     }
@@ -109,14 +101,13 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags)
                 && projects.equals(otherPerson.projects);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, projects);
+        return Objects.hash(name, phone, email, address, projects);
     }
 
     @Override
@@ -126,7 +117,6 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
-                .add("tags", tags)
                 .add("projects", projects)
                 .toString();
     }

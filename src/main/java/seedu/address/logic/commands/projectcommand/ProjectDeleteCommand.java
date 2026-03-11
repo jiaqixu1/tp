@@ -9,6 +9,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.project.Project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -45,9 +46,20 @@ public class ProjectDeleteCommand extends ProjectCommand {
 
         Person personToAssign = lastShownList.get(targetPersonIndex.getZeroBased());
 
-        Project project = model.deleteProject(personToAssign, targetProjectIndex);
+        List<Project> updatedProjects = new ArrayList<>(personToAssign.getProjects());
+        Project deletedProject = updatedProjects.remove(targetProjectIndex.getZeroBased());
 
-        return new CommandResult(String.format(MESSAGE_DELETE_PROJECT_SUCCESS, project.toString()));
+        Person updatedPerson = new Person(
+                personToAssign.getName(),
+                personToAssign.getPhone(),
+                personToAssign.getEmail(),
+                personToAssign.getAddress(),
+                updatedProjects
+        );
+
+        model.setPerson(personToAssign, updatedPerson);
+
+        return new CommandResult(String.format(MESSAGE_DELETE_PROJECT_SUCCESS, deletedProject.toString()));
 
     }
 }

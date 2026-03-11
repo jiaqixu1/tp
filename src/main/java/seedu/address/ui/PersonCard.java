@@ -39,8 +39,6 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
-    private FlowPane tags;
-    @FXML
     private FlowPane projects;
 
     /**
@@ -54,16 +52,8 @@ public class PersonCard extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
-        person.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         person.getProjects().stream()
                 .sorted(Comparator.comparing(project -> project.title))
-                .forEach(project -> {
-                    Label projectLabel = new Label(project.title);
-                    // Optional: Add different styling for projects
-                    projectLabel.setStyle("-fx-background-color: #2196F3;"); // Blue color
-                    projects.getChildren().add(projectLabel);
-                });
+                .forEach(project -> projects.getChildren().add(new Label(project.title)));
     }
 }

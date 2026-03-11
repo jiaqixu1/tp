@@ -9,6 +9,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.project.Project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -43,7 +44,18 @@ public class ProjectAddCommand extends ProjectCommand {
 
         Person personToAssign = lastShownList.get(targetIndex.getZeroBased());
 
-        model.assignProject(personToAssign, project);
+        List<Project> updatedProjects = new ArrayList<>(personToAssign.getProjects());
+        updatedProjects.add(project);
+
+        Person updatedPerson = new Person(
+                personToAssign.getName(),
+                personToAssign.getPhone(),
+                personToAssign.getEmail(),
+                personToAssign.getAddress(),
+                updatedProjects
+        );
+
+        model.setPerson(personToAssign, updatedPerson);
 
         return new CommandResult(String.format(MESSAGE_ADD_PROJECT_SUCCESS, project.toString()));
     }

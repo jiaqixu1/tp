@@ -85,7 +85,6 @@ public class UniquePersonList implements Iterable<Person> {
                 target.getPhone(),
                 target.getEmail(),
                 target.getAddress(),
-                target.getTags(),
                 updatedProjects
         );
 
@@ -108,7 +107,6 @@ public class UniquePersonList implements Iterable<Person> {
                 target.getPhone(),
                 target.getEmail(),
                 target.getAddress(),
-                target.getTags(),
                 updatedProjects
         );
 

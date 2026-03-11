@@ -7,6 +7,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalPersons.CARL;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.AddressBookBuilder;
 
 public class ModelManagerTest {
@@ -27,6 +29,16 @@ public class ModelManagerTest {
         assertEquals(new UserPrefs(), modelManager.getUserPrefs());
         assertEquals(new GuiSettings(), modelManager.getGuiSettings());
         assertEquals(new AddressBook(), new AddressBook(modelManager.getAddressBook()));
+    }
+
+    @Test
+    public void constructor_nullAddressBook_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> new ModelManager(null, new UserPrefs()));
+    }
+
+    @Test
+    public void constructor_nullUserPrefs_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> new ModelManager(new AddressBook(), null));
     }
 
     @Test
@@ -86,6 +98,96 @@ public class ModelManagerTest {
     public void hasPerson_personInAddressBook_returnsTrue() {
         modelManager.addPerson(ALICE);
         assertTrue(modelManager.hasPerson(ALICE));
+    }
+
+    @Test
+    public void hasTag_nullTag_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.hasTag(null));
+    }
+
+    @Test
+    public void hasTag_tagNotInAddressBook_returnsFalse() {
+        assertFalse(modelManager.hasTag(new Tag("friends")));
+    }
+
+    @Test
+    public void hasTag_tagInAddressBook_returnsTrue() {
+        Tag friends = new Tag("friends");
+        modelManager.addTag(friends);
+        assertTrue(modelManager.hasTag(friends));
+    }
+
+    @Test
+    public void setAddressBook_replacesData() {
+        AddressBook source = new AddressBookBuilder().withPerson(ALICE).build();
+        modelManager.setAddressBook(source);
+        assertEquals(source, new AddressBook(modelManager.getAddressBook()));
+    }
+
+    @Test
+    public void deleteTag_existingTag_tagDeleted() {
+        Tag friends = new Tag("friends");
+        modelManager.addTag(friends);
+
+        modelManager.deleteTag(friends);
+
+        assertFalse(modelManager.hasTag(friends));
+    }
+
+    @Test
+    public void setTag_existingTag_tagUpdated() {
+        Tag friends = new Tag("friends");
+        Tag colleagues = new Tag("colleagues");
+        modelManager.addTag(friends);
+
+        modelManager.setTag(friends, colleagues);
+
+        assertFalse(modelManager.hasTag(friends));
+        assertTrue(modelManager.hasTag(colleagues));
+    }
+
+    @Test
+    public void setPerson_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.setPerson(null, ALICE));
+    }
+
+    @Test
+    public void setPerson_nullEditedPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.setPerson(ALICE, null));
+    }
+
+    @Test
+    public void addPerson_updatesFilteredList() {
+        modelManager.addPerson(ALICE);
+        modelManager.updateFilteredPersonList(person -> false);
+
+        modelManager.addPerson(BENSON);
+
+        assertEquals(Arrays.asList(ALICE, BENSON), modelManager.getFilteredPersonList());
+    }
+
+    @Test
+    public void deletePerson_existingPerson_personDeleted() {
+        modelManager.addPerson(ALICE);
+
+        modelManager.deletePerson(ALICE);
+
+        assertFalse(modelManager.hasPerson(ALICE));
+    }
+
+    @Test
+    public void setPerson_validPersons_updatesPerson() {
+        modelManager.addPerson(ALICE);
+
+        modelManager.setPerson(ALICE, CARL);
+
+        assertFalse(modelManager.hasPerson(ALICE));
+        assertTrue(modelManager.hasPerson(CARL));
+    }
+
+    @Test
+    public void updateFilteredPersonList_nullPredicate_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.updateFilteredPersonList(null));
     }
 
     @Test

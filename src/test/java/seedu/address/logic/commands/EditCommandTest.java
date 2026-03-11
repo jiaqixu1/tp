@@ -147,6 +147,19 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_invalidTag_failure() {
+        Model modelWithoutTag = new ModelManager(new AddressBook(), new UserPrefs());
+        Person personToAdd = new PersonBuilder().build();
+        modelWithoutTag.addPerson(personToAdd);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTags("nonExistentTag").build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, modelWithoutTag, EditCommand.MESSAGE_TAG_NOT_FOUND);
+    }
+
+    @Test
     public void equals() {
         final EditCommand standardCommand = new EditCommand(INDEX_FIRST_PERSON, DESC_AMY);
 

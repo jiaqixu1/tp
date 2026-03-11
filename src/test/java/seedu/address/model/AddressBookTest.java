@@ -20,6 +20,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.exceptions.DuplicateTagException;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddressBookTest {
@@ -29,6 +31,7 @@ public class AddressBookTest {
     @Test
     public void constructor() {
         assertEquals(Collections.emptyList(), addressBook.getPersonList());
+        assertEquals(Collections.emptyList(), addressBook.getTagList());
     }
 
     @Test
@@ -52,6 +55,15 @@ public class AddressBookTest {
         AddressBookStub newData = new AddressBookStub(newPersons);
 
         assertThrows(DuplicatePersonException.class, () -> addressBook.resetData(newData));
+    }
+
+    @Test
+    public void resetData_withDuplicateTags_throwsDuplicateTagException() {
+        Tag friends = new Tag("friends");
+        List<Tag> newTags = Arrays.asList(friends, friends);
+        AddressBookStub newData = new AddressBookStub(Collections.emptyList(), newTags);
+
+        assertThrows(DuplicateTagException.class, () -> addressBook.resetData(newData));
     }
 
     @Test
@@ -84,8 +96,58 @@ public class AddressBookTest {
     }
 
     @Test
+    public void hasTag_nullTag_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.hasTag(null));
+    }
+
+    @Test
+    public void hasTag_tagNotInAddressBook_returnsFalse() {
+        assertFalse(addressBook.hasTag(new Tag("friends")));
+    }
+
+    @Test
+    public void hasTag_tagInAddressBook_returnsTrue() {
+        Tag friends = new Tag("friends");
+        addressBook.addTag(friends);
+        assertTrue(addressBook.hasTag(friends));
+    }
+
+    @Test
+    public void getTagList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> addressBook.getTagList().remove(0));
+    }
+
+    @Test
+    public void equals() {
+        // same values -> returns true
+        AddressBook addressBookCopy = new AddressBook(addressBook);
+        assertTrue(addressBook.equals(addressBookCopy));
+
+        // same object -> returns true
+        assertTrue(addressBook.equals(addressBook));
+
+        // null -> returns false
+        assertFalse(addressBook.equals(null));
+
+        // different types -> returns false
+        assertFalse(addressBook.equals(5));
+
+        // different data -> returns false
+        AddressBook differentAddressBook = new AddressBook();
+        differentAddressBook.addTag(new Tag("friends"));
+        assertFalse(addressBook.equals(differentAddressBook));
+    }
+
+    @Test
+    public void hashCodeMethod() {
+        AddressBook addressBookCopy = new AddressBook(addressBook);
+        assertEquals(addressBook.hashCode(), addressBookCopy.hashCode());
+    }
+
+    @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList() + "}";
+        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList()
+                + ", tags=" + addressBook.getTagList() + "}";
         assertEquals(expected, addressBook.toString());
     }
 
@@ -94,14 +156,25 @@ public class AddressBookTest {
      */
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final ObservableList<Tag> tags = FXCollections.observableArrayList();
 
         AddressBookStub(Collection<Person> persons) {
+            this(persons, Collections.emptyList());
+        }
+
+        AddressBookStub(Collection<Person> persons, Collection<Tag> tags) {
             this.persons.setAll(persons);
+            this.tags.setAll(tags);
         }
 
         @Override
         public ObservableList<Person> getPersonList() {
             return persons;
+        }
+
+        @Override
+        public ObservableList<Tag> getTagList() {
+            return tags;
         }
     }
 

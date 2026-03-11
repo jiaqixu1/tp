@@ -1,46 +1,54 @@
 {
   "_comment": "AddressBook save file which contains the same Person values as in TypicalPersons#getTypicalAddressBook()",
+  "tags" : [ "friends", "owesMoney", "husband", "friend" ],
   "persons" : [ {
     "name" : "Alice Pauline",
     "phone" : "94351253",
     "email" : "alice@example.com",
     "address" : "123, Jurong West Ave 6, #08-111",
-    "tasks": [ "refactor code" ]
+    "tasks": [ "refactor code" ],
+    "tags" : [ "friends" ]
   }, {
     "name" : "Benson Meier",
     "phone" : "98765432",
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
-    "tasks": [ "refactor code", "fix error in tp project" ]
+    "tasks": [ "refactor code", "fix error in tp project" ],
+    "tags" : [ "owesMoney", "friends" ]
   }, {
     "name" : "Carl Kurz",
     "phone" : "95352563",
     "email" : "heinz@example.com",
     "address" : "wall street",
-    "tasks": [ ]
+    "tasks": [ ],
+    "tags" : [ ]
   }, {
     "name" : "Daniel Meier",
     "phone" : "87652533",
     "email" : "cornelia@example.com",
     "address" : "10th street",
-    "tasks": [ "friends" ]
+    "tasks": [ "friends" ],
+    "tags" : [ "friends" ]
   }, {
     "name" : "Elle Meyer",
     "phone" : "9482224",
     "email" : "werner@example.com",
     "address" : "michegan ave",
-    "tasks": [ ]
+    "tasks": [ ],
+    "tags" : [ ]
   }, {
     "name" : "Fiona Kunz",
     "phone" : "9482427",
     "email" : "lydia@example.com",
     "address" : "little tokyo",
-    "tasks": [ ]
+    "tasks": [ ],
+    "tags" : [ ]
   }, {
     "name" : "George Best",
     "phone" : "9482442",
     "email" : "anna@example.com",
     "address" : "4th street",
-    "tasks": [ ]
+    "tasks": [ ],
+    "tags" : [ ]
   } ]
 }

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
@@ -21,6 +22,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.tag.Tag;
 import seedu.address.model.task.Task;
 
 /**
@@ -79,12 +81,13 @@ public class AddTaskCommand extends Command {
         Phone phone = personToEdit.getPhone();
         Email email = personToEdit.getEmail();
         Address address = personToEdit.getAddress();
+        Set<Tag> tagSet = personToEdit.getTags();
 
         List<Task> newTasks = new ArrayList<>(personToEdit.getTasks());
         newTasks.addAll(addTaskDescriptor.getTasks().orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED)));
         checkUniqueTasks(newTasks);
 
-        return new Person(name, phone, email, address, newTasks);
+        return new Person(name, phone, email, address, newTasks, tagSet);
     }
 
     /**

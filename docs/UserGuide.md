@@ -158,14 +158,14 @@ Examples:
 * `add-tag WebApp` adds a new project named `WebApp`.
 * `add-tag MobileApp` adds a new project named `MobileApp`.
 
-#### Viewing all projects : `view-tags`
+#### Viewing all projects : `view-all-tag`
 
 Displays all projects currently available in TaskForge.
 
-Format: `view-tags`
+Format: `view-all-tag`
 
 Example:
-* `view-tags`
+* `view-all-tag` returns a list of all existing project
 
 #### Deleting a project : `delete-tag`
 
@@ -174,11 +174,11 @@ Deletes a project by its index in the displayed project list.
 Format: `delete-tag INDEX`
 
 * Deletes the project at the specified `INDEX`.
-* The index refers to the index number shown by `view-tags`.
+* The index refers to the index number shown by `view-all-tag`.
 * The index **must be a positive integer** `1, 2, 3, ...`
 
 Example:
-* `view-tags` followed by `delete-tag 2` deletes the 2nd project in the list.
+* `view-all-tag` followed by `delete-tag 2` deletes the 2nd project in the list.
 
 ### Clearing all entries : `clear`
 

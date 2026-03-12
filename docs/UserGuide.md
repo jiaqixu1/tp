@@ -142,6 +142,44 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
+### Managing projects
+
+#### Adding a project : `add-tag`
+
+Adds a new project to TaskForge that contacts can be assigned to.
+
+Format: `add-tag PROJECT_NAME`
+
+* Adds a new project with the specified project name.
+* Project name must be alphanumeric (only letters and numbers).
+* Duplicate projects are not allowed.
+
+Examples:
+* `add-tag WebApp` adds a new project named `WebApp`.
+* `add-tag MobileApp` adds a new project named `MobileApp`.
+
+#### Viewing all projects : `view-all-tag`
+
+Displays all projects currently available in TaskForge.
+
+Format: `view-all-tag`
+
+Example:
+* `view-all-tag` returns a list of all existing project
+
+#### Deleting a project : `delete-tag`
+
+Deletes a project by its index in the displayed project list.
+
+Format: `delete-tag INDEX`
+
+* Deletes the project at the specified `INDEX`.
+* The index refers to the index number shown by `view-all-tag`.
+* The index **must be a positive integer** `1, 2, 3, ...`
+
+Example:
+* `view-all-tag` followed by `delete-tag 2` deletes the 2nd project in the list.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -192,9 +230,12 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add Project** | `add-tag PROJECT_NAME`<br> e.g., `add-tag WebApp`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete Project** | `delete-tag INDEX`<br> e.g., `delete-tag 1`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
+**View Projects** | `view-tags`
 **Help** | `help`

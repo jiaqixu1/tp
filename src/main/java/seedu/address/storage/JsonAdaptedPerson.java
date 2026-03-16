@@ -15,6 +15,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.project.Project;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.task.Task;
 
@@ -29,6 +30,7 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String address;
+    private final List<JsonAdaptedProject> projects = new ArrayList<>();
     private final List<JsonAdaptedTask> tasks = new ArrayList<>();
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -38,12 +40,16 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("tasks") List<JsonAdaptedTask> tasks,
-             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+                             @JsonProperty("projects") List<JsonAdaptedProject> projects,
+                             @JsonProperty("tasks") List<JsonAdaptedTask> tasks,
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        if (projects != null) {
+            this.projects.addAll(projects);
+        }
         if (tasks != null) {
             this.tasks.addAll(tasks);
         }
@@ -60,6 +66,9 @@ class JsonAdaptedPerson {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
+        projects.addAll(source.getProjects().stream()
+                .map(JsonAdaptedProject::new)
+                .collect(Collectors.toList()));
         tasks.addAll(source.getTasks().stream()
                 .map(JsonAdaptedTask::new)
                 .collect(Collectors.toList()));
@@ -74,15 +83,18 @@ class JsonAdaptedPerson {
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
     public Person toModelType() throws IllegalValueException {
+        final List<Project> personProjects = new ArrayList<>();
         final List<Task> personTasks = new ArrayList<>();
         final List<Tag> personTags = new ArrayList<>();
+        for (JsonAdaptedProject project : projects) {
+            personProjects.add(project.toModelType());
+        }
         for (JsonAdaptedTask task : tasks) {
             personTasks.add(task.toModelType());
         }
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
         }
-
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
         }
@@ -115,9 +127,10 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
+        final List<Project> modelProjects = new ArrayList<>(personProjects);
         final List<Task> modelTasks = new ArrayList<>(personTasks);
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTasks, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelProjects, modelTasks, modelTags);
     }
 
 }

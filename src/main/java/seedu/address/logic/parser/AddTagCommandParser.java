@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
-import seedu.address.logic.commands.project.AddTagCommand;
+import seedu.address.logic.commands.tag.AddTagCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**

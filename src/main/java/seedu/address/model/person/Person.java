@@ -10,9 +10,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.project.Project;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.task.Task;
-
 /**
  * Represents a Person in the address book.
  * Guarantees: details are present and not null, field values are validated, immutable.
@@ -26,17 +26,21 @@ public class Person {
 
     // Data fields
     private final Address address;
+    private final List<Project> projects;
     private final List<Task> tasks;
     private final Set<Tag> tags = new HashSet<>();
+
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, List<Task> tasks, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tasks, tags);
+    public Person(Name name, Phone phone, Email email, Address address,
+                  List<Project> projects, List<Task> tasks, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, address, projects, tasks, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.projects = Collections.unmodifiableList(new ArrayList<>(projects));
         this.tasks = Collections.unmodifiableList(new ArrayList<>(tasks));
         this.tags.addAll(tags);
     }
@@ -62,8 +66,8 @@ public class Person {
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
+    public List<Project> getProjects() {
+        return projects;
     }
 
     /**
@@ -72,6 +76,14 @@ public class Person {
      */
     public List<Task> getTasks() {
         return tasks;
+    }
+
+    /**
+     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
+     * if modification is attempted.
+     */
+    public Set<Tag> getTags() {
+        return Collections.unmodifiableSet(tags);
     }
 
     /**
@@ -107,6 +119,7 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && projects.equals(otherPerson.projects)
                 && tasks.equals(otherPerson.tasks)
                 && tags.equals(otherPerson.tags);
     }
@@ -114,7 +127,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tasks, tags);
+        return Objects.hash(name, phone, email, address, projects, tasks, tags);
     }
 
     @Override
@@ -124,6 +137,7 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
+                .add("projects", projects)
                 .add("tasks", tasks)
                 .add("tags", tags)
                 .toString();

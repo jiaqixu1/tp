@@ -9,7 +9,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.task.Task;
 
 /**
- * A utility class to help with building EditPersonDescriptor objects.
+ * A utility class to help with building AddTaskDescriptor objects.
  */
 public class AddTaskDescriptorBuilder {
 

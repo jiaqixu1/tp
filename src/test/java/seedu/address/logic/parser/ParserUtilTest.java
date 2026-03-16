@@ -18,6 +18,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.project.Project;
 import seedu.address.model.task.Task;
 
 public class ParserUtilTest {
@@ -25,12 +26,15 @@ public class ParserUtilTest {
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
+    private static final String INVALID_PROJECT = "#alpha";
     private static final String INVALID_TASK = "#refactor code";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_ADDRESS = "123 Main Street #0505";
     private static final String VALID_EMAIL = "rachel@example.com";
+    private static final String VALID_PROJECT_1 = "alpha";
+    private static final String VALID_PROJECT_2 = "beta";
     private static final String VALID_TASK_1 = "refactor code";
     private static final String VALID_TASK_2 = "meeting with client";
 
@@ -146,6 +150,56 @@ public class ParserUtilTest {
         String emailWithWhitespace = WHITESPACE + VALID_EMAIL + WHITESPACE;
         Email expectedEmail = new Email(VALID_EMAIL);
         assertEquals(expectedEmail, ParserUtil.parseEmail(emailWithWhitespace));
+    }
+
+    @Test
+    public void parseProject_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseProject(null));
+    }
+
+    @Test
+    public void parseProject_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseProject(INVALID_PROJECT));
+    }
+
+    @Test
+    public void parseProject_validValueWithoutWhitespace_returnsProject() throws Exception {
+        Project expectedProject = new Project(VALID_PROJECT_1);
+        assertEquals(expectedProject, ParserUtil.parseProject(VALID_PROJECT_1));
+    }
+
+    @Test
+    public void parseProject_validValueWithWhitespace_returnsTrimmedProject() throws Exception {
+        String projectWithWhitespace = WHITESPACE + VALID_PROJECT_1 + WHITESPACE;
+        Project expectedProject = new Project(VALID_PROJECT_1);
+        assertEquals(expectedProject, ParserUtil.parseProject(projectWithWhitespace));
+    }
+
+    @Test
+    public void parseProjects_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseProjects(null));
+    }
+
+    @Test
+    public void parseProjects_collectionWithInvalidProject_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseProjects(
+                Arrays.asList(VALID_PROJECT_1, INVALID_PROJECT))
+        );
+    }
+
+    @Test
+    public void parseProjects_emptyCollection_returnsEmptySet() throws Exception {
+        assertTrue(ParserUtil.parseProjects(Collections.emptyList()).isEmpty());
+    }
+
+    @Test
+    public void parseProjects_collectionWithValidProjects_returnsProjectSet() throws Exception {
+        List<Project> actualProjectSet = ParserUtil.parseProjects(Arrays.asList(VALID_PROJECT_1, VALID_PROJECT_2));
+        List<Project> expectedProjectSet = new ArrayList<Project>(Arrays.asList(
+                new Project(VALID_PROJECT_1), new Project(VALID_PROJECT_2))
+        );
+
+        assertEquals(expectedProjectSet, actualProjectSet);
     }
 
     @Test

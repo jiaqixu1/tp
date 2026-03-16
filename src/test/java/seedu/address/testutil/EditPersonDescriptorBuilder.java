@@ -11,6 +11,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.project.Project;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.task.Task;
 
@@ -38,6 +39,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setPhone(person.getPhone());
         descriptor.setEmail(person.getEmail());
         descriptor.setAddress(person.getAddress());
+        descriptor.setProjects(person.getProjects());
         descriptor.setTasks(person.getTasks());
         descriptor.setTags(person.getTags());
     }
@@ -78,6 +80,16 @@ public class EditPersonDescriptorBuilder {
      * Parses the {@code tasks} into a {@code List<Task>} and set it to the {@code EditPersonDescriptor}
      * that we are building.
      */
+    public EditPersonDescriptorBuilder withProjects(String... projects) {
+        List<Project> projectSet = Stream.of(projects).map(Project::new).collect(Collectors.toList());
+        descriptor.setProjects(projectSet);
+        return this;
+    }
+
+    /**
+     * Parses the {@code tasks} into a {@code List<Task>} and set it to the {@code EditPersonDescriptor}
+     * that we are building.
+     */
     public EditPersonDescriptorBuilder withTasks(String... tasks) {
         List<Task> taskSet = Stream.of(tasks).map(Task::new).collect(Collectors.toList());
         descriptor.setTasks(taskSet);
@@ -97,4 +109,5 @@ public class EditPersonDescriptorBuilder {
     public EditPersonDescriptor build() {
         return descriptor;
     }
+
 }

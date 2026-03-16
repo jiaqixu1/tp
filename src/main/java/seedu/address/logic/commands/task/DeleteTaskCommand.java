@@ -22,6 +22,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.project.Project;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.task.Task;
 
@@ -82,6 +83,7 @@ public class DeleteTaskCommand extends Command {
         Email email = personToEdit.getEmail();
         Address address = personToEdit.getAddress();
         Set<Tag> tagSet = personToEdit.getTags();
+        List<Project> projectList = personToEdit.getProjects();
 
         List<Task> newTasks = new ArrayList<>(personToEdit.getTasks());
         List<Task> tasksToDelete = new ArrayList<>();
@@ -97,7 +99,7 @@ public class DeleteTaskCommand extends Command {
         }
         newTasks.removeAll(tasksToDelete);
 
-        return new Person(name, phone, email, address, newTasks, tagSet);
+        return new Person(name, phone, email, address, projectList, newTasks, tagSet);
     }
 
     @Override

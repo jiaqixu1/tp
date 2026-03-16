@@ -6,7 +6,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import seedu.address.logic.parser.ArgumentTokenizer;
 import seedu.address.logic.parser.Parser;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.project.Project;
 import seedu.address.model.task.Task;
 
 /**
@@ -36,7 +38,8 @@ public class EditCommandParser implements Parser<EditCommand> {
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TASK);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                        PREFIX_ADDRESS, PREFIX_PROJECT_TITLE, PREFIX_TASK_DESCRIPTION);
 
         Index index;
 
@@ -62,13 +65,35 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
             editPersonDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
-        parseTasksForEdit(argMultimap.getAllValues(PREFIX_TASK)).ifPresent(editPersonDescriptor::setTasks);
+
+        parseProjectsForEdit(argMultimap.getAllValues(PREFIX_PROJECT_TITLE))
+                .ifPresent(editPersonDescriptor::setProjects);
+
+        parseTasksForEdit(argMultimap.getAllValues(PREFIX_TASK_DESCRIPTION))
+                .ifPresent(editPersonDescriptor::setTasks);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
 
         return new EditCommand(index, editPersonDescriptor);
+    }
+
+    /**
+     * Parses {@code Collection<String> project} into a {@code List<Project>} if {@code projects} is non-empty.
+     * If {@code projects} contain only one element which is an empty string, it will be parsed into a
+     * {@code List<Project>} containing zero tasks.
+     */
+    private Optional<List<Project>> parseProjectsForEdit(Collection<String> projects) throws ParseException {
+        assert projects != null;
+
+        if (projects.isEmpty()) {
+            return Optional.empty();
+        }
+        Collection<String> projectSet = projects.size() == 1 && projects.contains("")
+                ? Collections.emptyList()
+                : projects;
+        return Optional.of(ParserUtil.parseProjects(projectSet));
     }
 
     /**

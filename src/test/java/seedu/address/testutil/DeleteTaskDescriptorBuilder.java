@@ -1,12 +1,12 @@
 package seedu.address.testutil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
-import seedu.address.model.person.Person;
 
 /**
  * A utility class to help with building DeleteTaskDescriptorBuilder objects.
@@ -26,8 +26,11 @@ public class DeleteTaskDescriptorBuilder {
     /**
      * Returns an {@code DeleteTaskDescriptorBuilder} with fields containing {@code person}'s details
      */
-    public DeleteTaskDescriptorBuilder(Person person) {
+    public DeleteTaskDescriptorBuilder(Index index) {
         descriptor = new DeleteTaskDescriptor();
+        ArrayList<Index> indexes = new ArrayList<>();
+        indexes.add(index);
+        descriptor.setTasksIndexes(indexes);
     }
 
     /**

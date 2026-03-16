@@ -6,7 +6,9 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_TAG;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_TASK;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.person.AddCommand;
@@ -23,13 +26,26 @@ import seedu.address.logic.commands.person.EditCommand;
 import seedu.address.logic.commands.person.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.person.FindCommand;
 import seedu.address.logic.commands.person.ListCommand;
-import seedu.address.logic.commands.project.AddTagCommand;
-import seedu.address.logic.commands.project.DeleteTagCommand;
-import seedu.address.logic.commands.project.ViewAllTagCommand;
+import seedu.address.logic.commands.project.AddProjectCommand;
+import seedu.address.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
+import seedu.address.logic.commands.project.DeleteProjectCommand;
+import seedu.address.logic.commands.project.DeleteProjectCommand.DeleteProjectDescriptor;
+import seedu.address.logic.commands.project.ProjectCommand;
+import seedu.address.logic.commands.tag.AddTagCommand;
+import seedu.address.logic.commands.tag.DeleteTagCommand;
+import seedu.address.logic.commands.tag.ViewAllTagCommand;
+import seedu.address.logic.commands.task.AddTaskCommand;
+import seedu.address.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
+import seedu.address.logic.commands.task.DeleteTaskCommand;
+import seedu.address.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.Tag;
+import seedu.address.testutil.AddProjectDescriptorBuilder;
+import seedu.address.testutil.AddTaskDescriptorBuilder;
+import seedu.address.testutil.DeleteProjectDescriptorBuilder;
+import seedu.address.testutil.DeleteTaskDescriptorBuilder;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -112,13 +128,65 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_addProject() throws Exception {
+        Person person = new PersonBuilder().build();
+        AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder(person).build();
+        AddProjectCommand command = (AddProjectCommand) parser.parseCommand(AddProjectCommand.COMMAND_WORD
+                + " " + AddProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
+                + " " + PersonUtil.getAddProjectDescriptorDetails(descriptor));
+        assertEquals(new AddProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_deleteProject() throws Exception {
+        Index index = INDEX_FIRST_PROJECT;
+        DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder(index).build();
+        DeleteProjectCommand command = (DeleteProjectCommand) parser.parseCommand(DeleteProjectCommand.COMMAND_WORD
+                + " " + DeleteProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
+                + " " + PersonUtil.getDeleteProjectDescriptorDetails(descriptor));
+        assertEquals(new DeleteProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_addTask() throws Exception {
+        Person person = new PersonBuilder().build();
+        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder(person).build();
+        AddTaskCommand command = (AddTaskCommand) parser.parseCommand(AddTaskCommand.COMMAND_WORD
+                + " " + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getAddTaskDescriptorDetails(descriptor));
+        assertEquals(new AddTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_deleteTask() throws Exception {
+        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder(INDEX_FIRST_TASK).build();
+        DeleteTaskCommand command = (DeleteTaskCommand) parser.parseCommand(DeleteTaskCommand.COMMAND_WORD
+                + " " + INDEX_FIRST_PERSON.getOneBased() + " "
+                + PersonUtil.getDeleteTaskDescriptorDetails(descriptor));
+        assertEquals(new DeleteTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
         assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
-            -> parser.parseCommand(""));
+                -> parser.parseCommand(""));
     }
 
     @Test
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand"));
+    }
+
+    @Test
+    public void parseCommand_projectUnrecognisedSubcommand_throwsParseException() {
+        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                ProjectCommand.MESSAGE_USAGE), () -> parser.parseCommand(ProjectCommand.COMMAND_WORD));
+    }
+
+    @Test
+    public void parseCommand_projectUnknownSubcommand_throwsParseException() {
+        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                ProjectCommand.MESSAGE_USAGE), () -> parser.parseCommand(
+                        ProjectCommand.COMMAND_WORD + " unknownCommand")
+        );
     }
 }

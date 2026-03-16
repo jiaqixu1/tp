@@ -15,6 +15,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.project.Project;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.task.Task;
 
@@ -99,6 +100,21 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String project} into an {@code Project}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code project} is invalid.
+     */
+    public static Project parseProject(String project) throws ParseException {
+        requireNonNull(project);
+        String trimmedProject = project.trim();
+        if (!Project.isValidProjectTitle(trimmedProject)) {
+            throw new ParseException(Project.MESSAGE_CONSTRAINTS);
+        }
+        return new Project(trimmedProject);
+    }
+
+    /**
      * Parses a {@code String task} into a {@code Task}.
      * Leading and trailing whitespaces will be trimmed.
      *
@@ -164,5 +180,31 @@ public class ParserUtil {
             taskIndexSet.add(parseIndex(oneBasedIndex));
         }
         return taskIndexSet;
+    }
+
+    /**
+     * Parses {@code Collection<String> tasks} into a {@code List<Task>}.
+     */
+    public static List<Project> parseProjects(Collection<String> projects) throws ParseException {
+        requireNonNull(projects);
+        final List<Project> projectSet = new ArrayList<>();
+        for (String description : projects) {
+            projectSet.add(parseProject(description));
+        }
+        return projectSet;
+    }
+
+    /**
+     * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
+     * trimmed.
+     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     */
+    public static List<Index> parseProjectIndexes(Collection<String> oneBasedIndexes) throws ParseException {
+        requireNonNull(oneBasedIndexes);
+        final List<Index> projectIndexSet = new ArrayList<>();
+        for (String oneBasedIndex : oneBasedIndexes) {
+            projectIndexSet.add(parseIndex(oneBasedIndex));
+        }
+        return projectIndexSet;
     }
 }

@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -29,6 +30,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.project.Project;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.task.Task;
 
@@ -47,6 +49,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_PROJECT_TITLE + "PROJECT] "
             + "[" + PREFIX_TASK + "TASK]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -108,10 +111,12 @@ public class EditCommand extends Command {
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
+        List<Project> updatedProjects = editPersonDescriptor.getProjects().orElse(personToEdit.getProjects());
         List<Task> updatedTasks = editPersonDescriptor.getTasks().orElse(personToEdit.getTasks());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTasks, updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress,
+                updatedProjects, updatedTasks, updatedTags);
     }
 
     @Override
@@ -147,6 +152,7 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private Address address;
+        private List<Project> projects;
         private List<Task> tasks;
         private Set<Tag> tags;
 
@@ -161,6 +167,7 @@ public class EditCommand extends Command {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setAddress(toCopy.address);
+            setProjects(toCopy.projects);
             setTasks(toCopy.tasks);
             setTags(toCopy.tags);
         }
@@ -169,7 +176,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tasks, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, projects, tasks, tags);
         }
 
         public void setName(Name name) {
@@ -222,6 +229,23 @@ public class EditCommand extends Command {
         }
 
         /**
+         * Sets {@code tasks} to this object's {@code tasks}.
+         * A defensive copy of {@code tasks} is used internally.
+         */
+        public void setProjects(List<Project> projects) {
+            this.projects = (projects != null) ? new ArrayList<>(projects) : null;
+        }
+
+        /**
+         * Returns an unmodifiable task set, which throws {@code UnsupportedOperationException}
+         * if modification is attempted.
+         * Returns {@code Optional#empty()} if {@code tasks} is null.
+         */
+        public Optional<List<Project>> getProjects() {
+            return (projects != null) ? Optional.of(Collections.unmodifiableList(projects)) : Optional.empty();
+        }
+
+        /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.
          */
@@ -254,6 +278,7 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
+                    && Objects.equals(projects, otherEditPersonDescriptor.projects)
                     && Objects.equals(tasks, otherEditPersonDescriptor.tasks);
         }
 
@@ -264,7 +289,9 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("address", address)
+                    .add("projects", projects)
                     .add("tasks", tasks)
+                    .add("tags", tags)
                     .toString();
         }
     }

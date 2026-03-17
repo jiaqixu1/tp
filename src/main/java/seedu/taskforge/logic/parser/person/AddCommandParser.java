@@ -51,7 +51,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         List<Project> projectList = ParserUtil.parseProjects(argMultimap.getAllValues(PREFIX_PROJECT_TITLE));
         List<Task> taskList = ParserUtil.parseTasks(argMultimap.getAllValues(PREFIX_TASK_DESCRIPTION));
 
-        Person person = new Person(name, phone, email, projectList, taskList );
+        Person person = new Person(name, phone, email, projectList, taskList);
 
         return new AddCommand(person);
     }

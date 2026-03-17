@@ -25,11 +25,11 @@ import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
 import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
-import seedu.taskforge.logic.commands.project.AddProjectCommand;
-import seedu.taskforge.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
 import seedu.taskforge.logic.commands.project.AddProjectToProjectListCommand;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand.DeleteProjectDescriptor;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.commands.project.DeleteProjectFromProjectListCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
 import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
@@ -42,9 +42,9 @@ import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.testutil.AddProjectDescriptorBuilder;
+import seedu.taskforge.testutil.AssignProjectDescriptorBuilder;
 import seedu.taskforge.testutil.AddTaskDescriptorBuilder;
-import seedu.taskforge.testutil.DeleteProjectDescriptorBuilder;
+import seedu.taskforge.testutil.UnassignProjectDescriptorBuilder;
 import seedu.taskforge.testutil.DeleteTaskDescriptorBuilder;
 import seedu.taskforge.testutil.EditPersonDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
@@ -110,23 +110,23 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_addProject() throws Exception {
+    public void parseCommand_assignProject() throws Exception {
         Person person = new PersonBuilder().build();
-        AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder(person).build();
-        AddProjectCommand command = (AddProjectCommand) parser.parseCommand(AddProjectCommand.COMMAND_WORD
-                + " " + AddProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
-                + " " + PersonUtil.getAddProjectDescriptorDetails(descriptor));
-        assertEquals(new AddProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder(person).build();
+        AssignProjectCommand command = (AssignProjectCommand) parser.parseCommand(AssignProjectCommand.COMMAND_WORD
+                + " " + AssignProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
+                + " " + PersonUtil.getAssignProjectDescriptorDetails(descriptor));
+        assertEquals(new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
     @Test
-    public void parseCommand_deleteProject() throws Exception {
+    public void parseCommand_unassignProject() throws Exception {
         Index index = INDEX_FIRST_PROJECT;
-        DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder(index).build();
-        DeleteProjectCommand command = (DeleteProjectCommand) parser.parseCommand(DeleteProjectCommand.COMMAND_WORD
-                + " " + DeleteProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
-                + " " + PersonUtil.getDeleteProjectDescriptorDetails(descriptor));
-        assertEquals(new DeleteProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
+        UnassignProjectDescriptor descriptor = new UnassignProjectDescriptorBuilder(index).build();
+        UnassignProjectCommand command = (UnassignProjectCommand) parser.parseCommand(UnassignProjectCommand.COMMAND_WORD
+                + " " + UnassignProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
+                + " " + PersonUtil.getUnassignProjectDescriptorDetails(descriptor));
+        assertEquals(new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
     @Test

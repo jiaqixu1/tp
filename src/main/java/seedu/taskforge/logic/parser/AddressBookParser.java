@@ -17,9 +17,9 @@ import seedu.taskforge.logic.commands.person.DeleteCommand;
 import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
-import seedu.taskforge.logic.commands.project.AddProjectCommand;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.AddProjectToProjectListCommand;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
 import seedu.taskforge.logic.commands.project.DeleteProjectFromProjectListCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
 import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
@@ -31,9 +31,9 @@ import seedu.taskforge.logic.parser.person.AddCommandParser;
 import seedu.taskforge.logic.parser.person.DeleteCommandParser;
 import seedu.taskforge.logic.parser.person.EditCommandParser;
 import seedu.taskforge.logic.parser.person.FindCommandParser;
-import seedu.taskforge.logic.parser.project.AddProjectCommandParser;
+import seedu.taskforge.logic.parser.project.AssignProjectCommandParser;
 import seedu.taskforge.logic.parser.project.AddProjectToProjectListCommandParser;
-import seedu.taskforge.logic.parser.project.DeleteProjectCommandParser;
+import seedu.taskforge.logic.parser.project.UnassignProjectCommandParser;
 import seedu.taskforge.logic.parser.project.DeleteProjectFromProjectListCommandParser;
 import seedu.taskforge.logic.parser.task.AddTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
@@ -132,11 +132,11 @@ public class AddressBookParser {
 
         switch (subcommandWord) {
 
-        case AddProjectCommand.SUBCOMMAND_WORD:
-            return new AddProjectCommandParser().parse(arguments);
+        case AssignProjectCommand.SUBCOMMAND_WORD:
+            return new AssignProjectCommandParser().parse(arguments);
 
-        case DeleteProjectCommand.SUBCOMMAND_WORD:
-            return new DeleteProjectCommandParser().parse(arguments);
+        case UnassignProjectCommand.SUBCOMMAND_WORD:
+            return new UnassignProjectCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: project " + subinput);

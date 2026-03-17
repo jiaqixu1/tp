@@ -13,8 +13,8 @@ import java.util.List;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
-import seedu.taskforge.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand.DeleteProjectDescriptor;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
 import seedu.taskforge.model.person.Person;
@@ -78,9 +78,9 @@ public class PersonUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code AddProjectDescriptor}'s details.
+     * Returns the part of command string for the given {@code AssignProjectDescriptor}'s details.
      */
-    public static String getAddProjectDescriptorDetails(AddProjectDescriptor descriptor) {
+    public static String getAssignProjectDescriptorDetails(AssignProjectDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         if (descriptor.getProjects().isPresent()) {
             List<Project> projects = descriptor.getProjects().get();
@@ -94,9 +94,9 @@ public class PersonUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code DeleteProjectDescriptor}'s details.
+     * Returns the part of command string for the given {@code UnassignProjectDescriptor}'s details.
      */
-    public static String getDeleteProjectDescriptorDetails(DeleteProjectDescriptor descriptor) {
+    public static String getUnassignProjectDescriptorDetails(UnassignProjectDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         if (descriptor.getProjectsIndexes().isPresent()) {
             List<Index> indexes = descriptor.getProjectsIndexes().get();

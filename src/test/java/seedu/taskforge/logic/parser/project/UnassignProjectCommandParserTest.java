@@ -12,18 +12,18 @@ import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand.DeleteProjectDescriptor;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.parser.ParserUtil;
-import seedu.taskforge.testutil.DeleteProjectDescriptorBuilder;
+import seedu.taskforge.testutil.UnassignProjectDescriptorBuilder;
 
-public class DeleteProjectCommandParserTest {
+public class UnassignProjectCommandParserTest {
     private static final String PROJECT_EMPTY = " " + PREFIX_PROJECT_INDEX;
 
     private static final String MESSAGE_INVALID_FORMAT =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteProjectCommand.MESSAGE_USAGE);
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, UnassignProjectCommand.MESSAGE_USAGE);
 
-    private DeleteProjectCommandParser parser = new DeleteProjectCommandParser();
+    private UnassignProjectCommandParser parser = new UnassignProjectCommandParser();
 
     @Test
     public void parse_missingProject_failure() {
@@ -31,7 +31,7 @@ public class DeleteProjectCommandParserTest {
         assertParseFailure(parser, PROJECT_DELETE_1, MESSAGE_INVALID_FORMAT);
 
         // no field specified
-        assertParseFailure(parser, "1", DeleteProjectCommand.MESSAGE_NOT_EDITED);
+        assertParseFailure(parser, "1", UnassignProjectCommand.MESSAGE_NOT_EDITED);
 
         // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
@@ -66,9 +66,9 @@ public class DeleteProjectCommandParserTest {
         Index targetIndex = INDEX_SECOND_PERSON;
         String userInput = targetIndex.getOneBased() + PROJECT_DELETE_1;
 
-        DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
+        UnassignProjectDescriptor descriptor = new UnassignProjectDescriptorBuilder()
                 .withProjects("1").build();
-        DeleteProjectCommand expectedCommand = new DeleteProjectCommand(targetIndex, descriptor);
+        UnassignProjectCommand expectedCommand = new UnassignProjectCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -78,10 +78,10 @@ public class DeleteProjectCommandParserTest {
         Index targetIndex = INDEX_SECOND_PERSON;
         String userInput = targetIndex.getOneBased() + PROJECT_DELETE_1 + PROJECT_DELETE_2;
 
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
+        UnassignProjectDescriptor descriptor = new UnassignProjectDescriptorBuilder()
                 .withProjects("1", "2")
                 .build();
-        DeleteProjectCommand expectedCommand = new DeleteProjectCommand(targetIndex, descriptor);
+        UnassignProjectCommand expectedCommand = new UnassignProjectCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }

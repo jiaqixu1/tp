@@ -25,38 +25,38 @@ import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
 
 /**
- * Adds a project to an existing person in the address book.
+ * Assigns a project to an existing person in the address book.
  */
-public class AddProjectCommand extends ProjectCommand {
+public class AssignProjectCommand extends ProjectCommand {
 
-    public static final String SUBCOMMAND_WORD = "add";
+    public static final String SUBCOMMAND_WORD = "assign";
 
-    public static final String MESSAGE_ADD_PROJECT_SUCCESS = "New project added: %1$s";
+    public static final String MESSAGE_ASSIGN_PROJECT_SUCCESS = "Project assigned: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + " INDEX -l PROJECT_TITLE";
     public static final String MESSAGE_DUPLICATE_PROJECT = "This project already exists for this person!";
-    public static final String MESSAGE_PROJECT_NOT_FOUND = "The project to add does not exist in the address book";
-    public static final String MESSAGE_NOT_EDITED = "At least one project to add must be provided";
+    public static final String MESSAGE_PROJECT_NOT_FOUND = "The project to assign does not exist in the address book";
+    public static final String MESSAGE_NOT_EDITED = "At least one project to assign must be provided";
 
     private final Index index;
-    private final AddProjectDescriptor addProjectDescriptor;
+    private final AssignProjectDescriptor assignProjectDescriptor;
 
     /**
-     * Creates a AddProjectCommand to add the specified {@code Project} to the person
+     * Creates a AssignProjectCommand to assign the specified {@code Project} to the person
      * at the specified {@code Index}.
      *
-     * @param index The index of the person in the filtered person list to add the project to.
-     * @param addProjectDescriptor The project to be added to the person.
+     * @param index The index of the person in the filtered person list to assign the project to.
+     * @param assignProjectDescriptor The project to be assigned to the person.
      */
-    public AddProjectCommand(Index index, AddProjectDescriptor addProjectDescriptor) {
+    public AssignProjectCommand(Index index, AssignProjectDescriptor assignProjectDescriptor) {
         super();
         requireNonNull(index);
-        requireNonNull(addProjectDescriptor);
+        requireNonNull(assignProjectDescriptor);
         this.index = index;
-        this.addProjectDescriptor = new AddProjectDescriptor(addProjectDescriptor);
+        this.assignProjectDescriptor = new AssignProjectDescriptor(assignProjectDescriptor);
     }
 
     /**
-     * Executes the command to add a project to the specified person.
+     * Executes the command to assign a project to the specified person.
      *
      * @param model {@code Model} which the command should operate on.
      * @return A {@code CommandResult} with the success message.
@@ -72,19 +72,19 @@ public class AddProjectCommand extends ProjectCommand {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        if (!addProjectDescriptor.isProjectFieldEdited()) {
+        if (!assignProjectDescriptor.isProjectFieldEdited()) {
             throw new CommandException(MESSAGE_NOT_EDITED);
         }
 
-        validateProjectsExist(addProjectDescriptor.getProjects().orElseThrow(() ->
+        validateProjectsExist(assignProjectDescriptor.getProjects().orElseThrow(() ->
             new CommandException(MESSAGE_PROJECT_NOT_FOUND)), model);
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, addProjectDescriptor);
+        Person editedPerson = createEditedPerson(personToEdit, assignProjectDescriptor);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_ADD_PROJECT_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_ASSIGN_PROJECT_SUCCESS, Messages.format(editedPerson)));
     }
 
     private static void validateProjectsExist(List<Project> projects, Model model) throws CommandException {
@@ -101,7 +101,7 @@ public class AddProjectCommand extends ProjectCommand {
      */
     private static Person createEditedPerson(
             Person personToEdit,
-            AddProjectDescriptor addProjectDescriptor) throws CommandException {
+            AssignProjectDescriptor assignProjectDescriptor) throws CommandException {
         assert personToEdit != null;
 
         Name name = personToEdit.getName();
@@ -111,7 +111,7 @@ public class AddProjectCommand extends ProjectCommand {
         List<Task> taskList = personToEdit.getTasks();
 
         List<Project> newProjects = new ArrayList<>(personToEdit.getProjects());
-        newProjects.addAll(addProjectDescriptor.getProjects().orElseThrow(() ->
+        newProjects.addAll(assignProjectDescriptor.getProjects().orElseThrow(() ->
                 new CommandException(MESSAGE_PROJECT_NOT_FOUND)));
         checkUniqueProjects(newProjects);
 
@@ -138,28 +138,28 @@ public class AddProjectCommand extends ProjectCommand {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AddProjectCommand)) {
+        if (!(other instanceof AssignProjectCommand)) {
             return false;
         }
 
-        AddProjectCommand otherAddProjectCommand = (AddProjectCommand) other;
-        return index.equals(otherAddProjectCommand.index)
-                && addProjectDescriptor.equals(otherAddProjectCommand.addProjectDescriptor);
+        AssignProjectCommand otherAssignProjectCommand = (AssignProjectCommand) other;
+        return index.equals(otherAssignProjectCommand.index)
+                && assignProjectDescriptor.equals(otherAssignProjectCommand.assignProjectDescriptor);
     }
 
     /**
-     * Stores the projects to add to the person.
+     * Stores the projects to assign to the person.
      */
-    public static class AddProjectDescriptor {
+    public static class AssignProjectDescriptor {
         private List<Project> projects;
 
-        public AddProjectDescriptor() {}
+        public AssignProjectDescriptor() {}
 
         /**
          * Copy constructor.
          * A defensive copy of {@code projects} is used internally.
          */
-        public AddProjectDescriptor(AddProjectDescriptor toCopy) {
+        public AssignProjectDescriptor(AssignProjectDescriptor toCopy) {
             setProjects(toCopy.projects);
         }
 
@@ -194,11 +194,11 @@ public class AddProjectCommand extends ProjectCommand {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof AddProjectDescriptor)) {
+            if (!(other instanceof AssignProjectDescriptor)) {
                 return false;
             }
 
-            AddProjectDescriptor addProjectDescriptor = (AddProjectDescriptor) other;
+            AssignProjectDescriptor addProjectDescriptor = (AssignProjectDescriptor) other;
             return Objects.equals(projects, addProjectDescriptor.projects);
         }
     }

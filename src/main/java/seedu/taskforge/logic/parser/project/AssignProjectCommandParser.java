@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.commands.project.AddProjectCommand;
-import seedu.taskforge.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
 import seedu.taskforge.logic.parser.ArgumentMultimap;
 import seedu.taskforge.logic.parser.ArgumentTokenizer;
 import seedu.taskforge.logic.parser.Parser;
@@ -20,19 +20,19 @@ import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.project.Project;
 
 /**
- * Parses input arguments and creates a new AddProjectCommand object.
+ * Parses input arguments and creates a new AssignProjectCommand object.
  */
-public class AddProjectCommandParser implements Parser<AddProjectCommand> {
+public class AssignProjectCommandParser implements Parser<AssignProjectCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the AddProjectCommand
-     * and returns a AddProjectCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the AssignProjectCommand
+     * and returns a AssignProjectCommand object for execution.
      *
      * @param args The arguments string to be parsed.
-     * @return A AddProjectCommand object containing the parsed index and project.
+     * @return A AssignProjectCommand object containing the parsed index and project.
      * @throws ParseException If the user input does not conform to the expected format.
      */
-    public AddProjectCommand parse(String args) throws ParseException {
+    public AssignProjectCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_PROJECT_TITLE);
@@ -43,19 +43,19 @@ public class AddProjectCommandParser implements Parser<AddProjectCommand> {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddProjectCommand.MESSAGE_USAGE), pe);
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, AssignProjectCommand.MESSAGE_USAGE), pe);
         }
 
-        AddProjectDescriptor addProjectDescriptor = new AddProjectCommand.AddProjectDescriptor();
+        AssignProjectDescriptor assignProjectDescriptor = new AssignProjectDescriptor();
 
         parseProjectsForAdd(argMultimap.getAllValues(PREFIX_PROJECT_TITLE))
-                .ifPresent(addProjectDescriptor::setProjects);
+                .ifPresent(assignProjectDescriptor::setProjects);
 
-        if (!addProjectDescriptor.isProjectFieldEdited()) {
-            throw new ParseException(AddProjectCommand.MESSAGE_NOT_EDITED);
+        if (!assignProjectDescriptor.isProjectFieldEdited()) {
+            throw new ParseException(AssignProjectCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new AddProjectCommand(index, addProjectDescriptor);
+        return new AssignProjectCommand(index, assignProjectDescriptor);
     }
 
     /**

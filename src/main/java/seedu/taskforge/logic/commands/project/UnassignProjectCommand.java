@@ -25,40 +25,40 @@ import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
 
 /**
- * Deletes a project from an existing person in the address book.
+ * Unassigns a project from an existing person in the address book.
  */
-public class DeleteProjectCommand extends ProjectCommand {
+public class UnassignProjectCommand extends ProjectCommand {
 
-    public static final String SUBCOMMAND_WORD = "delete";
+    public static final String SUBCOMMAND_WORD = "unassign";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + " INDEX -pi PROJECT_INDEX";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + " INDEX -x PROJECT_INDEX";
 
-    public static final String MESSAGE_DELETE_PROJECT_SUCCESS = "Deleted Project: %1$s";
+    public static final String MESSAGE_UNASSIGN_PROJECT_SUCCESS = "Project unassigned: %1$s";
 
-    public static final String MESSAGE_NOT_EDITED = "At least one project to delete must be provided";
+    public static final String MESSAGE_NOT_EDITED = "At least one project to unassign must be provided";
 
     public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "The project index provided is invalid";
 
     private final Index index;
-    private final DeleteProjectDescriptor deleteProjectDescriptor;
+    private final UnassignProjectDescriptor unassignProjectDescriptor;
 
     /**
      * @param index of the person in the filtered person list to edit
-     * @param deleteProjectDescriptor details to edit the person with
+     * @param unassignProjectDescriptor details to edit the person with
      */
-    public DeleteProjectCommand(Index index, DeleteProjectDescriptor deleteProjectDescriptor) {
+    public UnassignProjectCommand(Index index, UnassignProjectDescriptor unassignProjectDescriptor) {
         requireNonNull(index);
-        requireNonNull(deleteProjectDescriptor);
+        requireNonNull(unassignProjectDescriptor);
 
         this.index = index;
-        this.deleteProjectDescriptor = new DeleteProjectDescriptor(deleteProjectDescriptor);
+        this.unassignProjectDescriptor = new UnassignProjectDescriptor(unassignProjectDescriptor);
     }
 
     /**
-     * Executes the command to delete a project from the specified person.
+     * Executes the command to unassign a project from the specified person.
      *
      * @param model {@code Model} which the command should operate on.
-     * @return A {@code CommandResult} with the success message containing the deleted project.
+     * @return A {@code CommandResult} with the success message containing the unassigned project.
      * @throws CommandException If either the person index or project index is invalid.
      */
     @Override
@@ -72,11 +72,11 @@ public class DeleteProjectCommand extends ProjectCommand {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, deleteProjectDescriptor);
+        Person editedPerson = createEditedPerson(personToEdit, unassignProjectDescriptor);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_DELETE_PROJECT_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_UNASSIGN_PROJECT_SUCCESS, Messages.format(editedPerson)));
     }
 
     /**
@@ -85,7 +85,7 @@ public class DeleteProjectCommand extends ProjectCommand {
      */
     private static Person createEditedPerson(
             Person personToEdit,
-            DeleteProjectDescriptor deleteProjectDescriptor) throws CommandException {
+            UnassignProjectDescriptor unassignProjectDescriptor) throws CommandException {
         assert personToEdit != null;
 
         Name name = personToEdit.getName();
@@ -96,7 +96,7 @@ public class DeleteProjectCommand extends ProjectCommand {
 
         List<Project> newProjects = new ArrayList<>(personToEdit.getProjects());
         List<Project> projectsToDelete = new ArrayList<>();
-        List<Index> indexToDelete = deleteProjectDescriptor.getProjectsIndexes()
+        List<Index> indexToDelete = unassignProjectDescriptor.getProjectsIndexes()
                 .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
         for (int i = 0; i < indexToDelete.size(); ++i) {
             int projectIndex = indexToDelete.get(i).getZeroBased();
@@ -118,28 +118,28 @@ public class DeleteProjectCommand extends ProjectCommand {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof DeleteProjectCommand)) {
+        if (!(other instanceof UnassignProjectCommand)) {
             return false;
         }
 
-        DeleteProjectCommand otherDeleteProjectCommand = (DeleteProjectCommand) other;
-        return index.equals(otherDeleteProjectCommand.index)
-                && deleteProjectDescriptor.equals(otherDeleteProjectCommand.deleteProjectDescriptor);
+        UnassignProjectCommand otherUnassignProjectCommand = (UnassignProjectCommand) other;
+        return index.equals(otherUnassignProjectCommand.index)
+                && unassignProjectDescriptor.equals(otherUnassignProjectCommand.unassignProjectDescriptor);
     }
 
     /**
-     * Stores the projects to delete from the person.
+     * Stores the projects to unassign from the person.
      */
-    public static class DeleteProjectDescriptor {
+    public static class UnassignProjectDescriptor {
         private List<Index> indexes;
 
-        public DeleteProjectDescriptor() {}
+        public UnassignProjectDescriptor() {}
 
         /**
          * Copy constructor.
          * A defensive copy of {@code projects} is used internally.
          */
-        public DeleteProjectDescriptor(DeleteProjectDescriptor toCopy) {
+        public UnassignProjectDescriptor(UnassignProjectDescriptor toCopy) {
             setProjectsIndexes(toCopy.indexes);
         }
 
@@ -174,11 +174,11 @@ public class DeleteProjectCommand extends ProjectCommand {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof DeleteProjectDescriptor)) {
+            if (!(other instanceof UnassignProjectDescriptor)) {
                 return false;
             }
 
-            DeleteProjectDescriptor deleteProjectDescriptor = (DeleteProjectDescriptor) other;
+            UnassignProjectDescriptor deleteProjectDescriptor = (UnassignProjectDescriptor) other;
             return Objects.equals(indexes, deleteProjectDescriptor.indexes);
         }
     }

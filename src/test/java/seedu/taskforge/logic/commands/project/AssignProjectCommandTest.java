@@ -21,105 +21,105 @@ import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.util.SampleDataUtil;
-import seedu.taskforge.testutil.AddProjectDescriptorBuilder;
+import seedu.taskforge.testutil.AssignProjectDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 
-public class AddProjectCommandTest {
+public class AssignProjectCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_addOneProjectUnfilteredList_success() {
+    public void execute_assignOneProjectUnfilteredList_success() {
         Index indexFirstPerson = Index.fromOneBased(1);
         Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
 
         PersonBuilder personInList = new PersonBuilder(firstPerson);
         Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).build();
 
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_BETA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
+        String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
 
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(assignProjectCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_addOneProjectFilteredList_success() {
+    public void execute_assignOneProjectFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
         PersonBuilder personInList = new PersonBuilder(firstPerson);
         Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).build();
 
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_BETA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
+        String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
 
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(assignProjectCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_addOneProjectDuplicateUnfilteredList_exceptionThrown() {
+    public void execute_assignOneProjectDuplicateUnfilteredList_exceptionThrown() {
         Index indexFirstPerson = Index.fromOneBased(1);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(indexFirstPerson, descriptor);
 
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
+        assertCommandFailure(assignProjectCommand, model, AssignProjectCommand.MESSAGE_DUPLICATE_PROJECT);
     }
 
     @Test
-    public void execute_addOneProjectDuplicateFilteredList_exceptionThrown() {
+    public void execute_assignOneProjectDuplicateFilteredList_exceptionThrown() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
+        assertCommandFailure(assignProjectCommand, model, AssignProjectCommand.MESSAGE_DUPLICATE_PROJECT);
     }
 
     @Test
-    public void execute_addMultipleProjectsDuplicateUnfilteredList_exceptionThrown() {
+    public void execute_assignMultipleProjectsDuplicateUnfilteredList_exceptionThrown() {
         Index indexFirstPerson = Index.fromOneBased(1);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y,
                 VALID_PROJECT_Z, VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(indexFirstPerson, descriptor);
 
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
+        assertCommandFailure(assignProjectCommand, model, AssignProjectCommand.MESSAGE_DUPLICATE_PROJECT);
     }
 
     @Test
-    public void execute_addMultipleProjectsDuplicateFilteredList_exceptionThrown() {
+    public void execute_assignMultipleProjectsDuplicateFilteredList_exceptionThrown() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y,
                 VALID_PROJECT_Z, VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
+        assertCommandFailure(assignProjectCommand, model, AssignProjectCommand.MESSAGE_DUPLICATE_PROJECT);
     }
 
     @Test
-    public void execute_addMultipleProjectsUnfilteredList_success() {
+    public void execute_assignMultipleProjectsUnfilteredList_success() {
         Index indexFirstPerson = Index.fromOneBased(1);
         Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
 
@@ -127,21 +127,21 @@ public class AddProjectCommandTest {
         Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA,
                 VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
 
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
+        String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
 
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(assignProjectCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_addMultipleProjectsFilteredList_success() {
+    public void execute_assignMultipleProjectsFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
@@ -149,48 +149,48 @@ public class AddProjectCommandTest {
         Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA,
                 VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
 
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
+        String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
                 Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
 
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(assignProjectCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_noProjectSpecifiedUnfilteredList_errorThrown() {
-        AddProjectCommand addProjectCommand = new AddProjectCommand(
-                INDEX_FIRST_PERSON, new AddProjectCommand.AddProjectDescriptor()
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(
+                INDEX_FIRST_PERSON, new AssignProjectDescriptor()
         );
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_NOT_EDITED);
+        assertCommandFailure(assignProjectCommand, model, AssignProjectCommand.MESSAGE_NOT_EDITED);
     }
 
     @Test
     public void execute_noProjectSpecifiedFilteredList_errorThrown() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddProjectCommand addProjectCommand = new AddProjectCommand(
-                INDEX_FIRST_PERSON, new AddProjectCommand.AddProjectDescriptor()
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(
+                INDEX_FIRST_PERSON, new AssignProjectDescriptor()
         );
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_NOT_EDITED);
+        assertCommandFailure(assignProjectCommand, model, AssignProjectCommand.MESSAGE_NOT_EDITED);
     }
 
     @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_X).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(outOfBoundIndex, descriptor);
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(addProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(assignProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     /**
-     * Adds project to a person of a filtered list where index is larger than size of filtered list,
+     * Assigns project to a person of a filtered list where index is larger than size of filtered list,
      * but smaller than size of address book
      */
     @Test
@@ -200,19 +200,19 @@ public class AddProjectCommandTest {
         // ensures that outOfBoundIndex is still in bounds of address book list
         assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
 
-        AddProjectCommand addProjectCommand = new AddProjectCommand(outOfBoundIndex,
-                new AddProjectDescriptorBuilder().withProjects(VALID_PROJECT_X).build());
+        AssignProjectCommand assignProjectCommand = new AssignProjectCommand(outOfBoundIndex,
+                new AssignProjectDescriptorBuilder().withProjects(VALID_PROJECT_X).build());
 
-        assertCommandFailure(addProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(assignProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
     public void equals() {
-        AddProjectDescriptor descriptor = new AddProjectDescriptor();
-        AddProjectCommand command = new AddProjectCommand(INDEX_FIRST_PROJECT, descriptor);
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptor();
+        AssignProjectCommand command = new AssignProjectCommand(INDEX_FIRST_PROJECT, descriptor);
 
         // same values
-        AddProjectCommand commandCopy = new AddProjectCommand(INDEX_FIRST_PROJECT, descriptor);
+        AssignProjectCommand commandCopy = new AssignProjectCommand(INDEX_FIRST_PROJECT, descriptor);
         assertEquals(command, commandCopy);
 
         // same object
@@ -225,22 +225,22 @@ public class AddProjectCommandTest {
         assertNotEquals(command, 5);
 
         // different index -> false
-        AddProjectCommand secondProjectCommand = new AddProjectCommand(INDEX_SECOND_PROJECT, descriptor);
+        AssignProjectCommand secondProjectCommand = new AssignProjectCommand(INDEX_SECOND_PROJECT, descriptor);
         assertNotEquals(command, secondProjectCommand);
 
         // different descriptor -> false
-        AddProjectDescriptor otherDescriptor = new AddProjectDescriptor();
+        AssignProjectDescriptor otherDescriptor = new AssignProjectDescriptor();
         otherDescriptor.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_ALPHA));
-        assertNotEquals(command, new AddProjectCommand(INDEX_FIRST_PROJECT, otherDescriptor));
+        assertNotEquals(command, new AssignProjectCommand(INDEX_FIRST_PROJECT, otherDescriptor));
     }
 
     @Test
-    public void addProjectDescriptor_equals() {
-        AddProjectDescriptor descriptor = new AddProjectDescriptor();
+    public void assignProjectDescriptor_equals() {
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptor();
         descriptor.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_ALPHA));
 
         // same values
-        AddProjectDescriptor descriptorCopy = new AddProjectDescriptor();
+        AssignProjectDescriptor descriptorCopy = new AssignProjectDescriptor();
         descriptorCopy.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_ALPHA));
         assertEquals(descriptor, descriptorCopy);
 
@@ -254,7 +254,7 @@ public class AddProjectCommandTest {
         assertNotEquals(descriptor, 5);
 
         // different list -> false
-        AddProjectDescriptor otherDescriptor = new AddProjectDescriptor();
+        AssignProjectDescriptor otherDescriptor = new AssignProjectDescriptor();
         descriptor.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_BETA));
         assertNotEquals(descriptor, otherDescriptor);
     }

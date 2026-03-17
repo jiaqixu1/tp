@@ -16,17 +16,17 @@ import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.commands.project.AddProjectCommand;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.testutil.AddProjectDescriptorBuilder;
+import seedu.taskforge.testutil.AssignProjectDescriptorBuilder;
 
-public class AddProjectCommandParserTest {
+public class AssignProjectCommandParserTest {
     private static final String PROJECT_EMPTY = " " + PREFIX_PROJECT_TITLE;
 
     private static final String MESSAGE_INVALID_FORMAT =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddProjectCommand.MESSAGE_USAGE);
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, AssignProjectCommand.MESSAGE_USAGE);
 
-    private AddProjectCommandParser parser = new AddProjectCommandParser();
+    private AssignProjectCommandParser parser = new AssignProjectCommandParser();
 
     @Test
     public void parse_missingProject_failure() {
@@ -34,7 +34,7 @@ public class AddProjectCommandParserTest {
         assertParseFailure(parser, PROJECT_DESC_X, MESSAGE_INVALID_FORMAT);
 
         // no field specified
-        assertParseFailure(parser, "1", AddProjectCommand.MESSAGE_NOT_EDITED);
+        assertParseFailure(parser, "1", AssignProjectCommand.MESSAGE_NOT_EDITED);
 
         // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
@@ -69,9 +69,9 @@ public class AddProjectCommandParserTest {
         Index targetIndex = INDEX_SECOND_PERSON;
         String userInput = targetIndex.getOneBased() + PROJECT_DESC_X;
 
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectCommand.AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_X).build();
-        AddProjectCommand expectedCommand = new AddProjectCommand(targetIndex, descriptor);
+        AssignProjectCommand expectedCommand = new AssignProjectCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -82,10 +82,10 @@ public class AddProjectCommandParserTest {
         String userInput = targetIndex.getOneBased()
                 + PROJECT_DESC_X + PROJECT_DESC_Y + PROJECT_DESC_Z;
 
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
+        AssignProjectCommand.AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder()
                 .withProjects(VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z)
                 .build();
-        AddProjectCommand expectedCommand = new AddProjectCommand(targetIndex, descriptor);
+        AssignProjectCommand expectedCommand = new AssignProjectCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }

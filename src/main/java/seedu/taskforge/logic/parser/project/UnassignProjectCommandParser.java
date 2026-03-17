@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand.DeleteProjectDescriptor;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.parser.ArgumentMultimap;
 import seedu.taskforge.logic.parser.ArgumentTokenizer;
 import seedu.taskforge.logic.parser.Parser;
@@ -22,7 +22,7 @@ import seedu.taskforge.logic.parser.exceptions.ParseException;
 /**
  * Parses input arguments and creates a new ProjectDeleteCommand object.
  */
-public class DeleteProjectCommandParser implements Parser<DeleteProjectCommand> {
+public class UnassignProjectCommandParser implements Parser<UnassignProjectCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the ProjectDeleteCommand
@@ -32,7 +32,7 @@ public class DeleteProjectCommandParser implements Parser<DeleteProjectCommand> 
      * @return A ProjectDeleteCommand object containing the parsed person index and project index.
      * @throws ParseException If the user input does not conform to the expected format.
      */
-    public DeleteProjectCommand parse(String args) throws ParseException {
+    public UnassignProjectCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_PROJECT_INDEX);
@@ -43,19 +43,19 @@ public class DeleteProjectCommandParser implements Parser<DeleteProjectCommand> 
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    DeleteProjectCommand.MESSAGE_USAGE), pe);
+                    UnassignProjectCommand.MESSAGE_USAGE), pe);
         }
 
-        DeleteProjectDescriptor deleteProjectDescriptor = new DeleteProjectDescriptor();
+        UnassignProjectDescriptor unassignProjectDescriptor = new UnassignProjectDescriptor();
 
         parseProjectsIndexesForAdd(argMultimap.getAllValues(PREFIX_PROJECT_INDEX))
-                .ifPresent(deleteProjectDescriptor::setProjectsIndexes);
+                .ifPresent(unassignProjectDescriptor::setProjectsIndexes);
 
-        if (!deleteProjectDescriptor.isProjectFieldEdited()) {
-            throw new ParseException(DeleteProjectCommand.MESSAGE_NOT_EDITED);
+        if (!unassignProjectDescriptor.isProjectFieldEdited()) {
+            throw new ParseException(UnassignProjectCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new DeleteProjectCommand(index, deleteProjectDescriptor);
+        return new UnassignProjectCommand(index, unassignProjectDescriptor);
     }
 
     /**

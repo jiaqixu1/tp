@@ -32,7 +32,7 @@ public class AddProjectCommand extends ProjectCommand {
     public static final String SUBCOMMAND_WORD = "add";
 
     public static final String MESSAGE_ADD_PROJECT_SUCCESS = "New project added: %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + " INDEX -pt PROJECT_TITLE";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + " INDEX -l PROJECT_TITLE";
     public static final String MESSAGE_DUPLICATE_PROJECT = "This project already exists for this person!";
     public static final String MESSAGE_PROJECT_NOT_FOUND = "The project to add does not exist in the address book";
     public static final String MESSAGE_NOT_EDITED = "At least one project to add must be provided";

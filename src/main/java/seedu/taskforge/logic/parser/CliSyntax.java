@@ -12,7 +12,7 @@ public class CliSyntax {
     public static final Prefix PREFIX_TASK = new Prefix("-t");
     public static final Prefix PREFIX_TAG = new Prefix("-z");
     public static final Prefix PREFIX_TASK_DESCRIPTION = new Prefix("-d");
-    public static final Prefix PREFIX_PROJECT_TITLE = new Prefix("-pt");
+    public static final Prefix PREFIX_PROJECT_TITLE = new Prefix("-l");
     public static final Prefix PREFIX_PROJECT_INDEX = new Prefix("-x");
 
 }

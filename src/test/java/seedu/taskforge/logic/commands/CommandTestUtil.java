@@ -79,9 +79,9 @@ public class CommandTestUtil {
     public static final String INVALID_TASK_DELETE = " " + PREFIX_INDEX + "-1";
 
     // For project related commands not person related
-    public static final String PROJECT_DESC_X = " " + PREFIX_PROJECT_TITLE + VALID_PROJECT_X;
-    public static final String PROJECT_DESC_Y = " " + PREFIX_PROJECT_TITLE + VALID_PROJECT_Y;
-    public static final String PROJECT_DESC_Z = " " + PREFIX_PROJECT_TITLE + VALID_PROJECT_Z;
+    public static final String PROJECT_DESC_X = " " + PREFIX_NAME + VALID_PROJECT_X;
+    public static final String PROJECT_DESC_Y = " " + PREFIX_NAME + VALID_PROJECT_Y;
+    public static final String PROJECT_DESC_Z = " " + PREFIX_NAME + VALID_PROJECT_Z;
 
     public static final String PROJECT_DELETE_1 = " " + PREFIX_INDEX + "1";
     public static final String PROJECT_DELETE_2 = " " + PREFIX_INDEX + "2";
@@ -91,6 +91,9 @@ public class CommandTestUtil {
             + "refactor code*"; // '*' not allowed in tasks
     public static final String INVALID_PROJECT_TITLE = " " + PREFIX_PROJECT_TITLE
             + "alpha*"; // '*' not allowed in projects
+    public static final String INVALID_PROJECT_NAME = " " + PREFIX_NAME
+            + "alpha*"; // '*' not allowed in projects
+
     public static final String INVALID_PROJECT_INDEX = " " + PREFIX_INDEX + -1;
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";

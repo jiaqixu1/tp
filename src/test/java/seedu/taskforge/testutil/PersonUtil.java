@@ -85,9 +85,9 @@ public class PersonUtil {
         if (descriptor.getProjects().isPresent()) {
             List<Project> projects = descriptor.getProjects().get();
             if (projects.isEmpty()) {
-                sb.append(PREFIX_PROJECT_TITLE).append(" ");
+                sb.append(PREFIX_NAME).append(" ");
             } else {
-                projects.forEach(s -> sb.append(PREFIX_PROJECT_TITLE).append(s.title).append(" "));
+                projects.forEach(s -> sb.append(PREFIX_NAME).append(s.title).append(" "));
             }
         }
         return sb.toString();

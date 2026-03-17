@@ -1,14 +1,14 @@
 package seedu.taskforge.logic.parser.project;
 
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_PROJECT_TITLE;
+import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_PROJECT_NAME;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PROJECT_DESC_X;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PROJECT_DESC_Y;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PROJECT_DESC_Z;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_X;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_Y;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_Z;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -21,7 +21,7 @@ import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.AssignProjectDescriptorBuilder;
 
 public class AssignProjectCommandParserTest {
-    private static final String PROJECT_EMPTY = " " + PREFIX_PROJECT_TITLE;
+    private static final String PROJECT_EMPTY = " " + PREFIX_NAME;
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, AssignProjectCommand.MESSAGE_USAGE);
@@ -57,11 +57,11 @@ public class AssignProjectCommandParserTest {
 
     @Test
     public void parse_invalidValue_failure() {
-        assertParseFailure(parser, "1" + INVALID_PROJECT_TITLE, Project.MESSAGE_CONSTRAINTS); // invalid project
+        assertParseFailure(parser, "1" + INVALID_PROJECT_NAME, Project.MESSAGE_CONSTRAINTS); // invalid project
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser, "1" + PROJECT_DESC_X
-                + INVALID_PROJECT_TITLE, Project.MESSAGE_CONSTRAINTS);
+                + INVALID_PROJECT_NAME, Project.MESSAGE_CONSTRAINTS);
     }
 
     @Test

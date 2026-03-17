@@ -2,7 +2,7 @@ package seedu.taskforge.logic.parser.project;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -35,7 +35,7 @@ public class AssignProjectCommandParser implements Parser<AssignProjectCommand> 
     public AssignProjectCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_PROJECT_TITLE);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME);
 
         Index index;
 
@@ -48,7 +48,7 @@ public class AssignProjectCommandParser implements Parser<AssignProjectCommand> 
 
         AssignProjectDescriptor assignProjectDescriptor = new AssignProjectDescriptor();
 
-        parseProjectsForAdd(argMultimap.getAllValues(PREFIX_PROJECT_TITLE))
+        parseProjectsForAdd(argMultimap.getAllValues(PREFIX_NAME))
                 .ifPresent(assignProjectDescriptor::setProjects);
 
         if (!assignProjectDescriptor.isProjectFieldEdited()) {

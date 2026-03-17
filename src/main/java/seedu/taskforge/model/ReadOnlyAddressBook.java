@@ -2,7 +2,7 @@ package seedu.taskforge.model;
 
 import javafx.collections.ObservableList;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 
 /**
  * Unmodifiable view of an address book
@@ -16,9 +16,9 @@ public interface ReadOnlyAddressBook {
     ObservableList<Person> getPersonList();
 
     /**
-     * Returns an unmodifiable view of the tags list.
-     * This list will not contain any duplicate tags.
+     * Returns an unmodifiable view of the projects list.
+     * This list will not contain any duplicate projects.
      */
-    ObservableList<Tag> getTagList();
+    ObservableList<Project> getProjectList();
 
 }

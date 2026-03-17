@@ -8,8 +8,8 @@ import javafx.collections.ObservableList;
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.UniquePersonList;
-import seedu.taskforge.model.tag.Tag;
-import seedu.taskforge.model.tag.UniqueTagList;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.project.UniqueProjectList;
 
 /**
  * Wraps all data at the address-book level
@@ -18,7 +18,7 @@ import seedu.taskforge.model.tag.UniqueTagList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
-    private final UniqueTagList tags;
+    private final UniqueProjectList projects;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -29,7 +29,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
-        tags = new UniqueTagList();
+        projects = new UniqueProjectList();
     }
 
     public AddressBook() {}
@@ -53,11 +53,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Replaces the contents of the tag list with {@code tags}.
-     * {@code tags} must not contain duplicate tags.
+     * Replaces the contents of the project list with {@code projects}.
+     * {@code projects} must not contain duplicate projects.
      */
-    public void setTags(List<Tag> tags) {
-        this.tags.setTags(tags);
+    public void setProjects(List<Project> projects) {
+        this.projects.setProjects(projects);
     }
 
     /**
@@ -67,7 +67,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
-        setTags(newData.getTagList());
+        setProjects(newData.getProjectList());
     }
 
     //// person-level operations
@@ -107,41 +107,43 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.remove(key);
     }
 
-    //// tag-level operations
+    //// project-level operations
 
     /**
-     * Returns true if a tag with the same identity as {@code tag} exists in the address book.
+     * Returns true if a project with the same identity as {@code project} exists in the address book.
      */
-    public boolean hasTag(Tag tag) {
-        requireNonNull(tag);
-        return tags.contains(tag);
+    public boolean hasProject(Project project) {
+        requireNonNull(project);
+        return projects.contains(project);
     }
 
     /**
-     * Adds a tag to the address book.
-     * The tag must not already exist in the address book.
+     * Adds a project to the address book.
+     * The project must not already exist in the address book.
      */
-    public void addTag(Tag tag) {
-        tags.add(tag);
+    public void addProject(Project project) {
+        projects.add(project);
     }
 
     /**
-     * Replaces the given tag {@code target} in the list with {@code editedTag}.
+        * Replaces the given project {@code target} in the list with
+        * {@code editedProject}.
      * {@code target} must exist in the address book.
-     * The tag identity of {@code editedTag} must not be the same as another existing tag in the address book.
+     * The project identity of {@code editedProject} must not be the same as
+     * another existing project in the address book.
      */
-    public void setTag(Tag target, Tag editedTag) {
-        requireNonNull(editedTag);
+    public void setProject(Project target, Project editedProject) {
+        requireNonNull(editedProject);
 
-        tags.setTag(target, editedTag);
+        projects.setProject(target, editedProject);
     }
 
     /**
      * Removes {@code key} from this {@code AddressBook}.
      * {@code key} must exist in the address book.
      */
-    public void removeTag(Tag key) {
-        tags.remove(key);
+    public void removeProject(Project key) {
+        projects.remove(key);
     }
 
     //// util methods
@@ -150,7 +152,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     public String toString() {
         return new ToStringBuilder(this)
                 .add("persons", persons)
-                .add("tags", tags)
+                .add("projects", projects)
                 .toString();
     }
 
@@ -160,8 +162,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
-    public ObservableList<Tag> getTagList() {
-        return tags.asUnmodifiableObservableList();
+    public ObservableList<Project> getProjectList() {
+        return projects.asUnmodifiableObservableList();
     }
 
     @Override
@@ -176,11 +178,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return persons.equals(otherAddressBook.persons) && tags.equals(otherAddressBook.tags);
+        return persons.equals(otherAddressBook.persons) && projects.equals(otherAddressBook.projects);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(persons, tags);
+        return java.util.Objects.hash(persons, projects);
     }
 }

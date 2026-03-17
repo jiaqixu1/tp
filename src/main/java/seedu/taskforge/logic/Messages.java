@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import seedu.taskforge.logic.parser.Prefix;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 
 /**
  * Container for user visible messages.
@@ -52,9 +52,9 @@ public class Messages {
     }
 
     /**
-     * Formats the {@code tag} for display to the user.
+     * Formats the {@code project} for display to the user.
      */
-    public static String format(Tag tag) {
-        return tag.toString();
+    public static String format(Project project) {
+        return project.toString();
     }
 }

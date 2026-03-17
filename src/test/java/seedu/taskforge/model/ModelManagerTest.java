@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.AddressBookBuilder;
 
 public class ModelManagerTest {
@@ -101,20 +101,20 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void hasTag_nullTag_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> modelManager.hasTag(null));
+    public void hasProject_nullProject_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.hasProject(null));
     }
 
     @Test
-    public void hasTag_tagNotInAddressBook_returnsFalse() {
-        assertFalse(modelManager.hasTag(new Tag("friends")));
+    public void hasProject_projectNotInAddressBook_returnsFalse() {
+        assertFalse(modelManager.hasProject(new Project("alpha")));
     }
 
     @Test
-    public void hasTag_tagInAddressBook_returnsTrue() {
-        Tag friends = new Tag("friends");
-        modelManager.addTag(friends);
-        assertTrue(modelManager.hasTag(friends));
+    public void hasProject_projectInAddressBook_returnsTrue() {
+        Project alpha = new Project("alpha");
+        modelManager.addProject(alpha);
+        assertTrue(modelManager.hasProject(alpha));
     }
 
     @Test
@@ -125,25 +125,25 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void deleteTag_existingTag_tagDeleted() {
-        Tag friends = new Tag("friends");
-        modelManager.addTag(friends);
+    public void deleteProject_existingProject_projectDeleted() {
+        Project alpha = new Project("alpha");
+        modelManager.addProject(alpha);
 
-        modelManager.deleteTag(friends);
+        modelManager.deleteProject(alpha);
 
-        assertFalse(modelManager.hasTag(friends));
+        assertFalse(modelManager.hasProject(alpha));
     }
 
     @Test
-    public void setTag_existingTag_tagUpdated() {
-        Tag friends = new Tag("friends");
-        Tag colleagues = new Tag("colleagues");
-        modelManager.addTag(friends);
+    public void setProject_existingProject_projectUpdated() {
+        Project alpha = new Project("alpha");
+        Project beta = new Project("beta");
+        modelManager.addProject(alpha);
 
-        modelManager.setTag(friends, colleagues);
+        modelManager.setProject(alpha, beta);
 
-        assertFalse(modelManager.hasTag(friends));
-        assertTrue(modelManager.hasTag(colleagues));
+        assertFalse(modelManager.hasProject(alpha));
+        assertTrue(modelManager.hasProject(beta));
     }
 
     @Test

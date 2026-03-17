@@ -1,4 +1,4 @@
-package seedu.taskforge.logic.commands.tag;
+package seedu.taskforge.logic.commands.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -17,59 +17,52 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 
-public class ViewAllTagCommandTest {
+public class ViewAllProjectCommandTest {
 
     @Test
-    public void execute_noTags_showsNone() {
-        ModelStubWithTagList modelStub = new ModelStubWithTagList();
+    public void execute_noProjects_showsNone() {
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList();
 
-        CommandResult result = new ViewAllTagCommand().execute(modelStub);
+        CommandResult result = new ViewAllProjectCommand().execute(modelStub);
 
-        assertEquals(ViewAllTagCommand.MESSAGE_SUCCESS + " None", result.getFeedbackToUser());
+        assertEquals(ViewAllProjectCommand.MESSAGE_SUCCESS + " None", result.getFeedbackToUser());
     }
 
     @Test
-    public void execute_withTags_showsAllTags() {
-        Tag friends = new Tag("friends");
-        Tag colleagues = new Tag("colleagues");
-        ModelStubWithTagList modelStub = new ModelStubWithTagList(friends, colleagues);
+    public void execute_withProjects_showsAllProjects() {
+        Project alpha = new Project("alpha");
+        Project beta = new Project("beta");
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(alpha, beta);
 
-        CommandResult result = new ViewAllTagCommand().execute(modelStub);
+        CommandResult result = new ViewAllProjectCommand().execute(modelStub);
 
-        String expected = ViewAllTagCommand.MESSAGE_SUCCESS + "\n"
-                + friends + "\n" + colleagues;
+        String expected = ViewAllProjectCommand.MESSAGE_SUCCESS + "\n"
+                + alpha + "\n" + beta;
         assertEquals(expected, result.getFeedbackToUser());
     }
 
     @Test
     public void equals() {
-        ViewAllTagCommand viewAllTagCommand = new ViewAllTagCommand();
+        ViewAllProjectCommand viewAllProjectCommand = new ViewAllProjectCommand();
 
-        // same object -> returns true
-        assertTrue(viewAllTagCommand.equals(viewAllTagCommand));
-
-        // different instance of same type -> returns true
-        assertTrue(viewAllTagCommand.equals(new ViewAllTagCommand()));
-
-        // different types -> returns false
-        assertFalse(viewAllTagCommand.equals(1));
-
-        // null -> returns false
-        assertFalse(viewAllTagCommand.equals(null));
+        assertTrue(viewAllProjectCommand.equals(viewAllProjectCommand));
+        assertTrue(viewAllProjectCommand.equals(new ViewAllProjectCommand()));
+        assertFalse(viewAllProjectCommand.equals(1));
+        assertFalse(viewAllProjectCommand.equals(null));
     }
 
     @Test
     public void toStringMethod() {
-        String expected = ViewAllTagCommand.class.getCanonicalName()
-                + "{commandWord=" + ViewAllTagCommand.COMMAND_WORD + "}";
-        assertEquals(expected, new ViewAllTagCommand().toString());
+        String expected = ViewAllProjectCommand.class.getCanonicalName()
+                + "{commandWord=" + ViewAllProjectCommand.COMMAND_WORD + "}";
+        assertEquals(expected, new ViewAllProjectCommand().toString());
     }
 
     @Test
     public void hashCodeMethod() {
-        assertEquals(ViewAllTagCommand.COMMAND_WORD.hashCode(), new ViewAllTagCommand().hashCode());
+        assertEquals(ViewAllProjectCommand.COMMAND_WORD.hashCode(), new ViewAllProjectCommand().hashCode());
     }
 
     /**
@@ -80,93 +73,111 @@ public class ViewAllTagCommandTest {
         public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public ReadOnlyUserPrefs getUserPrefs() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public GuiSettings getGuiSettings() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void setGuiSettings(GuiSettings guiSettings) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public Path getAddressBookFilePath() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void setAddressBookFilePath(Path addressBookFilePath) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
-        public void addPerson(Person person) {
+        public void setAddressBook(ReadOnlyAddressBook addressBook) {
             throw new AssertionError("This method should not be called.");
         }
-        @Override
-        public void setAddressBook(ReadOnlyAddressBook newData) {
-            throw new AssertionError("This method should not be called.");
-        }
+
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public boolean hasProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteProject(Project target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setProject(Project target, Project editedProject) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Project> getProjectList() {
+            return FXCollections.observableArrayList();
+        }
+
         @Override
         public boolean hasPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void addPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
         @Override
         public void setPerson(Person target, Person editedPerson) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public ObservableList<Person> getFilteredPersonList() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
         }
-        @Override
-        public boolean hasTag(Tag tag) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public void deleteTag(Tag target) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public void addTag(Tag tag) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public void setTag(Tag target, Tag editedTag) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public ObservableList<Tag> getTagList() {
-            return FXCollections.observableArrayList();
-        }
     }
 
     /**
-     * A Model stub with a configurable tag list.
+     * A Model stub with a configurable project list.
      */
-    private class ModelStubWithTagList extends ModelStub {
-        private final ObservableList<Tag> tags;
+    private class ModelStubWithProjectList extends ModelStub {
+        private final ObservableList<Project> projects;
 
-        ModelStubWithTagList(Tag... tags) {
-            this.tags = FXCollections.observableArrayList(tags);
+        ModelStubWithProjectList(Project... projects) {
+            this.projects = FXCollections.observableArrayList(projects);
         }
 
         @Override
-        public ObservableList<Tag> getTagList() {
-            return tags;
+        public ObservableList<Project> getProjectList() {
+            return projects;
         }
     }
 }

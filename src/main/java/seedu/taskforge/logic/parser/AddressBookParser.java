@@ -18,11 +18,11 @@ import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
 import seedu.taskforge.logic.commands.project.AddProjectCommand;
+import seedu.taskforge.logic.commands.project.AddProjectToProjectListCommand;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
+import seedu.taskforge.logic.commands.project.DeleteProjectFromProjectListCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
-import seedu.taskforge.logic.commands.tag.AddTagCommand;
-import seedu.taskforge.logic.commands.tag.DeleteTagCommand;
-import seedu.taskforge.logic.commands.tag.ViewAllTagCommand;
+import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
@@ -31,7 +31,9 @@ import seedu.taskforge.logic.parser.person.DeleteCommandParser;
 import seedu.taskforge.logic.parser.person.EditCommandParser;
 import seedu.taskforge.logic.parser.person.FindCommandParser;
 import seedu.taskforge.logic.parser.project.AddProjectCommandParser;
+import seedu.taskforge.logic.parser.project.AddProjectToProjectListCommandParser;
 import seedu.taskforge.logic.parser.project.DeleteProjectCommandParser;
+import seedu.taskforge.logic.parser.project.DeleteProjectFromProjectListCommandParser;
 import seedu.taskforge.logic.parser.task.AddTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
 
@@ -99,21 +101,21 @@ public class AddressBookParser {
         case ProjectCommand.COMMAND_WORD:
             return handleProject(arguments);
 
+        case ViewAllProjectCommand.COMMAND_WORD:
+            return new ViewAllProjectCommand();
+
+        case AddProjectToProjectListCommand.COMMAND_WORD:
+            return new AddProjectToProjectListCommandParser().parse(arguments);
+
+        case DeleteProjectFromProjectListCommand.COMMAND_WORD:
+            return new DeleteProjectFromProjectListCommandParser().parse(arguments);
+
         // Address book related commands
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:
             return new HelpCommand();
-
-        case AddTagCommand.COMMAND_WORD:
-            return new AddTagCommandParser().parse(arguments);
-
-        case DeleteTagCommand.COMMAND_WORD:
-            return new DeleteTagCommandParser().parse(arguments);
-
-        case ViewAllTagCommand.COMMAND_WORD:
-            return new ViewAllTagCommand();
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

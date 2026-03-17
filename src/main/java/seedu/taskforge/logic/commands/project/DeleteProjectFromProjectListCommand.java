@@ -1,4 +1,4 @@
-package seedu.taskforge.logic.commands.tag;
+package seedu.taskforge.logic.commands.project;
 
 import static java.util.Objects.requireNonNull;
 
@@ -11,40 +11,40 @@ import seedu.taskforge.logic.commands.Command;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 
 /**
- * Deletes a tag from the address book.
+ * Deletes a project from the address book.
  */
-public class DeleteTagCommand extends Command {
+public class DeleteProjectFromProjectListCommand extends Command {
 
-    public static final String COMMAND_WORD = "delete-tag";
+    public static final String COMMAND_WORD = "delete-project";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the tag identified by the index number used in the displayed tag list.\n"
+            + ": Deletes the project identified by the index number used in the displayed project list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tag: %1$s";
+    public static final String MESSAGE_DELETE_PROJECT_SUCCESS = "Deleted Project: %1$s";
 
     private final Index targetIndex;
 
-    public DeleteTagCommand(Index targetIndex) {
+    public DeleteProjectFromProjectListCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Tag> lastShownList = model.getTagList();
+        List<Project> lastShownList = model.getProjectList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Tag tagToDelete = lastShownList.get(targetIndex.getZeroBased());
-        model.deleteTag(tagToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_TAG_SUCCESS, tagToDelete));
+        Project projectToDelete = lastShownList.get(targetIndex.getZeroBased());
+        model.deleteProject(projectToDelete);
+        return new CommandResult(String.format(MESSAGE_DELETE_PROJECT_SUCCESS, projectToDelete));
     }
 
     @Override
@@ -53,13 +53,12 @@ public class DeleteTagCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
-        if (!(other instanceof DeleteTagCommand)) {
+        if (!(other instanceof DeleteProjectFromProjectListCommand)) {
             return false;
         }
 
-        DeleteTagCommand otherDeleteTagCommand = (DeleteTagCommand) other;
-        return targetIndex.equals(otherDeleteTagCommand.targetIndex);
+        DeleteProjectFromProjectListCommand otherDeleteProjectCommand = (DeleteProjectFromProjectListCommand) other;
+        return targetIndex.equals(otherDeleteProjectCommand.targetIndex);
     }
 
     @Override

@@ -25,7 +25,7 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -67,15 +67,6 @@ public class AddCommandTest {
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(personWithValidTags)),
                 commandResult.getFeedbackToUser());
         assertEquals(Arrays.asList(personWithValidTags), modelStub.personsAdded);
-    }
-
-    @Test
-    public void execute_personWithInvalidTags_throwsCommandException() {
-        Person personWithInvalidTags = new PersonBuilder().withTags("invalidTag").build();
-        AddCommand addCommand = new AddCommand(personWithInvalidTags);
-        ModelStubWithoutTag modelStub = new ModelStubWithoutTag();
-
-        assertThrows(CommandException.class, AddCommand.MESSAGE_TAG_NOT_FOUND, () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -184,27 +175,27 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasTag(Tag tag) {
+        public boolean hasProject(Project project) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void deleteTag(Tag target) {
+        public void deleteProject(Project target) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void addTag(Tag tag) {
+        public void addProject(Project project) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setTag(Tag target, Tag editedTag) {
+        public void setProject(Project target, Project editedProject) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public ObservableList<Tag> getTagList() {
+        public ObservableList<Project> getProjectList() {
             return FXCollections.observableArrayList();
         }
     }
@@ -240,39 +231,9 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasTag(Tag tag) {
-            return true;
-        }
-
-        @Override
         public void addPerson(Person person) {
             requireNonNull(person);
             personsAdded.add(person);
-        }
-
-        @Override
-        public ReadOnlyAddressBook getAddressBook() {
-            return new AddressBook();
-        }
-    }
-
-    /**
-     * A Model stub that rejects all tags (simulating empty tag list).
-     */
-    private class ModelStubWithoutTag extends ModelStub {
-        @Override
-        public boolean hasPerson(Person person) {
-            return false;
-        }
-
-        @Override
-        public boolean hasTag(Tag tag) {
-            return false;
-        }
-
-        @Override
-        public void addPerson(Person person) {
-            throw new AssertionError("This method should not be called.");
         }
 
         @Override

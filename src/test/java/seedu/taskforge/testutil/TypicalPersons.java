@@ -8,6 +8,9 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_X;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_Y;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_Z;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
@@ -21,7 +24,7 @@ import java.util.Set;
 
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 
 /**
  * A utility class containing a list of {@code Person} objects to be used in tests.
@@ -81,15 +84,18 @@ public class TypicalPersons {
      */
     public static AddressBook getTypicalAddressBook() {
         AddressBook ab = new AddressBook();
-        Set<Tag> uniqueTags = new LinkedHashSet<>();
+        Set<Project> uniqueProjects = new LinkedHashSet<>();
         for (Person person : getTypicalPersons()) {
-            uniqueTags.addAll(person.getTags());
+            uniqueProjects.addAll(person.getProjects());
         }
-        // Also add tags used in command tests (e.g. edit tests assign these tags)
-        uniqueTags.add(new Tag(VALID_TAG_HUSBAND));
-        uniqueTags.add(new Tag(VALID_TAG_FRIEND));
-        for (Tag tag : uniqueTags) {
-            ab.addTag(tag);
+        // Also add projects used in command tests.
+        uniqueProjects.add(new Project(VALID_PROJECT_ALPHA));
+        uniqueProjects.add(new Project(VALID_PROJECT_BETA));
+        uniqueProjects.add(new Project(VALID_PROJECT_X));
+        uniqueProjects.add(new Project(VALID_PROJECT_Y));
+        uniqueProjects.add(new Project(VALID_PROJECT_Z));
+        for (Project project : uniqueProjects) {
+            ab.addProject(project);
         }
         for (Person person : getTypicalPersons()) {
             ab.addPerson(person);

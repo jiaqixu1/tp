@@ -12,7 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.commons.core.LogsCenter;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -89,29 +89,29 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasTag(Tag tag) {
-        requireNonNull(tag);
-        return addressBook.hasTag(tag);
+    public boolean hasProject(Project project) {
+        requireNonNull(project);
+        return addressBook.hasProject(project);
     }
 
     @Override
-    public void deleteTag(Tag target) {
-        addressBook.removeTag(target);
+    public void deleteProject(Project target) {
+        addressBook.removeProject(target);
     }
 
     @Override
-    public void addTag(Tag tag) {
-        addressBook.addTag(tag);
+    public void addProject(Project project) {
+        addressBook.addProject(project);
     }
 
     @Override
-    public void setTag(Tag target, Tag editedTag) {
-        addressBook.setTag(target, editedTag);
+    public void setProject(Project target, Project editedProject) {
+        addressBook.setProject(target, editedProject);
     }
 
     @Override
-    public ObservableList<Tag> getTagList() {
-        return addressBook.getTagList();
+    public ObservableList<Project> getProjectList() {
+        return addressBook.getProjectList();
     }
 
     @Override

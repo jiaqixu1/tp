@@ -7,7 +7,6 @@ import static seedu.taskforge.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_TAG;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_TASK;
 
 import java.util.Arrays;
@@ -28,12 +27,12 @@ import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
 import seedu.taskforge.logic.commands.project.AddProjectCommand;
 import seedu.taskforge.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
+import seedu.taskforge.logic.commands.project.AddProjectToProjectListCommand;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand.DeleteProjectDescriptor;
+import seedu.taskforge.logic.commands.project.DeleteProjectFromProjectListCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
-import seedu.taskforge.logic.commands.tag.AddTagCommand;
-import seedu.taskforge.logic.commands.tag.DeleteTagCommand;
-import seedu.taskforge.logic.commands.tag.ViewAllTagCommand;
+import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
@@ -41,7 +40,7 @@ import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescripto
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.AddProjectDescriptorBuilder;
 import seedu.taskforge.testutil.AddTaskDescriptorBuilder;
 import seedu.taskforge.testutil.DeleteProjectDescriptorBuilder;
@@ -110,24 +109,6 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_addTag() throws Exception {
-        AddTagCommand command = (AddTagCommand) parser.parseCommand(AddTagCommand.COMMAND_WORD + " friends");
-        assertEquals(new AddTagCommand(new Tag("friends")), command);
-    }
-
-    @Test
-    public void parseCommand_deleteTag() throws Exception {
-        DeleteTagCommand command = (DeleteTagCommand) parser.parseCommand(
-                DeleteTagCommand.COMMAND_WORD + " " + INDEX_FIRST_TAG.getOneBased());
-        assertEquals(new DeleteTagCommand(INDEX_FIRST_TAG), command);
-    }
-
-    @Test
-    public void parseCommand_viewAllTag() throws Exception {
-        assertTrue(parser.parseCommand(ViewAllTagCommand.COMMAND_WORD) instanceof ViewAllTagCommand);
-    }
-
-    @Test
     public void parseCommand_addProject() throws Exception {
         Person person = new PersonBuilder().build();
         AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder(person).build();
@@ -145,6 +126,25 @@ public class AddressBookParserTest {
                 + " " + DeleteProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
                 + " " + PersonUtil.getDeleteProjectDescriptorDetails(descriptor));
         assertEquals(new DeleteProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_addProjectToProjectList() throws Exception {
+        AddProjectToProjectListCommand command = (AddProjectToProjectListCommand) parser.parseCommand(
+                AddProjectToProjectListCommand.COMMAND_WORD + " alpha");
+        assertEquals(new AddProjectToProjectListCommand(new Project("alpha")), command);
+    }
+
+    @Test
+    public void parseCommand_deleteProjectFromProjectList() throws Exception {
+        DeleteProjectFromProjectListCommand command = (DeleteProjectFromProjectListCommand) parser.parseCommand(
+                DeleteProjectFromProjectListCommand.COMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased());
+        assertEquals(new DeleteProjectFromProjectListCommand(INDEX_FIRST_PROJECT), command);
+    }
+
+    @Test
+    public void parseCommand_viewAllProject() throws Exception {
+        assertTrue(parser.parseCommand(ViewAllProjectCommand.COMMAND_WORD) instanceof ViewAllProjectCommand);
     }
 
     @Test

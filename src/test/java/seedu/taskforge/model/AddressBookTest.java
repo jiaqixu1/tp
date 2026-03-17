@@ -20,8 +20,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.exceptions.DuplicatePersonException;
-import seedu.taskforge.model.tag.Tag;
-import seedu.taskforge.model.tag.exceptions.DuplicateTagException;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.project.exceptions.DuplicateProjectException;
 import seedu.taskforge.testutil.PersonBuilder;
 
 public class AddressBookTest {
@@ -31,7 +31,7 @@ public class AddressBookTest {
     @Test
     public void constructor() {
         assertEquals(Collections.emptyList(), addressBook.getPersonList());
-        assertEquals(Collections.emptyList(), addressBook.getTagList());
+        assertEquals(Collections.emptyList(), addressBook.getProjectList());
     }
 
     @Test
@@ -59,12 +59,12 @@ public class AddressBookTest {
     }
 
     @Test
-    public void resetData_withDuplicateTags_throwsDuplicateTagException() {
-        Tag friends = new Tag("friends");
-        List<Tag> newTags = Arrays.asList(friends, friends);
-        AddressBookStub newData = new AddressBookStub(Collections.emptyList(), newTags);
+    public void resetData_withDuplicateProjects_throwsDuplicateProjectException() {
+        Project alpha = new Project("alpha");
+        List<Project> newProjects = Arrays.asList(alpha, alpha);
+        AddressBookStub newData = new AddressBookStub(Collections.emptyList(), newProjects);
 
-        assertThrows(DuplicateTagException.class, () -> addressBook.resetData(newData));
+        assertThrows(DuplicateProjectException.class, () -> addressBook.resetData(newData));
     }
 
     @Test
@@ -98,25 +98,25 @@ public class AddressBookTest {
     }
 
     @Test
-    public void hasTag_nullTag_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> addressBook.hasTag(null));
+    public void hasProject_nullProject_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.hasProject(null));
     }
 
     @Test
-    public void hasTag_tagNotInAddressBook_returnsFalse() {
-        assertFalse(addressBook.hasTag(new Tag("friends")));
+    public void hasProject_projectNotInAddressBook_returnsFalse() {
+        assertFalse(addressBook.hasProject(new Project("alpha")));
     }
 
     @Test
-    public void hasTag_tagInAddressBook_returnsTrue() {
-        Tag friends = new Tag("friends");
-        addressBook.addTag(friends);
-        assertTrue(addressBook.hasTag(friends));
+    public void hasProject_projectInAddressBook_returnsTrue() {
+        Project alpha = new Project("alpha");
+        addressBook.addProject(alpha);
+        assertTrue(addressBook.hasProject(alpha));
     }
 
     @Test
-    public void getTagList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> addressBook.getTagList().remove(0));
+    public void getProjectList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> addressBook.getProjectList().remove(0));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class AddressBookTest {
 
         // different data -> returns false
         AddressBook differentAddressBook = new AddressBook();
-        differentAddressBook.addTag(new Tag("friends"));
+        differentAddressBook.addProject(new Project("alpha"));
         assertFalse(addressBook.equals(differentAddressBook));
     }
 
@@ -149,7 +149,7 @@ public class AddressBookTest {
     @Test
     public void toStringMethod() {
         String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList()
-                + ", tags=" + addressBook.getTagList() + "}";
+                + ", projects=" + addressBook.getProjectList() + "}";
         assertEquals(expected, addressBook.toString());
     }
 
@@ -158,15 +158,15 @@ public class AddressBookTest {
      */
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Person> persons = FXCollections.observableArrayList();
-        private final ObservableList<Tag> tags = FXCollections.observableArrayList();
+        private final ObservableList<Project> projects = FXCollections.observableArrayList();
 
         AddressBookStub(Collection<Person> persons) {
             this(persons, Collections.emptyList());
         }
 
-        AddressBookStub(Collection<Person> persons, Collection<Tag> tags) {
+        AddressBookStub(Collection<Person> persons, Collection<Project> projects) {
             this.persons.setAll(persons);
-            this.tags.setAll(tags);
+            this.projects.setAll(projects);
         }
 
         @Override
@@ -175,8 +175,8 @@ public class AddressBookTest {
         }
 
         @Override
-        public ObservableList<Tag> getTagList() {
-            return tags;
+        public ObservableList<Project> getProjectList() {
+            return projects;
         }
     }
 

@@ -34,6 +34,7 @@ public class AddProjectCommand extends ProjectCommand {
     public static final String MESSAGE_ADD_PROJECT_SUCCESS = "New project added: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + " INDEX -pt PROJECT_TITLE";
     public static final String MESSAGE_DUPLICATE_PROJECT = "This project already exists for this person!";
+    public static final String MESSAGE_PROJECT_NOT_FOUND = "The project to add does not exist in the address book";
     public static final String MESSAGE_NOT_EDITED = "At least one project to add must be provided";
 
     private final Index index;
@@ -71,12 +72,27 @@ public class AddProjectCommand extends ProjectCommand {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
+        if (!addProjectDescriptor.isProjectFieldEdited()) {
+            throw new CommandException(MESSAGE_NOT_EDITED);
+        }
+
+        validateProjectsExist(addProjectDescriptor.getProjects().orElseThrow(() ->
+            new CommandException(MESSAGE_PROJECT_NOT_FOUND)), model);
+
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, addProjectDescriptor);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_ADD_PROJECT_SUCCESS, Messages.format(editedPerson)));
+    }
+
+    private static void validateProjectsExist(List<Project> projects, Model model) throws CommandException {
+        for (Project project : projects) {
+            if (!model.hasProject(project)) {
+                throw new CommandException(MESSAGE_PROJECT_NOT_FOUND);
+            }
+        }
     }
 
     /**
@@ -96,7 +112,7 @@ public class AddProjectCommand extends ProjectCommand {
 
         List<Project> newProjects = new ArrayList<>(personToEdit.getProjects());
         newProjects.addAll(addProjectDescriptor.getProjects().orElseThrow(() ->
-                new CommandException(MESSAGE_NOT_EDITED)));
+                new CommandException(MESSAGE_PROJECT_NOT_FOUND)));
         checkUniqueProjects(newProjects);
 
         return new Person(name, phone, email, newProjects, taskList, tagSet);

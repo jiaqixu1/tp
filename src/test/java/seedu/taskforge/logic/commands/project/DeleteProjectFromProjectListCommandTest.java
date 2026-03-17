@@ -1,4 +1,4 @@
-package seedu.taskforge.logic.commands.tag;
+package seedu.taskforge.logic.commands.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -7,7 +7,6 @@ import static seedu.taskforge.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -23,60 +22,63 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.project.UniqueProjectList;
 
-public class DeleteTagCommandTest {
+public class DeleteProjectFromProjectListCommandTest {
 
     @Test
     public void execute_validIndex_success() throws Exception {
-        Tag tagToDelete = new Tag("friends");
-        ModelStubWithTagList modelStub = new ModelStubWithTagList(tagToDelete);
+        Project projectToDelete = new Project("alpha");
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(projectToDelete);
 
-        CommandResult result = new DeleteTagCommand(Index.fromOneBased(1)).execute(modelStub);
+        CommandResult result = new DeleteProjectFromProjectListCommand(Index.fromOneBased(1))
+                .execute(modelStub);
 
-        assertEquals(String.format(DeleteTagCommand.MESSAGE_DELETE_TAG_SUCCESS, tagToDelete),
+        assertEquals(
+                String.format(DeleteProjectFromProjectListCommand.MESSAGE_DELETE_PROJECT_SUCCESS, projectToDelete),
                 result.getFeedbackToUser());
-        assertTrue(modelStub.deletedTags.contains(tagToDelete));
+        assertTrue(modelStub.deletedProjects.contains(projectToDelete));
     }
 
     @Test
     public void execute_invalidIndex_throwsCommandException() {
-        ModelStubWithTagList modelStub = new ModelStubWithTagList(new Tag("friends"));
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(new Project("alpha"));
         Index outOfBoundIndex = Index.fromOneBased(2);
+        DeleteProjectFromProjectListCommand deleteProjectCommand =
+                new DeleteProjectFromProjectListCommand(outOfBoundIndex);
 
-        assertThrows(CommandException.class,
-                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () -> new DeleteTagCommand(
-                        outOfBoundIndex).execute(modelStub));
+        assertThrows(
+                CommandException.class,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () -> deleteProjectCommand.execute(modelStub));
     }
 
     @Test
     public void equals() {
-        DeleteTagCommand deleteFirstCommand = new DeleteTagCommand(Index.fromOneBased(1));
-        DeleteTagCommand deleteSecondCommand = new DeleteTagCommand(Index.fromOneBased(2));
+        DeleteProjectFromProjectListCommand deleteFirstCommand =
+                new DeleteProjectFromProjectListCommand(Index.fromOneBased(1));
+        DeleteProjectFromProjectListCommand deleteSecondCommand =
+                new DeleteProjectFromProjectListCommand(Index.fromOneBased(2));
 
-        // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
-        // same values -> returns true
-        DeleteTagCommand deleteFirstCopy = new DeleteTagCommand(Index.fromOneBased(1));
+        DeleteProjectFromProjectListCommand deleteFirstCopy =
+                new DeleteProjectFromProjectListCommand(Index.fromOneBased(1));
         assertTrue(deleteFirstCommand.equals(deleteFirstCopy));
 
-        // different types -> returns false
         assertFalse(deleteFirstCommand.equals(1));
-
-        // null -> returns false
         assertFalse(deleteFirstCommand.equals(null));
-
-        // different index -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
     }
 
     @Test
     public void toStringMethod() {
         Index index = Index.fromOneBased(1);
-        DeleteTagCommand deleteTagCommand = new DeleteTagCommand(index);
-        String expected = DeleteTagCommand.class.getCanonicalName() + "{targetIndex=" + index + "}";
-        assertEquals(expected, deleteTagCommand.toString());
+        DeleteProjectFromProjectListCommand deleteProjectCommand =
+                new DeleteProjectFromProjectListCommand(index);
+        String expected = DeleteProjectFromProjectListCommand.class.getCanonicalName()
+                + "{targetIndex=" + index + "}";
+        assertEquals(expected, deleteProjectCommand.toString());
     }
 
     /**
@@ -87,100 +89,120 @@ public class DeleteTagCommandTest {
         public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public ReadOnlyUserPrefs getUserPrefs() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public GuiSettings getGuiSettings() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void setGuiSettings(GuiSettings guiSettings) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public Path getAddressBookFilePath() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void setAddressBookFilePath(Path addressBookFilePath) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
-        public void addPerson(Person person) {
+        public void setAddressBook(ReadOnlyAddressBook addressBook) {
             throw new AssertionError("This method should not be called.");
         }
-        @Override
-        public void setAddressBook(ReadOnlyAddressBook newData) {
-            throw new AssertionError("This method should not be called.");
-        }
+
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public boolean hasProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteProject(Project target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setProject(Project target, Project editedProject) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Project> getProjectList() {
+            return FXCollections.observableArrayList();
+        }
+
         @Override
         public boolean hasPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void addPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
         @Override
         public void setPerson(Person target, Person editedPerson) {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public ObservableList<Person> getFilteredPersonList() {
             throw new AssertionError("This method should not be called.");
         }
+
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
         }
-        @Override
-        public boolean hasTag(Tag tag) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public void deleteTag(Tag target) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public void addTag(Tag tag) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public void setTag(Tag target, Tag editedTag) {
-            throw new AssertionError("This method should not be called.");
-        }
-        @Override
-        public ObservableList<Tag> getTagList() {
-            return FXCollections.observableArrayList();
-        }
     }
 
     /**
-     * A Model stub that contains a fixed tag list and records deleted tags.
+     * A Model stub that contains a fixed project list and records deleted projects.
      */
-    private class ModelStubWithTagList extends ModelStub {
-        final ArrayList<Tag> deletedTags = new ArrayList<>();
-        private final ArrayList<Tag> tags;
+    private class ModelStubWithProjectList extends ModelStub {
+        final ArrayList<Project> deletedProjects = new ArrayList<>();
+        private final UniqueProjectList uniqueProjectList = new UniqueProjectList();
 
-        ModelStubWithTagList(Tag... tags) {
-            this.tags = new ArrayList<>(Arrays.asList(tags));
+        ModelStubWithProjectList(Project... projects) {
+            for (Project project : projects) {
+                uniqueProjectList.add(project);
+            }
         }
 
         @Override
-        public ObservableList<Tag> getTagList() {
-            return FXCollections.observableArrayList(tags);
+        public ObservableList<Project> getProjectList() {
+            return uniqueProjectList.asUnmodifiableObservableList();
         }
 
         @Override
-        public void deleteTag(Tag target) {
-            tags.remove(target);
-            deletedTags.add(target);
+        public void deleteProject(Project target) {
+            uniqueProjectList.remove(target);
+            deletedProjects.add(target);
         }
     }
 }

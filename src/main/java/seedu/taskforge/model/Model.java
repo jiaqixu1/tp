@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.tag.Tag;
+import seedu.taskforge.model.project.Project;
 
 /**
  * The API of the Model component.
@@ -54,33 +54,34 @@ public interface Model {
     ReadOnlyAddressBook getAddressBook();
 
     /**
-     * Returns true if a tag with the same identity as {@code tag} exists in the address book.
+     * Returns true if a project with the same identity as {@code project} exists in the address book.
      */
-    boolean hasTag(Tag tag);
+    boolean hasProject(Project project);
 
     /**
-     * Deletes the given tag.
-     * The tag must exist in the address book.
+     * Deletes the given project.
+     * The project must exist in the address book.
      */
-    void deleteTag(Tag target);
+    void deleteProject(Project target);
 
     /**
-     * Adds the given tag.
-     * {@code tag} must not already exist in the address book.
+     * Adds the given project.
+     * {@code project} must not already exist in the address book.
      */
-    void addTag(Tag tag);
+    void addProject(Project project);
 
     /**
-    * Replaces the given tag {@code target} with {@code editedTag}.
-    * {@code target} must exist in the address book.
-    * The tag identity of {@code editedTag} must not be the same as another existing tag in the address book.
-    */
-    void setTag(Tag target, Tag editedTag);
+        * Replaces the given project {@code target} with {@code editedProject}.
+        * {@code target} must exist in the address book.
+        * The project identity of {@code editedProject} must not be the same as
+        * another existing project in the address book.
+        */
+    void setProject(Project target, Project editedProject);
 
     /**
-     * Returns a list of all tags in the address book.
+     * Returns a list of all projects in the address book.
      */
-    ObservableList<Tag> getTagList();
+    ObservableList<Project> getProjectList();
 
     /**
      * Returns true if a person with the same identity as {@code person} exists in the address book.

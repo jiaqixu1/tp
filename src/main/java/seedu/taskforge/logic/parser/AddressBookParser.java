@@ -25,6 +25,7 @@ import seedu.taskforge.logic.commands.project.ProjectCommand;
 import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
+import seedu.taskforge.logic.commands.task.TaskCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.logic.parser.person.AddCommandParser;
 import seedu.taskforge.logic.parser.person.DeleteCommandParser;
@@ -91,11 +92,8 @@ public class AddressBookParser {
             return new ListCommand();
 
         // Task related commands
-        case AddTaskCommand.COMMAND_WORD:
-            return new AddTaskCommandParser().parse(arguments);
-
-        case DeleteTaskCommand.COMMAND_WORD:
-            return new DeleteTaskCommandParser().parse(arguments);
+        case TaskCommand.COMMAND_WORD:
+            return handleTask(arguments);
 
         // Project related commands
         case ProjectCommand.COMMAND_WORD:
@@ -143,6 +141,29 @@ public class AddressBookParser {
         default:
             logger.finer("This user input caused a ParseException: project " + subinput);
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ProjectCommand.MESSAGE_USAGE));
+        }
+    }
+
+    private Command handleTask(String subinput) throws ParseException {
+        final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(subinput.trim());
+        if (!matcher.matches()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TaskCommand.MESSAGE_USAGE));
+        }
+
+        final String subcommandWord = matcher.group("commandWord");
+        final String arguments = matcher.group("arguments");
+
+        switch (subcommandWord) {
+
+        case AddTaskCommand.SUBCOMMAND_WORD:
+            return new AddTaskCommandParser().parse(arguments);
+
+        case DeleteTaskCommand.SUBCOMMAND_WORD:
+            return new DeleteTaskCommandParser().parse(arguments);
+
+        default:
+            logger.finer("This user input caused a ParseException: task " + subinput);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TaskCommand.MESSAGE_USAGE));
         }
     }
 

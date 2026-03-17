@@ -1,19 +1,8 @@
 package seedu.taskforge.logic.commands.task;
 
-import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.CollectionUtil;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.Command;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
@@ -25,14 +14,19 @@ import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
 
+import java.util.*;
+
+import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+
 /**
  * Delete task(s) from an existing person in the address book.
  */
-public class DeleteTaskCommand extends Command {
-    public static final String COMMAND_WORD = "task-delete";
+public class DeleteTaskCommand extends TaskCommand {
+    public static final String SUBCOMMAND_WORD = "delete";
 
     public static final String MESSAGE_SUCCESS = "Deleted task: %1$s";
-    public static final String MESSAGE_USAGE = "task-delete INDEX -t TASK_INDEX";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + " INDEX -t TASK_INDEX";
     public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
     public static final String MESSAGE_NOT_EDITED = "At least one task to delete must be provided";
 

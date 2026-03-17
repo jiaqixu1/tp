@@ -37,6 +37,7 @@ import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
+import seedu.taskforge.logic.commands.task.TaskCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.person.Person;
@@ -152,7 +153,8 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder(person).build();
         AddTaskCommand command = (AddTaskCommand) parser.parseCommand(AddTaskCommand.COMMAND_WORD
-                + " " + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getAddTaskDescriptorDetails(descriptor));
+                + " " + AddTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
+                + " " + PersonUtil.getAddTaskDescriptorDetails(descriptor));
         assertEquals(new AddTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
@@ -160,7 +162,7 @@ public class AddressBookParserTest {
     public void parseCommand_deleteTask() throws Exception {
         DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder(INDEX_FIRST_TASK).build();
         DeleteTaskCommand command = (DeleteTaskCommand) parser.parseCommand(DeleteTaskCommand.COMMAND_WORD
-                + " " + INDEX_FIRST_PERSON.getOneBased() + " "
+                + " " + DeleteTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
                 + PersonUtil.getDeleteTaskDescriptorDetails(descriptor));
         assertEquals(new DeleteTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
@@ -187,6 +189,20 @@ public class AddressBookParserTest {
         assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 ProjectCommand.MESSAGE_USAGE), () -> parser.parseCommand(
                         ProjectCommand.COMMAND_WORD + " unknownCommand")
+        );
+    }
+
+    @Test
+    public void parseCommand_taskUnrecognisedSubcommand_throwsParseException() {
+        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                TaskCommand.MESSAGE_USAGE), () -> parser.parseCommand(TaskCommand.COMMAND_WORD));
+    }
+
+    @Test
+    public void parseCommand_taskUnknownSubcommand_throwsParseException() {
+        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                TaskCommand.MESSAGE_USAGE), () -> parser.parseCommand(
+                TaskCommand.COMMAND_WORD + " unknownCommand")
         );
     }
 }

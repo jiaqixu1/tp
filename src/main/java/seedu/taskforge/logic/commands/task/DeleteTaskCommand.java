@@ -1,5 +1,15 @@
 package seedu.taskforge.logic.commands.task;
 
+import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.CollectionUtil;
 import seedu.taskforge.logic.Messages;
@@ -13,11 +23,6 @@ import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
-
-import java.util.*;
-
-import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 /**
  * Delete task(s) from an existing person in the address book.

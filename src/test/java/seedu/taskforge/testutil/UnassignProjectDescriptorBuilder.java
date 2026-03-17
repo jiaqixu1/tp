@@ -33,8 +33,8 @@ public class UnassignProjectDescriptorBuilder {
     }
 
     /**
-     * Parses the {@code projects} into a {@code List<Project>} and set it to the {@code UnassignProjectDescriptorBuilder}
-     * that we are building.
+     * Parses the {@code projects} into a {@code List<Project>} and set it to the
+     * {@code UnassignProjectDescriptorBuilder} that we are building.
      */
     public UnassignProjectDescriptorBuilder withProjects(String... indexes) {
         List<Index> projectIndexSet = Stream.of(indexes)

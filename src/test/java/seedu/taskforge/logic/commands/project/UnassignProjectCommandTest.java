@@ -17,8 +17,8 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.testutil.UnassignProjectDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
+import seedu.taskforge.testutil.UnassignProjectDescriptorBuilder;
 
 public class UnassignProjectCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -72,7 +72,8 @@ public class UnassignProjectCommandTest {
                 .withProjects("2").build();
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(indexFirstPerson, descriptor);
 
-        assertCommandFailure(unassignProjectCommand, model, UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+        assertCommandFailure(unassignProjectCommand, model,
+                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
     }
 
     @Test
@@ -82,7 +83,8 @@ public class UnassignProjectCommandTest {
                 .withProjects("2").build();
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(unassignProjectCommand, model, UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+        assertCommandFailure(unassignProjectCommand, model,
+                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
     }
 
     @Test
@@ -92,7 +94,8 @@ public class UnassignProjectCommandTest {
                 .withProjects("1", "2").build();
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(indexFirstPerson, descriptor);
 
-        assertCommandFailure(unassignProjectCommand, model, UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+        assertCommandFailure(unassignProjectCommand, model,
+                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
     }
 
     @Test
@@ -102,7 +105,8 @@ public class UnassignProjectCommandTest {
                 .withProjects("1", "2").build();
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(unassignProjectCommand, model, UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+        assertCommandFailure(unassignProjectCommand, model,
+                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
     }
 
     @Test

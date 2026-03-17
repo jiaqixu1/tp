@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.Command;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
@@ -13,11 +12,14 @@ import seedu.taskforge.model.project.Project;
 /**
  * Adds a project to the address book.
  */
-public class AddProjectCommand extends Command {
+public class AddProjectCommand extends ProjectCommand {
 
-    public static final String COMMAND_WORD = "add-project";
+    public static final String SUBCOMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a project to the address book. ";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Adds a project to the address book. "
+            + "Parameters: PROJECT_TITLE\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " alpha";
 
     public static final String MESSAGE_SUCCESS = "New project added: %1$s";
     public static final String MESSAGE_DUPLICATE_PROJECT = "This project already exists in the address book";

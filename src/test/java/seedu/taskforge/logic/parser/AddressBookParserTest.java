@@ -25,13 +25,13 @@ import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
 import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
+import seedu.taskforge.logic.commands.project.AddProjectCommand;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
-import seedu.taskforge.logic.commands.project.AddProjectCommand;
-import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
-import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
@@ -42,13 +42,13 @@ import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.testutil.AssignProjectDescriptorBuilder;
 import seedu.taskforge.testutil.AddTaskDescriptorBuilder;
-import seedu.taskforge.testutil.UnassignProjectDescriptorBuilder;
+import seedu.taskforge.testutil.AssignProjectDescriptorBuilder;
 import seedu.taskforge.testutil.DeleteTaskDescriptorBuilder;
 import seedu.taskforge.testutil.EditPersonDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 import seedu.taskforge.testutil.PersonUtil;
+import seedu.taskforge.testutil.UnassignProjectDescriptorBuilder;
 
 public class AddressBookParserTest {
 
@@ -123,23 +123,25 @@ public class AddressBookParserTest {
     public void parseCommand_unassignProject() throws Exception {
         Index index = INDEX_FIRST_PROJECT;
         UnassignProjectDescriptor descriptor = new UnassignProjectDescriptorBuilder(index).build();
-        UnassignProjectCommand command = (UnassignProjectCommand) parser.parseCommand(UnassignProjectCommand.COMMAND_WORD
-                + " " + UnassignProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
-                + " " + PersonUtil.getUnassignProjectDescriptorDetails(descriptor));
+        UnassignProjectCommand command = (UnassignProjectCommand) parser.parseCommand(
+                UnassignProjectCommand.COMMAND_WORD + " " + UnassignProjectCommand.SUBCOMMAND_WORD
+                        + " " + INDEX_FIRST_PERSON.getOneBased() + " "
+                        + PersonUtil.getUnassignProjectDescriptorDetails(descriptor));
         assertEquals(new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
     @Test
     public void parseCommand_addProject() throws Exception {
         AddProjectCommand command = (AddProjectCommand) parser.parseCommand(
-                AddProjectCommand.COMMAND_WORD + " alpha");
+                ProjectCommand.COMMAND_WORD + " " + AddProjectCommand.SUBCOMMAND_WORD + " alpha");
         assertEquals(new AddProjectCommand(new Project("alpha")), command);
     }
 
     @Test
     public void parseCommand_deleteProject() throws Exception {
         DeleteProjectCommand command = (DeleteProjectCommand) parser.parseCommand(
-                DeleteProjectCommand.COMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased());
+                ProjectCommand.COMMAND_WORD + " " + DeleteProjectCommand.SUBCOMMAND_WORD + " "
+                        + INDEX_FIRST_PROJECT.getOneBased());
         assertEquals(new DeleteProjectCommand(INDEX_FIRST_PROJECT), command);
     }
 

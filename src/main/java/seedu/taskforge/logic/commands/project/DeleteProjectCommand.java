@@ -7,7 +7,6 @@ import java.util.List;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.Command;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
@@ -16,14 +15,14 @@ import seedu.taskforge.model.project.Project;
 /**
  * Deletes a project from the address book.
  */
-public class DeleteProjectCommand extends Command {
+public class DeleteProjectCommand extends ProjectCommand {
 
-    public static final String COMMAND_WORD = "delete-project";
+    public static final String SUBCOMMAND_WORD = "delete";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
             + ": Deletes the project identified by the index number used in the displayed project list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PROJECT_SUCCESS = "Deleted Project: %1$s";
 

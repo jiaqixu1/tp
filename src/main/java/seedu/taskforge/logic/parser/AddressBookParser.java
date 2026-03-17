@@ -17,11 +17,11 @@ import seedu.taskforge.logic.commands.person.DeleteCommand;
 import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
-import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.AddProjectCommand;
-import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
 import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
@@ -31,10 +31,10 @@ import seedu.taskforge.logic.parser.person.AddCommandParser;
 import seedu.taskforge.logic.parser.person.DeleteCommandParser;
 import seedu.taskforge.logic.parser.person.EditCommandParser;
 import seedu.taskforge.logic.parser.person.FindCommandParser;
-import seedu.taskforge.logic.parser.project.AssignProjectCommandParser;
 import seedu.taskforge.logic.parser.project.AddProjectCommandParser;
-import seedu.taskforge.logic.parser.project.UnassignProjectCommandParser;
+import seedu.taskforge.logic.parser.project.AssignProjectCommandParser;
 import seedu.taskforge.logic.parser.project.DeleteProjectCommandParser;
+import seedu.taskforge.logic.parser.project.UnassignProjectCommandParser;
 import seedu.taskforge.logic.parser.task.AddTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
 
@@ -102,12 +102,6 @@ public class AddressBookParser {
         case ViewAllProjectCommand.COMMAND_WORD:
             return new ViewAllProjectCommand();
 
-        case AddProjectCommand.COMMAND_WORD:
-            return new AddProjectCommandParser().parse(arguments);
-
-        case DeleteProjectCommand.COMMAND_WORD:
-            return new DeleteProjectCommandParser().parse(arguments);
-
         // Address book related commands
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
@@ -131,6 +125,12 @@ public class AddressBookParser {
         final String arguments = matcher.group("arguments");
 
         switch (subcommandWord) {
+
+        case AddProjectCommand.SUBCOMMAND_WORD:
+            return new AddProjectCommandParser().parse(arguments);
+
+        case DeleteProjectCommand.SUBCOMMAND_WORD:
+            return new DeleteProjectCommandParser().parse(arguments);
 
         case AssignProjectCommand.SUBCOMMAND_WORD:
             return new AssignProjectCommandParser().parse(arguments);

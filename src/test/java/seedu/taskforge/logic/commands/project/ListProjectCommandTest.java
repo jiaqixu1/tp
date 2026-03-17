@@ -39,7 +39,8 @@ public class ListProjectCommandTest {
         CommandResult result = new ListProjectCommand().execute(modelStub);
 
         String expected = ListProjectCommand.MESSAGE_SUCCESS + "\n"
-                + alpha + "\n" + beta;
+                + "1. " + alpha.title + "\n"
+                + "2. " + beta.title;
         assertEquals(expected, result.getFeedbackToUser());
     }
 

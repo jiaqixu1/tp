@@ -2,11 +2,14 @@ package seedu.taskforge.logic.commands.project;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.Model;
+import seedu.taskforge.model.project.Project;
 
 /**
  * Lists all projects in the address book to the user.
@@ -21,8 +24,9 @@ public class ListProjectCommand extends ProjectCommand {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        String projectsList = model.getProjectList().stream()
-                .map(Object::toString)
+        List<Project> projectList = model.getProjectList();
+        String projectsList = IntStream.range(0, projectList.size())
+                .mapToObj(i -> (i + 1) + ". " + projectList.get(i).title)
                 .collect(Collectors.joining("\n"));
         String feedback = MESSAGE_SUCCESS + (projectsList.isEmpty() ? " None" : "\n" + projectsList);
         return new CommandResult(feedback);

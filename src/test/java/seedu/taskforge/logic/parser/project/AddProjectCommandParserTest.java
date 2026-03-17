@@ -6,22 +6,22 @@ import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseSucc
 
 import org.junit.jupiter.api.Test;
 
-import seedu.taskforge.logic.commands.project.AddProjectToProjectListCommand;
+import seedu.taskforge.logic.commands.project.AddProjectCommand;
 import seedu.taskforge.model.project.Project;
 
-public class AddProjectToProjectListCommandParserTest {
+public class AddProjectCommandParserTest {
 
-    private AddProjectToProjectListCommandParser parser = new AddProjectToProjectListCommandParser();
+    private AddProjectCommandParser parser = new AddProjectCommandParser();
 
     @Test
-    public void parse_validArgs_returnsAddProjectToProjectListCommand() {
-        assertParseSuccess(parser, " alpha ", new AddProjectToProjectListCommand(new Project("alpha")));
+    public void parse_validArgs_returnsAddProjectCommand() {
+        assertParseSuccess(parser, " alpha ", new AddProjectCommand(new Project("alpha")));
     }
 
     @Test
     public void parse_emptyArgs_throwsParseException() {
         assertParseFailure(parser, "   ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddProjectToProjectListCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddProjectCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -29,3 +29,4 @@ public class AddProjectToProjectListCommandParserTest {
         assertParseFailure(parser, " project-title ", Project.MESSAGE_CONSTRAINTS);
     }
 }
+

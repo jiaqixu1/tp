@@ -25,17 +25,17 @@ import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 
-public class AddProjectToProjectListCommandTest {
+public class AddProjectCommandTest {
 
     @Test
     public void execute_newProject_success() throws Exception {
         ModelStubAcceptingProjectAdded modelStub = new ModelStubAcceptingProjectAdded();
         Project validProject = new Project("alpha");
 
-        CommandResult commandResult = new AddProjectToProjectListCommand(validProject).execute(modelStub);
+        CommandResult commandResult = new AddProjectCommand(validProject).execute(modelStub);
 
         assertEquals(
-                String.format(AddProjectToProjectListCommand.MESSAGE_SUCCESS, Messages.format(validProject)),
+                String.format(AddProjectCommand.MESSAGE_SUCCESS, Messages.format(validProject)),
                 commandResult.getFeedbackToUser());
         assertEquals(1, modelStub.projectsAdded.size());
         assertEquals(validProject, modelStub.projectsAdded.get(0));
@@ -44,24 +44,24 @@ public class AddProjectToProjectListCommandTest {
     @Test
     public void execute_duplicateProject_throwsCommandException() {
         Project validProject = new Project("alpha");
-        AddProjectToProjectListCommand addProjectCommand = new AddProjectToProjectListCommand(validProject);
+        AddProjectCommand addProjectCommand = new AddProjectCommand(validProject);
         ModelStubWithProject modelStub = new ModelStubWithProject(validProject);
 
         assertThrows(
                 CommandException.class,
-                AddProjectToProjectListCommand.MESSAGE_DUPLICATE_PROJECT, () -> addProjectCommand.execute(modelStub));
+                AddProjectCommand.MESSAGE_DUPLICATE_PROJECT, () -> addProjectCommand.execute(modelStub));
     }
 
     @Test
     public void equals() {
         Project alpha = new Project("alpha");
         Project beta = new Project("beta");
-        AddProjectToProjectListCommand addAlphaCommand = new AddProjectToProjectListCommand(alpha);
-        AddProjectToProjectListCommand addBetaCommand = new AddProjectToProjectListCommand(beta);
+        AddProjectCommand addAlphaCommand = new AddProjectCommand(alpha);
+        AddProjectCommand addBetaCommand = new AddProjectCommand(beta);
 
         assertTrue(addAlphaCommand.equals(addAlphaCommand));
 
-        AddProjectToProjectListCommand addAlphaCopy = new AddProjectToProjectListCommand(alpha);
+        AddProjectCommand addAlphaCopy = new AddProjectCommand(alpha);
         assertTrue(addAlphaCommand.equals(addAlphaCopy));
 
         assertFalse(addAlphaCommand.equals(1));
@@ -72,8 +72,8 @@ public class AddProjectToProjectListCommandTest {
     @Test
     public void toStringMethod() {
         Project project = new Project("alpha");
-        AddProjectToProjectListCommand addProjectCommand = new AddProjectToProjectListCommand(project);
-        String expected = AddProjectToProjectListCommand.class.getCanonicalName() + "{toAdd=" + project + "}";
+        AddProjectCommand addProjectCommand = new AddProjectCommand(project);
+        String expected = AddProjectCommand.class.getCanonicalName() + "{toAdd=" + project + "}";
         assertEquals(expected, addProjectCommand.toString());
     }
 
@@ -219,3 +219,4 @@ public class AddProjectToProjectListCommandTest {
         }
     }
 }
+

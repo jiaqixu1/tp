@@ -13,7 +13,7 @@ import seedu.taskforge.model.project.Project;
 /**
  * Adds a project to the address book.
  */
-public class AddProjectToProjectListCommand extends Command {
+public class AddProjectCommand extends Command {
 
     public static final String COMMAND_WORD = "add-project";
 
@@ -25,9 +25,9 @@ public class AddProjectToProjectListCommand extends Command {
     private final Project toAdd;
 
     /**
-     * Creates an AddProjectToProjectListCommand to add the specified {@code Project}
+     * Creates an AddProjectCommand to add the specified {@code Project}
      */
-    public AddProjectToProjectListCommand(Project project) {
+    public AddProjectCommand(Project project) {
         requireNonNull(project);
         toAdd = project;
     }
@@ -50,11 +50,11 @@ public class AddProjectToProjectListCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof AddProjectToProjectListCommand)) {
+        if (!(other instanceof AddProjectCommand)) {
             return false;
         }
 
-        AddProjectToProjectListCommand otherAddProjectCommand = (AddProjectToProjectListCommand) other;
+        AddProjectCommand otherAddProjectCommand = (AddProjectCommand) other;
         return toAdd.equals(otherAddProjectCommand.toAdd);
     }
 
@@ -65,3 +65,4 @@ public class AddProjectToProjectListCommand extends Command {
                 .toString();
     }
 }
+

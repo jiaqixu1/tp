@@ -16,7 +16,7 @@ import seedu.taskforge.model.project.Project;
 /**
  * Deletes a project from the address book.
  */
-public class DeleteProjectFromProjectListCommand extends Command {
+public class DeleteProjectCommand extends Command {
 
     public static final String COMMAND_WORD = "delete-project";
 
@@ -29,7 +29,7 @@ public class DeleteProjectFromProjectListCommand extends Command {
 
     private final Index targetIndex;
 
-    public DeleteProjectFromProjectListCommand(Index targetIndex) {
+    public DeleteProjectCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -53,11 +53,11 @@ public class DeleteProjectFromProjectListCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof DeleteProjectFromProjectListCommand)) {
+        if (!(other instanceof DeleteProjectCommand)) {
             return false;
         }
 
-        DeleteProjectFromProjectListCommand otherDeleteProjectCommand = (DeleteProjectFromProjectListCommand) other;
+        DeleteProjectCommand otherDeleteProjectCommand = (DeleteProjectCommand) other;
         return targetIndex.equals(otherDeleteProjectCommand.targetIndex);
     }
 
@@ -68,3 +68,4 @@ public class DeleteProjectFromProjectListCommand extends Command {
                 .toString();
     }
 }
+

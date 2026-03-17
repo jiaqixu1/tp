@@ -25,18 +25,18 @@ import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.project.UniqueProjectList;
 
-public class DeleteProjectFromProjectListCommandTest {
+public class DeleteProjectCommandTest {
 
     @Test
     public void execute_validIndex_success() throws Exception {
         Project projectToDelete = new Project("alpha");
         ModelStubWithProjectList modelStub = new ModelStubWithProjectList(projectToDelete);
 
-        CommandResult result = new DeleteProjectFromProjectListCommand(Index.fromOneBased(1))
+        CommandResult result = new DeleteProjectCommand(Index.fromOneBased(1))
                 .execute(modelStub);
 
         assertEquals(
-                String.format(DeleteProjectFromProjectListCommand.MESSAGE_DELETE_PROJECT_SUCCESS, projectToDelete),
+                String.format(DeleteProjectCommand.MESSAGE_DELETE_PROJECT_SUCCESS, projectToDelete),
                 result.getFeedbackToUser());
         assertTrue(modelStub.deletedProjects.contains(projectToDelete));
     }
@@ -45,8 +45,8 @@ public class DeleteProjectFromProjectListCommandTest {
     public void execute_invalidIndex_throwsCommandException() {
         ModelStubWithProjectList modelStub = new ModelStubWithProjectList(new Project("alpha"));
         Index outOfBoundIndex = Index.fromOneBased(2);
-        DeleteProjectFromProjectListCommand deleteProjectCommand =
-                new DeleteProjectFromProjectListCommand(outOfBoundIndex);
+        DeleteProjectCommand deleteProjectCommand =
+                new DeleteProjectCommand(outOfBoundIndex);
 
         assertThrows(
                 CommandException.class,
@@ -55,15 +55,15 @@ public class DeleteProjectFromProjectListCommandTest {
 
     @Test
     public void equals() {
-        DeleteProjectFromProjectListCommand deleteFirstCommand =
-                new DeleteProjectFromProjectListCommand(Index.fromOneBased(1));
-        DeleteProjectFromProjectListCommand deleteSecondCommand =
-                new DeleteProjectFromProjectListCommand(Index.fromOneBased(2));
+        DeleteProjectCommand deleteFirstCommand =
+                new DeleteProjectCommand(Index.fromOneBased(1));
+        DeleteProjectCommand deleteSecondCommand =
+                new DeleteProjectCommand(Index.fromOneBased(2));
 
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
-        DeleteProjectFromProjectListCommand deleteFirstCopy =
-                new DeleteProjectFromProjectListCommand(Index.fromOneBased(1));
+        DeleteProjectCommand deleteFirstCopy =
+                new DeleteProjectCommand(Index.fromOneBased(1));
         assertTrue(deleteFirstCommand.equals(deleteFirstCopy));
 
         assertFalse(deleteFirstCommand.equals(1));
@@ -74,9 +74,9 @@ public class DeleteProjectFromProjectListCommandTest {
     @Test
     public void toStringMethod() {
         Index index = Index.fromOneBased(1);
-        DeleteProjectFromProjectListCommand deleteProjectCommand =
-                new DeleteProjectFromProjectListCommand(index);
-        String expected = DeleteProjectFromProjectListCommand.class.getCanonicalName()
+        DeleteProjectCommand deleteProjectCommand =
+                new DeleteProjectCommand(index);
+        String expected = DeleteProjectCommand.class.getCanonicalName()
                 + "{targetIndex=" + index + "}";
         assertEquals(expected, deleteProjectCommand.toString());
     }
@@ -206,3 +206,4 @@ public class DeleteProjectFromProjectListCommandTest {
         }
     }
 }
+

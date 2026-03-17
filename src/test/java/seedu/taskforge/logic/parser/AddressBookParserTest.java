@@ -27,10 +27,10 @@ import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
-import seedu.taskforge.logic.commands.project.AddProjectToProjectListCommand;
+import seedu.taskforge.logic.commands.project.AddProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
-import seedu.taskforge.logic.commands.project.DeleteProjectFromProjectListCommand;
+import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
 import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
@@ -130,17 +130,17 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_addProjectToProjectList() throws Exception {
-        AddProjectToProjectListCommand command = (AddProjectToProjectListCommand) parser.parseCommand(
-                AddProjectToProjectListCommand.COMMAND_WORD + " alpha");
-        assertEquals(new AddProjectToProjectListCommand(new Project("alpha")), command);
+    public void parseCommand_addProject() throws Exception {
+        AddProjectCommand command = (AddProjectCommand) parser.parseCommand(
+                AddProjectCommand.COMMAND_WORD + " alpha");
+        assertEquals(new AddProjectCommand(new Project("alpha")), command);
     }
 
     @Test
-    public void parseCommand_deleteProjectFromProjectList() throws Exception {
-        DeleteProjectFromProjectListCommand command = (DeleteProjectFromProjectListCommand) parser.parseCommand(
-                DeleteProjectFromProjectListCommand.COMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased());
-        assertEquals(new DeleteProjectFromProjectListCommand(INDEX_FIRST_PROJECT), command);
+    public void parseCommand_deleteProject() throws Exception {
+        DeleteProjectCommand command = (DeleteProjectCommand) parser.parseCommand(
+                DeleteProjectCommand.COMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased());
+        assertEquals(new DeleteProjectCommand(INDEX_FIRST_PROJECT), command);
     }
 
     @Test

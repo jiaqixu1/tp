@@ -2,6 +2,7 @@ package seedu.taskforge.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -143,7 +144,22 @@ public class AddressBook implements ReadOnlyAddressBook {
      * {@code key} must exist in the address book.
      */
     public void removeProject(Project key) {
+        requireNonNull(key);
         projects.remove(key);
+
+        List<Person> allPersons = new ArrayList<>(persons.asUnmodifiableObservableList());
+        for (Person person : allPersons) {
+            if (!person.getProjects().contains(key)) {
+                continue;
+            }
+
+            List<Project> updatedProjects = new ArrayList<>(person.getProjects());
+            updatedProjects.removeIf(key::equals);
+
+            Person updatedPerson = new Person(person.getName(), person.getPhone(), person.getEmail(),
+                    updatedProjects, person.getTasks());
+            persons.setPerson(person, updatedPerson);
+        }
     }
 
     //// util methods

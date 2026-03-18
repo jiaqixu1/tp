@@ -115,6 +115,36 @@ public class AddressBookTest {
     }
 
     @Test
+    public void removeProject_existingProject_removesProjectFromAllPersons() {
+        Project alpha = new Project("alpha");
+        Project beta = new Project("beta");
+        Person firstPerson = new PersonBuilder().withName("First Person")
+                .withPhone("11111111").withEmail("first@example.com")
+                .withProjects("alpha", "beta").build();
+        Person secondPerson = new PersonBuilder().withName("Second Person")
+                .withPhone("22222222").withEmail("second@example.com")
+                .withProjects("alpha").build();
+        Person thirdPerson = new PersonBuilder().withName("Third Person")
+                .withPhone("33333333").withEmail("third@example.com")
+                .withProjects("beta").build();
+
+        addressBook.addProject(alpha);
+        addressBook.addProject(beta);
+        addressBook.addPerson(firstPerson);
+        addressBook.addPerson(secondPerson);
+        addressBook.addPerson(thirdPerson);
+
+        addressBook.removeProject(alpha);
+
+        assertFalse(addressBook.hasProject(alpha));
+        assertEquals(Arrays.asList(new Project("beta")),
+                addressBook.getPersonList().get(0).getProjects());
+        assertEquals(Collections.emptyList(), addressBook.getPersonList().get(1).getProjects());
+        assertEquals(Arrays.asList(new Project("beta")),
+                addressBook.getPersonList().get(2).getProjects());
+    }
+
+    @Test
     public void getProjectList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> addressBook.getProjectList().remove(0));
     }

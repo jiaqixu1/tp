@@ -22,6 +22,8 @@ class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
     public static final String MESSAGE_DUPLICATE_PROJECT = "Projects list contains duplicate project(s).";
+    public static final String MESSAGE_PERSON_PROJECT_NOT_IN_PROJECT_LIST =
+            "Person %1$s contains project %2$s that does not exist in the project list.";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
     private final List<JsonAdaptedProject> projects = new ArrayList<>();
@@ -68,6 +70,15 @@ class JsonSerializableAddressBook {
             if (addressBook.hasPerson(person)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
             }
+
+            for (Project personProject : person.getProjects()) {
+                if (!addressBook.hasProject(personProject)) {
+                    throw new IllegalValueException(String.format(
+                            MESSAGE_PERSON_PROJECT_NOT_IN_PROJECT_LIST,
+                            person.getName(), personProject));
+                }
+            }
+
             addressBook.addPerson(person);
         }
         return addressBook;

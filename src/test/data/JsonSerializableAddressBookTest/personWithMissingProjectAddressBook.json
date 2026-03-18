@@ -1,0 +1,14 @@
+{
+  "projects": [
+    "alpha"
+  ],
+  "persons": [
+    {
+      "name": "John Doe",
+      "phone": "91234567",
+      "email": "john@example.com",
+      "projects": ["beta"],
+      "tasks": []
+    }
+  ]
+}

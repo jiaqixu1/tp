@@ -16,9 +16,11 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.GuiSettings;
+import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.AddressBookBuilder;
+import seedu.taskforge.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
@@ -132,6 +134,25 @@ public class ModelManagerTest {
         modelManager.deleteProject(alpha);
 
         assertFalse(modelManager.hasProject(alpha));
+    }
+
+    @Test
+    public void deleteProject_existingProject_projectDeletedFromAllPersons() {
+        Project alpha = new Project("alpha");
+        Project beta = new Project("beta");
+        Person personWithAlphaAndBeta = new PersonBuilder().withName("Project Owner")
+                .withPhone("99988877").withEmail("owner@example.com")
+                .withProjects("alpha", "beta").build();
+
+        modelManager.addProject(alpha);
+        modelManager.addProject(beta);
+        modelManager.addPerson(personWithAlphaAndBeta);
+
+        modelManager.deleteProject(alpha);
+
+        assertFalse(modelManager.hasProject(alpha));
+        assertEquals(Arrays.asList(new Project("beta")), modelManager.getFilteredPersonList()
+                .get(0).getProjects());
     }
 
     @Test

@@ -155,7 +155,7 @@ public class AddTaskCommand extends TaskCommand {
          * Returns true if at least one field is edited.
          */
         public boolean isTaskFieldEdited() {
-            return CollectionUtil.isAnyNonNull(tasks);
+            return CollectionUtil.isAnyNonNull(tasks) && !tasks.isEmpty();
         }
 
         @Override

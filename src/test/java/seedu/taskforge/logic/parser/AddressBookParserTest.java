@@ -153,8 +153,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_addTask() throws Exception {
-        Person person = new PersonBuilder().build();
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder(person).build();
+        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder().withTasks("Write report").build();
         AddTaskCommand command = (AddTaskCommand) parser.parseCommand(AddTaskCommand.COMMAND_WORD
                 + " " + AddTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
                 + " " + PersonUtil.getAddTaskDescriptorDetails(descriptor));

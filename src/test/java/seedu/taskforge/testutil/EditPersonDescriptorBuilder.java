@@ -1,7 +1,6 @@
 package seedu.taskforge.testutil;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,7 +10,6 @@ import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
 
 /**
@@ -39,7 +37,6 @@ public class EditPersonDescriptorBuilder {
         descriptor.setEmail(person.getEmail());
         descriptor.setProjects(person.getProjects());
         descriptor.setTasks(person.getTasks());
-        descriptor.setTags(person.getTags());
     }
 
     /**
@@ -87,15 +84,6 @@ public class EditPersonDescriptorBuilder {
         return this;
     }
 
-    /**
-     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code EditPersonDescriptor}
-     * that we are building.
-     */
-    public EditPersonDescriptorBuilder withTags(String... tags) {
-        Set<Tag> tagSet = Stream.of(tags).map(Tag::new).collect(Collectors.toSet());
-        descriptor.setTags(tagSet);
-        return this;
-    }
 
     public EditPersonDescriptor build() {
         return descriptor;

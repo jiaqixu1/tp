@@ -1,16 +1,13 @@
 package seedu.taskforge.testutil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
 import seedu.taskforge.model.util.SampleDataUtil;
 
@@ -28,7 +25,6 @@ public class PersonBuilder {
     private Email email;
     private List<Project> projects;
     private List<Task> tasks;
-    private Set<Tag> tags;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -39,7 +35,6 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         projects = new ArrayList<>();
         tasks = new ArrayList<>();
-        tags = new HashSet<>();
     }
 
     /**
@@ -51,7 +46,6 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         projects = new ArrayList<>(personToCopy.getProjects());
         tasks = new ArrayList<>(personToCopy.getTasks());
-        tags = new HashSet<>(personToCopy.getTags());
     }
 
     /**
@@ -63,7 +57,7 @@ public class PersonBuilder {
     }
 
     /**
-     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code Person} that we are building.
+     * Parses the {@code projects} into a {@code List<Project>} and set it to the {@code Person} that we are building.
      */
     public PersonBuilder withProjects(String ... projects) {
         this.projects = SampleDataUtil.getProjectList(projects);
@@ -79,13 +73,6 @@ public class PersonBuilder {
         return this;
     }
 
-    /**
-     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code Person} that we are building.
-     */
-    public PersonBuilder withTags(String ... tags) {
-        this.tags = SampleDataUtil.getTagSet(tags);
-        return this;
-    }
 
 
     /**
@@ -105,7 +92,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, projects, tasks, tags);
+        return new Person(name, phone, email, projects, tasks);
     }
 
 }

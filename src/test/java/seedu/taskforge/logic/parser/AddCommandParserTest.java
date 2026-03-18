@@ -16,8 +16,6 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.PREAMBLE_NON_EMPTY;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PROJECT_DESC_ALPHA;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PROJECT_DESC_BETA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
-import static seedu.taskforge.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
 import static seedu.taskforge.logic.commands.CommandTestUtil.TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.TASK_REFACTOR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
@@ -25,8 +23,6 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -61,11 +57,11 @@ public class AddCommandParserTest {
         assertParseSuccess(parser, PREAMBLE_WHITESPACE
                 + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + PROJECT_DESC_ALPHA + PROJECT_DESC_BETA + TASK_REFACTOR
-                + TASK_FIX_ERROR + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
+                + TASK_FIX_ERROR, new AddCommand(expectedPerson));
 
         // multiple projects - all accepted
         Person expectedPersonMultipleProjects = new PersonBuilder(BOB)
-                .withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).withTasks().withTags()
+                .withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).withTasks()
                 .build();
 
         assertParseSuccess(parser,
@@ -75,7 +71,7 @@ public class AddCommandParserTest {
 
         // multiple tasks - all accepted
         Person expectedPersonMultipleTasks = new PersonBuilder(BOB).withProjects()
-                .withTasks(VALID_TASK_FIX_ERROR, VALID_TASK_REFACTOR).withTags()
+                .withTasks(VALID_TASK_FIX_ERROR, VALID_TASK_REFACTOR)
                 .build();
 
         assertParseSuccess(parser,
@@ -83,15 +79,6 @@ public class AddCommandParserTest {
                         + TASK_FIX_ERROR + TASK_REFACTOR,
                 new AddCommand(expectedPersonMultipleTasks));
 
-        // multiple tags - all accepted
-        Person expectedPersonMultipleTags = new PersonBuilder(BOB).withProjects().withTasks()
-                .withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
-                .build();
-
-        assertParseSuccess(parser,
-                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + TAG_DESC_FRIEND + TAG_DESC_HUSBAND,
-                new AddCommand(expectedPersonMultipleTags));
 
     }
 
@@ -152,7 +139,7 @@ public class AddCommandParserTest {
     @Test
     public void parse_optionalFieldsMissing_success() {
         // zero projects, tags, tasks
-        Person expectedPerson = new PersonBuilder(AMY).withProjects().withTasks().withTags().build();
+        Person expectedPerson = new PersonBuilder(AMY).withProjects().withTasks().build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY,
                 new AddCommand(expectedPerson));
     }

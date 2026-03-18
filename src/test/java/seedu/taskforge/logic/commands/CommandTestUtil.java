@@ -7,7 +7,6 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_INDEX;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.taskforge.testutil.Assert.assertThrows;
@@ -41,8 +40,6 @@ public class CommandTestUtil {
     public static final String VALID_TASK_IMPLEMENT_X = "implement feature x";
     public static final String VALID_TASK_IMPLEMENT_Y = "implement feature y";
     public static final String VALID_TASK_IMPLEMENT_Z = "implement feature z";
-    public static final String VALID_TAG_HUSBAND = "husband";
-    public static final String VALID_TAG_FRIEND = "friend";
     public static final String VALID_PROJECT_ALPHA = "alpha";
     public static final String VALID_PROJECT_BETA = "beta";
     public static final String VALID_PROJECT_X = "project x";
@@ -57,8 +54,6 @@ public class CommandTestUtil {
     public static final String EMAIL_DESC_BOB = " " + PREFIX_EMAIL + VALID_EMAIL_BOB;
     public static final String TASK_FIX_ERROR = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_FIX_ERROR;
     public static final String TASK_REFACTOR = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_REFACTOR;
-    public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
-    public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
     public static final String PROJECT_DESC_BETA = " " + PREFIX_PROJECT_TITLE + VALID_PROJECT_BETA;
     public static final String PROJECT_DESC_ALPHA = " " + PREFIX_PROJECT_TITLE + VALID_PROJECT_ALPHA;
 

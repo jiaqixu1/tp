@@ -1,9 +1,7 @@
 package seedu.taskforge.storage;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -15,7 +13,6 @@ import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
 
 /**
@@ -30,7 +27,6 @@ class JsonAdaptedPerson {
     private final String email;
     private final List<JsonAdaptedProject> projects = new ArrayList<>();
     private final List<JsonAdaptedTask> tasks = new ArrayList<>();
-    private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -39,8 +35,7 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
                              @JsonProperty("email") String email,
                              @JsonProperty("projects") List<JsonAdaptedProject> projects,
-                             @JsonProperty("tasks") List<JsonAdaptedTask> tasks,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+                             @JsonProperty("tasks") List<JsonAdaptedTask> tasks) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -50,9 +45,6 @@ class JsonAdaptedPerson {
         }
         if (tasks != null) {
             this.tasks.addAll(tasks);
-        }
-        if (tags != null) {
-            this.tags.addAll(tags);
         }
     }
 
@@ -69,9 +61,6 @@ class JsonAdaptedPerson {
         tasks.addAll(source.getTasks().stream()
                 .map(JsonAdaptedTask::new)
                 .collect(Collectors.toList()));
-        tags.addAll(source.getTags().stream()
-                .map(JsonAdaptedTag::new)
-                .collect(Collectors.toList()));
     }
 
     /**
@@ -82,15 +71,11 @@ class JsonAdaptedPerson {
     public Person toModelType() throws IllegalValueException {
         final List<Project> personProjects = new ArrayList<>();
         final List<Task> personTasks = new ArrayList<>();
-        final List<Tag> personTags = new ArrayList<>();
         for (JsonAdaptedProject project : projects) {
             personProjects.add(project.toModelType());
         }
         for (JsonAdaptedTask task : tasks) {
             personTasks.add(task.toModelType());
-        }
-        for (JsonAdaptedTag tag : tags) {
-            personTags.add(tag.toModelType());
         }
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
@@ -119,8 +104,7 @@ class JsonAdaptedPerson {
 
         final List<Project> modelProjects = new ArrayList<>(personProjects);
         final List<Task> modelTasks = new ArrayList<>(personTasks);
-        final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelProjects, modelTasks, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelProjects, modelTasks);
     }
 
 }

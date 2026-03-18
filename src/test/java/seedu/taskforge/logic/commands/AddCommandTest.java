@@ -56,18 +56,6 @@ public class AddCommandTest {
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
     }
 
-    @Test
-    public void execute_personWithValidTags_addSuccessful() throws Exception {
-        Person personWithValidTags = new PersonBuilder().withTags("friends").build();
-        AddCommand addCommand = new AddCommand(personWithValidTags);
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
-
-        CommandResult commandResult = addCommand.execute(modelStub);
-
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(personWithValidTags)),
-                commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(personWithValidTags), modelStub.personsAdded);
-    }
 
     @Test
     public void equals() {

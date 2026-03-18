@@ -46,8 +46,6 @@ public class Messages {
         person.getProjects().forEach(builder::append);
         builder.append("; Tasks: ");
         person.getTasks().forEach(builder::append);
-        builder.append("; Tags: ");
-        person.getTags().forEach(builder::append);
         return builder.toString();
     }
 

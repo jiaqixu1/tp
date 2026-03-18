@@ -8,7 +8,6 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.testutil.Assert.assertThrows;
@@ -95,16 +94,14 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withTasks(VALID_TASK_FIX_ERROR).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different tags -> returns false
-        editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
-        assertFalse(ALICE.equals(editedAlice));
+
     }
 
     @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", projects="
-                + ALICE.getProjects() + ", tasks=" + ALICE.getTasks() + ", tags=" + ALICE.getTags() + "}";
+                + ALICE.getProjects() + ", tasks=" + ALICE.getTasks() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

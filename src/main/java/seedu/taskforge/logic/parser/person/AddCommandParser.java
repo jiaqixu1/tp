@@ -5,11 +5,9 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import seedu.taskforge.logic.commands.person.AddCommand;
@@ -24,7 +22,6 @@ import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.tag.Tag;
 import seedu.taskforge.model.task.Task;
 
 /**
@@ -40,7 +37,7 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                        PREFIX_PROJECT_TITLE, PREFIX_TASK_DESCRIPTION, PREFIX_TAG);
+                        PREFIX_PROJECT_TITLE, PREFIX_TASK_DESCRIPTION);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -53,9 +50,8 @@ public class AddCommandParser implements Parser<AddCommand> {
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         List<Project> projectList = ParserUtil.parseProjects(argMultimap.getAllValues(PREFIX_PROJECT_TITLE));
         List<Task> taskList = ParserUtil.parseTasks(argMultimap.getAllValues(PREFIX_TASK_DESCRIPTION));
-        Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        Person person = new Person(name, phone, email, projectList, taskList, tagList);
+        Person person = new Person(name, phone, email, projectList, taskList);
 
         return new AddCommand(person);
     }

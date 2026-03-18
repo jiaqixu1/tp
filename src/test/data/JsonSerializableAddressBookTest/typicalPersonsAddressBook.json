@@ -6,49 +6,42 @@
     "phone" : "94351253",
     "email" : "alice@example.com",
     "projects": [ "alpha" ],
-    "tasks": [ "refactor code" ],
-    "tags" : [ "friends" ]
+    "tasks": [ "refactor code" ]
   }, {
     "name" : "Benson Meier",
     "phone" : "98765432",
     "email" : "johnd@example.com",
     "projects": [ "alpha", "beta" ],
-    "tasks": [ "refactor code", "fix error in tp project" ],
-    "tags" : [ "owesMoney", "friends" ]
+    "tasks": [ "refactor code", "fix error in tp project" ]
   }, {
     "name" : "Carl Kurz",
     "phone" : "95352563",
     "email" : "heinz@example.com",
     "projects": [ ],
-    "tasks": [ ],
-    "tags" : [ ]
+    "tasks": [ ]
   }, {
     "name" : "Daniel Meier",
     "phone" : "87652533",
     "email" : "cornelia@example.com",
     "projects": [ "alpha"],
-    "tasks": [ "refactor code" ],
-    "tags" : [ "friends" ]
+    "tasks": [ "refactor code" ]
   }, {
     "name" : "Elle Meyer",
     "phone" : "9482224",
     "email" : "werner@example.com",
     "projects": [ ],
-    "tasks": [ ],
-    "tags" : [ ]
+    "tasks": [ ]
   }, {
     "name" : "Fiona Kunz",
     "phone" : "9482427",
     "email" : "lydia@example.com",
     "projects": [ ],
-    "tasks": [ ],
-    "tags" : [ ]
+    "tasks": [ ]
   }, {
     "name" : "George Best",
     "phone" : "9482442",
     "email" : "anna@example.com",
     "projects": [ ],
-    "tasks": [ ],
-    "tags" : [ ]
+    "tasks": [ ]
   } ]
 }

@@ -16,8 +16,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.GuiSettings;
-import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
+import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.AddressBookBuilder;
 import seedu.taskforge.testutil.PersonBuilder;

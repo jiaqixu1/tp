@@ -1,6 +1,7 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import java.util.Optional;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.CollectionUtil;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.Command;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
@@ -26,11 +26,13 @@ import seedu.taskforge.model.task.Task;
 /**
  * Adds task(s) to an existing person in the address book.
  */
-public class AddTaskCommand extends Command {
-    public static final String COMMAND_WORD = "task-add";
+public class AddTaskCommand extends TaskCommand {
+    public static final String SUBCOMMAND_WORD = "add";
 
     public static final String MESSAGE_SUCCESS = "New task added: %1$s";
-    public static final String MESSAGE_USAGE = "task-add INDEX -d TASK_DESCRIPTION";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
+            + SUBCOMMAND_WORD + " INDEX "
+            + PREFIX_NAME + " TASK_NAME";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to add must be provided";
 

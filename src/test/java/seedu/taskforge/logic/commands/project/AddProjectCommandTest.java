@@ -1,261 +1,222 @@
 package seedu.taskforge.logic.commands.project;
 
+import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_X;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_Y;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_Z;
-import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PROJECT;
-import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.taskforge.testutil.Assert.assertThrows;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.taskforge.commons.core.index.Index;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
+import seedu.taskforge.logic.commands.CommandResult;
+import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
-import seedu.taskforge.model.ModelManager;
-import seedu.taskforge.model.UserPrefs;
+import seedu.taskforge.model.ReadOnlyAddressBook;
+import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.util.SampleDataUtil;
-import seedu.taskforge.testutil.AddProjectDescriptorBuilder;
-import seedu.taskforge.testutil.PersonBuilder;
+import seedu.taskforge.model.project.Project;
 
 public class AddProjectCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_addOneProjectUnfilteredList_success() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
+    public void execute_newProject_success() throws Exception {
+        ModelStubAcceptingProjectAdded modelStub = new ModelStubAcceptingProjectAdded();
+        Project validProject = new Project("alpha");
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).build();
+        CommandResult commandResult = new AddProjectCommand(validProject).execute(modelStub);
 
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_BETA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
-
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
+        assertEquals(
+                String.format(AddProjectCommand.MESSAGE_SUCCESS, Messages.format(validProject)),
+                commandResult.getFeedbackToUser());
+        assertEquals(1, modelStub.projectsAdded.size());
+        assertEquals(validProject, modelStub.projectsAdded.get(0));
     }
 
     @Test
-    public void execute_addOneProjectFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+    public void execute_duplicateProject_throwsCommandException() {
+        Project validProject = new Project("alpha");
+        AddProjectCommand addProjectCommand = new AddProjectCommand(validProject);
+        ModelStubWithProject modelStub = new ModelStubWithProject(validProject);
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).build();
-
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_BETA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_addOneProjectDuplicateUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
-
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
-    }
-
-    @Test
-    public void execute_addOneProjectDuplicateFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
-    }
-
-    @Test
-    public void execute_addMultipleProjectsDuplicateUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y,
-                VALID_PROJECT_Z, VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
-
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
-    }
-
-    @Test
-    public void execute_addMultipleProjectsDuplicateFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y,
-                VALID_PROJECT_Z, VALID_PROJECT_ALPHA).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_DUPLICATE_PROJECT);
-    }
-
-    @Test
-    public void execute_addMultipleProjectsUnfilteredList_success() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA,
-                VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
-
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(indexFirstPerson, descriptor);
-
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_addMultipleProjectsFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA,
-                VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
-
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_BETA, VALID_PROJECT_X, VALID_PROJECT_Y, VALID_PROJECT_Z).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(AddProjectCommand.MESSAGE_ADD_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(addProjectCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_noProjectSpecifiedUnfilteredList_errorThrown() {
-        AddProjectCommand addProjectCommand = new AddProjectCommand(
-                INDEX_FIRST_PERSON, new AddProjectCommand.AddProjectDescriptor()
-        );
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_NOT_EDITED);
-    }
-
-    @Test
-    public void execute_noProjectSpecifiedFilteredList_errorThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddProjectCommand addProjectCommand = new AddProjectCommand(
-                INDEX_FIRST_PERSON, new AddProjectCommand.AddProjectDescriptor()
-        );
-        assertCommandFailure(addProjectCommand, model, AddProjectCommand.MESSAGE_NOT_EDITED);
-    }
-
-    @Test
-    public void execute_invalidPersonIndexUnfilteredList_failure() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        AddProjectCommand.AddProjectDescriptor descriptor = new AddProjectDescriptorBuilder()
-                .withProjects(VALID_PROJECT_X).build();
-        AddProjectCommand addProjectCommand = new AddProjectCommand(outOfBoundIndex, descriptor);
-
-        assertCommandFailure(addProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-    }
-
-    /**
-     * Adds project to a person of a filtered list where index is larger than size of filtered list,
-     * but smaller than size of address book
-     */
-    @Test
-    public void execute_invalidPersonIndexFilteredList_failure() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Index outOfBoundIndex = INDEX_SECOND_PERSON;
-        // ensures that outOfBoundIndex is still in bounds of address book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
-
-        AddProjectCommand addProjectCommand = new AddProjectCommand(outOfBoundIndex,
-                new AddProjectDescriptorBuilder().withProjects(VALID_PROJECT_X).build());
-
-        assertCommandFailure(addProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertThrows(
+                CommandException.class,
+                AddProjectCommand.MESSAGE_DUPLICATE_PROJECT, () -> addProjectCommand.execute(modelStub));
     }
 
     @Test
     public void equals() {
-        AddProjectDescriptor descriptor = new AddProjectDescriptor();
-        AddProjectCommand command = new AddProjectCommand(INDEX_FIRST_PROJECT, descriptor);
+        Project alpha = new Project("alpha");
+        Project beta = new Project("beta");
+        AddProjectCommand addAlphaCommand = new AddProjectCommand(alpha);
+        AddProjectCommand addBetaCommand = new AddProjectCommand(beta);
 
-        // same values
-        AddProjectCommand commandCopy = new AddProjectCommand(INDEX_FIRST_PROJECT, descriptor);
-        assertEquals(command, commandCopy);
+        assertTrue(addAlphaCommand.equals(addAlphaCommand));
 
-        // same object
-        assertEquals(command, command);
+        AddProjectCommand addAlphaCopy = new AddProjectCommand(alpha);
+        assertTrue(addAlphaCommand.equals(addAlphaCopy));
 
-        // null -> false
-        assertNotEquals(command, null);
-
-        // different type -> false
-        assertNotEquals(command, 5);
-
-        // different index -> false
-        AddProjectCommand secondProjectCommand = new AddProjectCommand(INDEX_SECOND_PROJECT, descriptor);
-        assertNotEquals(command, secondProjectCommand);
-
-        // different descriptor -> false
-        AddProjectDescriptor otherDescriptor = new AddProjectDescriptor();
-        otherDescriptor.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_ALPHA));
-        assertNotEquals(command, new AddProjectCommand(INDEX_FIRST_PROJECT, otherDescriptor));
+        assertFalse(addAlphaCommand.equals(1));
+        assertFalse(addAlphaCommand.equals(null));
+        assertFalse(addAlphaCommand.equals(addBetaCommand));
     }
 
     @Test
-    public void addProjectDescriptor_equals() {
-        AddProjectDescriptor descriptor = new AddProjectDescriptor();
-        descriptor.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_ALPHA));
+    public void toStringMethod() {
+        Project project = new Project("alpha");
+        AddProjectCommand addProjectCommand = new AddProjectCommand(project);
+        String expected = AddProjectCommand.class.getCanonicalName() + "{toAdd=" + project + "}";
+        assertEquals(expected, addProjectCommand.toString());
+    }
 
-        // same values
-        AddProjectDescriptor descriptorCopy = new AddProjectDescriptor();
-        descriptorCopy.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_ALPHA));
-        assertEquals(descriptor, descriptorCopy);
+    /**
+     * A default model stub that has all methods failing.
+     */
+    private class ModelStub implements Model {
+        @Override
+        public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
+            throw new AssertionError("This method should not be called.");
+        }
 
-        // same object
-        assertEquals(descriptor, descriptor);
+        @Override
+        public ReadOnlyUserPrefs getUserPrefs() {
+            throw new AssertionError("This method should not be called.");
+        }
 
-        // null -> false
-        assertNotEquals(descriptor, null);
+        @Override
+        public GuiSettings getGuiSettings() {
+            throw new AssertionError("This method should not be called.");
+        }
 
-        // different type -> false
-        assertNotEquals(descriptor, 5);
+        @Override
+        public void setGuiSettings(GuiSettings guiSettings) {
+            throw new AssertionError("This method should not be called.");
+        }
 
-        // different list -> false
-        AddProjectDescriptor otherDescriptor = new AddProjectDescriptor();
-        descriptor.setProjects(SampleDataUtil.getProjectList(VALID_PROJECT_BETA));
-        assertNotEquals(descriptor, otherDescriptor);
+        @Override
+        public Path getAddressBookFilePath() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setAddressBookFilePath(Path addressBookFilePath) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setAddressBook(ReadOnlyAddressBook addressBook) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteProject(Project target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setProject(Project target, Project editedProject) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Project> getProjectList() {
+            return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public boolean hasPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deletePerson(Person target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+    }
+
+    /**
+     * A Model stub that contains a single project.
+     */
+    private class ModelStubWithProject extends ModelStub {
+        private final Project project;
+
+        ModelStubWithProject(Project project) {
+            requireNonNull(project);
+            this.project = project;
+        }
+
+        @Override
+        public boolean hasProject(Project project) {
+            requireNonNull(project);
+            return this.project.equals(project);
+        }
+    }
+
+    /**
+     * A Model stub that always accepts the project being added.
+     */
+    private class ModelStubAcceptingProjectAdded extends ModelStub {
+        final ArrayList<Project> projectsAdded = new ArrayList<>();
+
+        @Override
+        public boolean hasProject(Project project) {
+            requireNonNull(project);
+            return projectsAdded.contains(project);
+        }
+
+        @Override
+        public void addProject(Project project) {
+            requireNonNull(project);
+            projectsAdded.add(project);
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            return new AddressBook();
+        }
     }
 }
+

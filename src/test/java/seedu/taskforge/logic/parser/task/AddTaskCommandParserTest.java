@@ -8,7 +8,7 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.TASK_DESC_IMPLEMENT
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_Y;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_Z;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -22,7 +22,7 @@ import seedu.taskforge.model.task.Task;
 import seedu.taskforge.testutil.AddTaskDescriptorBuilder;
 
 public class AddTaskCommandParserTest {
-    private static final String TASK_EMPTY = " " + PREFIX_TASK_DESCRIPTION;
+    private static final String TASK_EMPTY = " " + PREFIX_NAME;
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddTaskCommand.MESSAGE_USAGE);

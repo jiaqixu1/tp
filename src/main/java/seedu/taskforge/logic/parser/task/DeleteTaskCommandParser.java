@@ -2,7 +2,7 @@ package seedu.taskforge.logic.parser.task;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +31,7 @@ public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
     public DeleteTaskCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_TASK);
+                ArgumentTokenizer.tokenize(args, PREFIX_INDEX);
 
         Index index;
 
@@ -44,7 +44,7 @@ public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
 
         DeleteTaskDescriptor deleteTaskDescriptor = new DeleteTaskDescriptor();
 
-        parseTasksIndexesForAdd(argMultimap.getAllValues(PREFIX_TASK))
+        parseTasksIndexesForAdd(argMultimap.getAllValues(PREFIX_INDEX))
                 .ifPresent(deleteTaskDescriptor::setTasksIndexes);
 
         if (!deleteTaskDescriptor.isTaskFieldEdited()) {

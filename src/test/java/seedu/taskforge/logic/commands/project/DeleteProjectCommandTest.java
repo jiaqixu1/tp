@@ -1,193 +1,209 @@
 package seedu.taskforge.logic.commands.project;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.taskforge.testutil.Assert.assertThrows;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.model.AddressBook;
+import seedu.taskforge.logic.commands.CommandResult;
+import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
-import seedu.taskforge.model.ModelManager;
-import seedu.taskforge.model.UserPrefs;
+import seedu.taskforge.model.ReadOnlyAddressBook;
+import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.testutil.DeleteProjectDescriptorBuilder;
-import seedu.taskforge.testutil.PersonBuilder;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.project.UniqueProjectList;
 
 public class DeleteProjectCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_deleteOneProjectUnfilteredList_success() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
+    public void execute_validIndex_success() throws Exception {
+        Project projectToDelete = new Project("alpha");
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(projectToDelete);
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects().build();
+        CommandResult result = new DeleteProjectCommand(Index.fromOneBased(1))
+                .execute(modelStub);
 
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("1").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(indexFirstPerson, descriptor);
-
-        String expectedMessage = String.format(DeleteProjectCommand.MESSAGE_DELETE_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(deleteProjectCommand, model, expectedMessage, expectedModel);
+        assertEquals(
+                String.format(DeleteProjectCommand.MESSAGE_DELETE_PROJECT_SUCCESS, projectToDelete),
+                result.getFeedbackToUser());
+        assertTrue(modelStub.deletedProjects.contains(projectToDelete));
     }
 
     @Test
-    public void execute_deleteOneProjectFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+    public void execute_invalidIndex_throwsCommandException() {
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(new Project("alpha"));
+        Index outOfBoundIndex = Index.fromOneBased(2);
+        DeleteProjectCommand deleteProjectCommand =
+                new DeleteProjectCommand(outOfBoundIndex);
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects().build();
-
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("1").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(DeleteProjectCommand.MESSAGE_DELETE_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(deleteProjectCommand, model, expectedMessage, expectedModel);
+        assertThrows(
+                CommandException.class,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () -> deleteProjectCommand.execute(modelStub));
     }
 
     @Test
-    public void execute_deleteOneProjectOutOfBoundUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("2").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(indexFirstPerson, descriptor);
+    public void equals() {
+        DeleteProjectCommand deleteFirstCommand =
+                new DeleteProjectCommand(Index.fromOneBased(1));
+        DeleteProjectCommand deleteSecondCommand =
+                new DeleteProjectCommand(Index.fromOneBased(2));
 
-        assertCommandFailure(deleteProjectCommand, model, DeleteProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+        assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
+
+        DeleteProjectCommand deleteFirstCopy =
+                new DeleteProjectCommand(Index.fromOneBased(1));
+        assertTrue(deleteFirstCommand.equals(deleteFirstCopy));
+
+        assertFalse(deleteFirstCommand.equals(1));
+        assertFalse(deleteFirstCommand.equals(null));
+        assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
     }
 
     @Test
-    public void execute_deleteOneProjectOutOfBoundFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("2").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(deleteProjectCommand, model, DeleteProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
-    }
-
-    @Test
-    public void execute_deleteMultipleProjectsOutOfBoundUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("1", "2").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(indexFirstPerson, descriptor);
-
-        assertCommandFailure(deleteProjectCommand, model, DeleteProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
-    }
-
-    @Test
-    public void execute_deleteMultipleProjectsOutOfBoundFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("1", "2").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(deleteProjectCommand, model, DeleteProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
-    }
-
-    @Test
-    public void execute_deleteMultipleProjectsUnfilteredList_success() {
-        Index indexSecondPerson = Index.fromOneBased(2);
-        Person firstPerson = model.getFilteredPersonList().get(indexSecondPerson.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects().build();
-
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("1", "2").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(indexSecondPerson, descriptor);
-
-        String expectedMessage = String.format(DeleteProjectCommand.MESSAGE_DELETE_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(deleteProjectCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_deleteMultipleProjectsFilteredList_success() {
-        showPersonAtIndex(model, INDEX_SECOND_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withProjects().build();
-
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("1", "2").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(DeleteProjectCommand.MESSAGE_DELETE_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(deleteProjectCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_noProjectSpecifiedUnfilteredList_errorThrown() {
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(
-                INDEX_FIRST_PERSON, new DeleteProjectCommand.DeleteProjectDescriptor()
-        );
-        assertCommandFailure(deleteProjectCommand, model, DeleteProjectCommand.MESSAGE_NOT_EDITED);
-    }
-
-    @Test
-    public void execute_noProjectSpecifiedFilteredList_errorThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(
-                INDEX_FIRST_PERSON, new DeleteProjectCommand.DeleteProjectDescriptor()
-        );
-        assertCommandFailure(deleteProjectCommand, model, DeleteProjectCommand.MESSAGE_NOT_EDITED);
-    }
-
-    @Test
-    public void execute_invalidPersonIndexUnfilteredList_failure() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        DeleteProjectCommand.DeleteProjectDescriptor descriptor = new DeleteProjectDescriptorBuilder()
-                .withProjects("1").build();
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(outOfBoundIndex, descriptor);
-
-        assertCommandFailure(deleteProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    public void toStringMethod() {
+        Index index = Index.fromOneBased(1);
+        DeleteProjectCommand deleteProjectCommand =
+                new DeleteProjectCommand(index);
+        String expected = DeleteProjectCommand.class.getCanonicalName()
+                + "{targetIndex=" + index + "}";
+        assertEquals(expected, deleteProjectCommand.toString());
     }
 
     /**
-     * Adds project to a person of a filtered list where index is larger than size of filtered list,
-     * but smaller than size of address book
+     * A default model stub that has all methods failing.
      */
-    @Test
-    public void execute_invalidPersonIndexFilteredList_failure() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Index outOfBoundIndex = INDEX_SECOND_PERSON;
-        // ensures that outOfBoundIndex is still in bounds of address book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
+    private class ModelStub implements Model {
+        @Override
+        public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
+            throw new AssertionError("This method should not be called.");
+        }
 
-        DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(outOfBoundIndex,
-                new DeleteProjectDescriptorBuilder().withProjects("1").build());
+        @Override
+        public ReadOnlyUserPrefs getUserPrefs() {
+            throw new AssertionError("This method should not be called.");
+        }
 
-        assertCommandFailure(deleteProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        @Override
+        public GuiSettings getGuiSettings() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setGuiSettings(GuiSettings guiSettings) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Path getAddressBookFilePath() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setAddressBookFilePath(Path addressBookFilePath) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setAddressBook(ReadOnlyAddressBook addressBook) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteProject(Project target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addProject(Project project) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setProject(Project target, Project editedProject) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Project> getProjectList() {
+            return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public boolean hasPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deletePerson(Person target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+    }
+
+    /**
+     * A Model stub that contains a fixed project list and records deleted projects.
+     */
+    private class ModelStubWithProjectList extends ModelStub {
+        final ArrayList<Project> deletedProjects = new ArrayList<>();
+        private final UniqueProjectList uniqueProjectList = new UniqueProjectList();
+
+        ModelStubWithProjectList(Project... projects) {
+            for (Project project : projects) {
+                uniqueProjectList.add(project);
+            }
+        }
+
+        @Override
+        public ObservableList<Project> getProjectList() {
+            return uniqueProjectList.asUnmodifiableObservableList();
+        }
+
+        @Override
+        public void deleteProject(Project target) {
+            uniqueProjectList.remove(target);
+            deletedProjects.add(target);
+        }
     }
 }
+

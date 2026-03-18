@@ -2,7 +2,7 @@ package seedu.taskforge.logic.parser.task;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class AddTaskCommandParser implements Parser<AddTaskCommand> {
     public AddTaskCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_TASK_DESCRIPTION);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME);
 
         Index index;
 
@@ -44,7 +44,7 @@ public class AddTaskCommandParser implements Parser<AddTaskCommand> {
 
         AddTaskDescriptor addTaskDescriptor = new AddTaskDescriptor();
 
-        parseTasksForAdd(argMultimap.getAllValues(PREFIX_TASK_DESCRIPTION)).ifPresent(addTaskDescriptor::setTasks);
+        parseTasksForAdd(argMultimap.getAllValues(PREFIX_NAME)).ifPresent(addTaskDescriptor::setTasks);
 
         if (!addTaskDescriptor.isTaskFieldEdited()) {
             throw new ParseException(AddTaskCommand.MESSAGE_NOT_EDITED);

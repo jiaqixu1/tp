@@ -1,13 +1,10 @@
 package seedu.taskforge.logic.commands.project;
 
-import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.taskforge.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -15,66 +12,58 @@ import org.junit.jupiter.api.Test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
-import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
-import seedu.taskforge.logic.commands.exceptions.CommandException;
-import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 
-public class AddProjectToProjectListCommandTest {
+public class ListProjectCommandTest {
 
     @Test
-    public void execute_newProject_success() throws Exception {
-        ModelStubAcceptingProjectAdded modelStub = new ModelStubAcceptingProjectAdded();
-        Project validProject = new Project("alpha");
+    public void execute_noProjects_showsNone() {
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList();
 
-        CommandResult commandResult = new AddProjectToProjectListCommand(validProject).execute(modelStub);
+        CommandResult result = new ListProjectCommand().execute(modelStub);
 
-        assertEquals(
-                String.format(AddProjectToProjectListCommand.MESSAGE_SUCCESS, Messages.format(validProject)),
-                commandResult.getFeedbackToUser());
-        assertEquals(1, modelStub.projectsAdded.size());
-        assertEquals(validProject, modelStub.projectsAdded.get(0));
+        assertEquals(ListProjectCommand.MESSAGE_SUCCESS + " None", result.getFeedbackToUser());
     }
 
     @Test
-    public void execute_duplicateProject_throwsCommandException() {
-        Project validProject = new Project("alpha");
-        AddProjectToProjectListCommand addProjectCommand = new AddProjectToProjectListCommand(validProject);
-        ModelStubWithProject modelStub = new ModelStubWithProject(validProject);
+    public void execute_withProjects_showsAllProjects() {
+        Project alpha = new Project("alpha");
+        Project beta = new Project("beta");
+        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(alpha, beta);
 
-        assertThrows(
-                CommandException.class,
-                AddProjectToProjectListCommand.MESSAGE_DUPLICATE_PROJECT, () -> addProjectCommand.execute(modelStub));
+        CommandResult result = new ListProjectCommand().execute(modelStub);
+
+        String expected = ListProjectCommand.MESSAGE_SUCCESS + "\n"
+                + "1. " + alpha.title + "\n"
+                + "2. " + beta.title;
+        assertEquals(expected, result.getFeedbackToUser());
     }
 
     @Test
     public void equals() {
-        Project alpha = new Project("alpha");
-        Project beta = new Project("beta");
-        AddProjectToProjectListCommand addAlphaCommand = new AddProjectToProjectListCommand(alpha);
-        AddProjectToProjectListCommand addBetaCommand = new AddProjectToProjectListCommand(beta);
+        ListProjectCommand viewAllProjectCommand = new ListProjectCommand();
 
-        assertTrue(addAlphaCommand.equals(addAlphaCommand));
-
-        AddProjectToProjectListCommand addAlphaCopy = new AddProjectToProjectListCommand(alpha);
-        assertTrue(addAlphaCommand.equals(addAlphaCopy));
-
-        assertFalse(addAlphaCommand.equals(1));
-        assertFalse(addAlphaCommand.equals(null));
-        assertFalse(addAlphaCommand.equals(addBetaCommand));
+        assertTrue(viewAllProjectCommand.equals(viewAllProjectCommand));
+        assertTrue(viewAllProjectCommand.equals(new ListProjectCommand()));
+        assertFalse(viewAllProjectCommand.equals(1));
+        assertFalse(viewAllProjectCommand.equals(null));
     }
 
     @Test
     public void toStringMethod() {
-        Project project = new Project("alpha");
-        AddProjectToProjectListCommand addProjectCommand = new AddProjectToProjectListCommand(project);
-        String expected = AddProjectToProjectListCommand.class.getCanonicalName() + "{toAdd=" + project + "}";
-        assertEquals(expected, addProjectCommand.toString());
+        String expected = ListProjectCommand.class.getCanonicalName()
+                + "{subcommandWord=" + ListProjectCommand.SUBCOMMAND_WORD + "}";
+        assertEquals(expected, new ListProjectCommand().toString());
+    }
+
+    @Test
+    public void hashCodeMethod() {
+        assertEquals(ListProjectCommand.SUBCOMMAND_WORD.hashCode(), new ListProjectCommand().hashCode());
     }
 
     /**
@@ -178,44 +167,18 @@ public class AddProjectToProjectListCommandTest {
     }
 
     /**
-     * A Model stub that contains a single project.
+     * A Model stub with a configurable project list.
      */
-    private class ModelStubWithProject extends ModelStub {
-        private final Project project;
+    private class ModelStubWithProjectList extends ModelStub {
+        private final ObservableList<Project> projects;
 
-        ModelStubWithProject(Project project) {
-            requireNonNull(project);
-            this.project = project;
+        ModelStubWithProjectList(Project... projects) {
+            this.projects = FXCollections.observableArrayList(projects);
         }
 
         @Override
-        public boolean hasProject(Project project) {
-            requireNonNull(project);
-            return this.project.equals(project);
-        }
-    }
-
-    /**
-     * A Model stub that always accepts the project being added.
-     */
-    private class ModelStubAcceptingProjectAdded extends ModelStub {
-        final ArrayList<Project> projectsAdded = new ArrayList<>();
-
-        @Override
-        public boolean hasProject(Project project) {
-            requireNonNull(project);
-            return projectsAdded.contains(project);
-        }
-
-        @Override
-        public void addProject(Project project) {
-            requireNonNull(project);
-            projectsAdded.add(project);
-        }
-
-        @Override
-        public ReadOnlyAddressBook getAddressBook() {
-            return new AddressBook();
+        public ObservableList<Project> getProjectList() {
+            return projects;
         }
     }
 }

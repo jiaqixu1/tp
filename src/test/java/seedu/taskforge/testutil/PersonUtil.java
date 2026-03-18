@@ -1,9 +1,9 @@
 package seedu.taskforge.testutil;
 
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_INDEX;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
@@ -13,8 +13,8 @@ import java.util.List;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
-import seedu.taskforge.logic.commands.project.AddProjectCommand.AddProjectDescriptor;
-import seedu.taskforge.logic.commands.project.DeleteProjectCommand.DeleteProjectDescriptor;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
 import seedu.taskforge.model.person.Person;
@@ -78,32 +78,32 @@ public class PersonUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code AddProjectDescriptor}'s details.
+     * Returns the part of command string for the given {@code AssignProjectDescriptor}'s details.
      */
-    public static String getAddProjectDescriptorDetails(AddProjectDescriptor descriptor) {
+    public static String getAssignProjectDescriptorDetails(AssignProjectDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         if (descriptor.getProjects().isPresent()) {
             List<Project> projects = descriptor.getProjects().get();
             if (projects.isEmpty()) {
-                sb.append(PREFIX_PROJECT_TITLE).append(" ");
+                sb.append(PREFIX_NAME).append(" ");
             } else {
-                projects.forEach(s -> sb.append(PREFIX_PROJECT_TITLE).append(s.title).append(" "));
+                projects.forEach(s -> sb.append(PREFIX_NAME).append(s.title).append(" "));
             }
         }
         return sb.toString();
     }
 
     /**
-     * Returns the part of command string for the given {@code DeleteProjectDescriptor}'s details.
+     * Returns the part of command string for the given {@code UnassignProjectDescriptor}'s details.
      */
-    public static String getDeleteProjectDescriptorDetails(DeleteProjectDescriptor descriptor) {
+    public static String getUnassignProjectDescriptorDetails(UnassignProjectDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         if (descriptor.getProjectsIndexes().isPresent()) {
             List<Index> indexes = descriptor.getProjectsIndexes().get();
             if (indexes.isEmpty()) {
-                sb.append(PREFIX_PROJECT_INDEX).append(" ");
+                sb.append(PREFIX_INDEX).append(" ");
             } else {
-                indexes.forEach(s -> sb.append(PREFIX_PROJECT_INDEX).append(s.getOneBased()).append(" "));
+                indexes.forEach(s -> sb.append(PREFIX_INDEX).append(s.getOneBased()).append(" "));
             }
         }
         return sb.toString();
@@ -117,9 +117,9 @@ public class PersonUtil {
         if (descriptor.getTasks().isPresent()) {
             List<Task> tasks = descriptor.getTasks().get();
             if (tasks.isEmpty()) {
-                sb.append(PREFIX_TASK_DESCRIPTION).append(" ");
+                sb.append(PREFIX_NAME).append(" ");
             } else {
-                tasks.forEach(s -> sb.append(PREFIX_TASK_DESCRIPTION).append(s.description).append(" "));
+                tasks.forEach(s -> sb.append(PREFIX_NAME).append(s.description).append(" "));
             }
         }
         return sb.toString();
@@ -133,9 +133,9 @@ public class PersonUtil {
         if (descriptor.getTasksIndexes().isPresent()) {
             List<Index> indexes = descriptor.getTasksIndexes().get();
             if (indexes.isEmpty()) {
-                sb.append(PREFIX_TASK).append(" ");
+                sb.append(PREFIX_INDEX).append(" ");
             } else {
-                indexes.forEach(s -> sb.append(PREFIX_TASK).append(s.getOneBased()).append(" "));
+                indexes.forEach(s -> sb.append(PREFIX_INDEX).append(s.getOneBased()).append(" "));
             }
         }
         return sb.toString();

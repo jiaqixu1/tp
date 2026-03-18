@@ -4,7 +4,7 @@ import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_TASK_DELETE;
 import static seedu.taskforge.logic.commands.CommandTestUtil.TASK_DELETE_1;
 import static seedu.taskforge.logic.commands.CommandTestUtil.TASK_DELETE_2;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -18,7 +18,7 @@ import seedu.taskforge.logic.parser.ParserUtil;
 import seedu.taskforge.testutil.DeleteTaskDescriptorBuilder;
 
 public class DeleteTaskCommandParserTest {
-    private static final String TASK_EMPTY = " " + PREFIX_TASK;
+    private static final String TASK_EMPTY = " " + PREFIX_INDEX;
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteTaskCommand.MESSAGE_USAGE);

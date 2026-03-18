@@ -18,22 +18,23 @@ import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
 import seedu.taskforge.logic.commands.project.AddProjectCommand;
-import seedu.taskforge.logic.commands.project.AddProjectToProjectListCommand;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
-import seedu.taskforge.logic.commands.project.DeleteProjectFromProjectListCommand;
+import seedu.taskforge.logic.commands.project.ListProjectCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
-import seedu.taskforge.logic.commands.project.ViewAllProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
+import seedu.taskforge.logic.commands.task.TaskCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.logic.parser.person.AddCommandParser;
 import seedu.taskforge.logic.parser.person.DeleteCommandParser;
 import seedu.taskforge.logic.parser.person.EditCommandParser;
 import seedu.taskforge.logic.parser.person.FindCommandParser;
 import seedu.taskforge.logic.parser.project.AddProjectCommandParser;
-import seedu.taskforge.logic.parser.project.AddProjectToProjectListCommandParser;
+import seedu.taskforge.logic.parser.project.AssignProjectCommandParser;
 import seedu.taskforge.logic.parser.project.DeleteProjectCommandParser;
-import seedu.taskforge.logic.parser.project.DeleteProjectFromProjectListCommandParser;
+import seedu.taskforge.logic.parser.project.UnassignProjectCommandParser;
 import seedu.taskforge.logic.parser.task.AddTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
 
@@ -91,24 +92,12 @@ public class AddressBookParser {
             return new ListCommand();
 
         // Task related commands
-        case AddTaskCommand.COMMAND_WORD:
-            return new AddTaskCommandParser().parse(arguments);
-
-        case DeleteTaskCommand.COMMAND_WORD:
-            return new DeleteTaskCommandParser().parse(arguments);
+        case TaskCommand.COMMAND_WORD:
+            return handleTask(arguments);
 
         // Project related commands
         case ProjectCommand.COMMAND_WORD:
             return handleProject(arguments);
-
-        case ViewAllProjectCommand.COMMAND_WORD:
-            return new ViewAllProjectCommand();
-
-        case AddProjectToProjectListCommand.COMMAND_WORD:
-            return new AddProjectToProjectListCommandParser().parse(arguments);
-
-        case DeleteProjectFromProjectListCommand.COMMAND_WORD:
-            return new DeleteProjectFromProjectListCommandParser().parse(arguments);
 
         // Address book related commands
         case ExitCommand.COMMAND_WORD:
@@ -140,9 +129,41 @@ public class AddressBookParser {
         case DeleteProjectCommand.SUBCOMMAND_WORD:
             return new DeleteProjectCommandParser().parse(arguments);
 
+        case ListProjectCommand.SUBCOMMAND_WORD:
+            return new ListProjectCommand();
+
+        case AssignProjectCommand.SUBCOMMAND_WORD:
+            return new AssignProjectCommandParser().parse(arguments);
+
+        case UnassignProjectCommand.SUBCOMMAND_WORD:
+            return new UnassignProjectCommandParser().parse(arguments);
+
         default:
             logger.finer("This user input caused a ParseException: project " + subinput);
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ProjectCommand.MESSAGE_USAGE));
+        }
+    }
+
+    private Command handleTask(String subinput) throws ParseException {
+        final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(subinput.trim());
+        if (!matcher.matches()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TaskCommand.MESSAGE_USAGE));
+        }
+
+        final String subcommandWord = matcher.group("commandWord");
+        final String arguments = matcher.group("arguments");
+
+        switch (subcommandWord) {
+
+        case AddTaskCommand.SUBCOMMAND_WORD:
+            return new AddTaskCommandParser().parse(arguments);
+
+        case DeleteTaskCommand.SUBCOMMAND_WORD:
+            return new DeleteTaskCommandParser().parse(arguments);
+
+        default:
+            logger.finer("This user input caused a ParseException: task " + subinput);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TaskCommand.MESSAGE_USAGE));
         }
     }
 

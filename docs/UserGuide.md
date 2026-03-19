@@ -15,11 +15,11 @@ TaskForge is a **desktop app for managing contacts, optimized for use via a Comm
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W09-4/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your TaskForge.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar taskforge.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -201,7 +201,7 @@ Example:
 
 Unassigns a project from a person
 
-Format: `project unassign PERSON_INDEX -iPROJECT_INDEX`
+Format: `project unassign PERSON_INDEX -i PROJECT_INDEX`
 
 * Unassigns project(s) from the person at the specified `INDEX`.
 * `PROJECT_INDEX` refers to the project numbering shown for that person in the app.
@@ -245,6 +245,21 @@ Format: `task delete INDEX -i TASK_INDEX`
 Examples:
 * `task delete 1 -i 2`
 * `task delete 3 -i 1 -i 4`
+
+#### Viewing all tasks of a person : `task view`
+
+Displays all tasks assigned to a person.
+
+Format: `task view INDEX`
+
+* Shows all tasks assigned to the person at the specified `INDEX`.
+* The person index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** `1, 2, 3, ...`
+* If the person has no tasks, a message will be shown.
+
+Examples:
+* `task view 1`
+* `task view 2`
 
 ### Clearing all entries : `clear`
 
@@ -295,17 +310,18 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Add Project** | `project add PROJECT_NAME`<br> e.g., `add-tag WebApp`
+**Add** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `add -n James Ho -p 22224444 -e jamesho@example.com`
+**Add Project** | `project add PROJECT_NAME`<br> e.g., `project add WebApp`
 **Add Task** | `task add INDEX -n TASK_NAME`<br> e.g., `task add 1 -n Draft proposal`
 **Assign Project** | `project assign INDEX -n PROJECT_NAME`<br> e.g., `project assign 1 -n WebApp`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Delete Project** | `project delete INDEX`<br> e.g., `delete-tag 1`
+**Delete Project** | `project delete INDEX`<br> e.g., `project delete 1`
 **Delete Task** | `task delete INDEX -i TASK_INDEX`<br> e.g., `task delete 2 -i 1`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
+**View Tasks** | `task view INDEX`
+**Edit** | edit [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit -n James Ho -p 22224444 -e jamesho@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
-**Unssign Project** | `project unassign INDEX -i LOCAL_PROJECT_INDEX`<br> e.g., `project delete 2 -i 1`
-**View Projects** | `view-tags`
+**Unassign Project** | `project unassign INDEX -i LOCAL_PROJECT_INDEX`<br> e.g., `project delete 2 -i 1`
+**View Projects** | `project list`
 **Help** | `help`

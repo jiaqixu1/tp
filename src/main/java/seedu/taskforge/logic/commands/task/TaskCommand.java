@@ -10,12 +10,6 @@ public abstract class TaskCommand extends Command {
 
     public static final String COMMAND_WORD = "task";
 
-    public static final String MESSAGE_USAGE =
-            COMMAND_WORD + ": Manages tasks.\n"
-                    + "Subcommands:\n"
-                    + "  add ...\n"
-                    + "  delete ...\n"
-                    + "  view INDEX\n"
-                    + "Example: " + COMMAND_WORD + " view 2";
+    public static final String MESSAGE_USAGE = "task should be followed by add/delete/view";
 
 }

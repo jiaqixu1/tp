@@ -144,41 +144,75 @@ Examples:
 
 ### Managing projects
 
-#### Adding a project : `add-tag`
+#### Adding a project : `project add`
 
-Adds a new project to TaskForge that contacts can be assigned to.
+Adds a new project to TaskForge into the project list.
 
-Format: `add-tag PROJECT_NAME`
+Format: `project add PROJECT_NAME`
 
 * Adds a new project with the specified project name.
-* Project name must be alphanumeric (only letters and numbers).
+* Project name must be alphanumeric (only letters and numbers), between 1 to 64 characters.
 * Duplicate projects are not allowed.
 
 Examples:
-* `add-tag WebApp` adds a new project named `WebApp`.
-* `add-tag MobileApp` adds a new project named `MobileApp`.
+* `project add WebApp` adds a new project named `WebApp`.
+* `project add MobileApp` adds a new project named `MobileApp`.
 
-#### Viewing all projects : `view-all-tag`
+#### Viewing all projects : `project list`
 
 Displays all projects currently available in TaskForge.
 
-Format: `view-all-tag`
+Format: `project list`
 
 Example:
-* `view-all-tag` returns a list of all existing project
+* `project list` returns a list of all existing project
 
-#### Deleting a project : `delete-tag`
+#### Deleting a project : `project delete`
 
 Deletes a project by its index in the displayed project list.
 
-Format: `delete-tag INDEX`
+Format: `project delete INDEX`
 
 * Deletes the project at the specified `INDEX`.
-* The index refers to the index number shown by `view-all-tag`.
+* The index refers to the index number shown by `project list`.
 * The index **must be a positive integer** `1, 2, 3, ...`
 
 Example:
-* `view-all-tag` followed by `delete-tag 2` deletes the 2nd project in the list.
+* `project list` followed by `project delete 2` deletes the 2nd project in the list.
+
+#### Assigning a project : `project assign`
+
+Assigns a project to a person
+
+Format: `project assign PERSON_INDEX -nPROJECT_NAME`
+
+* Assigns project(s) from `project list` to a person.
+* Project should exist in `project list` before being assigned to a person.
+* `PERSON_INDEX` refers to the person index that's displayed on `list`
+* `PERSON_INDEX` **must be a positive integer** `1, 2, 3, ...`
+* The same project cannot be assigned twice to the same person (no duplicates)
+* To assign multiple projects in one command, repeat the `-n` prefix.
+
+Example:
+* `project assign 1 -nWebApp` checks whether the project named WebApp exists, then assigns the project to the 1st person in the `list`
+* `project assign 2 -nWebApp -nMobileApp` assigns multiple projects to the 2nd person in the `list`
+
+#### Unassigning a project : `project unassign`
+
+Unassigns a project from a person
+
+Format: `project unassign PERSON_INDEX -iPROJECT_INDEX`
+
+* Unassigns project(s) from the person at the specified `INDEX`.
+* `PROJECT_INDEX` refers to the project numbering shown for that person in the app.
+* `PROJECT_INDEX` does NOT refer to the project index that's displayed on `project list`.
+* `PERSON_INDEX` refers to the person index that's displayed on `list`
+* Both person `PERSON_INDEX` and `PROJECT_INDEX` **must be positive integers** `1, 2, 3, ...`
+* To unassign multiple projects in one command, repeat the `-i` prefix.
+
+Examples:
+* `project delete 1 -i 2` deletes 2nd project from the 1st person in the `list`
+* `project delete 3 -i 1 -i 4` deletes 1st and 4th project from the 1st person in the `list`
 
 ### Managing tasks
 
@@ -262,14 +296,16 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Add Project** | `add-tag PROJECT_NAME`<br> e.g., `add-tag WebApp`
+**Add Project** | `project add PROJECT_NAME`<br> e.g., `add-tag WebApp`
 **Add Task** | `task add INDEX -n TASK_NAME`<br> e.g., `task add 1 -n Draft proposal`
+**Assign Project** | `project assign INDEX -n PROJECT_NAME`<br> e.g., `project assign 1 -n WebApp`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Delete Project** | `delete-tag INDEX`<br> e.g., `delete-tag 1`
+**Delete Project** | `project delete INDEX`<br> e.g., `delete-tag 1`
 **Delete Task** | `task delete INDEX -i TASK_INDEX`<br> e.g., `task delete 2 -i 1`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
+**Unssign Project** | `project unassign INDEX -i LOCAL_PROJECT_INDEX`<br> e.g., `project delete 2 -i 1`
 **View Projects** | `view-tags`
 **Help** | `help`

@@ -239,36 +239,42 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 _{more aspects and alternatives to be added}_
 
-### Project management feature (`add-tag`, `view-all-tag`, `delete-tag`)
+### Project management feature (`project add`, `project delete`, `project list`, `project assign`, `project unassign`)
 
 TaskForge supports project management using three commands:
-`add-tag`, `view-all-tag`, and `delete-tag`.
+- `project add`
+- `project delete`
+- `project list`
+- `project assign`
+- `project unassign`
 
 #### Implementation overview
 
 1. **Model layer**
-   - `UniqueTagList` stores globally unique project entries.
+   - `UniqueProjectList` stores globally unique project entries.
    - `AddressBook` exposes project operations through methods such as
-       `hasTag`, `addTag`, `setTag`, `setTags`, `removeTag`, and `getTagList`.
+     `hasProject`, `addProject`, `setProject`, `removeProject`, `cascadeRemoveProjectFromPersons`, and `getProjectList`.
 
 2. **Logic layer**
-    - `AddTagCommand` adds a new project entry to the global list.
-    - `DeleteTagCommand` removes a project entry from the list by the index.
-    - `ViewAllTagCommand` shows all project entries in the list.
-    - `AddressBookParser` routes `add-tag`, `delete-tag`, and `view-all-tag` to their
+    - `AddProjectCommand` adds a new project entry to the global UniqueProjectList.
+    - `DeleteProjectCommand` removes a project entry from the list by the index.
+    - `ListProjectCommand` shows all project entries in the list.
+    - `AssignProjectCommand` assigns project from the global UniqueProjectList to a person
+    - `UnassignProjectCommand` unassigns project from a person
+    - `AddressBookParser` routes `project add`, `project delete`, `project list`, `project assign`, and `project unassign` to their
        corresponding command parsers/commands.
 
 3. **Storage layer**
-    - `JsonSerializableAddressBook` persists project entries in the `tags` JSON array.
-    - During deserialization, tags are restored into the model so project entries persist across application restarts.
+    - `JsonSerializableAddressBook` persists project entries in the `projects` JSON array.
+    - During deserialization, projects are restored into the model so project entries persist across application restarts.
 
 #### Validation behavior in commands related to person class
 
 When a user adds or edits a person including changing project, each value must be checked to see whether they are already exist in the global project list:
 
-- `AddCommand` validates each project via `model.hasTag(tag)` before adding the person.
-- `EditCommand` validates each edited project via `model.hasTag(tag)` before committing changes.
-- If any tag is missing, command execution fails with `MESSAGE_TAG_NOT_FOUND`.
+- `AddCommand` validates each project via `model.hasProject(project)` before adding the person.
+- `EditCommand` validates each edited project via `model.hasProject(project)` before committing changes.
+- If any tag is missing, command execution fails with `MESSAGE_PROJECT_NOT_FOUND`.
 
 This ensures a person can only be assigned to valid existing projects.
 
@@ -342,17 +348,19 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                           | So that I can…​                                                              |
-|----------|------|----------------------------------------|------------------------------------------------------------------------------|
-| `* * *`  | user | add a contact                          | keep track of project members.                                               |
-| `* * *`  | user | delete a contact                       | remove outdated information or remove a member from the project.             |
-| `* * *`  | user | add a project to a contact             | assign member to the project                                                 |
-| `* * *`  | user | delete a project from a contact        | remove members from a project                                                |
-| `* * *`  | user | add tasks to contact                   | clearly know about their responsibilities                                    |
+| Priority | As a …​ | I want to …​                           | So that I can…​                                                            |
+|----------|------|----------------------------------------|----------------------------------------------------------------------------|
+| `* * *`  | user | add a contact                          | keep track of project members                                              |
+| `* * *`  | user | delete a contact                       | remove outdated information or remove a member from the project            |
+| `* * *`  | user | add a project                          | keep track of projects                                                     |
+| `* * *`  | user | remove a project                       | remove completed or discarded project                                      |
+| `* * *`  | user | assign a project to a contact          | assign member to the project                                               |
+| `* * *`  | user | unassign a project from a contact      | remove members from a project                                              |
+| `* * *`  | user | add tasks to contact                   | clearly know about their responsibilities                                  |
 | `* * *`  | user | delete tasks from a contact            | easily remove tasks that is falsely assigned to the contact or has been done |
-| `* * *`  | user | view all contacts                      | see all the project members contacts                                         |
-| `* * *`  | user | view all projects                      | easily have an overview of all projects                                      |
-| `* * *`  | user | view all tasks assigned to the contact | see all the tasks assigned to a contact                                      |
+| `* * *`  | user | view all contacts                      | see all the project members contacts                                       |
+| `* * *`  | user | view all projects                      | easily have an overview of all projects                                    |
+| `* * *`  | user | view all tasks assigned to the contact | see all the tasks assigned to a contact                                    |
 
 *{More to be added}*
 

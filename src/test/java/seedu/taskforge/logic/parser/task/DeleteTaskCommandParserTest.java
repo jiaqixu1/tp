@@ -33,6 +33,9 @@ public class DeleteTaskCommandParserTest {
         // no field specified
         assertParseFailure(parser, "1", DeleteTaskCommand.MESSAGE_NOT_EDITED);
 
+        // empty task index value after task-index prefix
+        assertParseFailure(parser, "1" + TASK_EMPTY, DeleteTaskCommand.MESSAGE_NOT_EDITED);
+
         // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
     }

@@ -5,7 +5,6 @@ import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,11 +62,9 @@ public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
             throws ParseException {
         assert tasksIndexes != null;
 
-        if (tasksIndexes.isEmpty()) {
+        if (tasksIndexes.isEmpty() || (tasksIndexes.size() == 1 && tasksIndexes.contains(""))) {
             return Optional.empty();
         }
-        Collection<String> taskSet = tasksIndexes.size() == 1
-                && tasksIndexes.contains("") ? Collections.emptyList() : tasksIndexes;
-        return Optional.of(ParserUtil.parseTaskIndexes(taskSet));
+        return Optional.of(ParserUtil.parseTaskIndexes(tasksIndexes));
     }
 }

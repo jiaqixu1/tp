@@ -88,7 +88,14 @@ public class AssignProjectCommand extends ProjectCommand {
         return new CommandResult(String.format(MESSAGE_ASSIGN_PROJECT_SUCCESS, Messages.format(editedPerson)));
     }
 
-    private static void validateProjectsExist(List<Project> projects, Model model) throws CommandException {
+    /**
+     * Validates that all given projects exist in the model.
+     *
+     * @param projects The list of projects to validate.
+     * @param model The model containing the existing projects.
+     * @throws CommandException If any project in the list does not exist in the model.
+     */
+    public static void validateProjectsExist(List<Project> projects, Model model) throws CommandException {
         for (Project project : projects) {
             if (!model.hasProject(project)) {
                 throw new CommandException(MESSAGE_PROJECT_NOT_FOUND);

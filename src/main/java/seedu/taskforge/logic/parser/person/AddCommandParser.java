@@ -10,6 +10,7 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import java.util.List;
 import java.util.stream.Stream;
 
+import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.parser.ArgumentMultimap;
 import seedu.taskforge.logic.parser.ArgumentTokenizer;

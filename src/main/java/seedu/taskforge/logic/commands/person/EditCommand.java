@@ -1,11 +1,14 @@
 package seedu.taskforge.logic.commands.person;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.commands.project.AssignProjectCommand.MESSAGE_PROJECT_NOT_FOUND;
+import static seedu.taskforge.logic.commands.project.AssignProjectCommand.validateProjectsExist;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_PROJECT_TITLE + "PROJECT] "
-            + "[" + PREFIX_TASK + "TASK]...\n"
+            + "[" + PREFIX_TASK_DESCRIPTION + "TASK]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -83,6 +86,9 @@ public class EditCommand extends Command {
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
+
+        validateProjectsExist(editPersonDescriptor.getProjects().orElseThrow(() ->
+                new CommandException(MESSAGE_PROJECT_NOT_FOUND)), model);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);

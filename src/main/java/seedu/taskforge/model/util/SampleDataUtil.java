@@ -20,17 +20,28 @@ public class SampleDataUtil {
     public static Person[] getSamplePersons() {
         return new Person[] {
             new Person(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                    getProjectList("friends"), getTaskList("add new feature")),
+                    getProjectList("Interior"), getTaskList("add new feature")),
             new Person(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
-                    getProjectList("colleagues", "friends"), getTaskList("read notes", "add new feature")),
+                    getProjectList("Manufacture", "Mobile app"), getTaskList("read notes", "add new feature")),
             new Person(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
-                    getProjectList("family"), getTaskList("meeting")),
+                    getProjectList("Infrastructure"), getTaskList("meeting")),
             new Person(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
-                    getProjectList("family"), getTaskList("research on project")),
+                    getProjectList("Manufacture"), getTaskList("research on project")),
             new Person(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
-                    getProjectList("classmates"), getTaskList("add new feature")),
+                    getProjectList("Web app"), getTaskList("add new feature")),
             new Person(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                    getProjectList("colleagues"), getTaskList("read notes"))
+                    getProjectList("Future Gen"), getTaskList("read notes"))
+        };
+    }
+
+    public static Project[] getSampleProjects() {
+        return new Project[] {
+            new Project("Interior"),
+            new Project("Manufacture"),
+            new Project("Mobile app"),
+            new Project("Infrastructure"),
+            new Project("Web app"),
+            new Project("Future gen")
         };
     }
 
@@ -38,6 +49,9 @@ public class SampleDataUtil {
         AddressBook sampleAb = new AddressBook();
         for (Person samplePerson : getSamplePersons()) {
             sampleAb.addPerson(samplePerson);
+        }
+        for (Project sampleProject : getSampleProjects()) {
+            sampleAb.addProject(sampleProject);
         }
         return sampleAb;
     }

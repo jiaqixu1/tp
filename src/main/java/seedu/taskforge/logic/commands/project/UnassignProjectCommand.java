@@ -164,7 +164,7 @@ public class UnassignProjectCommand extends ProjectCommand {
          * Returns true if at least one field is edited.
          */
         public boolean isProjectFieldEdited() {
-            return CollectionUtil.isAnyNonNull(indexes);
+            return CollectionUtil.isAnyNonNull(indexes) && !indexes.isEmpty();
         }
 
         @Override

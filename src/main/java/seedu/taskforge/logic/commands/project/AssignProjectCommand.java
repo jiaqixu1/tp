@@ -184,7 +184,7 @@ public class AssignProjectCommand extends ProjectCommand {
          * Returns true if at least one field is edited.
          */
         public boolean isProjectFieldEdited() {
-            return CollectionUtil.isAnyNonNull(projects);
+            return CollectionUtil.isAnyNonNull(projects) && !projects.isEmpty();
         }
 
         @Override

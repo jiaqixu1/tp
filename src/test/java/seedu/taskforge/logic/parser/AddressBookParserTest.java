@@ -112,7 +112,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_assignProject() throws Exception {
         Person person = new PersonBuilder().build();
-        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder(person).build();
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder(person).withProjects("alpha").build();
         AssignProjectCommand command = (AssignProjectCommand) parser.parseCommand(AssignProjectCommand.COMMAND_WORD
                 + " " + AssignProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
                 + " " + PersonUtil.getAssignProjectDescriptorDetails(descriptor));

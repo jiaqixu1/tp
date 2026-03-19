@@ -36,6 +36,9 @@ public class AssignProjectCommandParserTest {
         // no field specified
         assertParseFailure(parser, "1", AssignProjectCommand.MESSAGE_NOT_EDITED);
 
+        // empty field after prefix
+        assertParseFailure(parser, "1" + PROJECT_EMPTY, AssignProjectCommand.MESSAGE_NOT_EDITED);
+
         // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
     }

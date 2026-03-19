@@ -27,14 +27,14 @@ public class AddCommand extends Command {
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
-            + "[" + PREFIX_PROJECT_TITLE + "TASK] "
+            + "[" + PREFIX_PROJECT_TITLE + "PROJECT_TITLE] "
             + "[" + PREFIX_TASK + "TASK]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_PHONE + "98765432 "
             + PREFIX_EMAIL + "johnd@example.com "
-            + PREFIX_TASK + "implement feature x"
-            + PREFIX_TASK + "write documentation";
+            + PREFIX_PROJECT_TITLE + "Project Y "
+            + PREFIX_TASK + "implement feature x ";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";

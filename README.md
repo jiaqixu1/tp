@@ -15,7 +15,7 @@ Tech project managers and team leads who manage multiple ongoing projects and te
 Tech lead and project managers who prefer efficient keyboard-driven workflows, comfortable with working with CLI commands and need to manage multiple projects and team members regularly.
 
 ### Key features
-- Add and manage project team members with contact information 
+- Add and manage project team members with contact information
 - Create and organize multiple projects, assign team members to each project
 - Add, track, and manage tasks assigned to team members across different projects
 - View all projects and contacts information

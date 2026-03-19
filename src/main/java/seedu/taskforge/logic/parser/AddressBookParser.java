@@ -26,6 +26,7 @@ import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
 import seedu.taskforge.logic.commands.task.TaskCommand;
+import seedu.taskforge.logic.commands.task.ViewTasksCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.logic.parser.person.AddCommandParser;
 import seedu.taskforge.logic.parser.person.DeleteCommandParser;
@@ -37,6 +38,7 @@ import seedu.taskforge.logic.parser.project.DeleteProjectCommandParser;
 import seedu.taskforge.logic.parser.project.UnassignProjectCommandParser;
 import seedu.taskforge.logic.parser.task.AddTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
+import seedu.taskforge.logic.parser.task.ViewTasksCommandParser;
 
 /**
  * Parses user input.
@@ -94,6 +96,7 @@ public class AddressBookParser {
         // Task related commands
         case TaskCommand.COMMAND_WORD:
             return handleTask(arguments);
+
 
         // Project related commands
         case ProjectCommand.COMMAND_WORD:
@@ -160,6 +163,9 @@ public class AddressBookParser {
 
         case DeleteTaskCommand.SUBCOMMAND_WORD:
             return new DeleteTaskCommandParser().parse(arguments);
+
+        case ViewTasksCommand.SUBCOMMAND_WORD:
+            return new ViewTasksCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: task " + subinput);

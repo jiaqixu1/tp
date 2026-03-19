@@ -9,9 +9,9 @@ import static seedu.taskforge.commons.util.AppUtil.checkArgument;
  */
 public class Task {
 
-    public static final String MESSAGE_CONSTRAINTS =
-            "Task descriptions should be alphanumeric, with single spaces between words.";
-    public static final String VALIDATION_REGEX = "\\p{Alnum}+( \\p{Alnum}+)*";
+    public static final String MESSAGE_CONSTRAINTS = "Task name should be alphanumeric"
+            + " between 1 to 64 characters";
+    public static final String VALIDATION_REGEX = "^[a-zA-Z0-9 ]{1,64}$";
 
     public final String description;
     protected boolean isDone;

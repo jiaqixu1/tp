@@ -6,7 +6,7 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.logic.Messages;
@@ -29,13 +29,13 @@ public class AddCommand extends Command {
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + "[" + PREFIX_PROJECT_TITLE + "PROJECT] "
-            + "[" + PREFIX_TASK_DESCRIPTION + "TASK]...\n"
+            + "[" + PREFIX_TASK + "TASK]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_PHONE + "98765432 "
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_PROJECT_TITLE + "Mobile app "
-            + PREFIX_TASK_DESCRIPTION + "refactor code";
+            + PREFIX_TASK + "refactor code";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";

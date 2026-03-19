@@ -6,7 +6,7 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +38,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                         PREFIX_PROJECT_TITLE, PREFIX_TASK_DESCRIPTION);
+                         PREFIX_PROJECT_TITLE, PREFIX_TASK);
 
         Index index;
 
@@ -65,7 +65,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         parseProjectsForEdit(argMultimap.getAllValues(PREFIX_PROJECT_TITLE))
                 .ifPresent(editPersonDescriptor::setProjects);
 
-        parseTasksForEdit(argMultimap.getAllValues(PREFIX_TASK_DESCRIPTION))
+        parseTasksForEdit(argMultimap.getAllValues(PREFIX_TASK))
                 .ifPresent(editPersonDescriptor::setTasks);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {

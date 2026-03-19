@@ -5,7 +5,7 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -37,7 +37,7 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                        PREFIX_PROJECT_TITLE, PREFIX_TASK_DESCRIPTION);
+                        PREFIX_PROJECT_TITLE, PREFIX_TASK);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -49,7 +49,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         List<Project> projectList = ParserUtil.parseProjects(argMultimap.getAllValues(PREFIX_PROJECT_TITLE));
-        List<Task> taskList = ParserUtil.parseTasks(argMultimap.getAllValues(PREFIX_TASK_DESCRIPTION));
+        List<Task> taskList = ParserUtil.parseTasks(argMultimap.getAllValues(PREFIX_TASK));
 
         Person person = new Person(name, phone, email, projectList, taskList);
 

@@ -6,7 +6,6 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProject
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
+import seedu.taskforge.logic.parser.CliSyntax;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
@@ -69,9 +69,9 @@ public class PersonUtil {
         if (descriptor.getTasks().isPresent()) {
             List<Task> tasks = descriptor.getTasks().get();
             if (tasks.isEmpty()) {
-                sb.append(PREFIX_TASK_DESCRIPTION).append(" ");
+                sb.append(CliSyntax.PREFIX_TASK).append(" ");
             } else {
-                tasks.forEach(s -> sb.append(PREFIX_TASK_DESCRIPTION).append(s.description).append(" "));
+                tasks.forEach(s -> sb.append(CliSyntax.PREFIX_TASK).append(s.description).append(" "));
             }
         }
         return sb.toString();

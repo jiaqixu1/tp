@@ -8,7 +8,6 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.taskforge.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import java.util.List;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
+import seedu.taskforge.logic.parser.CliSyntax;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
@@ -52,15 +52,15 @@ public class CommandTestUtil {
     public static final String PHONE_DESC_BOB = " " + PREFIX_PHONE + VALID_PHONE_BOB;
     public static final String EMAIL_DESC_AMY = " " + PREFIX_EMAIL + VALID_EMAIL_AMY;
     public static final String EMAIL_DESC_BOB = " " + PREFIX_EMAIL + VALID_EMAIL_BOB;
-    public static final String TASK_FIX_ERROR = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_FIX_ERROR;
-    public static final String TASK_REFACTOR = " " + PREFIX_TASK_DESCRIPTION + VALID_TASK_REFACTOR;
+    public static final String TASK_FIX_ERROR = " " + CliSyntax.PREFIX_TASK + VALID_TASK_FIX_ERROR;
+    public static final String TASK_REFACTOR = " " + CliSyntax.PREFIX_TASK + VALID_TASK_REFACTOR;
     public static final String PROJECT_DESC_BETA = " " + PREFIX_PROJECT_TITLE + VALID_PROJECT_BETA;
     public static final String PROJECT_DESC_ALPHA = " " + PREFIX_PROJECT_TITLE + VALID_PROJECT_ALPHA;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
-    public static final String INVALID_TASK_DESC = " " + PREFIX_TASK_DESCRIPTION
+    public static final String INVALID_TASK_DESC = " " + CliSyntax.PREFIX_TASK
             + "refactor code*"; // '*' not allowed in tasks
     public static final String INVALID_TASK_INDEX = " " + PREFIX_TASK + -1;
 

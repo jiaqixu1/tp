@@ -26,7 +26,7 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -50,7 +50,7 @@ import seedu.taskforge.testutil.EditPersonDescriptorBuilder;
 public class EditCommandParserTest {
 
     private static final String PROJECT_EMPTY = " " + PREFIX_PROJECT_TITLE;
-    private static final String TASK_EMPTY = " " + PREFIX_TASK_DESCRIPTION;
+    private static final String TASK_EMPTY = " " + PREFIX_TASK;
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);

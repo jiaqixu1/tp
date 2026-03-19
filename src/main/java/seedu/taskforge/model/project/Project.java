@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
  * Guarantees: immutable; title is valid as declared in {@link #isValidProjectTitle(String)}
  */
 public class Project {
-    public static final String MESSAGE_CONSTRAINTS = "Project title should be alphanumeric";
+    public static final String MESSAGE_CONSTRAINTS = "Project title should be alphanumeric"
+            + " between 1 to 64 characters";
     public static final String VALIDATION_REGEX = "^[a-zA-Z0-9 ]{1,64}$";
 
     public final String title;

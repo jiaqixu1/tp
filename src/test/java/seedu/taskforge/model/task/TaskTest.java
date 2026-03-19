@@ -4,6 +4,8 @@ import static seedu.taskforge.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.taskforge.model.project.Project;
+
 public class TaskTest {
 
     @Test
@@ -14,7 +16,9 @@ public class TaskTest {
     @Test
     public void constructor_invalidTaskDescription_throwsIllegalArgumentException() {
         String invalidTaskDescription = "";
+        String invalidTaskNameTooLong = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnqrstuvwxyzabcdefghijklmno";
         assertThrows(IllegalArgumentException.class, () -> new Task(invalidTaskDescription));
+        assertThrows(IllegalArgumentException.class, () -> new Project(invalidTaskNameTooLong));
     }
 
     @Test

@@ -344,14 +344,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​ | I want to …​                           | So that I can…​                                                              |
 |----------|------|----------------------------------------|------------------------------------------------------------------------------|
-| `* * *`  | user | add a contact                          | keep track of project members.                                               |
-| `* * *`  | user | delete a contact                       | remove outdated information or remove a member from the project.             |
+| `* * *`  | user | add a contact                          | add new contact to the management system.                                               |
+| `* * *`  | user | delete a contact                       | remove a contact from the system.             |
+| `* * *`  | user | add a project                          | add a new project to the system.                                           |
+| `* * *`  | user | delete a project                       | remove completed projects or projects that have been cancelled.                                      |
+| `* * *`  | user | view all projects                      | get a list of all projects that I am in charge of.                                     |
 | `* * *`  | user | add a project to a contact             | assign member to the project                                                 |
 | `* * *`  | user | delete a project from a contact        | remove members from a project                                                |
 | `* * *`  | user | add tasks to contact                   | clearly know about their responsibilities                                    |
 | `* * *`  | user | delete tasks from a contact            | easily remove tasks that is falsely assigned to the contact or has been done |
 | `* * *`  | user | view all contacts                      | see all the project members contacts                                         |
-| `* * *`  | user | view all projects                      | easily have an overview of all projects                                      |
 | `* * *`  | user | view all tasks assigned to the contact | see all the tasks assigned to a contact                                      |
 
 *{More to be added}*

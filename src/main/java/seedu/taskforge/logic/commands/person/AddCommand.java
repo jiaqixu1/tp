@@ -25,17 +25,17 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
             + "Parameters: "
-            + PREFIX_NAME + " NAME "
-            + PREFIX_PHONE + " PHONE "
-            + PREFIX_EMAIL + " EMAIL "
-            + "[" + PREFIX_PROJECT_TITLE + " PROJECT] "
-            + "[" + PREFIX_TASK + " TASK]...\n"
+            + PREFIX_NAME + "NAME "
+            + PREFIX_PHONE + "PHONE "
+            + PREFIX_EMAIL + "EMAIL "
+            + "[" + PREFIX_PROJECT_TITLE + "PROJECT] "
+            + "[" + PREFIX_TASK + "TASK]...\n"
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_NAME + " John Doe "
-            + PREFIX_PHONE + " 98765432 "
-            + PREFIX_EMAIL + " johnd@example.com "
-            + PREFIX_PROJECT_TITLE + " Mobile app "
-            + PREFIX_TASK + " refactor code";
+            + PREFIX_NAME + "John Doe "
+            + PREFIX_PHONE + "98765432 "
+            + PREFIX_EMAIL + "johnd@example.com "
+            + PREFIX_PROJECT_TITLE + "Mobile app "
+            + PREFIX_TASK + "refactor code";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in taskforge";

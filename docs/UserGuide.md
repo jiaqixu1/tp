@@ -184,7 +184,7 @@ Example:
 
 Assigns a project to a person
 
-Format: `project assign PERSON_INDEX -nPROJECT_NAME`
+Format: `project assign PERSON_INDEX -n PROJECT_NAME`
 
 * Assigns project(s) from `project list` to a person.
 * Project should exist in `project list` before being assigned to a person.
@@ -194,8 +194,8 @@ Format: `project assign PERSON_INDEX -nPROJECT_NAME`
 * To assign multiple projects in one command, repeat the `-n` prefix.
 
 Example:
-* `project assign 1 -nWebApp` checks whether the project named WebApp exists, then assigns the project to the 1st person in the `list`
-* `project assign 2 -nWebApp -nMobileApp` assigns multiple projects to the 2nd person in the `list`
+* `project assign 1 -n WebApp` checks whether the project named WebApp exists, then assigns the project to the 1st person in the `list`
+* `project assign 2 -n WebApp -n MobileApp` assigns multiple projects to the 2nd person in the `list`
 
 #### Unassigning a project : `project unassign`
 
@@ -212,7 +212,7 @@ Format: `project unassign PERSON_INDEX -i PROJECT_INDEX`
 
 Examples:
 * `project delete 1 -i 2` deletes 2nd project from the 1st person in the `list`
-* `project delete 3 -i 1 -i 4` deletes 1st and 4th project from the 1st person in the `list`
+* `project delete 3 -i 1 -i 4` deletes 1st and 4th project from the 3rd person in the `list`
 
 ### Managing tasks
 
@@ -310,7 +310,7 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `add -n James Ho -p 22224444 -e jamesho@example.com`
+**Add** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
 **Add Project** | `project add PROJECT_NAME`<br> e.g., `project add WebApp`
 **Add Task** | `task add INDEX -n TASK_NAME`<br> e.g., `task add 1 -n Draft proposal`
 **Assign Project** | `project assign INDEX -n PROJECT_NAME`<br> e.g., `project assign 1 -n WebApp`
@@ -318,10 +318,10 @@ Action | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Delete Project** | `project delete INDEX`<br> e.g., `project delete 1`
 **Delete Task** | `task delete INDEX -i TASK_INDEX`<br> e.g., `task delete 2 -i 1`
-**View Tasks** | `task view INDEX`
-**Edit** | edit [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit -n James Ho -p 22224444 -e jamesho@example.com`
+**View Tasks** | `task view INDEX`<br> e.g.,`task view 1`
+**Edit** | `edit Index [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit Index -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
-**Unassign Project** | `project unassign INDEX -i LOCAL_PROJECT_INDEX`<br> e.g., `project delete 2 -i 1`
+**Unassign Project** | `project unassign INDEX -i PROJECT_INDEX`<br> e.g., `project unassgin 2 -i 1`
 **View Projects** | `project list`
 **Help** | `help`

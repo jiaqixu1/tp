@@ -278,45 +278,45 @@ When a user adds or edits a person including changing project, each value must b
 
 This ensures a person can only be assigned to valid existing projects.
 
-### Task management feature (`task add`, `task delete`,`task view`)
+### Task management feature (`task assign`, `task unassign`,`task view`)
 
 TaskForge supports task management through the parent command `task` with two subcommands:
 
-- `task add INDEX -n TASK_NAME`
-- `task delete INDEX -i TASK_INDEX`
+- `task assign INDEX -n TASK_NAME`
+- `task unassign INDEX -i TASK_INDEX`
 - `task view INDEX`
 
 #### Implementation overview
 
 1. **Command structure**
    - `TaskCommand` is the abstract base for task-related commands and defines the top-level command word `task`.
-   - `AddTaskCommand` handles adding one or more tasks to a person.
-   - `DeleteTaskCommand` handles deleting one or more tasks from a person by local task index.
+   - `AssignTaskCommand` handles assigning one or more tasks to a person.
+   - `UnassignTaskCommand` handles unassigning one or more tasks from a person by local task index.
    - `ViewTasksCommand` handles viewing all tasks assigned to a person.
 2. **Parser flow**
    - `AddressBookParser#parseCommand` routes top-level `task` input to `AddressBookParser#handleTask`.
    - `handleTask` extracts the task subcommand and dispatches as follows:
-      - `add` -> `AddTaskCommandParser`
-      - `delete` -> `DeleteTaskCommandParser`
+      - `assign` -> `AssignTaskCommandParser`
+      - `unassign` -> `UnassignTaskCommandParser`
       - `view` -> `ViewTasksCommandParser`
    - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
 
 3. **Input parsing details**
-   - `AddTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
-   - `DeleteTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
+   - `AssignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
+   - `UnassignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
    - `ViewTasksCommandParser` parses the preamble as the target person `INDEX`.
-   - If no task payload is provided (e.g., `task add 1` or `task delete 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
-   - Similarly, if an empty task name or task index is provided (e.g., `task add 1 -n` or `task delete 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+   - If no task payload is provided (e.g., `task assign 1` or `task unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+   - Similarly, if an empty task name or task index is provided (e.g., `task assign 1 -n` or `task unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 
 4. **Execution behavior and validation**
     - All task commands resolve the target person from `model.getFilteredPersonList()` using the supplied person `INDEX`.
     - If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
-    - `AddTaskCommand` appends tasks to the person's current task list and rejects duplicates via `MESSAGE_DUPLICATE_TASK`.
-    - `DeleteTaskCommand` resolves each local task index from the selected person's task list and throws
+      - `AssignTaskCommand` assigns tasks to the person's current task list and rejects duplicates via `MESSAGE_DUPLICATE_TASK`.
+      - `UnassignTaskCommand` resolves each local task index from the selected person's task list and unassigns them, throwing
       `MESSAGE_INDEX_OUT_OF_BOUND` if any task index is invalid.
     - `ViewTasksCommand` retrieves the selected person's task list and displays all tasks assigned to that person in the result box.
     - If the selected person has no assigned tasks, `ViewTasksCommand` returns a message indicating that the person has no tasks.
-    - On success, `AddTaskCommand` and `DeleteTaskCommand` update the person in the model and refresh the filtered person list, while `ViewTasksCommand` only returns the viewing result without modifying model data.
+   - On success, `AssignTaskCommand` and `UnassignTaskCommand` update the person in the model and refresh the filtered person list, while `ViewTasksCommand` only returns the viewing result without modifying model data.
 
 ### \[Proposed\] Data archiving
 

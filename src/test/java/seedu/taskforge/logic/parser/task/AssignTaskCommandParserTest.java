@@ -16,18 +16,18 @@ import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.commands.task.AddTaskCommand;
-import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand.AssignTaskDescriptor;
 import seedu.taskforge.model.task.Task;
-import seedu.taskforge.testutil.AddTaskDescriptorBuilder;
+import seedu.taskforge.testutil.AssignTaskDescriptorBuilder;
 
-public class AddTaskCommandParserTest {
+public class AssignTaskCommandParserTest {
     private static final String TASK_EMPTY = " " + PREFIX_NAME;
 
     private static final String MESSAGE_INVALID_FORMAT =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddTaskCommand.MESSAGE_USAGE);
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, AssignTaskCommand.MESSAGE_USAGE);
 
-    private AddTaskCommandParser parser = new AddTaskCommandParser();
+    private AssignTaskCommandParser parser = new AssignTaskCommandParser();
 
     @Test
     public void parse_missingTask_failure() {
@@ -35,10 +35,10 @@ public class AddTaskCommandParserTest {
         assertParseFailure(parser, TASK_DESC_IMPLEMENT_X, MESSAGE_INVALID_FORMAT);
 
         // no field specified
-        assertParseFailure(parser, "1", AddTaskCommand.MESSAGE_NOT_EDITED);
+        assertParseFailure(parser, "1", AssignTaskCommand.MESSAGE_NOT_EDITED);
 
         // empty task value after task prefix
-        assertParseFailure(parser, "1" + TASK_EMPTY, AddTaskCommand.MESSAGE_NOT_EDITED);
+        assertParseFailure(parser, "1" + TASK_EMPTY, AssignTaskCommand.MESSAGE_NOT_EDITED);
 
         // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
@@ -73,9 +73,9 @@ public class AddTaskCommandParserTest {
         Index targetIndex = INDEX_SECOND_PERSON;
         String userInput = targetIndex.getOneBased() + TASK_DESC_IMPLEMENT_X;
 
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder()
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
                 .withTasks(VALID_TASK_IMPLEMENT_X).build();
-        AddTaskCommand expectedCommand = new AddTaskCommand(targetIndex, descriptor);
+        AssignTaskCommand expectedCommand = new AssignTaskCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -86,10 +86,10 @@ public class AddTaskCommandParserTest {
         String userInput = targetIndex.getOneBased()
                 + TASK_DESC_IMPLEMENT_X + TASK_DESC_IMPLEMENT_Y + TASK_DESC_IMPLEMENT_Z;
 
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder()
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
                 .withTasks(VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z)
                 .build();
-        AddTaskCommand expectedCommand = new AddTaskCommand(targetIndex, descriptor);
+        AssignTaskCommand expectedCommand = new AssignTaskCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }

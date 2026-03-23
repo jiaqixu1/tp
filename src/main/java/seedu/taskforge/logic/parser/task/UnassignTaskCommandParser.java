@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
-import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
+import seedu.taskforge.logic.commands.task.UnassignTaskCommand;
+import seedu.taskforge.logic.commands.task.UnassignTaskCommand.UnassignTaskDescriptor;
 import seedu.taskforge.logic.parser.ArgumentMultimap;
 import seedu.taskforge.logic.parser.ArgumentTokenizer;
 import seedu.taskforge.logic.parser.Parser;
@@ -18,16 +18,16 @@ import seedu.taskforge.logic.parser.ParserUtil;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 
 /**
- * Parses input arguments and creates a new DeleteTaskCommand object
+ * Parses input arguments and creates a new UnassignTaskCommand object
  */
-public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
+public class UnassignTaskCommandParser implements Parser<UnassignTaskCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the DeleteTaskCommand
-     * and returns an DeleteTaskCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the UnassignTaskCommand
+     * and returns an UnassignTaskCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
-    public DeleteTaskCommand parse(String args) throws ParseException {
+    public UnassignTaskCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_INDEX);
@@ -38,19 +38,19 @@ public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    DeleteTaskCommand.MESSAGE_USAGE), pe);
+                    UnassignTaskCommand.MESSAGE_USAGE), pe);
         }
 
-        DeleteTaskDescriptor deleteTaskDescriptor = new DeleteTaskDescriptor();
+        UnassignTaskDescriptor unassignTaskDescriptor = new UnassignTaskDescriptor();
 
         parseTasksIndexesForAdd(argMultimap.getAllValues(PREFIX_INDEX))
-                .ifPresent(deleteTaskDescriptor::setTasksIndexes);
+                .ifPresent(unassignTaskDescriptor::setTasksIndexes);
 
-        if (!deleteTaskDescriptor.isTaskFieldEdited()) {
-            throw new ParseException(DeleteTaskCommand.MESSAGE_NOT_EDITED);
+        if (!unassignTaskDescriptor.isTaskFieldEdited()) {
+            throw new ParseException(UnassignTaskCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new DeleteTaskCommand(index, deleteTaskDescriptor);
+        return new UnassignTaskCommand(index, unassignTaskDescriptor);
     }
 
     /**

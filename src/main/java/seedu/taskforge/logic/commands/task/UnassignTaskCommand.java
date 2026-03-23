@@ -1,7 +1,7 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -24,31 +24,31 @@ import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
 
 /**
- * Adds task(s) to an existing person in the address book.
+ * Unassign task(s) from an existing person in the address book.
  */
-public class AddTaskCommand extends TaskCommand {
-    public static final String SUBCOMMAND_WORD = "add";
+public class UnassignTaskCommand extends TaskCommand {
+    public static final String SUBCOMMAND_WORD = "unassign";
 
-    public static final String MESSAGE_SUCCESS = "New task added: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task unassigned: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
             + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_NAME + " TASK_NAME";
-    public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
-    public static final String MESSAGE_NOT_EDITED = "At least one task to add must be provided";
+            + PREFIX_INDEX + " TASK_INDEX";
+    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
+    public static final String MESSAGE_NOT_EDITED = "At least one task to unassign must be provided";
 
     private final Index index;
-    private final AddTaskDescriptor addTaskDescriptor;
+    private final UnassignTaskDescriptor unassignTaskDescriptor;
 
     /**
      * @param index of the person in the filtered person list to edit
-     * @param addTaskDescriptor details to edit the person with
+     * @param unassignTaskDescriptor details to edit the person with
      */
-    public AddTaskCommand(Index index, AddTaskDescriptor addTaskDescriptor) {
+    public UnassignTaskCommand(Index index, UnassignTaskDescriptor unassignTaskDescriptor) {
         requireNonNull(index);
-        requireNonNull(addTaskDescriptor);
+        requireNonNull(unassignTaskDescriptor);
 
         this.index = index;
-        this.addTaskDescriptor = new AddTaskDescriptor(addTaskDescriptor);
+        this.unassignTaskDescriptor = new UnassignTaskDescriptor(unassignTaskDescriptor);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class AddTaskCommand extends TaskCommand {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, addTaskDescriptor);
+        Person editedPerson = createEditedPerson(personToEdit, unassignTaskDescriptor);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
@@ -74,7 +74,7 @@ public class AddTaskCommand extends TaskCommand {
      */
     private static Person createEditedPerson(
             Person personToEdit,
-            AddTaskDescriptor addTaskDescriptor) throws CommandException {
+            UnassignTaskDescriptor unassignTaskDescriptor) throws CommandException {
         assert personToEdit != null;
 
         Name name = personToEdit.getName();
@@ -83,23 +83,20 @@ public class AddTaskCommand extends TaskCommand {
         List<Project> projectList = personToEdit.getProjects();
 
         List<Task> newTasks = new ArrayList<>(personToEdit.getTasks());
-        newTasks.addAll(addTaskDescriptor.getTasks().orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED)));
-        checkUniqueTasks(newTasks);
+        List<Task> tasksToDelete = new ArrayList<>();
+        List<Index> indexToDelete = unassignTaskDescriptor.getTasksIndexes()
+                .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
+        for (int i = 0; i < indexToDelete.size(); ++i) {
+            int taskIndex = indexToDelete.get(i).getZeroBased();
+            try {
+                tasksToDelete.add(newTasks.get(taskIndex));
+            } catch (IndexOutOfBoundsException e) {
+                throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
+            }
+        }
+        newTasks.removeAll(tasksToDelete);
 
         return new Person(name, phone, email, projectList, newTasks);
-    }
-
-    /**
-     * Checks and returns a {@code List<Task>} if there is no duplicates.
-     * A {@code CommandException} is thrown if there are duplicates.
-     *
-     */
-    public static List<Task> checkUniqueTasks(List<Task> tasks) throws CommandException {
-        long distinctCount = tasks.stream().distinct().count();
-        if (distinctCount != tasks.size()) {
-            throw new CommandException(MESSAGE_DUPLICATE_TASK);
-        }
-        return tasks;
     }
 
     @Override
@@ -109,37 +106,37 @@ public class AddTaskCommand extends TaskCommand {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AddTaskCommand)) {
+        if (!(other instanceof UnassignTaskCommand)) {
             return false;
         }
 
-        AddTaskCommand otherAddTaskCommand = (AddTaskCommand) other;
-        return index.equals(otherAddTaskCommand.index)
-                && addTaskDescriptor.equals(otherAddTaskCommand.addTaskDescriptor);
+        UnassignTaskCommand otherUnassignTaskCommand = (UnassignTaskCommand) other;
+        return index.equals(otherUnassignTaskCommand.index)
+                && unassignTaskDescriptor.equals(otherUnassignTaskCommand.unassignTaskDescriptor);
     }
 
     /**
-     * Stores the tasks to add to the person.
+     * Stores the tasks to delete from the person.
      */
-    public static class AddTaskDescriptor {
-        private List<Task> tasks;
+    public static class UnassignTaskDescriptor {
+        private List<Index> indexes;
 
-        public AddTaskDescriptor() {}
+        public UnassignTaskDescriptor() {}
 
         /**
          * Copy constructor.
          * A defensive copy of {@code tasks} is used internally.
          */
-        public AddTaskDescriptor(AddTaskDescriptor toCopy) {
-            setTasks(toCopy.tasks);
+        public UnassignTaskDescriptor(UnassignTaskDescriptor toCopy) {
+            setTasksIndexes(toCopy.indexes);
         }
 
         /**
          * Sets {@code tasks} to this object's {@code tasks}.
          * A defensive copy of {@code tasks} is used internally.
          */
-        public void setTasks(List<Task> tasks) {
-            this.tasks = (tasks != null) ? new ArrayList<>(tasks) : null;
+        public void setTasksIndexes(List<Index> indexes) {
+            this.indexes = (indexes != null) ? new ArrayList<>(indexes) : null;
         }
 
         /**
@@ -147,15 +144,15 @@ public class AddTaskCommand extends TaskCommand {
          * if modification is attempted.
          * Returns {@code Optional#empty()} if {@code tasks} is null.
          */
-        public Optional<List<Task>> getTasks() {
-            return (tasks != null) ? Optional.of(Collections.unmodifiableList(tasks)) : Optional.empty();
+        public Optional<List<Index>> getTasksIndexes() {
+            return (indexes != null) ? Optional.of(Collections.unmodifiableList(indexes)) : Optional.empty();
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isTaskFieldEdited() {
-            return CollectionUtil.isAnyNonNull(tasks) && !tasks.isEmpty();
+            return CollectionUtil.isAnyNonNull(indexes);
         }
 
         @Override
@@ -165,12 +162,12 @@ public class AddTaskCommand extends TaskCommand {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof AddTaskDescriptor)) {
+            if (!(other instanceof UnassignTaskDescriptor)) {
                 return false;
             }
 
-            AddTaskDescriptor addTaskDescriptor = (AddTaskDescriptor) other;
-            return Objects.equals(tasks, addTaskDescriptor.tasks);
+            UnassignTaskDescriptor unassignTaskDescriptor = (UnassignTaskDescriptor) other;
+            return Objects.equals(indexes, unassignTaskDescriptor.indexes);
         }
     }
 }

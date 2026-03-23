@@ -1,7 +1,7 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -24,31 +24,31 @@ import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
 
 /**
- * Delete task(s) from an existing person in the address book.
+ * Assigns task(s) to an existing person in the address book.
  */
-public class DeleteTaskCommand extends TaskCommand {
-    public static final String SUBCOMMAND_WORD = "delete";
+public class AssignTaskCommand extends TaskCommand {
+    public static final String SUBCOMMAND_WORD = "assign";
 
-    public static final String MESSAGE_SUCCESS = "Deleted task: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task assigned: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
             + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_INDEX + " TASK_INDEX";
-    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
-    public static final String MESSAGE_NOT_EDITED = "At least one task to delete must be provided";
+            + PREFIX_NAME + " TASK_NAME";
+    public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
+    public static final String MESSAGE_NOT_EDITED = "At least one task to assign must be provided";
 
     private final Index index;
-    private final DeleteTaskDescriptor deleteTaskDescriptor;
+    private final AssignTaskDescriptor assignTaskDescriptor;
 
     /**
      * @param index of the person in the filtered person list to edit
-     * @param deleteTaskDescriptor details to edit the person with
+     * @param assignTaskDescriptor details to edit the person with
      */
-    public DeleteTaskCommand(Index index, DeleteTaskDescriptor deleteTaskDescriptor) {
+    public AssignTaskCommand(Index index, AssignTaskDescriptor assignTaskDescriptor) {
         requireNonNull(index);
-        requireNonNull(deleteTaskDescriptor);
+        requireNonNull(assignTaskDescriptor);
 
         this.index = index;
-        this.deleteTaskDescriptor = new DeleteTaskDescriptor(deleteTaskDescriptor);
+        this.assignTaskDescriptor = new AssignTaskDescriptor(assignTaskDescriptor);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DeleteTaskCommand extends TaskCommand {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, deleteTaskDescriptor);
+        Person editedPerson = createEditedPerson(personToEdit, assignTaskDescriptor);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
@@ -74,7 +74,7 @@ public class DeleteTaskCommand extends TaskCommand {
      */
     private static Person createEditedPerson(
             Person personToEdit,
-            DeleteTaskDescriptor deleteTaskDescriptor) throws CommandException {
+            AssignTaskDescriptor assignTaskDescriptor) throws CommandException {
         assert personToEdit != null;
 
         Name name = personToEdit.getName();
@@ -83,20 +83,23 @@ public class DeleteTaskCommand extends TaskCommand {
         List<Project> projectList = personToEdit.getProjects();
 
         List<Task> newTasks = new ArrayList<>(personToEdit.getTasks());
-        List<Task> tasksToDelete = new ArrayList<>();
-        List<Index> indexToDelete = deleteTaskDescriptor.getTasksIndexes()
-                .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
-        for (int i = 0; i < indexToDelete.size(); ++i) {
-            int taskIndex = indexToDelete.get(i).getZeroBased();
-            try {
-                tasksToDelete.add(newTasks.get(taskIndex));
-            } catch (IndexOutOfBoundsException e) {
-                throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
-            }
-        }
-        newTasks.removeAll(tasksToDelete);
+        newTasks.addAll(assignTaskDescriptor.getTasks().orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED)));
+        checkUniqueTasks(newTasks);
 
         return new Person(name, phone, email, projectList, newTasks);
+    }
+
+    /**
+     * Checks and returns a {@code List<Task>} if there is no duplicates.
+     * A {@code CommandException} is thrown if there are duplicates.
+     *
+     */
+    public static List<Task> checkUniqueTasks(List<Task> tasks) throws CommandException {
+        long distinctCount = tasks.stream().distinct().count();
+        if (distinctCount != tasks.size()) {
+            throw new CommandException(MESSAGE_DUPLICATE_TASK);
+        }
+        return tasks;
     }
 
     @Override
@@ -106,37 +109,37 @@ public class DeleteTaskCommand extends TaskCommand {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof DeleteTaskCommand)) {
+        if (!(other instanceof AssignTaskCommand)) {
             return false;
         }
 
-        DeleteTaskCommand otherDeleteTaskCommand = (DeleteTaskCommand) other;
-        return index.equals(otherDeleteTaskCommand.index)
-                && deleteTaskDescriptor.equals(otherDeleteTaskCommand.deleteTaskDescriptor);
+        AssignTaskCommand otherAssignTaskCommand = (AssignTaskCommand) other;
+        return index.equals(otherAssignTaskCommand.index)
+                && assignTaskDescriptor.equals(otherAssignTaskCommand.assignTaskDescriptor);
     }
 
     /**
-     * Stores the tasks to delete from the person.
+     * Stores the tasks to add to the person.
      */
-    public static class DeleteTaskDescriptor {
-        private List<Index> indexes;
+    public static class AssignTaskDescriptor {
+        private List<Task> tasks;
 
-        public DeleteTaskDescriptor() {}
+        public AssignTaskDescriptor() {}
 
         /**
          * Copy constructor.
          * A defensive copy of {@code tasks} is used internally.
          */
-        public DeleteTaskDescriptor(DeleteTaskDescriptor toCopy) {
-            setTasksIndexes(toCopy.indexes);
+        public AssignTaskDescriptor(AssignTaskDescriptor toCopy) {
+            setTasks(toCopy.tasks);
         }
 
         /**
          * Sets {@code tasks} to this object's {@code tasks}.
          * A defensive copy of {@code tasks} is used internally.
          */
-        public void setTasksIndexes(List<Index> indexes) {
-            this.indexes = (indexes != null) ? new ArrayList<>(indexes) : null;
+        public void setTasks(List<Task> tasks) {
+            this.tasks = (tasks != null) ? new ArrayList<>(tasks) : null;
         }
 
         /**
@@ -144,15 +147,15 @@ public class DeleteTaskCommand extends TaskCommand {
          * if modification is attempted.
          * Returns {@code Optional#empty()} if {@code tasks} is null.
          */
-        public Optional<List<Index>> getTasksIndexes() {
-            return (indexes != null) ? Optional.of(Collections.unmodifiableList(indexes)) : Optional.empty();
+        public Optional<List<Task>> getTasks() {
+            return (tasks != null) ? Optional.of(Collections.unmodifiableList(tasks)) : Optional.empty();
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isTaskFieldEdited() {
-            return CollectionUtil.isAnyNonNull(indexes);
+            return CollectionUtil.isAnyNonNull(tasks) && !tasks.isEmpty();
         }
 
         @Override
@@ -162,12 +165,12 @@ public class DeleteTaskCommand extends TaskCommand {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof DeleteTaskDescriptor)) {
+            if (!(other instanceof AssignTaskDescriptor)) {
                 return false;
             }
 
-            DeleteTaskDescriptor deleteTaskDescriptor = (DeleteTaskDescriptor) other;
-            return Objects.equals(indexes, deleteTaskDescriptor.indexes);
+            AssignTaskDescriptor assignTaskDescriptor = (AssignTaskDescriptor) other;
+            return Objects.equals(tasks, assignTaskDescriptor.tasks);
         }
     }
 }

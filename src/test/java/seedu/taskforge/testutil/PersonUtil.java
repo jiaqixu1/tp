@@ -14,8 +14,8 @@ import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
-import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
-import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand.AssignTaskDescriptor;
+import seedu.taskforge.logic.commands.task.UnassignTaskCommand.UnassignTaskDescriptor;
 import seedu.taskforge.logic.parser.CliSyntax;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
@@ -110,9 +110,9 @@ public class PersonUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code AddTaskDescriptor}'s details.
+     * Returns the part of command string for the given {@code AssignTaskDescriptor}'s details.
      */
-    public static String getAddTaskDescriptorDetails(AddTaskDescriptor descriptor) {
+    public static String getAssignTaskDescriptorDetails(AssignTaskDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         if (descriptor.getTasks().isPresent()) {
             List<Task> tasks = descriptor.getTasks().get();
@@ -126,9 +126,9 @@ public class PersonUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code DeleteTaskDescriptor}'s details.
+     * Returns the part of command string for the given {@code UnassignTaskDescriptor}'s details.
      */
-    public static String getDeleteTaskDescriptorDetails(DeleteTaskDescriptor descriptor) {
+    public static String getUnassignTaskDescriptorDetails(UnassignTaskDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         if (descriptor.getTasksIndexes().isPresent()) {
             List<Index> indexes = descriptor.getTasksIndexes().get();

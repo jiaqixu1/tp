@@ -16,46 +16,90 @@ public class PersonContainsKeywordsPredicateTest {
 
     @Test
     public void equals() {
-        List<String> firstPredicateNameKeywords = Collections.singletonList("first");
-        List<String> secondPredicateNameKeywords = Arrays.asList("first", "second");
-        List<String> phoneKeywords = Collections.singletonList("91234567");
-        List<String> emailKeywords = Collections.singletonList("alice@example.com");
-        List<String> taskKeywords = Collections.singletonList("Task1");
-        List<String> projectKeywords = Collections.singletonList("Project1");
+        List<String> nameKeywords = Collections.singletonList("Alice");
+        List<String> differentNameKeywords = Collections.singletonList("Bob");
 
-        PersonContainsKeywordsPredicate firstPredicate = new PersonContainsKeywordsPredicate()
-                .setNameKeywords(firstPredicateNameKeywords)
-                .setPhoneKeywords(phoneKeywords)
-                .setEmailKeywords(emailKeywords)
-                .setTaskKeywords(taskKeywords)
-                .setProjectKeywords(projectKeywords);
-        PersonContainsKeywordsPredicate secondPredicate = new PersonContainsKeywordsPredicate()
-                .setNameKeywords(secondPredicateNameKeywords)
+        List<String> phoneKeywords = Collections.singletonList("91234567");
+        List<String> differentPhoneKeywords = Collections.singletonList("88887777");
+
+        List<String> emailKeywords = Collections.singletonList("alice@example.com");
+        List<String> differentEmailKeywords = Collections.singletonList("bob@example.com");
+
+        List<String> taskKeywords = Collections.singletonList("Task1");
+        List<String> differentTaskKeywords = Collections.singletonList("Task2");
+
+        List<String> projectKeywords = Collections.singletonList("Project1");
+        List<String> differentProjectKeywords = Collections.singletonList("Project2");
+
+        PersonContainsKeywordsPredicate basePredicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(nameKeywords)
                 .setPhoneKeywords(phoneKeywords)
                 .setEmailKeywords(emailKeywords)
                 .setTaskKeywords(taskKeywords)
                 .setProjectKeywords(projectKeywords);
 
         // same object -> returns true
-        assertTrue(firstPredicate.equals(firstPredicate));
+        assertTrue(basePredicate.equals(basePredicate));
 
         // same values -> returns true
-        PersonContainsKeywordsPredicate firstPredicateCopy = new PersonContainsKeywordsPredicate()
-                .setNameKeywords(firstPredicateNameKeywords)
+        PersonContainsKeywordsPredicate basePredicateCopy = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(nameKeywords)
                 .setPhoneKeywords(phoneKeywords)
                 .setEmailKeywords(emailKeywords)
                 .setTaskKeywords(taskKeywords)
                 .setProjectKeywords(projectKeywords);
-        assertTrue(firstPredicate.equals(firstPredicateCopy));
+        assertTrue(basePredicate.equals(basePredicateCopy));
 
         // different types -> returns false
-        assertFalse(firstPredicate.equals(1));
+        assertFalse(basePredicate.equals(1));
 
         // null -> returns false
-        assertFalse(firstPredicate.equals(null));
+        assertFalse(basePredicate.equals(null));
 
-        // different person -> returns false
-        assertFalse(firstPredicate.equals(secondPredicate));
+        // different nameKeywords -> returns false
+        PersonContainsKeywordsPredicate differentNamePredicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(differentNameKeywords)
+                .setPhoneKeywords(phoneKeywords)
+                .setEmailKeywords(emailKeywords)
+                .setTaskKeywords(taskKeywords)
+                .setProjectKeywords(projectKeywords);
+        assertFalse(basePredicate.equals(differentNamePredicate));
+
+        // different phoneKeywords -> returns false
+        PersonContainsKeywordsPredicate differentPhonePredicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(nameKeywords)
+                .setPhoneKeywords(differentPhoneKeywords)
+                .setEmailKeywords(emailKeywords)
+                .setTaskKeywords(taskKeywords)
+                .setProjectKeywords(projectKeywords);
+        assertFalse(basePredicate.equals(differentPhonePredicate));
+
+        // different emailKeywords -> returns false
+        PersonContainsKeywordsPredicate differentEmailPredicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(nameKeywords)
+                .setPhoneKeywords(phoneKeywords)
+                .setEmailKeywords(differentEmailKeywords)
+                .setTaskKeywords(taskKeywords)
+                .setProjectKeywords(projectKeywords);
+        assertFalse(basePredicate.equals(differentEmailPredicate));
+
+        // different taskKeywords -> returns false
+        PersonContainsKeywordsPredicate differentTaskPredicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(nameKeywords)
+                .setPhoneKeywords(phoneKeywords)
+                .setEmailKeywords(emailKeywords)
+                .setTaskKeywords(differentTaskKeywords)
+                .setProjectKeywords(projectKeywords);
+        assertFalse(basePredicate.equals(differentTaskPredicate));
+
+        // different projectKeywords -> returns false
+        PersonContainsKeywordsPredicate differentProjectPredicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(nameKeywords)
+                .setPhoneKeywords(phoneKeywords)
+                .setEmailKeywords(emailKeywords)
+                .setTaskKeywords(taskKeywords)
+                .setProjectKeywords(differentProjectKeywords);
+        assertFalse(basePredicate.equals(differentProjectPredicate));
     }
 
     @Test

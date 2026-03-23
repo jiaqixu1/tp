@@ -78,12 +78,32 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_emptyFields_throwsParseException() {
-        // field with empty whitespace string for name
+        // field with empty whitespace string for individual parameter
         assertParseFailure(parser, " -n   ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+        assertParseFailure(parser, " -p   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+        assertParseFailure(parser, " -e   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+        assertParseFailure(parser, " -d   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+        assertParseFailure(parser, " -l   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
 
-        // multiple parameters with empty whitespace string for project
-        assertParseFailure(parser, " -n Alice -p 91234567 -d Task1 -l   ",
+        // multiple parameters with empty whitespace string for parameters
+        assertParseFailure(parser, " -n -p 91234567 -e email@gmail.com -d Task1 -l project1 ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+
+        assertParseFailure(parser, " -n Alice -p -e email@gmail.com -d Task1 -l project1 ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+
+        assertParseFailure(parser, " -n Alice -p 91234567 -e email@gmail.com -d -l project1 ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+
+        assertParseFailure(parser, " -n Alice -p 91234567 -e -d Task1 -l project1 ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+
+        assertParseFailure(parser, " -n Alice -p 91234567 -e email@gmail.com -d Task1 -l   ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
     }
 

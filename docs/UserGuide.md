@@ -110,23 +110,24 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons by multiple fields: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose fields (name, phone, email, tasks, projects) match the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS] [-d TASK_KEYWORDS] [-l PROJECT_KEYWORDS]`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* For a specific field, persons matching at least one keyword will be returned (i.e. `OR` search).
+  e.g. `find -n Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* When multiple fields are specified, only persons matching ALL specified fields will be returned (i.e. `AND` search).
+  e.g. `find -n Alice -p 91234567` will return only persons named Alice AND with the phone number 91234567.
+* Only full words will be matched e.g. `Han` will not match `Hans`.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find -n John` returns `john` and `John Doe`
+* `find -n alex david` returns `Alex Yeoh`, `David Li`
+* `find -n Alice -p 91234567` returns any person named `Alice` whose phone number is `91234567`.
+* `find -d "Task 1" -l ProjectA` returns any person who has a task containing "Task 1" and belongs to project `ProjectA`.
 
 ### Deleting a person : `delete`
 
@@ -140,7 +141,7 @@ Format: `delete INDEX`
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in TaskForge.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `find -n Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
 ### Managing projects
 
@@ -320,7 +321,7 @@ Action | Format, Examples
 **Delete Task** | `task delete INDEX -i TASK_INDEX`<br> e.g., `task delete 2 -i 1`
 **View Tasks** | `task view INDEX`
 **Edit** | edit [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit -n James Ho -p 22224444 -e jamesho@example.com`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find** | `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS] [-d TASK_KEYWORDS] [-l PROJECT_KEYWORDS]`<br> e.g., `find -n James Jake -p 91234567`
 **List** | `list`
 **Unassign Project** | `project unassign INDEX -i LOCAL_PROJECT_INDEX`<br> e.g., `project delete 2 -i 1`
 **View Projects** | `project list`

@@ -1,6 +1,7 @@
 package seedu.taskforge.logic.parser;
 
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.taskforge.logic.commands.person.FindCommand.MESSAGE_USAGE;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -18,7 +19,8 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_emptyArg_throwsParseException() {
-        assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "     ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
     }
 
     @Test
@@ -27,10 +29,21 @@ public class FindCommandParserTest {
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(Arrays.asList("Alice", "Bob"));
         FindCommand expectedFindCommand = new FindCommand(predicate);
-        assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
+        assertParseSuccess(parser, " -n Alice Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+        assertParseSuccess(parser, " \n -n Alice \n \t Bob  \t", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_preambleNotEmpty_throwsParseException() {
+        // preamble without prefix
+        assertParseFailure(parser, "Alice Bob",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+
+        // preamble with other prefix
+        assertParseFailure(parser, "Alice -n Bob",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
     }
 
     @Test

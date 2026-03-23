@@ -38,9 +38,6 @@ public class FindCommandParser implements Parser<FindCommand> {
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate();
 
         List<String> nameKeywords = getKeywords(argMultimap.getAllValues(PREFIX_NAME));
-        if (nameKeywords.isEmpty() && !argMultimap.getPreamble().isEmpty()) {
-            nameKeywords = Arrays.asList(argMultimap.getPreamble().split("\\s+"));
-        }
         if (!nameKeywords.isEmpty()) {
             predicate.setNameKeywords(nameKeywords);
         }
@@ -65,7 +62,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             predicate.setProjectKeywords(projectKeywords);
         }
 
-        if (!predicate.isAnyFieldChecked()) {
+        if (!predicate.isAnyFieldChecked() || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 

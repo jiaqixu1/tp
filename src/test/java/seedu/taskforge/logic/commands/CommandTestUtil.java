@@ -20,8 +20,8 @@ import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
 import seedu.taskforge.logic.parser.CliSyntax;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
-import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
 import seedu.taskforge.testutil.EditPersonDescriptorBuilder;
 
 /**
@@ -157,7 +157,8 @@ public class CommandTestUtil {
 
         Person person = model.getFilteredPersonList().get(targetIndex.getZeroBased());
         final String[] splitName = person.getName().fullName.split("\\s+");
-        model.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
+        model.updateFilteredPersonList(new PersonContainsKeywordsPredicate()
+                .setNameKeywords(Arrays.asList(splitName[0])));
 
         assertEquals(1, model.getFilteredPersonList().size());
     }

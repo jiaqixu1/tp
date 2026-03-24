@@ -1,5 +1,6 @@
 package seedu.taskforge.model.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,18 +42,33 @@ public class SampleDataUtil {
             new Project("Mobile app"),
             new Project("Infrastructure"),
             new Project("Web app"),
-            new Project("Future gen")
+            new Project("Future Gen")
         };
     }
 
     public static ReadOnlyAddressBook getSampleAddressBook() {
         AddressBook sampleAb = new AddressBook();
+        
+        // Create projects with their tasks
+        Project interiorProject = new Project("Interior", new ArrayList<>());
+        Project manufactureProject = new Project("Manufacture", new ArrayList<>());
+        Project mobileAppProject = new Project("Mobile app", new ArrayList<>());
+        Project infrastructureProject = new Project("Infrastructure", new ArrayList<>());
+        Project webAppProject = new Project("Web app", new ArrayList<>());
+        Project futureGenProject = new Project("Future Gen", new ArrayList<>());
+        
+        sampleAb.addProject(interiorProject);
+        sampleAb.addProject(manufactureProject);
+        sampleAb.addProject(mobileAppProject);
+        sampleAb.addProject(infrastructureProject);
+        sampleAb.addProject(webAppProject);
+        sampleAb.addProject(futureGenProject);
+        
+        // Add persons with projects and tasks
         for (Person samplePerson : getSamplePersons()) {
             sampleAb.addPerson(samplePerson);
         }
-        for (Project sampleProject : getSampleProjects()) {
-            sampleAb.addProject(sampleProject);
-        }
+        
         return sampleAb;
     }
 

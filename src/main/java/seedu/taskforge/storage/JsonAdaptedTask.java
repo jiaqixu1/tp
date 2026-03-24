@@ -1,7 +1,7 @@
 package seedu.taskforge.storage;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.taskforge.commons.exceptions.IllegalValueException;
 import seedu.taskforge.model.task.Task;
@@ -17,7 +17,7 @@ class JsonAdaptedTask {
      * Constructs a {@code JsonAdaptedTask} with the given {@code description}.
      */
     @JsonCreator
-    public JsonAdaptedTask(String description) {
+    public JsonAdaptedTask(@JsonProperty("description") String description) {
         this.description = description;
     }
 
@@ -28,7 +28,6 @@ class JsonAdaptedTask {
         description = source.description;
     }
 
-    @JsonValue
     public String getDescription() {
         return description;
     }

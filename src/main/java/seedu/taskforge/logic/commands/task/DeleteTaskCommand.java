@@ -15,6 +15,7 @@ import seedu.taskforge.commons.util.CollectionUtil;
 import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
+import seedu.taskforge.logic.parser.CliSyntax;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
@@ -65,6 +66,7 @@ public class DeleteTaskCommand extends TaskCommand {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.commitAddressBook(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
     }
 

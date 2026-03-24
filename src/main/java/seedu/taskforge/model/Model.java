@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
+import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 
@@ -115,4 +116,14 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    void commitAddressBook(String commandResult);
+
+    String undoAddressBook();
+
+    String redoAddressBook();
+
+    boolean canUndoAddressBook();
+
+    boolean canRedoAddressBook();
 }

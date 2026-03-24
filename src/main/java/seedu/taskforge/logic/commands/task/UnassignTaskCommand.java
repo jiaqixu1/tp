@@ -61,7 +61,7 @@ public class UnassignTaskCommand extends TaskCommand {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, unassignTaskDescriptor);
+        Person editedPerson = createEditedPerson(personToEdit, unassignTaskDescriptor, model);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
@@ -74,7 +74,7 @@ public class UnassignTaskCommand extends TaskCommand {
      */
     private static Person createEditedPerson(
             Person personToEdit,
-            UnassignTaskDescriptor unassignTaskDescriptor) throws CommandException {
+            UnassignTaskDescriptor unassignTaskDescriptor, Model model) throws CommandException {
         assert personToEdit != null;
 
         Name name = personToEdit.getName();
@@ -94,9 +94,26 @@ public class UnassignTaskCommand extends TaskCommand {
                 throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
             }
         }
+
+        checkTasksExistInAssignedProjects(tasksToDelete, personToEdit, model);
         newTasks.removeAll(tasksToDelete);
 
         return new Person(name, phone, email, projectList, newTasks);
+    }
+
+    private static void checkTasksExistInAssignedProjects(List<Task> tasks, Person person, Model model)
+            throws CommandException {
+        List<Project> assignedProjects = person.getProjects();
+        List<Project> allProjects = model.getProjectList();
+
+        boolean allTasksExist = tasks.stream().allMatch(task ->
+                assignedProjects.stream().anyMatch(assignedProject ->
+                        allProjects.stream().anyMatch(project -> assignedProject.equals(project)
+                                && project.getTasks().contains(task))));
+
+        if (!allTasksExist) {
+            throw new CommandException(MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+        }
     }
 
     @Override

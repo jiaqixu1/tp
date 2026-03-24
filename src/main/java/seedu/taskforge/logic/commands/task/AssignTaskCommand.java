@@ -61,6 +61,8 @@ public class AssignTaskCommand extends TaskCommand {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
+        List<Task> tasksToAssign = assignTaskDescriptor.getTasks().orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
+        checkTasksExistInAssignedProjects(tasksToAssign, personToEdit, model);
         Person editedPerson = createEditedPerson(personToEdit, assignTaskDescriptor);
 
         model.setPerson(personToEdit, editedPerson);
@@ -87,6 +89,21 @@ public class AssignTaskCommand extends TaskCommand {
         checkUniqueTasks(newTasks);
 
         return new Person(name, phone, email, projectList, newTasks);
+    }
+
+    private static void checkTasksExistInAssignedProjects(List<Task> tasks, Person person, Model model)
+            throws CommandException {
+        List<Project> assignedProjects = person.getProjects();
+        List<Project> allProjects = model.getProjectList();
+
+        boolean allTasksExist = tasks.stream().allMatch(task ->
+                assignedProjects.stream().anyMatch(assignedProject ->
+                        allProjects.stream().anyMatch(project -> assignedProject.equals(project)
+                                && project.getTasks().contains(task))));
+
+        if (!allTasksExist) {
+            throw new CommandException(MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+        }
     }
 
     /**

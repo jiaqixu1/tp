@@ -13,6 +13,8 @@ import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
@@ -23,11 +25,29 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.task.Task;
 import seedu.taskforge.testutil.AssignTaskDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 
 public class AssignTaskCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model = createModelWithProjectTasks();
+
+    private Model createModelWithProjectTasks() {
+        Model seededModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        seededModel.setProject(new Project("alpha"), new Project("alpha", Arrays.asList(
+                new Task(VALID_TASK_REFACTOR),
+                new Task(VALID_TASK_FIX_ERROR),
+                new Task(VALID_TASK_IMPLEMENT_X),
+                new Task(VALID_TASK_IMPLEMENT_Y),
+                new Task(VALID_TASK_IMPLEMENT_Z)
+        )));
+        seededModel.setProject(new Project("beta"), new Project("beta", Arrays.asList(
+                new Task(VALID_TASK_REFACTOR),
+                new Task(VALID_TASK_FIX_ERROR)
+        )));
+        return seededModel;
+    }
 
     @Test
     public void execute_addOneTaskUnfilteredList_success() {
@@ -191,6 +211,15 @@ public class AssignTaskCommandTest {
                 new AssignTaskDescriptorBuilder().withTasks(VALID_TASK_IMPLEMENT_X).build());
 
         assertCommandFailure(assignTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_taskNotInAssignedProjects_failure() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withTasks("non existent task").build();
+        AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(assignTaskCommand, model, TaskCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
     }
 
 }

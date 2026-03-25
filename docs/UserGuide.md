@@ -315,6 +315,16 @@ Clears all entries from TaskForge.
 
 Format: `clear`
 
+### Undoing previous command : `undo`
+Reverts the last change made in TaskForge.
+
+Format: `undo`
+
+### Redoing previous command : `redo`
+Reapplies the last undone change, effectively canceling the undo.
+
+Format: `redo`
+
 ### Exiting the program : `exit`
 
 Exits the program.

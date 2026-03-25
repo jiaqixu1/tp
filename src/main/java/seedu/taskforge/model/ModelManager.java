@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.commons.core.LogsCenter;
-import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 

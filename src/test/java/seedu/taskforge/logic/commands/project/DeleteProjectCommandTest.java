@@ -181,7 +181,7 @@ public class DeleteProjectCommandTest {
         }
 
         @Override
-        public void commitAddressBook(String commandResult) {
+        public void commitAddressBook(String input) {
 
         }
 

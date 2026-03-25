@@ -268,6 +268,16 @@ TaskForge supports project management using three commands:
     - `JsonSerializableAddressBook` persists project entries in the `projects` JSON array.
     - During deserialization, projects are restored into the model so project entries persist across application restarts.
 
+### Project management feature (`project add`, `project delete`, `project assign`, `project unassign`, `project list`)
+
+TaskForge supports project management through five commands:
+
+- `project add`
+- `project delete`
+- `project assign`
+- `project unassign`
+- `project list`
+
 #### Validation behavior in commands related to person class
 
 When a user adds or edits a person including changing project, each value must be checked to see whether they are already exist in the global project list:

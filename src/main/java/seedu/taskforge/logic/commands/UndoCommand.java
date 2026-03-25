@@ -3,6 +3,9 @@ package seedu.taskforge.logic.commands;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
 
+/**
+ * Undoes the most recent command that modified the address book.
+ */
 public class UndoCommand extends Command {
 
     public static final String COMMAND_WORD = "undo";
@@ -11,7 +14,7 @@ public class UndoCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        if(!model.canUndoAddressBook()) {
+        if (!model.canUndoAddressBook()) {
             throw new CommandException(MESSAGE_FAILED);
         }
         String input = model.undoAddressBook();

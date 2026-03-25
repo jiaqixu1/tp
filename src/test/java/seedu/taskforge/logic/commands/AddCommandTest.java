@@ -163,7 +163,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void commitAddressBook(String commandResult) {
+        public void commitAddressBook(String input) {
 
         }
 

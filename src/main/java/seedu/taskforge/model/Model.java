@@ -5,7 +5,6 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
-import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 
@@ -117,13 +116,28 @@ public interface Model {
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
 
-    void commitAddressBook(String commandResult);
+    /**
+     * Commits the current address book state to the undo/redo history.
+     */
+    void commitAddressBook(String input);
 
+    /**
+     * Restores the previous address book state.
+     */
     String undoAddressBook();
 
+    /**
+     * Restores a previously undone address book state.
+     */
     String redoAddressBook();
 
+    /**
+     * Checks if an undo operation is possible.
+     */
     boolean canUndoAddressBook();
 
+    /**
+     * Checks if a redo operation is possible.
+     */
     boolean canRedoAddressBook();
 }

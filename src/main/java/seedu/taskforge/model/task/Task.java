@@ -15,6 +15,7 @@ public class Task {
 
     public final String description;
     protected boolean isDone;
+    private final String projectTitle;
 
     /**
      * Constructs a {@code Task}.
@@ -22,10 +23,32 @@ public class Task {
      * @param description A valid task name.
      */
     public Task(String description) {
+        this(description, null);
+    }
+
+    /**
+     * Constructs a {@code Task} that optionally tracks the owning project.
+     */
+    public Task(String description, String projectTitle) {
         requireNonNull(description);
         checkArgument(isValidTaskDescription(description), MESSAGE_CONSTRAINTS);
         this.description = description;
+        this.projectTitle = projectTitle;
         isDone = false;
+    }
+
+    /**
+     * Returns the project title that this task belongs to.
+     */
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+
+    /**
+     * Returns whether this task belongs to the project with the given title.
+     */
+    public boolean belongsToProject(String targetProjectTitle) {
+        return projectTitle != null && projectTitle.equals(targetProjectTitle);
     }
 
     /**
@@ -81,6 +104,7 @@ public class Task {
     /**
      * Format state as text for viewing.
      */
+    @Override
     public String toString() {
         return '[' + description + ']';
     }

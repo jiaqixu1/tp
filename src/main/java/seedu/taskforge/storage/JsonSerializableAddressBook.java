@@ -13,6 +13,7 @@ import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.task.Task;
 
 /**
  * An Immutable AddressBook that is serializable to JSON format.
@@ -24,6 +25,8 @@ class JsonSerializableAddressBook {
     public static final String MESSAGE_DUPLICATE_PROJECT = "Projects list contains duplicate project(s).";
     public static final String MESSAGE_PERSON_PROJECT_NOT_IN_PROJECT_LIST =
             "Person %1$s contains project %2$s that does not exist in the project list.";
+    public static final String MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS =
+            "Person %1$s contains task %2$s that does not exist in any assigned project.";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
     private final List<JsonAdaptedProject> projects = new ArrayList<>();
@@ -76,6 +79,27 @@ class JsonSerializableAddressBook {
                     throw new IllegalValueException(String.format(
                             MESSAGE_PERSON_PROJECT_NOT_IN_PROJECT_LIST,
                             person.getName(), personProject));
+                }
+            }
+
+            for (Task personTask : person.getTasks()) {
+                boolean taskExistsInAssignedProjects;
+                if (personTask.getProjectTitle() != null) {
+                    taskExistsInAssignedProjects = person.getProjects().stream()
+                        .filter(personProject -> personProject.title.equals(personTask.getProjectTitle()))
+                        .anyMatch(personProject -> addressBook.getProjectList().stream()
+                            .anyMatch(project -> project.equals(personProject)
+                                && project.getTasks().contains(personTask)));
+                } else {
+                    taskExistsInAssignedProjects = person.getProjects().stream()
+                        .anyMatch(personProject -> addressBook.getProjectList().stream()
+                            .anyMatch(project -> project.equals(personProject)
+                                && project.getTasks().contains(personTask)));
+                }
+                if (!taskExistsInAssignedProjects) {
+                    throw new IllegalValueException(String.format(
+                            MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS,
+                            person.getName(), personTask.description));
                 }
             }
 

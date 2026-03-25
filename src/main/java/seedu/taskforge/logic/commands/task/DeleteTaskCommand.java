@@ -1,8 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
-import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,91 +10,83 @@ import java.util.Optional;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.CollectionUtil;
-import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
-import seedu.taskforge.model.person.Email;
-import seedu.taskforge.model.person.Name;
-import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
+import seedu.taskforge.model.task.exceptions.TaskNotFoundException;
 
 /**
- * Delete task(s) from an existing person in the address book.
+ * Deletes a task from the task list of an existing project in the address book.
  */
 public class DeleteTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "delete";
 
-    public static final String MESSAGE_SUCCESS = "Deleted task: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task deleted from project: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_INDEX + " TASK_INDEX";
-    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
+            + SUBCOMMAND_WORD + " PROJECT_INDEX -i TASK_INDEX";
     public static final String MESSAGE_NOT_EDITED = "At least one task to delete must be provided";
+    public static final String MESSAGE_INVALID_PROJECT_INDEX = "The project index provided is invalid.";
+    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
 
-    private final Index index;
+    private final Index projectIndex;
     private final DeleteTaskDescriptor deleteTaskDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
-     * @param deleteTaskDescriptor details to edit the person with
+     * Creates a DeleteTaskCommand to delete a task from a project.
      */
-    public DeleteTaskCommand(Index index, DeleteTaskDescriptor deleteTaskDescriptor) {
-        requireNonNull(index);
+    public DeleteTaskCommand(Index projectIndex, DeleteTaskDescriptor deleteTaskDescriptor) {
+        requireNonNull(projectIndex);
         requireNonNull(deleteTaskDescriptor);
 
-        this.index = index;
+        this.projectIndex = projectIndex;
         this.deleteTaskDescriptor = new DeleteTaskDescriptor(deleteTaskDescriptor);
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
+        List<Project> projectList = model.getProjectList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        if (projectIndex.getZeroBased() >= projectList.size()) {
+            throw new CommandException(MESSAGE_INVALID_PROJECT_INDEX);
         }
 
-        Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, deleteTaskDescriptor);
+        Project projectToEdit = projectList.get(projectIndex.getZeroBased());
+        Project editedProject = createEditedProject(projectToEdit, deleteTaskDescriptor);
 
-        model.setPerson(personToEdit, editedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
+        model.setProject(projectToEdit, editedProject);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, editedProject));
     }
 
-    /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
-     */
-    private static Person createEditedPerson(
-            Person personToEdit,
-            DeleteTaskDescriptor deleteTaskDescriptor) throws CommandException {
-        assert personToEdit != null;
+    private static Project createEditedProject(Project projectToEdit,
+                                               DeleteTaskDescriptor deleteTaskDescriptor) throws CommandException {
+        assert projectToEdit != null;
 
-        Name name = personToEdit.getName();
-        Phone phone = personToEdit.getPhone();
-        Email email = personToEdit.getEmail();
-        List<Project> projectList = personToEdit.getProjects();
-
-        List<Task> newTasks = new ArrayList<>(personToEdit.getTasks());
-        List<Task> tasksToDelete = new ArrayList<>();
-        List<Index> indexToDelete = deleteTaskDescriptor.getTasksIndexes()
+        Project editedProject = new Project(projectToEdit.title, projectToEdit.getTasks());
+        List<Index> indexesToDelete = deleteTaskDescriptor.getTaskIndexes()
                 .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
-        for (int i = 0; i < indexToDelete.size(); ++i) {
-            int taskIndex = indexToDelete.get(i).getZeroBased();
+
+        List<Task> tasksToDelete = new ArrayList<>();
+        for (Index index : indexesToDelete) {
+            int taskIndex = index.getZeroBased();
             try {
-                tasksToDelete.add(newTasks.get(taskIndex));
+                tasksToDelete.add(editedProject.getTasks().get(taskIndex));
             } catch (IndexOutOfBoundsException e) {
                 throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
             }
         }
-        newTasks.removeAll(tasksToDelete);
 
-        return new Person(name, phone, email, projectList, newTasks);
+        try {
+            for (Task task : tasksToDelete) {
+                editedProject.getUniqueTaskList().remove(task);
+            }
+        } catch (TaskNotFoundException tnfe) {
+            throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
+        }
+
+        return editedProject;
     }
 
     @Override
@@ -105,54 +95,53 @@ public class DeleteTaskCommand extends TaskCommand {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof DeleteTaskCommand)) {
             return false;
         }
 
         DeleteTaskCommand otherDeleteTaskCommand = (DeleteTaskCommand) other;
-        return index.equals(otherDeleteTaskCommand.index)
+        return projectIndex.equals(otherDeleteTaskCommand.projectIndex)
                 && deleteTaskDescriptor.equals(otherDeleteTaskCommand.deleteTaskDescriptor);
     }
 
     /**
-     * Stores the tasks to delete from the person.
+     * Stores the task indexes to delete from the project.
      */
     public static class DeleteTaskDescriptor {
-        private List<Index> indexes;
+        private List<Index> taskIndexes;
 
         public DeleteTaskDescriptor() {}
 
         /**
          * Copy constructor.
-         * A defensive copy of {@code tasks} is used internally.
+         * A defensive copy of {@code taskIndexes} is used internally.
          */
         public DeleteTaskDescriptor(DeleteTaskDescriptor toCopy) {
-            setTasksIndexes(toCopy.indexes);
+            setTaskIndexes(toCopy.taskIndexes);
         }
 
         /**
-         * Sets {@code tasks} to this object's {@code tasks}.
-         * A defensive copy of {@code tasks} is used internally.
+         * Sets {@code taskIndexes} to this object's {@code taskIndexes}.
+         * A defensive copy of {@code taskIndexes} is used internally.
          */
-        public void setTasksIndexes(List<Index> indexes) {
-            this.indexes = (indexes != null) ? new ArrayList<>(indexes) : null;
+        public void setTaskIndexes(List<Index> taskIndexes) {
+            this.taskIndexes = (taskIndexes != null) ? new ArrayList<>(taskIndexes) : null;
         }
 
         /**
-         * Returns an unmodifiable task set, which throws {@code UnsupportedOperationException}
+         * Returns an unmodifiable task-index list, which throws {@code UnsupportedOperationException}
          * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tasks} is null.
+         * Returns {@code Optional#empty()} if {@code taskIndexes} is null.
          */
-        public Optional<List<Index>> getTasksIndexes() {
-            return (indexes != null) ? Optional.of(Collections.unmodifiableList(indexes)) : Optional.empty();
+        public Optional<List<Index>> getTaskIndexes() {
+            return (taskIndexes != null) ? Optional.of(Collections.unmodifiableList(taskIndexes)) : Optional.empty();
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isTaskFieldEdited() {
-            return CollectionUtil.isAnyNonNull(indexes);
+            return CollectionUtil.isAnyNonNull(taskIndexes);
         }
 
         @Override
@@ -161,13 +150,12 @@ public class DeleteTaskCommand extends TaskCommand {
                 return true;
             }
 
-            // instanceof handles nulls
             if (!(other instanceof DeleteTaskDescriptor)) {
                 return false;
             }
 
             DeleteTaskDescriptor deleteTaskDescriptor = (DeleteTaskDescriptor) other;
-            return Objects.equals(indexes, deleteTaskDescriptor.indexes);
+            return Objects.equals(taskIndexes, deleteTaskDescriptor.taskIndexes);
         }
     }
 }

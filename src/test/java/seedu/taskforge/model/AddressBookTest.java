@@ -18,10 +18,14 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.taskforge.model.person.Email;
+import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.person.exceptions.DuplicatePersonException;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.project.exceptions.DuplicateProjectException;
+import seedu.taskforge.model.task.Task;
 import seedu.taskforge.testutil.PersonBuilder;
 
 public class AddressBookTest {
@@ -142,6 +146,35 @@ public class AddressBookTest {
         assertEquals(Collections.emptyList(), addressBook.getPersonList().get(1).getProjects());
         assertEquals(Arrays.asList(new Project("beta")),
                 addressBook.getPersonList().get(2).getProjects());
+    }
+
+    @Test
+    public void setProject_taskDeletedFromProject_cascadesAssignedTasks() {
+        Project alpha = new Project("alpha", Arrays.asList(
+            new Task("refactor code"),
+            new Task("fix error in tp project")
+        ));
+        Person person = new Person(
+            new Name("Task Owner"),
+            new Phone("99998888"),
+            new Email("owner@example.com"),
+            Arrays.asList(new Project("alpha")),
+            Arrays.asList(
+                new Task("refactor code", "Alpha"),
+                new Task("fix error in tp project", "Alpha")
+            )
+        );
+
+        addressBook.addProject(alpha);
+        addressBook.addPerson(person);
+
+        Project editedAlpha = new Project("alpha", Arrays.asList(new Task("refactor code")));
+        addressBook.setProject(alpha, editedAlpha);
+
+        List<Task> updatedTasks = addressBook.getPersonList().get(0).getTasks();
+        assertEquals(1, updatedTasks.size());
+        assertEquals("refactor code", updatedTasks.get(0).description);
+        assertEquals("Alpha", updatedTasks.get(0).getProjectTitle());
     }
 
     @Test

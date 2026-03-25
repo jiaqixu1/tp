@@ -16,8 +16,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.GuiSettings;
-import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.AddressBookBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
@@ -241,7 +241,9 @@ public class ModelManagerTest {
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getName().fullName.split("\\s+");
-        modelManager.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(Arrays.asList(keywords));
+        modelManager.updateFilteredPersonList(predicate);
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests

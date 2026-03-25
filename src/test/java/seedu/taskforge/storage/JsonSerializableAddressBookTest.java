@@ -23,6 +23,8 @@ public class JsonSerializableAddressBookTest {
     private static final Path DUPLICATE_PROJECT_FILE = TEST_DATA_FOLDER.resolve("duplicateProjectAddressBook.json");
     private static final Path PERSON_WITH_MISSING_PROJECT_FILE =
             TEST_DATA_FOLDER.resolve("personWithMissingProjectAddressBook.json");
+    private static final Path PERSON_WITH_MISSING_TASK_IN_PROJECTS_FILE =
+            TEST_DATA_FOLDER.resolve("personWithMissingTaskInProjectsAddressBook.json");
 
     @Test
     public void toModelType_typicalPersonsFile_success() throws Exception {
@@ -63,6 +65,16 @@ public class JsonSerializableAddressBookTest {
         assertThrows(IllegalValueException.class,
                 String.format(JsonSerializableAddressBook.MESSAGE_PERSON_PROJECT_NOT_IN_PROJECT_LIST,
                         "John Doe", "Beta"),
+                dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_personWithMissingTaskInProjects_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(PERSON_WITH_MISSING_TASK_IN_PROJECTS_FILE,
+                JsonSerializableAddressBook.class).get();
+        assertThrows(IllegalValueException.class,
+                String.format(JsonSerializableAddressBook.MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS,
+                        "John Doe", "read notes"),
                 dataFromFile::toModelType);
     }
 

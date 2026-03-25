@@ -1,187 +1,109 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.taskforge.testutil.Assert.assertThrows;
+import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
+
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
-import seedu.taskforge.model.person.Person;
-import seedu.taskforge.testutil.DeleteTaskDescriptorBuilder;
-import seedu.taskforge.testutil.PersonBuilder;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.task.Task;
 
 public class DeleteTaskCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_deleteOneTaskUnfilteredList_success() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
+    public void execute_deleteOneTask_success() {
+        Project firstProject = model.getProjectList().get(INDEX_FIRST_PROJECT.getZeroBased());
+        Project projectWithTasks = new Project(firstProject.title,
+                Arrays.asList(new Task(VALID_TASK_FIX_ERROR), new Task(VALID_TASK_IMPLEMENT_X)));
+        model.setProject(firstProject, projectWithTasks);
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks().build();
+        Project editedProject = new Project(firstProject.title, Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
 
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("1").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(indexFirstPerson, descriptor);
+        DeleteTaskCommand.DeleteTaskDescriptor descriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        descriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(1)));
+        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, descriptor);
 
-        String expectedMessage = String.format(DeleteTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(DeleteTaskCommand.MESSAGE_SUCCESS, editedProject);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
+        expectedModel.setProject(projectWithTasks, editedProject);
 
         assertCommandSuccess(deleteTaskCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_deleteOneTaskFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+    public void execute_deleteOutOfBoundTask_failure() {
+        Project firstProject = model.getProjectList().get(INDEX_FIRST_PROJECT.getZeroBased());
+        Project projectWithTask = new Project(firstProject.title, Arrays.asList(new Task(VALID_TASK_FIX_ERROR)));
+        model.setProject(firstProject, projectWithTask);
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks().build();
-
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("1").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(DeleteTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(deleteTaskCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_deleteOneTaskOutOfBoundUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("2").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(indexFirstPerson, descriptor);
+        DeleteTaskCommand.DeleteTaskDescriptor descriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        descriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(2)));
+        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, descriptor);
 
         assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
     }
 
     @Test
-    public void execute_deleteOneTaskOutOfBoundFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("2").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
-    }
-
-    @Test
-    public void execute_deleteMultipleTasksOutOfBoundUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("1", "2").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(indexFirstPerson, descriptor);
-
-        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
-    }
-
-    @Test
-    public void execute_deleteMultipleTasksOutOfBoundFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("1", "2").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
-    }
-
-    @Test
-    public void execute_deleteMultipleTasksUnfilteredList_success() {
-        Index indexSecondPerson = Index.fromOneBased(2);
-        Person firstPerson = model.getFilteredPersonList().get(indexSecondPerson.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks().build();
-
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("1", "2").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(indexSecondPerson, descriptor);
-
-        String expectedMessage = String.format(DeleteTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(deleteTaskCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_deleteMultipleTasksFilteredList_success() {
-        showPersonAtIndex(model, INDEX_SECOND_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks().build();
-
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("1", "2").build();
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(DeleteTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(deleteTaskCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_noTaskSpecifiedUnfilteredList_errorThrown() {
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PERSON, new DeleteTaskDescriptor());
+    public void execute_noTaskSpecified_failure() {
+        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT,
+                new DeleteTaskCommand.DeleteTaskDescriptor());
         assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_NOT_EDITED);
     }
 
     @Test
-    public void execute_noTaskSpecifiedFilteredList_errorThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PERSON, new DeleteTaskDescriptor());
-        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_NOT_EDITED);
-    }
+    public void execute_invalidProjectIndex_failure() {
+        Index outOfBoundIndex = Index.fromOneBased(model.getProjectList().size() + 1);
 
-    @Test
-    public void execute_invalidPersonIndexUnfilteredList_failure() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder()
-                .withTasks("1").build();
+        DeleteTaskCommand.DeleteTaskDescriptor descriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        descriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(1)));
         DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(deleteTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INVALID_PROJECT_INDEX);
     }
 
-    /**
-     * Adds task to a person of a filtered list where index is larger than size of filtered list,
-     * but smaller than size of address book
-     */
     @Test
-    public void execute_invalidPersonIndexFilteredList_failure() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Index outOfBoundIndex = INDEX_SECOND_PERSON;
-        // ensures that outOfBoundIndex is still in bounds of address book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
+    public void equals() {
+        DeleteTaskCommand.DeleteTaskDescriptor firstDescriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        firstDescriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(1)));
 
-        DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(outOfBoundIndex,
-                new DeleteTaskDescriptorBuilder().withTasks("1").build());
+        DeleteTaskCommand.DeleteTaskDescriptor secondDescriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        secondDescriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(2)));
 
-        assertCommandFailure(deleteTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        DeleteTaskCommand firstCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        DeleteTaskCommand sameValuesCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        DeleteTaskCommand differentCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, secondDescriptor);
+
+        assertTrue(firstCommand.equals(firstCommand));
+        assertTrue(firstCommand.equals(sameValuesCommand));
+        assertFalse(firstCommand.equals(differentCommand));
+        assertFalse(firstCommand.equals(1));
+        assertFalse(firstCommand.equals((Object) null));
     }
 
+    @Test
+    public void deleteTaskDescriptor_behaviour() {
+        DeleteTaskCommand.DeleteTaskDescriptor descriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+
+        descriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(1)));
+        assertTrue(descriptor.isTaskFieldEdited());
+        assertThrows(UnsupportedOperationException.class, () -> descriptor.getTaskIndexes().get().clear());
+    }
 }

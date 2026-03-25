@@ -1,9 +1,12 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
 
@@ -21,7 +24,7 @@ import seedu.taskforge.model.task.Task;
 
 public class AddTaskCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_addOneTask_success() {
@@ -68,5 +71,34 @@ public class AddTaskCommandTest {
         AddTaskCommand addTaskCommand = new AddTaskCommand(outOfBoundIndex, descriptor);
 
         assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_INVALID_PROJECT_INDEX);
+    }
+
+    @Test
+    public void equals() {
+        AddTaskCommand.AddTaskDescriptor firstDescriptor = new AddTaskCommand.AddTaskDescriptor();
+        firstDescriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
+
+        AddTaskCommand.AddTaskDescriptor secondDescriptor = new AddTaskCommand.AddTaskDescriptor();
+        secondDescriptor.setTasks(Arrays.asList(new Task(VALID_TASK_FIX_ERROR)));
+
+        AddTaskCommand firstCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        AddTaskCommand sameValuesCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        AddTaskCommand differentCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, secondDescriptor);
+
+        assertTrue(firstCommand.equals(firstCommand));
+        assertTrue(firstCommand.equals(sameValuesCommand));
+        assertFalse(firstCommand.equals(differentCommand));
+        assertFalse(firstCommand.equals(1));
+        assertFalse(firstCommand.equals((Object) null));
+    }
+
+    @Test
+    public void addTaskDescriptor_behaviour() {
+        AddTaskCommand.AddTaskDescriptor descriptor = new AddTaskCommand.AddTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+
+        descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
+        assertTrue(descriptor.isTaskFieldEdited());
+        assertThrows(UnsupportedOperationException.class, () -> descriptor.getTasks().get().clear());
     }
 }

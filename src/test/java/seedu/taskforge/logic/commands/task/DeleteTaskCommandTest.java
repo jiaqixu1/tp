@@ -1,9 +1,12 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
 
@@ -21,7 +24,7 @@ import seedu.taskforge.model.task.Task;
 
 public class DeleteTaskCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_deleteOneTask_success() {
@@ -73,5 +76,34 @@ public class DeleteTaskCommandTest {
         DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(outOfBoundIndex, descriptor);
 
         assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INVALID_PROJECT_INDEX);
+    }
+
+    @Test
+    public void equals() {
+        DeleteTaskCommand.DeleteTaskDescriptor firstDescriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        firstDescriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(1)));
+
+        DeleteTaskCommand.DeleteTaskDescriptor secondDescriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        secondDescriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(2)));
+
+        DeleteTaskCommand firstCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        DeleteTaskCommand sameValuesCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        DeleteTaskCommand differentCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, secondDescriptor);
+
+        assertTrue(firstCommand.equals(firstCommand));
+        assertTrue(firstCommand.equals(sameValuesCommand));
+        assertFalse(firstCommand.equals(differentCommand));
+        assertFalse(firstCommand.equals(1));
+        assertFalse(firstCommand.equals((Object) null));
+    }
+
+    @Test
+    public void deleteTaskDescriptor_behaviour() {
+        DeleteTaskCommand.DeleteTaskDescriptor descriptor = new DeleteTaskCommand.DeleteTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+
+        descriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(1)));
+        assertTrue(descriptor.isTaskFieldEdited());
+        assertThrows(UnsupportedOperationException.class, () -> descriptor.getTaskIndexes().get().clear());
     }
 }

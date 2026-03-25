@@ -1,5 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
@@ -9,6 +10,7 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
@@ -31,7 +33,7 @@ import seedu.taskforge.testutil.AssignTaskDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 
 public class AssignTaskCommandTest {
-    private Model model = createModelWithProjectTasks();
+    private final Model model = createModelWithProjectTasks();
 
     private Model createModelWithProjectTasks() {
         Model seededModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -220,6 +222,34 @@ public class AssignTaskCommandTest {
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(assignTaskCommand, model, TaskCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+    }
+
+    @Test
+    public void equals() {
+        AssignTaskDescriptor firstDescriptor = new AssignTaskDescriptorBuilder()
+                .withTasks(VALID_TASK_IMPLEMENT_X).build();
+        AssignTaskDescriptor secondDescriptor = new AssignTaskDescriptorBuilder()
+                .withTasks(VALID_TASK_IMPLEMENT_Y).build();
+
+        AssignTaskCommand firstCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, firstDescriptor);
+        AssignTaskCommand sameValuesCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, firstDescriptor);
+        AssignTaskCommand differentCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, secondDescriptor);
+
+        assertTrue(firstCommand.equals(firstCommand));
+        assertTrue(firstCommand.equals(sameValuesCommand));
+        assertFalse(firstCommand.equals(differentCommand));
+        assertFalse(firstCommand.equals(1));
+        assertFalse(firstCommand.equals((Object) null));
+    }
+
+    @Test
+    public void assignTaskDescriptor_behaviour() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+
+        descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
+        assertTrue(descriptor.isTaskFieldEdited());
+        assertThrows(UnsupportedOperationException.class, () -> descriptor.getTasks().get().clear());
     }
 
 }

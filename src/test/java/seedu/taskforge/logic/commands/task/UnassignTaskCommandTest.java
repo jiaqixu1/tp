@@ -1,11 +1,13 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
@@ -28,7 +30,7 @@ import seedu.taskforge.testutil.PersonBuilder;
 import seedu.taskforge.testutil.UnassignTaskDescriptorBuilder;
 
 public class UnassignTaskCommandTest {
-    private Model model = createModelWithProjectTasks();
+    private final Model model = createModelWithProjectTasks();
 
     private Model createModelWithProjectTasks() {
         Model seededModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -217,6 +219,34 @@ public class UnassignTaskCommandTest {
 
         assertCommandFailure(unassignTaskCommand, modelWithMissingTask,
             TaskCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+    }
+
+    @Test
+    public void equals() {
+        UnassignTaskDescriptor firstDescriptor = new UnassignTaskDescriptorBuilder()
+                .withTasks("1").build();
+        UnassignTaskDescriptor secondDescriptor = new UnassignTaskDescriptorBuilder()
+                .withTasks("2").build();
+
+        UnassignTaskCommand firstCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, firstDescriptor);
+        UnassignTaskCommand sameValuesCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, firstDescriptor);
+        UnassignTaskCommand differentCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, secondDescriptor);
+
+        assertTrue(firstCommand.equals(firstCommand));
+        assertTrue(firstCommand.equals(sameValuesCommand));
+        assertFalse(firstCommand.equals(differentCommand));
+        assertFalse(firstCommand.equals(1));
+        assertFalse(firstCommand.equals((Object) null));
+    }
+
+    @Test
+    public void unassignTaskDescriptor_behaviour() {
+        UnassignTaskDescriptor descriptor = new UnassignTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+
+        descriptor.setTasksIndexes(Arrays.asList(Index.fromOneBased(1)));
+        assertTrue(descriptor.isTaskFieldEdited());
+        assertThrows(UnsupportedOperationException.class, () -> descriptor.getTasksIndexes().get().clear());
     }
 
 }

@@ -144,7 +144,7 @@ public class AddressBookParser {
             return new UnassignProjectCommandParser().parse(arguments);
 
         case FindProjectCommand.SUBCOMMAND_WORD:
-                return new FindProjectCommandParser().parse(arguments);
+            return new FindProjectCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: project " + subinput);

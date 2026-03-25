@@ -20,6 +20,7 @@ import seedu.taskforge.logic.commands.person.ListCommand;
 import seedu.taskforge.logic.commands.project.AddProjectCommand;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
+import seedu.taskforge.logic.commands.project.FindProjectCommand;
 import seedu.taskforge.logic.commands.project.ListProjectCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
@@ -35,6 +36,7 @@ import seedu.taskforge.logic.parser.person.FindCommandParser;
 import seedu.taskforge.logic.parser.project.AddProjectCommandParser;
 import seedu.taskforge.logic.parser.project.AssignProjectCommandParser;
 import seedu.taskforge.logic.parser.project.DeleteProjectCommandParser;
+import seedu.taskforge.logic.parser.project.FindProjectCommandParser;
 import seedu.taskforge.logic.parser.project.UnassignProjectCommandParser;
 import seedu.taskforge.logic.parser.task.AddTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
@@ -140,6 +142,9 @@ public class AddressBookParser {
 
         case UnassignProjectCommand.SUBCOMMAND_WORD:
             return new UnassignProjectCommandParser().parse(arguments);
+
+        case FindProjectCommand.SUBCOMMAND_WORD:
+                return new FindProjectCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: project " + subinput);

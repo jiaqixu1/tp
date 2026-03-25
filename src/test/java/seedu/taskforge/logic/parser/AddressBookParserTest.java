@@ -29,6 +29,7 @@ import seedu.taskforge.logic.commands.project.AddProjectCommand;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
+import seedu.taskforge.logic.commands.project.FindProjectCommand;
 import seedu.taskforge.logic.commands.project.ListProjectCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
@@ -149,6 +150,13 @@ public class AddressBookParserTest {
     public void parseCommand_listProject() throws Exception {
         assertTrue(parser.parseCommand(ProjectCommand.COMMAND_WORD + " " + ListProjectCommand.SUBCOMMAND_WORD)
                 instanceof ListProjectCommand);
+    }
+
+    @Test
+    public void parseCommand_findProject() throws Exception {
+        FindProjectCommand command = (FindProjectCommand) parser.parseCommand(
+                ProjectCommand.COMMAND_WORD + " " + FindProjectCommand.SUBCOMMAND_WORD + " alpha beta");
+        assertEquals(new FindProjectCommand(Arrays.asList("alpha", "beta")), command);
     }
 
     @Test

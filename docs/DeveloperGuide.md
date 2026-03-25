@@ -239,14 +239,15 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 _{more aspects and alternatives to be added}_
 
-### Project management feature (`project add`, `project delete`, `project list`, `project assign`, `project unassign`)
+### Project management feature (`project add`, `project delete`, `project list`, `project assign`, `project unassign`, `project find`)
 
-TaskForge supports project management using three commands:
+TaskForge supports project management through the parent command `project` with the following subcommands:
 - `project add`
 - `project delete`
 - `project list`
 - `project assign`
 - `project unassign`
+- `project find`
 
 #### Implementation overview
 
@@ -261,7 +262,8 @@ TaskForge supports project management using three commands:
     - `ListProjectCommand` shows all project entries in the list.
     - `AssignProjectCommand` assigns project from the global UniqueProjectList to a person
     - `UnassignProjectCommand` unassigns project from a person
-    - `AddressBookParser` routes `project add`, `project delete`, `project list`, `project assign`, and `project unassign` to their
+    - `FindProjectCommand` searches the global project list and displays projects whose titles contain the given keyword(s).
+    - `AddressBookParser` routes `project add`, `project delete`, `project list`, `project assign`, `project unassign` and `project find` to their
        corresponding command parsers/commands.
 
 3. **Storage layer**
@@ -361,6 +363,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user | view all contacts                      | see all the project members contacts                                       |
 | `* * *`  | user | view all projects                      | easily have an overview of all projects                                    |
 | `* * *`  | user | view all tasks assigned to the contact | see all the tasks assigned to a contact                                    |
+| `* * *`  | user | find projects by name                  | quickly locate relevant projects from the global project list              |
 
 *{More to be added}*
 
@@ -476,6 +479,35 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * Steps 1a1 - 1a2 are repeated until the command is correct.
 
    Use case ends.
+
+**Use case: UC05 Find projects by name**
+
+**Guarantees**
+
+1. Matching projects are displayed if at least one project title contains the given keyword.
+2. No project is modified during this operation.
+
+**MSS**
+
+1. User enters a command to find a project by keyword.
+2. TaskForge searches the global project list.
+3. TaskForge displays the matching project titles as text.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. User enters an invalid command format.
+    * 1a1. TaskForge shows an error message.
+    * 1a2. User enters the command again.
+    * Steps 1a1-1a2 are repeated until the input is valid.
+
+  Use case ends.
+
+* 2a. No project matches the keyword.
+    * 2a1. TaskForge displays a message that no matching projects were found.
+
+  Use case ends.
 
 *{More to be added}*
 
@@ -594,6 +626,24 @@ testers are expected to do more *exploratory* testing.
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
+
+### Finding a project
+
+1. Finding projects by name
+
+    1. Prerequisites: There are existing projects in the project list, e.g. `Alpha`, `Alpha Backend`, `Beta`.
+
+    1. Test case: `project find alpha`  
+       Expected: All projects whose titles contain `alpha` are shown in the result display.
+
+    1. Test case: `project find beta`  
+       Expected: The matching project is shown in the result display.
+
+    1. Test case: `project find gamma`  
+       Expected: A message is shown indicating that no matching projects were found.
+
+    1. Test case: `project find`  
+       Expected: Invalid command format message is shown.
 
 1. _{ more test cases …​ }_
 

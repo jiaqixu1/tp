@@ -180,6 +180,21 @@ Format: `project delete INDEX`
 Example:
 * `project list` followed by `project delete 2` deletes the 2nd project in the list.
 
+#### Finding projects by name : `project find`
+
+Finds projects whose names contain any of the given keywords.
+
+Format: `project find KEYWORD [MORE_KEYWORDS]`
+
+* The search is case-insensitive. e.g. `alpha` will match `Alpha`
+* The search is performed on project names only.
+* Projects matching at least one keyword will be shown (i.e. `OR` search).
+* The result is shown as plain text in the result display. It does not filter or change the person list.
+
+Examples:
+* `project find alpha`
+* `project find web mobile`
+
 #### Assigning a project : `project assign`
 
 Assigns a project to a person

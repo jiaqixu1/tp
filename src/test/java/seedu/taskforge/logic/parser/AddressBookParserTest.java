@@ -163,6 +163,7 @@ public class AddressBookParserTest {
         FindProjectCommand command = (FindProjectCommand) parser.parseCommand(
                 ProjectCommand.COMMAND_WORD + " " + FindProjectCommand.SUBCOMMAND_WORD + " alpha beta");
         assertEquals(new FindProjectCommand(Arrays.asList("alpha", "beta")), command);
+    }
 
     @Test
     public void parseCommand_assignTask() throws Exception {

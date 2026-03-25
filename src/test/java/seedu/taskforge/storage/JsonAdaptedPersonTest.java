@@ -95,7 +95,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidProjects_throwsIllegalValueException() {
         List<JsonAdaptedProject> invalidProjects = new ArrayList<>(VALID_PROJECTS);
-        invalidProjects.add(new JsonAdaptedProject(INVALID_PROJECT));
+        invalidProjects.add(new JsonAdaptedProject(INVALID_PROJECT, null));
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, invalidProjects,
                         VALID_TASKS);
@@ -105,7 +105,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidTasks_throwsIllegalValueException() {
         List<JsonAdaptedTask> invalidTasks = new ArrayList<>(VALID_TASKS);
-        invalidTasks.add(new JsonAdaptedTask(INVALID_TASK));
+        invalidTasks.add(new JsonAdaptedTask(INVALID_TASK, null));
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_PROJECTS,
                         invalidTasks);

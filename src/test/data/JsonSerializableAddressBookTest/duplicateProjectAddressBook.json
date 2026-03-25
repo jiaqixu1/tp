@@ -1,7 +1,7 @@
 {
   "projects": [
-    "alpha",
-    "alpha"
+    { "title": "alpha", "tasks": [] },
+    { "title": "alpha", "tasks": [] }
   ],
   "persons": []
 }

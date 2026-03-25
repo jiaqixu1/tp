@@ -1,196 +1,104 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_Y;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_Z;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.taskforge.testutil.Assert.assertThrows;
+import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
+
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.Messages;
-import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
-import seedu.taskforge.model.person.Person;
-import seedu.taskforge.testutil.AddTaskDescriptorBuilder;
-import seedu.taskforge.testutil.PersonBuilder;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.task.Task;
 
 public class AddTaskCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_addOneTaskUnfilteredList_success() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
+    public void execute_addOneTask_success() {
+        Project firstProject = model.getProjectList().get(INDEX_FIRST_PROJECT.getZeroBased());
+        Project editedProject = new Project(firstProject.title, Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR).build();
+        AddTaskCommand.AddTaskDescriptor descriptor = new AddTaskCommand.AddTaskDescriptor();
+        descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
+        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, descriptor);
 
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_FIX_ERROR).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(indexFirstPerson, descriptor);
-
-        String expectedMessage = String.format(AddTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AddTaskCommand.MESSAGE_SUCCESS, editedProject);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
+        expectedModel.setProject(firstProject, editedProject);
 
         assertCommandSuccess(addTaskCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_addOneTaskFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+    public void execute_addDuplicateTask_failure() {
+        Project firstProject = model.getProjectList().get(INDEX_FIRST_PROJECT.getZeroBased());
+        Project projectWithTask = new Project(firstProject.title, Arrays.asList(new Task(VALID_TASK_FIX_ERROR)));
+        model.setProject(firstProject, projectWithTask);
 
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR).build();
-
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_FIX_ERROR).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(AddTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(addTaskCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_addOneTaskDuplicateUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_REFACTOR).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(indexFirstPerson, descriptor);
+        AddTaskCommand.AddTaskDescriptor descriptor = new AddTaskCommand.AddTaskDescriptor();
+        descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_FIX_ERROR)));
+        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, descriptor);
 
         assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_DUPLICATE_TASK);
     }
 
     @Test
-    public void execute_addOneTaskDuplicateFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_REFACTOR).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_DUPLICATE_TASK);
-    }
-
-    @Test
-    public void execute_addMultipleTasksDuplicateUnfilteredList_exceptionThrown() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y,
-                VALID_TASK_IMPLEMENT_Z, VALID_TASK_REFACTOR).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(indexFirstPerson, descriptor);
-
-        assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_DUPLICATE_TASK);
-    }
-
-    @Test
-    public void execute_addMultipleTasksDuplicateFilteredList_exceptionThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y,
-                VALID_TASK_IMPLEMENT_Z, VALID_TASK_REFACTOR).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_DUPLICATE_TASK);
-    }
-
-    @Test
-    public void execute_addMultipleTasksUnfilteredList_success() {
-        Index indexFirstPerson = Index.fromOneBased(1);
-        Person firstPerson = model.getFilteredPersonList().get(indexFirstPerson.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
-
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(indexFirstPerson, descriptor);
-
-        String expectedMessage = String.format(AddTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(addTaskCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_addMultipleTasksFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
-
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
-        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PERSON, descriptor);
-
-        String expectedMessage = String.format(AddTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, editedPerson);
-
-        assertCommandSuccess(addTaskCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_noTaskSpecifiedUnfilteredList_errorThrown() {
-        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PERSON, new AddTaskDescriptor());
+    public void execute_noTaskSpecified_failure() {
+        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, new AddTaskCommand.AddTaskDescriptor());
         assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_NOT_EDITED);
     }
 
     @Test
-    public void execute_noTaskSpecifiedFilteredList_errorThrown() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AddTaskCommand addTaskCommand = new AddTaskCommand(INDEX_FIRST_PERSON, new AddTaskDescriptor());
-        assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_NOT_EDITED);
-    }
+    public void execute_invalidProjectIndex_failure() {
+        Index outOfBoundIndex = Index.fromOneBased(model.getProjectList().size() + 1);
 
-    @Test
-    public void execute_invalidPersonIndexUnfilteredList_failure() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_IMPLEMENT_X).build();
+        AddTaskCommand.AddTaskDescriptor descriptor = new AddTaskCommand.AddTaskDescriptor();
+        descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
         AddTaskCommand addTaskCommand = new AddTaskCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(addTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_INVALID_PROJECT_INDEX);
     }
 
-    /**
-     * Adds task to a person of a filtered list where index is larger than size of filtered list,
-     * but smaller than size of address book
-     */
     @Test
-    public void execute_invalidPersonIndexFilteredList_failure() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        Index outOfBoundIndex = INDEX_SECOND_PERSON;
-        // ensures that outOfBoundIndex is still in bounds of address book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
+    public void equals() {
+        AddTaskCommand.AddTaskDescriptor firstDescriptor = new AddTaskCommand.AddTaskDescriptor();
+        firstDescriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
 
-        AddTaskCommand addTaskCommand = new AddTaskCommand(outOfBoundIndex,
-                new AddTaskDescriptorBuilder().withTasks(VALID_TASK_IMPLEMENT_X).build());
+        AddTaskCommand.AddTaskDescriptor secondDescriptor = new AddTaskCommand.AddTaskDescriptor();
+        secondDescriptor.setTasks(Arrays.asList(new Task(VALID_TASK_FIX_ERROR)));
 
-        assertCommandFailure(addTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        AddTaskCommand firstCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        AddTaskCommand sameValuesCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, firstDescriptor);
+        AddTaskCommand differentCommand = new AddTaskCommand(INDEX_FIRST_PROJECT, secondDescriptor);
+
+        assertTrue(firstCommand.equals(firstCommand));
+        assertTrue(firstCommand.equals(sameValuesCommand));
+        assertFalse(firstCommand.equals(differentCommand));
+        assertFalse(firstCommand.equals(1));
+        assertFalse(firstCommand.equals((Object) null));
     }
 
+    @Test
+    public void addTaskDescriptor_behaviour() {
+        AddTaskCommand.AddTaskDescriptor descriptor = new AddTaskCommand.AddTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+
+        descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
+        assertTrue(descriptor.isTaskFieldEdited());
+        assertThrows(UnsupportedOperationException.class, () -> descriptor.getTasks().get().clear());
+    }
 }

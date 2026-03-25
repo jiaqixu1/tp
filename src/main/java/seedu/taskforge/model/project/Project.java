@@ -1,10 +1,16 @@
 package seedu.taskforge.model.project;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.commons.util.AppUtil.checkArgument;
+import static seedu.taskforge.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import seedu.taskforge.model.task.Task;
+import seedu.taskforge.model.task.UniqueTaskList;
 
 /**
  * Represents a Project in the address book.
@@ -16,6 +22,7 @@ public class Project {
     public static final String VALIDATION_REGEX = "^[a-zA-Z0-9 ]{1,64}$";
 
     public final String title;
+    private final UniqueTaskList tasks;
 
     /**
      * Constructs a {@code Project}.
@@ -23,13 +30,39 @@ public class Project {
      * @param title A valid project title.
      */
     public Project(String title) {
-        requireNonNull(title);
+        this(title, new ArrayList<>());
+    }
+
+    /**
+     * Constructs a {@code Project} with tasks.
+     *
+     * @param title A valid project title.
+     * @param tasks A list of tasks for this project.
+     */
+    public Project(String title, List<Task> tasks) {
+        requireAllNonNull(title, tasks);
         checkArgument(isValidProjectTitle(title), MESSAGE_CONSTRAINTS);
         this.title = capitalize(title);
+        this.tasks = new UniqueTaskList();
+        this.tasks.setTasks(tasks);
     }
 
     public static boolean isValidProjectTitle(String test) {
         return test.matches(VALIDATION_REGEX);
+    }
+
+    /**
+     * Returns the tasks for this project.
+     */
+    public List<Task> getTasks() {
+        return new ArrayList<>(tasks.asUnmodifiableObservableList());
+    }
+
+    /**
+     * Returns the UniqueTaskList for this project.
+     */
+    public UniqueTaskList getUniqueTaskList() {
+        return tasks;
     }
 
     @Override
@@ -49,12 +82,13 @@ public class Project {
 
     @Override
     public int hashCode() {
-        return title.hashCode();
+        return Objects.hash(title);
     }
 
     /**
      * Format state as text for viewing.
      */
+    @Override
     public String toString() {
         return title;
     }
@@ -64,5 +98,4 @@ public class Project {
                 .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
                 .collect(Collectors.joining(" "));
     }
-
 }

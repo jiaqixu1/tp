@@ -1,8 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,94 +10,73 @@ import java.util.Optional;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.CollectionUtil;
-import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
-import seedu.taskforge.model.person.Email;
-import seedu.taskforge.model.person.Name;
-import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
+import seedu.taskforge.model.task.exceptions.DuplicateTaskException;
 
 /**
- * Adds task(s) to an existing person in the address book.
+ * Adds a task to the task list of an existing project in the address book.
  */
 public class AddTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "add";
 
-    public static final String MESSAGE_SUCCESS = "New task added: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task added to project: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_NAME + " TASK_NAME";
-    public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
+            + SUBCOMMAND_WORD + " PROJECT_INDEX -n TASK_NAME";
+    public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this project!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to add must be provided";
+    public static final String MESSAGE_INVALID_PROJECT_INDEX = "The project index provided is invalid.";
 
-    private final Index index;
+    private final Index projectIndex;
     private final AddTaskDescriptor addTaskDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
-     * @param addTaskDescriptor details to edit the person with
+     * Creates an AddTaskCommand to add a task to a project.
      */
-    public AddTaskCommand(Index index, AddTaskDescriptor addTaskDescriptor) {
-        requireNonNull(index);
+    public AddTaskCommand(Index projectIndex, AddTaskDescriptor addTaskDescriptor) {
+        requireNonNull(projectIndex);
         requireNonNull(addTaskDescriptor);
 
-        this.index = index;
+        this.projectIndex = projectIndex;
         this.addTaskDescriptor = new AddTaskDescriptor(addTaskDescriptor);
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
+        List<Project> projectList = model.getProjectList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        if (projectIndex.getZeroBased() >= projectList.size()) {
+            throw new CommandException(MESSAGE_INVALID_PROJECT_INDEX);
         }
 
-        Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, addTaskDescriptor);
+        Project projectToEdit = projectList.get(projectIndex.getZeroBased());
+        Project editedProject = createEditedProject(projectToEdit, addTaskDescriptor);
 
-        model.setPerson(personToEdit, editedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
+        model.setProject(projectToEdit, editedProject);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, editedProject));
     }
 
-    /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
-     */
-    private static Person createEditedPerson(
-            Person personToEdit,
-            AddTaskDescriptor addTaskDescriptor) throws CommandException {
-        assert personToEdit != null;
+    private static Project createEditedProject(Project projectToEdit,
+                                               AddTaskDescriptor addTaskDescriptor) throws CommandException {
+        assert projectToEdit != null;
 
-        Name name = personToEdit.getName();
-        Phone phone = personToEdit.getPhone();
-        Email email = personToEdit.getEmail();
-        List<Project> projectList = personToEdit.getProjects();
+        Project editedProject = new Project(projectToEdit.title, projectToEdit.getTasks());
+        List<Task> tasksToAdd = addTaskDescriptor.getTasks()
+                .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
 
-        List<Task> newTasks = new ArrayList<>(personToEdit.getTasks());
-        newTasks.addAll(addTaskDescriptor.getTasks().orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED)));
-        checkUniqueTasks(newTasks);
-
-        return new Person(name, phone, email, projectList, newTasks);
-    }
-
-    /**
-     * Checks and returns a {@code List<Task>} if there is no duplicates.
-     * A {@code CommandException} is thrown if there are duplicates.
-     *
-     */
-    public static List<Task> checkUniqueTasks(List<Task> tasks) throws CommandException {
-        long distinctCount = tasks.stream().distinct().count();
-        if (distinctCount != tasks.size()) {
+        try {
+            for (Task task : tasksToAdd) {
+                editedProject.getUniqueTaskList().add(task);
+            }
+        } catch (DuplicateTaskException dte) {
             throw new CommandException(MESSAGE_DUPLICATE_TASK);
         }
-        return tasks;
+
+        return editedProject;
     }
 
     @Override
@@ -108,18 +85,17 @@ public class AddTaskCommand extends TaskCommand {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof AddTaskCommand)) {
             return false;
         }
 
         AddTaskCommand otherAddTaskCommand = (AddTaskCommand) other;
-        return index.equals(otherAddTaskCommand.index)
+        return projectIndex.equals(otherAddTaskCommand.projectIndex)
                 && addTaskDescriptor.equals(otherAddTaskCommand.addTaskDescriptor);
     }
 
     /**
-     * Stores the tasks to add to the person.
+     * Stores the details of the task that is to be added to the project.
      */
     public static class AddTaskDescriptor {
         private List<Task> tasks;
@@ -143,7 +119,7 @@ public class AddTaskCommand extends TaskCommand {
         }
 
         /**
-         * Returns an unmodifiable task set, which throws {@code UnsupportedOperationException}
+         * Returns an unmodifiable task list, which throws {@code UnsupportedOperationException}
          * if modification is attempted.
          * Returns {@code Optional#empty()} if {@code tasks} is null.
          */
@@ -164,7 +140,6 @@ public class AddTaskCommand extends TaskCommand {
                 return true;
             }
 
-            // instanceof handles nulls
             if (!(other instanceof AddTaskDescriptor)) {
                 return false;
             }

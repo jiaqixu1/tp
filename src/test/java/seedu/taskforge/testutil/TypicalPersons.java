@@ -23,6 +23,7 @@ import java.util.Set;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.task.Task;
 
 /**
  * A utility class containing a list of {@code Person} objects to be used in tests.
@@ -87,8 +88,16 @@ public class TypicalPersons {
         uniqueProjects.add(new Project(VALID_PROJECT_X));
         uniqueProjects.add(new Project(VALID_PROJECT_Y));
         uniqueProjects.add(new Project(VALID_PROJECT_Z));
+
         for (Project project : uniqueProjects) {
-            ab.addProject(project);
+            if (project.title.equalsIgnoreCase(VALID_PROJECT_ALPHA)
+                    || project.title.equalsIgnoreCase(VALID_PROJECT_BETA)) {
+                ab.addProject(new Project(project.title, Arrays.asList(
+                        new Task(VALID_TASK_REFACTOR),
+                        new Task(VALID_TASK_FIX_ERROR))));
+            } else {
+                ab.addProject(project);
+            }
         }
         for (Person person : getTypicalPersons()) {
             ab.addPerson(person);

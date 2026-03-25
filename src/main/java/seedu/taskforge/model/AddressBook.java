@@ -11,6 +11,7 @@ import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.UniquePersonList;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.project.UniqueProjectList;
+import seedu.taskforge.model.task.Task;
 
 /**
  * Wraps all data at the address-book level
@@ -136,7 +137,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void setProject(Project target, Project editedProject) {
         requireNonNull(editedProject);
 
+        List<Task> removedTasks = new ArrayList<>(target.getTasks());
+        removedTasks.removeAll(editedProject.getTasks());
         projects.setProject(target, editedProject);
+        if (!removedTasks.isEmpty()) {
+            cascadeRemoveDeletedProjectTasksFromPersons(editedProject, removedTasks);
+        }
     }
 
     /**
@@ -161,9 +167,33 @@ public class AddressBook implements ReadOnlyAddressBook {
 
             List<Project> updatedProjects = new ArrayList<>(person.getProjects());
             updatedProjects.removeIf(projectToRemove::equals);
+            List<Task> updatedTasks = new ArrayList<>(person.getTasks());
+            updatedTasks.removeIf(task -> task.belongsToProject(projectToRemove.title));
 
             Person updatedPerson = new Person(person.getName(), person.getPhone(), person.getEmail(),
-                    updatedProjects, person.getTasks());
+                    updatedProjects, updatedTasks);
+            persons.setPerson(person, updatedPerson);
+        }
+    }
+
+    private void cascadeRemoveDeletedProjectTasksFromPersons(Project project, List<Task> deletedProjectTasks) {
+        List<Person> allPersons = new ArrayList<>(persons.asUnmodifiableObservableList());
+        for (Person person : allPersons) {
+            if (!person.getProjects().contains(project)) {
+                continue;
+            }
+
+            List<Task> updatedTasks = new ArrayList<>(person.getTasks());
+            boolean changed = updatedTasks.removeIf(task ->
+                    task.belongsToProject(project.title) && deletedProjectTasks.stream()
+                            .anyMatch(deletedTask -> deletedTask.description.equals(task.description)));
+
+            if (!changed) {
+                continue;
+            }
+
+            Person updatedPerson = new Person(person.getName(), person.getPhone(), person.getEmail(),
+                    person.getProjects(), updatedTasks);
             persons.setPerson(person, updatedPerson);
         }
     }

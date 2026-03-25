@@ -35,20 +35,24 @@ import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand.UnassignProjectDescriptor;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand.AssignTaskDescriptor;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand.DeleteTaskDescriptor;
 import seedu.taskforge.logic.commands.task.TaskCommand;
+import seedu.taskforge.logic.commands.task.UnassignTaskCommand;
+import seedu.taskforge.logic.commands.task.UnassignTaskCommand.UnassignTaskDescriptor;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.person.NameContainsKeywordsPredicate;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.testutil.AddTaskDescriptorBuilder;
 import seedu.taskforge.testutil.AssignProjectDescriptorBuilder;
-import seedu.taskforge.testutil.DeleteTaskDescriptorBuilder;
+import seedu.taskforge.testutil.AssignTaskDescriptorBuilder;
 import seedu.taskforge.testutil.EditPersonDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 import seedu.taskforge.testutil.PersonUtil;
 import seedu.taskforge.testutil.UnassignProjectDescriptorBuilder;
+import seedu.taskforge.testutil.UnassignTaskDescriptorBuilder;
 
 public class AddressBookParserTest {
 
@@ -152,21 +156,41 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_assignTask() throws Exception {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTasks("Write report").build();
+        AssignTaskCommand command = (AssignTaskCommand) parser.parseCommand(AssignTaskCommand.COMMAND_WORD
+                + " " + AssignTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
+                + " " + PersonUtil.getAssignTaskDescriptorDetails(descriptor));
+        assertEquals(new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
     public void parseCommand_addTask() throws Exception {
-        AddTaskDescriptor descriptor = new AddTaskDescriptorBuilder().withTasks("Write report").build();
+        AddTaskDescriptor descriptor = new AddTaskDescriptor();
+        descriptor.setTasks(Arrays.asList(ParserUtil.parseTask("Write report")));
+
         AddTaskCommand command = (AddTaskCommand) parser.parseCommand(AddTaskCommand.COMMAND_WORD
-                + " " + AddTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
-                + " " + PersonUtil.getAddTaskDescriptorDetails(descriptor));
-        assertEquals(new AddTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
+                + " " + AddTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased() + " -n Write report");
+        assertEquals(new AddTaskCommand(INDEX_FIRST_PROJECT, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_unassignTask() throws Exception {
+        UnassignTaskDescriptor descriptor = new UnassignTaskDescriptorBuilder(INDEX_FIRST_TASK).build();
+        UnassignTaskCommand command = (UnassignTaskCommand) parser.parseCommand(UnassignTaskCommand.COMMAND_WORD
+                + " " + UnassignTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
+                + PersonUtil.getUnassignTaskDescriptorDetails(descriptor));
+        assertEquals(new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
     @Test
     public void parseCommand_deleteTask() throws Exception {
-        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptorBuilder(INDEX_FIRST_TASK).build();
+        DeleteTaskDescriptor descriptor = new DeleteTaskDescriptor();
+        descriptor.setTaskIndexes(Arrays.asList(INDEX_FIRST_TASK));
+
         DeleteTaskCommand command = (DeleteTaskCommand) parser.parseCommand(DeleteTaskCommand.COMMAND_WORD
-                + " " + DeleteTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
-                + PersonUtil.getDeleteTaskDescriptorDetails(descriptor));
-        assertEquals(new DeleteTaskCommand(INDEX_FIRST_PERSON, descriptor), command);
+                + " " + DeleteTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased() + " -i 1");
+        assertEquals(new DeleteTaskCommand(INDEX_FIRST_PROJECT, descriptor), command);
     }
 
     @Test

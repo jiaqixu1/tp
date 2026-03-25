@@ -241,12 +241,12 @@ _{more aspects and alternatives to be added}_
 
 ### Project management feature (`project add`, `project delete`, `project list`, `project assign`, `project unassign`)
 
-TaskForge supports project management using three commands:
-- `project add`
-- `project delete`
+TaskForge supports project management using five commands:
+- `project add PROJECT_NAME`
+- `project delete PROJECT_INDEX`
 - `project list`
-- `project assign`
-- `project unassign`
+- `project assign INDEX -pn PROJECT_NAME`
+- `project unassign INDEX -pn PROJECT_NAME`
 
 #### Implementation overview
 
@@ -257,66 +257,152 @@ TaskForge supports project management using three commands:
 
 2. **Logic layer**
     - `AddProjectCommand` adds a new project entry to the global UniqueProjectList.
-    - `DeleteProjectCommand` removes a project entry from the list by the index.
+    - `DeleteProjectCommand` removes project(s) entry from the list by the index and cascades deletion from all persons.
     - `ListProjectCommand` shows all project entries in the list.
-    - `AssignProjectCommand` assigns project from the global UniqueProjectList to a person
-    - `UnassignProjectCommand` unassigns project from a person
+    - `AssignProjectCommand` assigns project(s) from the global UniqueProjectList to a person.
+    - `UnassignProjectCommand` unassigns project(s) from a person.
     - `AddressBookParser` routes `project add`, `project delete`, `project list`, `project assign`, and `project unassign` to their
        corresponding command parsers/commands.
 
-3. **Storage layer**
+3. **Parser flow**
+   - `AddressBookParser#parseCommand` routes top-level `project` input to `AddressBookParser#handleProject`.
+   - `handleProject` extracts the project subcommand and dispatches as follows:
+      - `add` -> `AddProjectCommandParser`
+      - `delete` -> `DeleteProjectCommandParser`
+      - `list` -> `ListProjectCommandParser`
+      - `assign` -> `AssignProjectCommandParser`
+      - `unassign` -> `UnassignProjectCommandParser`
+   - Unknown or missing project subcommands throw a `ParseException` with `ProjectCommand.MESSAGE_USAGE`.
+
+4. **Storage layer**
     - `JsonSerializableAddressBook` persists project entries in the `projects` JSON array.
     - During deserialization, projects are restored into the model so project entries persist across application restarts.
 
-#### Validation behavior in commands related to person class
+#### Validation and cascading behavior
 
-When a user adds or edits a person including changing project, each value must be checked to see whether they are already exist in the global project list:
+**Project addition (`project add`)**:
+- `AddProjectCommand` validates the project name constraints before adding.
+- Projects must be globally unique; attempting to add a duplicate project fails with `MESSAGE_DUPLICATE_PROJECT`.
+
+**Project deletion (`project delete`)**:
+- `DeleteProjectCommand` removes project(s) from the global UniqueProjectList.
+- `AddressBook#cascadeRemoveProjectFromPersons()` automatically removes the all projects assignment that has been assigned to the contact
+- All tasks within that project is also removed through the `cascadeRemoveDeletedProjectTasksFromPersons()` function.
+
+**Project listing (`project list`)**:
+- `ListProjectCommand` retrieves and displays all projects in the global project list.
+- No validation is required; the command succeeds regardless of project count.
+
+**Project assignment to person (`project assign`)**:
+- `AssignProjectCommand` validates whether or not project(s) exists in the project list first.
+- Uses `model.hasProject(project)` to verify project existence.
+- Rejects duplicate assignments via `MESSAGE_DUPLICATE_PROJECT`.
+
+**Project unassignment from person (`project unassign`)**:
+- `UnassignProjectCommand` validates whether or not project(s) exists in the person's assigned projects before unassignment.
+- If a person is unassigned from a project, all tasks assigned to that person that belong to that project are automatically removed.
+
+#### Input parsing details
+
+- `AddProjectCommandParser` parses the preamble as the new project `NAME`.
+- `DeleteProjectCommandParser` parses the preamble as the target project `INDEX`.
+- `ListProjectCommandParser` takes no arguments; the entire input after `list` is discarded.
+- `AssignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project names from repeated `-pn` prefixes.
+- `UnassignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project names from repeated `-pn` prefixes.
+- If no project payload is provided (e.g., `project assign 1` or `project unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+- Similarly, if an empty project name is provided (e.g., `project assign 1 -pn` or `project unassign 1 -pn`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+
+#### Execution behavior and validation in person-related commands
+
+When a user adds or edits a person including changing project assignments, each project value must be checked to see whether it already exists in the global project list:
 
 - `AddCommand` validates each project via `model.hasProject(project)` before adding the person.
 - `EditCommand` validates each edited project via `model.hasProject(project)` before committing changes.
-- If any tag is missing, command execution fails with `MESSAGE_PROJECT_NOT_FOUND`.
+- If any project is missing, command execution fails with `MESSAGE_PROJECT_NOT_FOUND`.
 
 This ensures a person can only be assigned to valid existing projects.
 
-### Task management feature (`task add`, `task delete`,`task view`)
+### Task management feature (`task add`, `task delete`, `task assign`, `task unassign`, `task view`)
 
-TaskForge supports task management through the parent command `task` with two subcommands:
-
-- `task add INDEX -n TASK_NAME`
-- `task delete INDEX -i TASK_INDEX`
+TaskForge supports task management using five commands:
+- `task add PROJECT_INDEX -n TASK_NAME`
+- `task delete PROJECT_INDEX -i TASK_INDEX`
+- `task assign INDEX -n TASK_NAME`
+- `task unassign INDEX -i TASK_INDEX`
 - `task view INDEX`
 
 #### Implementation overview
 
-1. **Command structure**
-   - `TaskCommand` is the abstract base for task-related commands and defines the top-level command word `task`.
-   - `AddTaskCommand` handles adding one or more tasks to a person.
-   - `DeleteTaskCommand` handles deleting one or more tasks from a person by local task index.
-   - `ViewTasksCommand` handles viewing all tasks assigned to a person.
-2. **Parser flow**
+1. **Model layer**
+   - `UniqueTaskList` stores task entries within each project.
+   - `Project` exposes task operations through methods such as `hasTask`, `addTask`, `removeTask`, and `getTasks`.
+   - `AddressBook` provides cascade deletion from all task assignments when a task is deleted from a project.
+
+2. **Logic layer**
+    - `AddTaskCommand` adds new task(s) to a project in the global project list.
+    - `DeleteTaskCommand` removes task(s) from a project by project index and task index.
+    - `AssignTaskCommand` assigns existing task(s) to a person.
+    - `UnassignTaskCommand` unassigns task(s) from a person.
+    - `ViewTasksCommand` displays all tasks assigned to a person.
+    - `AddressBookParser` routes `task add`, `task delete`, `task assign`, `task unassign`, and `task view` to their corresponding command parsers/commands.
+
+3. **Parser flow**
    - `AddressBookParser#parseCommand` routes top-level `task` input to `AddressBookParser#handleTask`.
    - `handleTask` extracts the task subcommand and dispatches as follows:
       - `add` -> `AddTaskCommandParser`
       - `delete` -> `DeleteTaskCommandParser`
+      - `assign` -> `AssignTaskCommandParser`
+      - `unassign` -> `UnassignTaskCommandParser`
       - `view` -> `ViewTasksCommandParser`
    - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
 
-3. **Input parsing details**
-   - `AddTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
-   - `DeleteTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
-   - `ViewTasksCommandParser` parses the preamble as the target person `INDEX`.
-   - If no task payload is provided (e.g., `task add 1` or `task delete 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
-   - Similarly, if an empty task name or task index is provided (e.g., `task add 1 -n` or `task delete 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+4. **Storage layer**
+    - `JsonAdaptedTask` handles serialization/deserialization of task objects.
+    - `JsonAdaptedProject` includes a list of `JsonAdaptedTask` entries that are persisted in the JSON file.
+    - During deserialization, tasks are restored into projects so task entries persist across application restarts.
 
-4. **Execution behavior and validation**
-    - All task commands resolve the target person from `model.getFilteredPersonList()` using the supplied person `INDEX`.
-    - If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
-    - `AddTaskCommand` appends tasks to the person's current task list and rejects duplicates via `MESSAGE_DUPLICATE_TASK`.
-    - `DeleteTaskCommand` resolves each local task index from the selected person's task list and throws
-      `MESSAGE_INDEX_OUT_OF_BOUND` if any task index is invalid.
-    - `ViewTasksCommand` retrieves the selected person's task list and displays all tasks assigned to that person in the result box.
-    - If the selected person has no assigned tasks, `ViewTasksCommand` returns a message indicating that the person has no tasks.
-    - On success, `AddTaskCommand` and `DeleteTaskCommand` update the person in the model and refresh the filtered person list, while `ViewTasksCommand` only returns the viewing result without modifying model data.
+#### Validation and cascading behavior
+
+**Task addition (`task add`)**:
+- `AddTaskCommand` validates the project index and task name constraints before adding.
+- Tasks are stored at the project level, maintaining project-specific task uniqueness.
+- Rejects duplicate tasks via `MESSAGE_DUPLICATE_TASK`.
+
+**Task deletion from project (`task delete`)**:
+- `DeleteTaskCommand` removes task(s) from a project by project index and task index.
+- `AddressBook#cascadeRemoveDeletedProjectTasksFromPersons()` automatically removes the deleted task from all persons who have it assigned.
+
+**Task assignment to person (`task assign`)**:
+- `AssignTaskCommand` validates whether or not task(s) exists in the person's assigned projects before assignment.
+- Uses `resolveTasksWithProjectTracking()` to track which project each task belongs to.
+- Rejects duplicate assignments via `MESSAGE_DUPLICATE_TASK`.
+
+**Task viewing (`task view`)**:
+- `ViewTasksCommand` retrieves the selected person's task list and displays all tasks assigned to that person.
+- No validation is required; the command only retrieves and displays information.
+
+**Task unassignment from person (`task unassign`)**:
+- `UnassignTaskCommand` removes task(s) from a person by task index.
+- Validates whether or not the task exist in the person's assigned projects before unassignment.
+- Resolves each local task index from the selected person's task list and unassigns them, throwing `MESSAGE_INDEX_OUT_OF_BOUND` if any task index is invalid.
+
+#### Input parsing details
+
+- `AddTaskCommandParser` parses the preamble as the target project `INDEX` and parses task names from repeated `-n` prefixes.
+- `DeleteTaskCommandParser` parses the preamble as the target project `INDEX` and parses task indexes from repeated `-i` prefixes.
+- `AssignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
+- `UnassignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
+- `ViewTasksCommandParser` parses the preamble as the target person `INDEX`.
+- If no task payload is provided (e.g., `task assign 1` or `task unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+- Similarly, if an empty task name or task index is provided (e.g., `task assign 1 -n` or `task unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+
+#### Execution behavior and validation
+
+- All task commands (except `task add` and `task delete`) resolve the target person from `model.getFilteredPersonList()` using the supplied person `INDEX`.
+- If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
+- `AddTaskCommand` and `DeleteTaskCommand` resolve the target project from the list and validate the project index before executing.
+- On success, `AddTaskCommand`, `DeleteTaskCommand`, `AssignTaskCommand`, and `UnassignTaskCommand` update the model and refresh the filtered person list.
+- `ViewTasksCommand` only retrieves and displays information without modifying model data.
 
 ### \[Proposed\] Data archiving
 

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.commands.task.AddTaskCommand;
-import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand.AssignTaskDescriptor;
 import seedu.taskforge.logic.parser.ArgumentMultimap;
 import seedu.taskforge.logic.parser.ArgumentTokenizer;
 import seedu.taskforge.logic.parser.Parser;
@@ -20,12 +20,16 @@ import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.task.Task;
 
 /**
- * Parses input arguments and creates a new AddTaskCommand object.
+ * Parses input arguments and creates a new AssignTaskCommand object
  */
-public class AddTaskCommandParser implements Parser<AddTaskCommand> {
+public class AssignTaskCommandParser implements Parser<AssignTaskCommand> {
 
-    @Override
-    public AddTaskCommand parse(String args) throws ParseException {
+    /**
+     * Parses the given {@code String} of arguments in the context of the AssignTaskCommand
+     * and returns an AssignTaskCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    public AssignTaskCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME);
@@ -35,17 +39,19 @@ public class AddTaskCommandParser implements Parser<AddTaskCommand> {
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddTaskCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, AssignTaskCommand.MESSAGE_USAGE), pe);
         }
 
-        AddTaskDescriptor addTaskDescriptor = new AddTaskDescriptor();
-        parseTasksForAdd(argMultimap.getAllValues(PREFIX_NAME)).ifPresent(addTaskDescriptor::setTasks);
+        AssignTaskDescriptor assignTaskDescriptor = new AssignTaskDescriptor();
 
-        if (!addTaskDescriptor.isTaskFieldEdited()) {
-            throw new ParseException(AddTaskCommand.MESSAGE_NOT_EDITED);
+        parseTasksForAdd(argMultimap.getAllValues(PREFIX_NAME)).ifPresent(assignTaskDescriptor::setTasks);
+
+        if (!assignTaskDescriptor.isTaskFieldEdited()) {
+            throw new ParseException(AssignTaskCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new AddTaskCommand(index, addTaskDescriptor);
+        return new AssignTaskCommand(index, assignTaskDescriptor);
     }
 
     /**

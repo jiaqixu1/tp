@@ -1,7 +1,7 @@
 package seedu.taskforge.storage;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.taskforge.commons.exceptions.IllegalValueException;
 import seedu.taskforge.model.task.Task;
@@ -12,13 +12,16 @@ import seedu.taskforge.model.task.Task;
 class JsonAdaptedTask {
 
     private final String description;
+    private final String projectTitle;
 
     /**
      * Constructs a {@code JsonAdaptedTask} with the given {@code description}.
      */
     @JsonCreator
-    public JsonAdaptedTask(String description) {
+    public JsonAdaptedTask(@JsonProperty("description") String description,
+                           @JsonProperty("projectTitle") String projectTitle) {
         this.description = description;
+        this.projectTitle = projectTitle;
     }
 
     /**
@@ -26,11 +29,15 @@ class JsonAdaptedTask {
      */
     public JsonAdaptedTask(Task source) {
         description = source.description;
+        projectTitle = source.getProjectTitle();
     }
 
-    @JsonValue
     public String getDescription() {
         return description;
+    }
+
+    public String getProjectTitle() {
+        return projectTitle;
     }
 
     /**
@@ -42,7 +49,7 @@ class JsonAdaptedTask {
         if (!Task.isValidTaskDescription(description)) {
             throw new IllegalValueException(Task.MESSAGE_CONSTRAINTS);
         }
-        return new Task(description);
+        return new Task(description, projectTitle);
     }
 
 }

@@ -218,11 +218,11 @@ Examples:
 
 #### Adding a task to a project : `task add`
 
-Adds a new task to a project in the project list.
+Adds task(s) to a project in the project list.
 
 Format: `task add PROJECT_INDEX -n TASK_NAME`
 
-* Adds a new task with the specified `TASK_NAME` to the project at the specified `PROJECT_INDEX`.
+* Adds new task(s) with the specified `TASK_NAME` to the project at the specified `PROJECT_INDEX`.
 * The project index refers to the index number shown by `project list`.
 * The project index **must be a positive integer** `1, 2, 3, ...`
 * Task name must be alphanumeric (only letters, numbers and spaces), between 1 to 64 characters.

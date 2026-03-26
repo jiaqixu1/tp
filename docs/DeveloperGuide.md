@@ -245,8 +245,8 @@ TaskForge supports project management through the parent command `project` with 
 - `project add PROJECT_NAME`
 - `project delete PROJECT_INDEX`
 - `project list`
-- `project assign INDEX -pn PROJECT_NAME`
-- `project unassign INDEX -pn PROJECT_NAME`
+- `project assign INDEX -n PROJECT_NAME`
+- `project unassign INDEX -i PROJECT_INDEX`
 - `project find [KEYWORD]`
 
 
@@ -318,11 +318,11 @@ TaskForge supports project management through the parent command `project` with 
 - `AddProjectCommandParser` parses the preamble as the new project `NAME`.
 - `DeleteProjectCommandParser` parses the preamble as the target project `INDEX`.
 - `ListProjectCommandParser` takes no arguments; the entire input after `list` is discarded.
-- `AssignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project names from repeated `-pn` prefixes.
-- `UnassignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project names from repeated `-pn` prefixes.
+- `AssignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project names from repeated `-n` prefixes.
+- `UnassignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project indexes from repeated `-i` prefixes.
 - `FindProjectCommandParser` parses the input into one or more keywords.
 - If no project payload is provided (e.g., `project assign 1` or `project unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
-- Similarly, if an empty project name is provided (e.g., `project assign 1 -pn` or `project unassign 1 -pn`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+- Similarly, if an empty project name is provided (e.g., `project assign 1 -n` or `project unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 
 #### Execution behavior and validation in person-related commands
 

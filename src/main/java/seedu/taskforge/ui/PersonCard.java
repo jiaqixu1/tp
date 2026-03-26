@@ -64,7 +64,8 @@ public class PersonCard extends UiPart<Region> {
                 ));
         IntStream.range(0, taskList.size())
                 .forEach(i -> tasks.getChildren().add(
-                        new Label((i + 1) + ". " + taskList.get(i).description)
+                        new Label((i + 1) + ". " + (taskList.get(i).getStatus() ? "[X] " : "[ ] ")
+                                + taskList.get(i).description)
                 ));
     }
 }

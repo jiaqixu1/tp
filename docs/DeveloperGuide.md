@@ -334,15 +334,17 @@ When a user adds or edits a person including changing project assignments, each 
 
 This ensures a person can only be assigned to valid existing projects.
 
-### Task management feature (`task add`, `task delete`, `task list`, `task assign`, `task unassign`, `task view`)
+### Task management feature (`task add`, `task delete`, `task list`, `task assign`, `task unassign`, `task view`, `task mark`, `task unmark`)
 
-TaskForge supports task management using six commands:
+TaskForge supports task management using eight commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
 - `task delete PROJECT_INDEX -i TASK_INDEX`
 - `task list -n PROJECT_NAME`
 - `task assign INDEX -n TASK_NAME`
 - `task unassign INDEX -i TASK_INDEX`
 - `task view INDEX`
+- `task mark PERSON_INDEX TASK_INDEX`
+- `task unmark PERSON_INDEX TASK_INDEX`
 
 #### Implementation overview
 
@@ -350,6 +352,7 @@ TaskForge supports task management using six commands:
    - `UniqueTaskList` stores task entries within each project.
    - `Project` exposes task operations through methods such as `hasTask`, `addTask`, `removeTask`, and `getTasks`.
    - `AddressBook` provides cascade deletion from all task assignments when a task is deleted from a project.
+   - `Task` includes an `isDone` boolean field to track the completion status of a task. It provides `getStatus()`, `setDone()`, and `setNotDone()` methods.
 
 2. **Logic layer**
     - `AddTaskCommand` adds new task(s) to a project in the global project list.
@@ -358,7 +361,9 @@ TaskForge supports task management using six commands:
     - `AssignTaskCommand` assigns existing task(s) to a person.
     - `UnassignTaskCommand` unassigns task(s) from a person.
     - `ViewTasksCommand` displays all tasks assigned to a person.
-   - `AddressBookParser` routes `task add`, `task delete`, `task list`, `task assign`, `task unassign`, and `task view` to their corresponding command parsers/commands.
+    - `MarkTaskCommand` marks a task as done for a specific person.
+    - `UnmarkTaskCommand` marks a task as not done for a specific person.
+   - `AddressBookParser` routes task subcommands to their corresponding command parsers/commands.
 
 3. **Parser flow**
    - `AddressBookParser#parseCommand` routes top-level `task` input to `AddressBookParser#handleTask`.
@@ -369,11 +374,13 @@ TaskForge supports task management using six commands:
       - `assign` -> `AssignTaskCommandParser`
       - `unassign` -> `UnassignTaskCommandParser`
       - `view` -> `ViewTasksCommandParser`
+      - `mark` -> `MarkTaskCommandParser`
+      - `unmark` -> `UnmarkTaskCommandParser`
    - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
 
 4. **Storage layer**
     - `JsonAdaptedTask` handles serialization/deserialization of task objects.
-    - `JsonAdaptedProject` includes a list of `JsonAdaptedTask` entries that are persisted in the JSON file.
+    - `JsonAdaptedProject` and `JsonAdaptedPerson` includes a list of `JsonAdaptedTask` entries that are persisted in the JSON file.
     - During deserialization, tasks are restored into projects so task entries persist across application restarts.
 
 #### Validation and cascading behavior
@@ -405,6 +412,18 @@ TaskForge supports task management using six commands:
 - Validates whether or not the task exist in the person's assigned projects before unassignment.
 - Resolves each local task index from the selected person's task list and unassigns them, throwing `MESSAGE_INDEX_OUT_OF_BOUND` if any task index is invalid.
 
+**Task marking (`task mark`)**:
+- `MarkTaskCommand` marks a task as done for a person by task index.
+- Validates person index and task index.
+- Throws `MESSAGE_TASK_ALREADY_DONE` if the task is already marked as done.
+- Creates a new `Person` with the updated task list and replaces the old person in the model.
+
+**Task unmarking (`task unmark`)**:
+- `UnmarkTaskCommand` marks a task as not done for a person by task index.
+- Validates person index and task index.
+- Throws `MESSAGE_TASK_ALREADY_NOT_DONE` if the task is already marked as not done.
+- Creates a new `Person` with the updated task list and replaces the old person in the model.
+
 #### Input parsing details
 
 - `AddTaskCommandParser` parses the preamble as the target project `INDEX` and parses task names from repeated `-n` prefixes.
@@ -413,6 +432,7 @@ TaskForge supports task management using six commands:
 - `AssignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
 - `UnassignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
 - `ViewTasksCommandParser` parses the preamble as the target person `INDEX`.
+- `MarkTaskCommandParser` and `UnmarkTaskCommandParser` parse the preamble as the target person `INDEX` and target task `INDEX`.
 - If no task payload is provided (e.g., `task assign 1` or `task unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 - Similarly, if an empty task name or task index is provided (e.g., `task assign 1 -n` or `task unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 

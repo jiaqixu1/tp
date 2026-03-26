@@ -73,6 +73,23 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Parses the {@code tasks} into a {@code List<Task>} and append it to the {@code Person} that we are building.
+     */
+    public PersonBuilder appendTasks(String ... tasks) {
+        this.tasks.addAll(SampleDataUtil.getTaskList(tasks));
+        return this;
+    }
+
+    /**
+     * Parses the {@code tasks} into a {@code List<Task>}, set each task as done,
+     * then append it to the {@code Person} that we are building.
+     */
+    public PersonBuilder appendDoneTasks(String ... tasks) {
+        this.tasks.addAll(SampleDataUtil.getTaskList(tasks).stream().peek(Task::setDone).toList());
+        return this;
+    }
+
 
 
     /**

@@ -2,6 +2,7 @@ package seedu.taskforge.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalPersons.ALICE;
 import static seedu.taskforge.testutil.TypicalPersons.HOON;
@@ -11,6 +12,8 @@ import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -18,6 +21,8 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.taskforge.commons.exceptions.DataLoadingException;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.ReadOnlyAddressBook;
+import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.task.Task;
 
 public class JsonAddressBookStorageTest {
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonAddressBookStorageTest");
@@ -106,5 +111,29 @@ public class JsonAddressBookStorageTest {
     @Test
     public void saveAddressBook_nullFilePath_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> saveAddressBook(new AddressBook(), null));
+    }
+
+    @Test
+    public void readAndSaveAddressBook_markedTaskStatus_persists() throws Exception {
+        Path filePath = testFolder.resolve("TempAddressBookWithStatus.json");
+        AddressBook original = getTypicalAddressBook();
+
+        Person firstPerson = original.getPersonList().get(0);
+        Task firstTask = firstPerson.getTasks().get(0);
+        Task doneTask = new Task(firstTask.description, firstTask.getProjectTitle());
+        doneTask.setDone();
+
+        List<Task> updatedTasks = new ArrayList<>(firstPerson.getTasks());
+        updatedTasks.set(0, doneTask);
+        Person personWithDoneTask = new Person(firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
+                firstPerson.getProjects(), updatedTasks);
+        original.setPerson(firstPerson, personWithDoneTask);
+
+        JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
+        storage.saveAddressBook(original, filePath);
+        ReadOnlyAddressBook readBack = storage.readAddressBook(filePath).get();
+
+        Person readBackPerson = readBack.getPersonList().get(0);
+        assertTrue(readBackPerson.getTasks().get(0).getStatus());
     }
 }

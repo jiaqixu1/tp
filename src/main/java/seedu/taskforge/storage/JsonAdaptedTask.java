@@ -13,15 +13,22 @@ class JsonAdaptedTask {
 
     private final String description;
     private final String projectTitle;
+    private final Boolean isDone;
 
     /**
      * Constructs a {@code JsonAdaptedTask} with the given {@code description}.
      */
     @JsonCreator
     public JsonAdaptedTask(@JsonProperty("description") String description,
-                           @JsonProperty("projectTitle") String projectTitle) {
+                           @JsonProperty("projectTitle") String projectTitle,
+                           @JsonProperty("isDone") Boolean isDone) {
         this.description = description;
         this.projectTitle = projectTitle;
+        this.isDone = isDone;
+    }
+
+    public JsonAdaptedTask(String description, String projectTitle) {
+        this(description, projectTitle, null);
     }
 
     /**
@@ -30,14 +37,11 @@ class JsonAdaptedTask {
     public JsonAdaptedTask(Task source) {
         description = source.description;
         projectTitle = source.getProjectTitle();
+        isDone = source.getStatus();
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public String getProjectTitle() {
-        return projectTitle;
     }
 
     /**
@@ -49,7 +53,11 @@ class JsonAdaptedTask {
         if (!Task.isValidTaskDescription(description)) {
             throw new IllegalValueException(Task.MESSAGE_CONSTRAINTS);
         }
-        return new Task(description, projectTitle);
+        Task task = new Task(description, projectTitle);
+        if (Boolean.TRUE.equals(isDone)) {
+            task.setDone();
+        }
+        return task;
     }
 
 }

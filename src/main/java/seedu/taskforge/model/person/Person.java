@@ -16,6 +16,10 @@ import seedu.taskforge.model.task.Task;
  */
 public class Person {
 
+    public static final int FREE = 0;
+    public static final int AVAILABLE = 2;
+    public static final int BUSY = 4;
+
     // Identity fields
     private final Name name;
     private final Phone phone;
@@ -67,6 +71,29 @@ public class Person {
         return tasks;
     }
 
+    /**
+     * Returns the current workload count of this person.
+     * Workload is defined as the number of not done tasks assigned to the person.
+     * @return The number of tasks with status false (incomplete)
+     */
+    public int getWorkload() {
+        return (int) tasks.stream().filter(t -> !t.getStatus()).count();
+    }
+
+    /**
+     * Returns the availability status of this person based on their current workload.
+     * @return FREE, AVAILABLE, BUSY, or OVERLOADED
+     */
+    public Availability getAvailability() {
+        int workload = getWorkload();
+        return workload == FREE
+                ? Availability.FREE
+                : workload <= AVAILABLE
+                ? Availability.AVAILABLE
+                : workload <= BUSY
+                ? Availability.BUSY
+                : Availability.OVERLOADED;
+    }
 
     /**
      * Returns true if both persons have the same name.

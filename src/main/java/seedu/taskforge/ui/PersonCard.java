@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.shape.Circle;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
@@ -38,9 +39,11 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label phone;
     @FXML
-    private Label address;
-    @FXML
     private Label email;
+    @FXML
+    private Label availability;
+    @FXML
+    private Circle availabilityIndicator;
     @FXML
     private FlowPane projects;
     @FXML
@@ -56,6 +59,11 @@ public class PersonCard extends UiPart<Region> {
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
         email.setText(person.getEmail().value);
+
+        String availabilityString = person.getAvailability().toString();
+        availability.setText(availabilityString + ".  Workload:  " + person.getWorkload());
+        availabilityIndicator.getStyleClass().add(availabilityString);
+
         List<Project> projectList = person.getProjects();
         List<Task> taskList = person.getTasks();
         IntStream.range(0, projectList.size())
@@ -64,7 +72,8 @@ public class PersonCard extends UiPart<Region> {
                 ));
         IntStream.range(0, taskList.size())
                 .forEach(i -> tasks.getChildren().add(
-                        new Label((i + 1) + ". " + taskList.get(i).description)
+                        new Label((i + 1) + ". " + (taskList.get(i).getStatus() ? "[X] " : "[ ] ")
+                                + taskList.get(i).description)
                 ));
     }
 }

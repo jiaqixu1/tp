@@ -334,16 +334,19 @@ When a user adds or edits a person including changing project assignments, each 
 
 This ensures a person can only be assigned to valid existing projects.
 
-### Task management feature (`task add`, `task delete`, `task list`, `task find`, `task assign`, `task unassign`, `task view`)
+### Task management feature (`task add`, `task delete`, `task list`, `task find`, `task assign`, `task unassign`, `task view`, `task mark`, `task unmark`)
 
-TaskForge supports task management using seven commands:
+TaskForge supports task management using six commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
 - `task delete PROJECT_INDEX -i TASK_INDEX`
+- `task edit PROJECT_NAME -i TASK_INDEX -n NEW_TASK_NAME`
 - `task list -n PROJECT_NAME`
 - `task find KEYWORD [MORE_KEYWORDS]`
 - `task assign INDEX -n TASK_NAME`
 - `task unassign INDEX -i TASK_INDEX`
 - `task view INDEX`
+- `task mark PERSON_INDEX TASK_INDEX`
+- `task unmark PERSON_INDEX TASK_INDEX`
 
 #### Implementation overview
 
@@ -351,15 +354,20 @@ TaskForge supports task management using seven commands:
    - `UniqueTaskList` stores task entries within each project.
    - `Project` exposes task operations through methods such as `hasTask`, `addTask`, `removeTask`, and `getTasks`.
    - `AddressBook` provides cascade deletion from all task assignments when a task is deleted from a project.
+   - `Task` includes an `isDone` boolean field to track the completion status of a task. It provides `getStatus()`, `setDone()`, and `setNotDone()` methods.
 
 2. **Logic layer**
     - `AddTaskCommand` adds new task(s) to a project in the global project list.
     - `DeleteTaskCommand` removes task(s) from a project by project index and task index.
-   - `ListTaskCommand` lists all task(s) from a specified project by project name.
-   - `FindTaskCommand` finds task(s) across all projects by keyword(s).
+    - `EditTaskCommand` renames a task in a project by project name and task index.
+    - `ListTaskCommand` lists all task(s) from a specified project by project name.
+    - `FindTaskCommand` finds task(s) across all projects by keyword(s).
     - `AssignTaskCommand` assigns existing task(s) to a person.
     - `UnassignTaskCommand` unassigns task(s) from a person.
     - `ViewTasksCommand` displays all tasks assigned to a person.
+    - `MarkTaskCommand` marks a task as done for a specific person.
+    - `UnmarkTaskCommand` marks a task as not done for a specific person.
+    - `AddressBookParser` routes task subcommands to their corresponding command parsers/commands.
    - `AddressBookParser` routes `task add`, `task delete`, `task list`, `task find`, `task assign`, `task unassign`, and `task view` to their corresponding command parsers/commands.
 
 3. **Parser flow**
@@ -367,16 +375,19 @@ TaskForge supports task management using seven commands:
    - `handleTask` extracts the task subcommand and dispatches as follows:
       - `add` -> `AddTaskCommandParser`
       - `delete` -> `DeleteTaskCommandParser`
+      - `edit` -> `EditTaskCommandParser`
       - `list` -> `ListTaskCommandParser`
       - `find` -> `FindTaskCommandParser`
       - `assign` -> `AssignTaskCommandParser`
       - `unassign` -> `UnassignTaskCommandParser`
       - `view` -> `ViewTasksCommandParser`
+      - `mark` -> `MarkTaskCommandParser`
+      - `unmark` -> `UnmarkTaskCommandParser`
    - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
 
 4. **Storage layer**
     - `JsonAdaptedTask` handles serialization/deserialization of task objects.
-    - `JsonAdaptedProject` includes a list of `JsonAdaptedTask` entries that are persisted in the JSON file.
+    - `JsonAdaptedProject` and `JsonAdaptedPerson` includes a list of `JsonAdaptedTask` entries that are persisted in the JSON file.
     - During deserialization, tasks are restored into projects so task entries persist across application restarts.
 
 #### Validation and cascading behavior
@@ -389,6 +400,12 @@ TaskForge supports task management using seven commands:
 **Task deletion from project (`task delete`)**:
 - `DeleteTaskCommand` removes task(s) from a project by project index and task index.
 - `AddressBook#cascadeRemoveDeletedProjectTasksFromPersons()` automatically removes the deleted task from all persons who have it assigned.
+
+**Task editing in project (`task edit`)**:
+- `EditTaskCommand` validates that the target project exists by project name and that the task index is within bounds.
+- The command renames the selected project task and rejects duplicates via `MESSAGE_DUPLICATE_TASK`.
+- Before applying the rename, the command snapshots people currently assigned to the original task.
+- After updating the project, it reassigns each affected person to the renamed task so assignments are preserved.
 
 **Task listing by project (`task list`)**:
 - `ListTaskCommand` validates that the provided project name exists in the global project list.
@@ -413,26 +430,41 @@ TaskForge supports task management using seven commands:
 - Validates whether or not the task exist in the person's assigned projects before unassignment.
 - Resolves each local task index from the selected person's task list and unassigns them, throwing `MESSAGE_INDEX_OUT_OF_BOUND` if any task index is invalid.
 
+**Task marking (`task mark`)**:
+- `MarkTaskCommand` marks a task as done for a person by task index.
+- Validates person index and task index.
+- Throws `MESSAGE_TASK_ALREADY_DONE` if the task is already marked as done.
+- Creates a new `Person` with the updated task list and replaces the old person in the model.
+
+**Task unmarking (`task unmark`)**:
+- `UnmarkTaskCommand` marks a task as not done for a person by task index.
+- Validates person index and task index.
+- Throws `MESSAGE_TASK_ALREADY_NOT_DONE` if the task is already marked as not done.
+- Creates a new `Person` with the updated task list and replaces the old person in the model.
+
 #### Input parsing details
 
 - `AddTaskCommandParser` parses the preamble as the target project `INDEX` and parses task names from repeated `-n` prefixes.
 - `DeleteTaskCommandParser` parses the preamble as the target project `INDEX` and parses task indexes from repeated `-i` prefixes.
+- `EditTaskCommandParser` parses the preamble as target `PROJECT_NAME`, parses task index from `-i`, and parses the new task name from `-n`.
 - `ListTaskCommandParser` parses project name from `-n PROJECT_NAME`.
 - `FindTaskCommandParser` parses one or more keyword tokens from the argument preamble.
 - `AssignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
 - `UnassignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
 - `ViewTasksCommandParser` parses the preamble as the target person `INDEX`.
+- `MarkTaskCommandParser` and `UnmarkTaskCommandParser` parse the preamble as the target person `INDEX` and target task `INDEX`.
 - If no task payload is provided (e.g., `task assign 1` or `task unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 - Similarly, if an empty task name or task index is provided (e.g., `task assign 1 -n` or `task unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 
 #### Execution behavior and validation
 
-- All task commands (except `task add` and `task delete`) resolve the target person from `model.getFilteredPersonList()` using the supplied person `INDEX`.
+- Person-targeting commands (`task assign`, `task unassign`, `task view`) resolve the target person from `model.getFilteredPersonList()` using the supplied person `INDEX`.
 - If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
 - `AddTaskCommand` and `DeleteTaskCommand` resolve the target project from the list and validate the project index before executing.
+- `EditTaskCommand` resolves the target project by name and validates the provided task index before executing.
 - `ListTaskCommand` resolves the target project by project name and fails if the project does not exist.
 - `FindTaskCommand` resolves across all project task lists and returns matching task entries in `taskName - projectName` format.
-- On success, `AddTaskCommand`, `DeleteTaskCommand`, `AssignTaskCommand`, and `UnassignTaskCommand` update the model and refresh the filtered person list.
+- On success, `AddTaskCommand`, `DeleteTaskCommand`, `EditTaskCommand`, `AssignTaskCommand`, and `UnassignTaskCommand` update the model.
 - `ListTaskCommand`, `FindTaskCommand`, and `ViewTasksCommand` only retrieve and display information without modifying model data.
 
 ### \[Proposed\] Data archiving

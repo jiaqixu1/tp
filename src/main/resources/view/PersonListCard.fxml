@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <GridPane HBox.hgrow="ALWAYS">
@@ -18,6 +19,12 @@
       <padding>
         <Insets top="5" right="5" bottom="5" left="15" />
       </padding>
+
+      <HBox spacing="8" alignment="CENTER_LEFT">
+        <Circle fx:id="availabilityIndicator" radius="8" styleClass="availabilityIndicator" />
+        <Label fx:id="availability" styleClass="cell_small_label" text="\$availability" />
+      </HBox>
+
       <HBox spacing="0.5" alignment="CENTER_LEFT">
         <Label fx:id="id" styleClass="cell_big_label">
           <minWidth>
@@ -27,6 +34,7 @@
         </Label>
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
       </HBox>
+
       <FlowPane fx:id="tasks" />
       <FlowPane fx:id="projects" />
       <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />

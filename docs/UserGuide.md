@@ -340,6 +340,34 @@ Examples:
 * `task view 1`
 * `task view 2`
 
+#### Marking a task as done : `task mark`
+
+Marks a task as done for an existing person in the address book.
+
+Format: `task mark PERSON_INDEX TASK_INDEX`
+
+* Marks the task identified by `TASK_INDEX` as done for the person identified by `PERSON_INDEX`.
+* `PERSON_INDEX` refers to the person index in the displayed person list.
+* `TASK_INDEX` refers to the task index in the person's task list (visible via `task view`).
+* Both indices **must be positive integers** `1, 2, 3, ...`
+
+Example:
+* `task mark 1 1` marks the 1st task of the 1st person as done.
+
+#### Unmarking a task as done : `task unmark`
+
+Unmarks a task as done for an existing person in the address book.
+
+Format: `task unmark PERSON_INDEX TASK_INDEX`
+
+* Unmarks the task identified by `TASK_INDEX` as done for the person identified by `PERSON_INDEX`.
+* `PERSON_INDEX` refers to the person index in the displayed person list.
+* `TASK_INDEX` refers to the task index in the person's task list (visible via `task view`).
+* Both indices **must be positive integers** `1, 2, 3, ...`
+
+Example:
+* `task unmark 1 1` marks the 1st task of the 1st person as not done.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from TaskForge.
@@ -402,6 +430,8 @@ Action | Format, Examples
 **Delete Project** | `project delete INDEX`<br> e.g., `project delete 1`
 **Find Project** | `project find KEYWORD [MORE_KEYWORDS]`<br> e.g., `project find Alpha Web`
 **View Tasks** | `task view INDEX`<br> e.g.,`task view 1`
+**Mark Task** | `task mark PERSON_INDEX TASK_INDEX`<br> e.g., `task mark 1 1`
+**Unmark Task** | `task unmark PERSON_INDEX TASK_INDEX`<br> e.g., `task unmark 1 1`
 **Edit Person** | `edit Index [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit Index -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
 **Find Person** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List Person** | `list`

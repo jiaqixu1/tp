@@ -29,8 +29,10 @@ import seedu.taskforge.logic.commands.task.AssignTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
 import seedu.taskforge.logic.commands.task.EditTaskCommand;
 import seedu.taskforge.logic.commands.task.ListTaskCommand;
+import seedu.taskforge.logic.commands.task.MarkTaskCommand;
 import seedu.taskforge.logic.commands.task.TaskCommand;
 import seedu.taskforge.logic.commands.task.UnassignTaskCommand;
+import seedu.taskforge.logic.commands.task.UnmarkTaskCommand;
 import seedu.taskforge.logic.commands.task.ViewTasksCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.logic.parser.person.AddCommandParser;
@@ -47,7 +49,9 @@ import seedu.taskforge.logic.parser.task.AssignTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
 import seedu.taskforge.logic.parser.task.EditTaskCommandParser;
 import seedu.taskforge.logic.parser.task.ListTaskCommandParser;
+import seedu.taskforge.logic.parser.task.MarkTaskCommandParser;
 import seedu.taskforge.logic.parser.task.UnassignTaskCommandParser;
+import seedu.taskforge.logic.parser.task.UnmarkTaskCommandParser;
 import seedu.taskforge.logic.parser.task.ViewTasksCommandParser;
 
 /**
@@ -188,6 +192,12 @@ public class AddressBookParser {
 
         case UnassignTaskCommand.SUBCOMMAND_WORD:
             return new UnassignTaskCommandParser().parse(arguments);
+
+        case MarkTaskCommand.SUBCOMMAND_WORD:
+            return new MarkTaskCommandParser().parse(arguments);
+
+        case UnmarkTaskCommand.SUBCOMMAND_WORD:
+            return new UnmarkTaskCommandParser().parse(arguments);
 
         case ViewTasksCommand.SUBCOMMAND_WORD:
             return new ViewTasksCommandParser().parse(arguments);

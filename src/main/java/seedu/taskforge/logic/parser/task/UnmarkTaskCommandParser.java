@@ -25,7 +25,8 @@ public class UnmarkTaskCommandParser implements Parser<UnmarkTaskCommand> {
         String[] splitArgs = trimmedArgs.split("\\s+");
 
         if (splitArgs.length != 2) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UnmarkTaskCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    UnmarkTaskCommand.MESSAGE_USAGE));
         }
 
         try {
@@ -33,7 +34,8 @@ public class UnmarkTaskCommandParser implements Parser<UnmarkTaskCommand> {
             Index taskIndex = ParserUtil.parseIndex(splitArgs[1]);
             return new UnmarkTaskCommand(personIndex, taskIndex);
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UnmarkTaskCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    UnmarkTaskCommand.MESSAGE_USAGE), pe);
         }
     }
 }

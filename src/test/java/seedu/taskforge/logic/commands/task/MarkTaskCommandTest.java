@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_Y;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;

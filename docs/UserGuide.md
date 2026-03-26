@@ -77,7 +77,7 @@ Format: `help`
 
 Adds a person to TaskForge.
 
-Format: `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK -l PROJECT]…​`
+Format: `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK] [-l PROJECT]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tasks and projects (including 0)

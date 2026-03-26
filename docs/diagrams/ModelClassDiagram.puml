@@ -13,12 +13,15 @@ Class ModelManager
 Class UserPrefs
 
 Class UniquePersonList
+Class UniqueProjectList
+Class UniqueTaskList
 Class Person
 Class Address
 Class Email
 Class Name
 Class Phone
-Class Tag
+Class Project
+Class Task
 
 Class I #FFFFFF
 }
@@ -36,19 +39,29 @@ ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
 AddressBook *--> "1" UniquePersonList
+AddressBook *--> "1" UniqueProjectList
+Project *--> "1" UniqueTaskList
 UniquePersonList --> "~* all" Person
+UniqueProjectList *--> "~* contains" Project
+UniqueTaskList --> "~* contains" Task
 Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
-Person *--> "*" Tag
+Person *--> "~* projects" Project
+Person *--> "~* tasks" Task
+Project --> "0..1" Project : references
+Task --> "0..1" Task : references
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
+UniqueProjectList -[hidden]right-> I
+UniqueTaskList -[hidden]right-> I
 
 Name -[hidden]right-> Phone
 Phone -[hidden]right-> Address
 Address -[hidden]right-> Email
+Project -[hidden]right-> Task
 
 ModelManager --> "~* filtered" Person
 @enduml

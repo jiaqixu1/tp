@@ -334,9 +334,9 @@ When a user adds or edits a person including changing project assignments, each 
 
 This ensures a person can only be assigned to valid existing projects.
 
-### Task management feature (`task add`, `task delete`, `task list`, `task find`, `task assign`, `task unassign`, `task view`, `task mark`, `task unmark`)
+### Task management feature (`task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task view`, `task mark`, `task unmark`)
 
-TaskForge supports task management using six commands:
+TaskForge supports task management using 10 commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
 - `task delete PROJECT_INDEX -i TASK_INDEX`
 - `task edit PROJECT_NAME -i TASK_INDEX -n NEW_TASK_NAME`

@@ -11,6 +11,8 @@ package "Parser Classes" as ParserClasses{
 Class XYZCommand
 Class CommandResult
 Class "{abstract}\nCommand" as Command
+Class ModelCommand
+Class XYZModelCommand
 
 
 Class "<<interface>>\nLogic" as Logic
@@ -32,6 +34,8 @@ LogicManager -right->"1" ParserClasses
 ParserClasses ..> XYZCommand : <<create>>
 
 XYZCommand -up-|> Command
+ModelCommand -up-|> Command
+XYZModelCommand -up-|> ModelCommand
 LogicManager .left.> Command : <<call>>
 
 LogicManager --> Model
@@ -39,7 +43,8 @@ LogicManager --> Storage
 Storage --[hidden] Model
 Command .[hidden]up.> Storage
 Command .right.> Model
-note right of XYZCommand: XYZCommand = AddCommand, \nFindCommand, etc
+note right of XYZCommand: XYZCommand = ExitCommand, \nHelpCommand
+note right of XYZModelCommand: XYZModelCommand = AddProjectCommand, \nAssignTaskCommand
 
 Logic ..> CommandResult
 LogicManager .down.> CommandResult

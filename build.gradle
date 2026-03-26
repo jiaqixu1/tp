@@ -69,4 +69,8 @@ shadowJar {
     archiveFileName = 'taskforge.jar'
 }
 
+run {
+    enableAssertions = true
+}
+
 defaultTasks 'clean', 'test'

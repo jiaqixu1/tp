@@ -12,6 +12,7 @@ public abstract class TaskCommand extends Command {
     public static final String MESSAGE_USAGE = "task should be followed by "
             + "add/"
             + "delete/"
+            + "edit/"
             + "list/"
             + "assign/"
             + "unassign/"

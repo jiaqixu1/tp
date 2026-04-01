@@ -36,11 +36,11 @@ public class UniquePersonProjectList implements Iterable<PersonProject> {
      */
     public void add(PersonProject toAdd) {
         requireNonNull(toAdd);
-        
+
         if (!(toAdd instanceof PersonProject)) {
             throw new InvalidPersonProjectTypeException();
         }
-        
+
         if (contains(toAdd)) {
             throw new DuplicateProjectException();
         }

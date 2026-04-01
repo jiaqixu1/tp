@@ -218,7 +218,8 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         for (Person person : allPersons) {
-            if (projectIndex < 0 || person.getProjects().stream().noneMatch(pp -> pp.getProjectIndex() == projectIndex)) {
+            if (projectIndex < 0
+                    || person.getProjects().stream().noneMatch(pp -> pp.getProjectIndex() == projectIndex)) {
                 continue;
             }
 

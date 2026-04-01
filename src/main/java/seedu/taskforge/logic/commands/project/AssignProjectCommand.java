@@ -123,7 +123,7 @@ public class AssignProjectCommand extends ProjectCommand {
         List<Project> projectsToAssign = assignProjectDescriptor.getProjects().orElseThrow(() ->
                 new CommandException(MESSAGE_PROJECT_NOT_FOUND));
         List<Project> globalProjectList = new ArrayList<>(model.getProjectList());
-        
+
         // Convert Projects to PersonProjects then add to the person's project list
         for (Project project : projectsToAssign) {
             int projectIndex = globalProjectList.indexOf(project);
@@ -133,7 +133,7 @@ public class AssignProjectCommand extends ProjectCommand {
             PersonProject personProject = new PersonProject(projectIndex);
             newPersonProjects.add(personProject);
         }
-        
+
         checkUniquePersonProjects(newPersonProjects);
 
         return new Person(name, phone, email, newPersonProjects, taskList);

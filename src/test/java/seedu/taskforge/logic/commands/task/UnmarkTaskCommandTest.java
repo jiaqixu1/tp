@@ -3,12 +3,12 @@ package seedu.taskforge.logic.commands.task;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +19,9 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonTask;
+import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
-import seedu.taskforge.testutil.PersonBuilder;
 
 public class UnmarkTaskCommandTest {
 
@@ -29,27 +30,24 @@ public class UnmarkTaskCommandTest {
     @Test
     public void execute_unmarkTask_success() throws Exception {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Task doneTask = new Task(VALID_TASK_IMPLEMENT_X);
-        doneTask.setDone();
-        Person personWithDoneTask = new Person(firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
-                firstPerson.getProjects(), Arrays.asList(doneTask));
-        model.setPerson(firstPerson, personWithDoneTask);
+        PersonTask firstPersonTask = firstPerson.getTasks().get(0);
+        Project taskProject = model.getProjectList().get(firstPersonTask.getProjectIndex());
+        List<Task> updatedTasks = new ArrayList<>(taskProject.getTasks());
+        updatedTasks.get(firstPersonTask.getTaskIndex()).setDone();
+        model.setProject(taskProject, new Project(taskProject.title, updatedTasks));
 
         UnmarkTaskCommand command = new UnmarkTaskCommand(INDEX_FIRST_PERSON, Index.fromOneBased(1));
         CommandResult commandResult = command.execute(model);
 
-        Person updatedPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        assertFalse(updatedPerson.getTasks().get(0).getStatus());
-        assertEquals(String.format(UnmarkTaskCommand.MESSAGE_UNMARK_TASK_SUCCESS, VALID_TASK_IMPLEMENT_X),
+        Task unmarkedTask = model.getProjectList().get(firstPersonTask.getProjectIndex())
+            .getTasks().get(firstPersonTask.getTaskIndex());
+        assertFalse(unmarkedTask.getStatus());
+        assertEquals(String.format(UnmarkTaskCommand.MESSAGE_UNMARK_TASK_SUCCESS, unmarkedTask.description),
                 commandResult.getFeedbackToUser());
     }
 
     @Test
     public void execute_taskAlreadyNotDone_failure() {
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person personWithTask = new PersonBuilder(firstPerson).withTasks(VALID_TASK_IMPLEMENT_X).build();
-        model.setPerson(firstPerson, personWithTask);
-
         UnmarkTaskCommand command = new UnmarkTaskCommand(INDEX_FIRST_PERSON, Index.fromOneBased(1));
         assertCommandFailure(command, model, UnmarkTaskCommand.MESSAGE_TASK_ALREADY_NOT_DONE);
     }
@@ -65,13 +63,9 @@ public class UnmarkTaskCommandTest {
     @Test
     public void execute_invalidTaskIndex_failure() {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Task doneTask = new Task(VALID_TASK_IMPLEMENT_X);
-        doneTask.setDone();
-        Person personWithDoneTask = new Person(firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
-                firstPerson.getProjects(), Arrays.asList(doneTask));
-        model.setPerson(firstPerson, personWithDoneTask);
+        int outOfBounds = firstPerson.getTasks().size() + 1;
 
-        UnmarkTaskCommand command = new UnmarkTaskCommand(INDEX_FIRST_PERSON, Index.fromOneBased(2));
+        UnmarkTaskCommand command = new UnmarkTaskCommand(INDEX_FIRST_PERSON, Index.fromOneBased(outOfBounds));
         assertCommandFailure(command, model, DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
     }
 

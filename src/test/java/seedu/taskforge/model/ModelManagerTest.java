@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
+import seedu.taskforge.model.person.PersonProject;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.testutil.AddressBookBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
@@ -151,7 +152,7 @@ public class ModelManagerTest {
         modelManager.deleteProject(alpha);
 
         assertFalse(modelManager.hasProject(alpha));
-        assertEquals(Arrays.asList(new Project("beta")), modelManager.getFilteredPersonList()
+        assertEquals(Arrays.asList(new PersonProject(0)), modelManager.getFilteredPersonList()
                 .get(0).getProjects());
     }
 

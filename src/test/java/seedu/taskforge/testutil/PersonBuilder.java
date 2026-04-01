@@ -6,10 +6,9 @@ import java.util.List;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
-import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
-import seedu.taskforge.model.util.SampleDataUtil;
 
 /**
  * A utility class to help with building Person objects.
@@ -23,8 +22,8 @@ public class PersonBuilder {
     private Name name;
     private Phone phone;
     private Email email;
-    private List<Project> projects;
-    private List<Task> tasks;
+    private List<PersonProject> projects;
+    private List<PersonTask> tasks;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -60,7 +59,10 @@ public class PersonBuilder {
      * Parses the {@code projects} into a {@code List<Project>} and set it to the {@code Person} that we are building.
      */
     public PersonBuilder withProjects(String ... projects) {
-        this.projects = SampleDataUtil.getProjectList(projects);
+        this.projects = new ArrayList<>();
+        for (int i = 0; i < projects.length; i++) {
+            this.projects.add(new PersonProject(i));
+        }
         return this;
     }
 
@@ -69,7 +71,10 @@ public class PersonBuilder {
      * Parses the {@code tasks} into a {@code List<Task>} and set it to the {@code Person} that we are building.
      */
     public PersonBuilder withTasks(String ... tasks) {
-        this.tasks = SampleDataUtil.getTaskList(tasks);
+        this.tasks = new ArrayList<>();
+        for (int i = 0; i < tasks.length; i++) {
+            this.tasks.add(new PersonTask(0, i));
+        }
         return this;
     }
 
@@ -77,7 +82,10 @@ public class PersonBuilder {
      * Parses the {@code tasks} into a {@code List<Task>} and append it to the {@code Person} that we are building.
      */
     public PersonBuilder appendTasks(String ... tasks) {
-        this.tasks.addAll(SampleDataUtil.getTaskList(tasks));
+        int startIndex = this.tasks.size();
+        for (int i = 0; i < tasks.length; i++) {
+            this.tasks.add(new PersonTask(0, startIndex + i));
+        }
         return this;
     }
 
@@ -86,7 +94,10 @@ public class PersonBuilder {
      * then append it to the {@code Person} that we are building.
      */
     public PersonBuilder appendDoneTasks(String ... tasks) {
-        this.tasks.addAll(SampleDataUtil.getTaskList(tasks).stream().peek(Task::setDone).toList());
+        int startIndex = this.tasks.size();
+        for (int i = 0; i < tasks.length; i++) {
+            this.tasks.add(new PersonTask(0, startIndex + i));
+        }
         return this;
     }
 

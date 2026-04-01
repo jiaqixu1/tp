@@ -84,7 +84,7 @@ class JsonSerializableAddressBook {
                 }
             }
 
-                for (PersonTask personTask : person.getTasks()) {
+            for (PersonTask personTask : person.getTasks()) {
                 int taskProjectIndex = personTask.getProjectIndex();
                 int taskIndex = personTask.getTaskIndex();
 

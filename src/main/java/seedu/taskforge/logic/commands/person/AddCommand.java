@@ -47,9 +47,9 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in taskforge";
-        public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
+    public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
             "Task to assign does not exist in any assigned project.";
-        public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
+    public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
 
     private final Person toAdd;
     private final List<Project> projectsToAssign;
@@ -65,6 +65,13 @@ public class AddCommand extends Command {
         toAdd = person;
         this.projectsToAssign = new ArrayList<>(projectsToAssign);
         this.tasksToAssign = new ArrayList<>(tasksToAssign);
+    }
+
+    /**
+     * Creates an AddCommand to add the specified {@code Person} with no project/task assignments.
+     */
+    public AddCommand(Person person) {
+        this(person, new ArrayList<>(), new ArrayList<>());
     }
 
     @Override
@@ -89,14 +96,14 @@ public class AddCommand extends Command {
         }
 
         List<PersonTask> personTasksToAssign = resolvePersonTasks(tasksToAssign, personProjectsToAssign,
-            globalProjectListOrEmpty(model));
+                globalProjectListOrEmpty(model));
 
         Person personWithProjects = new Person(
                 toAdd.getName(),
                 toAdd.getPhone(),
                 toAdd.getEmail(),
                 personProjectsToAssign,
-            personTasksToAssign
+                personTasksToAssign
         );
 
         model.addPerson(personWithProjects);

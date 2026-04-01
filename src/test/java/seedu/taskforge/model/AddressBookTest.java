@@ -21,6 +21,8 @@ import javafx.collections.ObservableList;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.person.exceptions.DuplicatePersonException;
 import seedu.taskforge.model.project.Project;
@@ -141,10 +143,10 @@ public class AddressBookTest {
         addressBook.removeProject(alpha);
 
         assertFalse(addressBook.hasProject(alpha));
-        assertEquals(Arrays.asList(new Project("beta")),
+        assertEquals(Arrays.asList(new PersonProject(0)),
                 addressBook.getPersonList().get(0).getProjects());
         assertEquals(Collections.emptyList(), addressBook.getPersonList().get(1).getProjects());
-        assertEquals(Arrays.asList(new Project("beta")),
+        assertEquals(Collections.emptyList(),
                 addressBook.getPersonList().get(2).getProjects());
     }
 
@@ -158,10 +160,10 @@ public class AddressBookTest {
             new Name("Task Owner"),
             new Phone("99998888"),
             new Email("owner@example.com"),
-            Arrays.asList(new Project("alpha")),
+            Arrays.asList(new PersonProject(0)),
             Arrays.asList(
-                new Task("refactor code", "Alpha"),
-                new Task("fix error in tp project", "Alpha")
+                new PersonTask(0, 0),
+                new PersonTask(0, 1)
             )
         );
 
@@ -171,10 +173,9 @@ public class AddressBookTest {
         Project editedAlpha = new Project("alpha", Arrays.asList(new Task("refactor code")));
         addressBook.setProject(alpha, editedAlpha);
 
-        List<Task> updatedTasks = addressBook.getPersonList().get(0).getTasks();
+        List<PersonTask> updatedTasks = addressBook.getPersonList().get(0).getTasks();
         assertEquals(1, updatedTasks.size());
-        assertEquals("refactor code", updatedTasks.get(0).description);
-        assertEquals("Alpha", updatedTasks.get(0).getProjectTitle());
+        assertEquals(new PersonTask(0, 0), updatedTasks.get(0));
     }
 
     @Test

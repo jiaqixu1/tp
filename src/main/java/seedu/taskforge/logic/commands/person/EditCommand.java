@@ -56,9 +56,9 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
-        public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
+    public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
             "Task to assign does not exist in any assigned project.";
-        public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
+    public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -113,7 +113,7 @@ public class EditCommand extends Command {
             List<Project> projectsToAssign = editPersonDescriptor.getProjects().get();
             updatedPersonProjects = new ArrayList<>();
             List<Project> globalProjectList = new ArrayList<>(model.getProjectList());
-            
+
             for (Project project : projectsToAssign) {
                 int projectIndex = globalProjectList.indexOf(project);
                 if (projectIndex == -1) {
@@ -126,9 +126,9 @@ public class EditCommand extends Command {
         }
 
         List<PersonTask> updatedTasks = editPersonDescriptor.getTasks().isPresent()
-                ? resolvePersonTasks(editPersonDescriptor.getTasks().get(), updatedPersonProjects,
+            ? resolvePersonTasks(editPersonDescriptor.getTasks().get(), updatedPersonProjects,
                 new ArrayList<>(model.getProjectList()))
-                : personToEdit.getTasks();
+            : personToEdit.getTasks();
 
         return new Person(updatedName, updatedPhone, updatedEmail,
                 updatedPersonProjects, updatedTasks);

@@ -42,10 +42,10 @@ public class PersonUtil {
         sb.append(PREFIX_PHONE + person.getPhone().value + " ");
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
         person.getProjects().stream().forEach(
-            s -> sb.append(PREFIX_PROJECT_TITLE + s.title + " ")
+            s -> sb.append(PREFIX_PROJECT_TITLE + "project" + s.getProjectIndex() + " ")
         );
         person.getTasks().stream().forEach(
-            s -> sb.append(PREFIX_TASK + s.description + " ")
+            s -> sb.append(PREFIX_TASK + "task" + s.getProjectIndex() + "_" + s.getTaskIndex() + " ")
         );
         return sb.toString();
     }

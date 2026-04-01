@@ -73,7 +73,7 @@ public class PersonCard extends UiPart<Region> {
         String availabilityString = calculateAvailability(workload).toString();
         availability.setText(availabilityString + ".  Workload:  " + workload);
         availabilityIndicator.getStyleClass().add(availabilityString);
-        
+
         IntStream.range(0, personProjectList.size())
                 .forEach(i -> {
                     PersonProject personProject = personProjectList.get(i);

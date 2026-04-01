@@ -22,11 +22,17 @@ public class UniquePersonTaskList implements Iterable<PersonTask> {
     private final ObservableList<PersonTask> internalUnmodifiableList =
             FXCollections.unmodifiableObservableList(internalList);
 
+    /**
+     * Returns whether the list contains an equivalent person task.
+     */
     public boolean contains(PersonTask toCheck) {
         requireNonNull(toCheck);
         return internalList.stream().anyMatch(toCheck::equals);
     }
 
+    /**
+     * Adds a person task to the list.
+     */
     public void add(PersonTask toAdd) {
         requireNonNull(toAdd);
         if (!(toAdd instanceof PersonTask)) {
@@ -38,6 +44,9 @@ public class UniquePersonTaskList implements Iterable<PersonTask> {
         internalList.add(toAdd);
     }
 
+    /**
+     * Replaces the target person task in the list with {@code editedPersonTask}.
+     */
     public void setPersonTask(PersonTask target, PersonTask editedPersonTask) {
         requireAllNonNull(target, editedPersonTask);
 
@@ -53,6 +62,10 @@ public class UniquePersonTaskList implements Iterable<PersonTask> {
         internalList.set(index, editedPersonTask);
     }
 
+    /**
+     * Removes the equivalent person task from the list.
+     * The person task must exist in the list.
+     */
     public void remove(PersonTask toRemove) {
         requireNonNull(toRemove);
         if (!internalList.remove(toRemove)) {
@@ -60,11 +73,17 @@ public class UniquePersonTaskList implements Iterable<PersonTask> {
         }
     }
 
+    /**
+     * Replaces the contents of this list with {@code replacement}.
+     */
     public void setPersonTasks(UniquePersonTaskList replacement) {
         requireNonNull(replacement);
         internalList.setAll(replacement.internalList);
     }
 
+    /**
+     * Replaces the contents of this list with {@code personTasks}.
+     */
     public void setPersonTasks(List<PersonTask> personTasks) {
         requireAllNonNull(personTasks);
         if (!personTasksAreUnique(personTasks)) {
@@ -73,6 +92,9 @@ public class UniquePersonTaskList implements Iterable<PersonTask> {
         internalList.setAll(personTasks);
     }
 
+    /**
+     * Returns the backing list as an unmodifiable {@code ObservableList}.
+     */
     public ObservableList<PersonTask> asUnmodifiableObservableList() {
         return internalUnmodifiableList;
     }

@@ -79,9 +79,6 @@ public class TypicalPersons {
     public static AddressBook getTypicalAddressBook() {
         AddressBook ab = new AddressBook();
         Set<Project> uniqueProjects = new LinkedHashSet<>();
-        for (Person person : getTypicalPersons()) {
-            uniqueProjects.addAll(person.getProjects());
-        }
         // Also add projects used in command tests.
         uniqueProjects.add(new Project(VALID_PROJECT_ALPHA));
         uniqueProjects.add(new Project(VALID_PROJECT_BETA));

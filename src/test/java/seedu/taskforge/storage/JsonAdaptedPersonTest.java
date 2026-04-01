@@ -20,17 +20,15 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_NAME = "R@chel";
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_EMAIL = "example.com";
-    private static final String INVALID_PROJECT = "#friend";
-    private static final String INVALID_TASK = "#refactor code";
 
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_PHONE = BENSON.getPhone().toString();
     private static final String VALID_EMAIL = BENSON.getEmail().toString();
-    private static final List<JsonAdaptedProject> VALID_PROJECTS = BENSON.getProjects().stream()
-            .map(JsonAdaptedProject::new)
+    private static final List<JsonAdaptedPersonProject> VALID_PROJECTS = BENSON.getProjects().stream()
+        .map(JsonAdaptedPersonProject::new)
             .collect(Collectors.toList());
-    private static final List<JsonAdaptedTask> VALID_TASKS = BENSON.getTasks().stream()
-            .map(JsonAdaptedTask::new)
+    private static final List<JsonAdaptedPersonTask> VALID_TASKS = BENSON.getTasks().stream()
+        .map(JsonAdaptedPersonTask::new)
             .collect(Collectors.toList());
 
     @Test
@@ -94,8 +92,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_invalidProjects_throwsIllegalValueException() {
-        List<JsonAdaptedProject> invalidProjects = new ArrayList<>(VALID_PROJECTS);
-        invalidProjects.add(new JsonAdaptedProject(INVALID_PROJECT, null));
+        List<JsonAdaptedPersonProject> invalidProjects = new ArrayList<>(VALID_PROJECTS);
+        invalidProjects.add(new JsonAdaptedPersonProject(-1));
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, invalidProjects,
                         VALID_TASKS);
@@ -104,8 +102,8 @@ public class JsonAdaptedPersonTest {
 
     @Test
     public void toModelType_invalidTasks_throwsIllegalValueException() {
-        List<JsonAdaptedTask> invalidTasks = new ArrayList<>(VALID_TASKS);
-        invalidTasks.add(new JsonAdaptedTask(INVALID_TASK, null));
+        List<JsonAdaptedPersonTask> invalidTasks = new ArrayList<>(VALID_TASKS);
+        invalidTasks.add(new JsonAdaptedPersonTask(-1, -1));
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_PROJECTS,
                         invalidTasks);

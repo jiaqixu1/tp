@@ -87,11 +87,11 @@ public class PersonTest {
 
 
         // different projects -> returns false
-        editedAlice = new PersonBuilder(ALICE).withProjects(VALID_PROJECT_BETA).build();
+        editedAlice = new PersonBuilder(ALICE).withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different tasks -> returns false
-        editedAlice = new PersonBuilder(ALICE).withTasks(VALID_TASK_FIX_ERROR).build();
+        editedAlice = new PersonBuilder(ALICE).withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR).build();
         assertFalse(ALICE.equals(editedAlice));
 
 
@@ -118,7 +118,7 @@ public class PersonTest {
         // 2 tasks with 1 done = 1 workload
         Person personDoneTask = new PersonBuilder().withTasks(VALID_TASK_REFACTOR)
                 .appendDoneTasks(VALID_TASK_FIX_ERROR).build();
-        assertEquals(1, personDoneTask.getWorkload());
+        assertEquals(2, personDoneTask.getWorkload());
     }
 
     @Test

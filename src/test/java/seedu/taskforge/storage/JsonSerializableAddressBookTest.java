@@ -64,7 +64,7 @@ public class JsonSerializableAddressBookTest {
                 JsonSerializableAddressBook.class).get();
         assertThrows(IllegalValueException.class,
                 String.format(JsonSerializableAddressBook.MESSAGE_PERSON_PROJECT_NOT_IN_PROJECT_LIST,
-                        "John Doe", "Beta"),
+                        "John Doe", 1),
                 dataFromFile::toModelType);
     }
 
@@ -74,7 +74,7 @@ public class JsonSerializableAddressBookTest {
                 JsonSerializableAddressBook.class).get();
         assertThrows(IllegalValueException.class,
                 String.format(JsonSerializableAddressBook.MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS,
-                        "John Doe", "read notes"),
+                        "John Doe", "[invalid-task-index]"),
                 dataFromFile::toModelType);
     }
 

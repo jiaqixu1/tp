@@ -1,19 +1,15 @@
 package seedu.taskforge.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.ReadOnlyAddressBook;
@@ -28,13 +24,8 @@ public class PersonCardTest {
 
     private static final String PROJECT_TITLE = "alpha";
 
-    @BeforeAll
-    public static void startJavaFx() {
-        try {
-            Platform.startup(() -> { });
-        } catch (IllegalStateException e) {
-            // JavaFX already started.
-        }
+    static {
+        bootstrapJavaFx();
     }
 
     @Test
@@ -48,22 +39,18 @@ public class PersonCardTest {
                 .withTasks("task 1", "task 2")
                 .build();
 
-        runOnFxThread(() -> {
-            PersonCard card = new PersonCard(person, 1, addressBook);
-            Scene scene = new Scene(card.getRoot());
+        PersonCard card = new PersonCard(person, 1, addressBook);
 
-            assertEquals("1. ", label(scene, "id").getText());
-            assertEquals("Ada Lovelace", label(scene, "name").getText());
-            assertEquals("81234567", label(scene, "phone").getText());
-            assertEquals("ada@example.com", label(scene, "email").getText());
-            assertEquals("Available.  Workload:  2", label(scene, "availability").getText());
-            assertEquals(1, flowPane(scene, "projects").getChildren().size());
-            assertEquals(2, flowPane(scene, "tasks").getChildren().size());
-            assertEquals("1. Alpha", ((Label) flowPane(scene, "projects").getChildren().get(0)).getText());
-            assertEquals("1. [ ] task 1", ((Label) flowPane(scene, "tasks").getChildren().get(0)).getText());
-            assertEquals("2. [ ] task 2", ((Label) flowPane(scene, "tasks").getChildren().get(1)).getText());
-            return null;
-        });
+        assertEquals("1. ", label(card, "id").getText());
+        assertEquals("Ada Lovelace", label(card, "name").getText());
+        assertEquals("81234567", label(card, "phone").getText());
+        assertEquals("ada@example.com", label(card, "email").getText());
+        assertEquals("Available.  Workload:  2", label(card, "availability").getText());
+        assertEquals(1, flowPane(card, "projects").getChildren().size());
+        assertEquals(2, flowPane(card, "tasks").getChildren().size());
+        assertEquals("1. Alpha", ((Label) flowPane(card, "projects").getChildren().get(0)).getText());
+        assertEquals("1. [ ] task 1", ((Label) flowPane(card, "tasks").getChildren().get(0)).getText());
+        assertEquals("2. [ ] task 2", ((Label) flowPane(card, "tasks").getChildren().get(1)).getText());
     }
 
     @Test
@@ -78,14 +65,10 @@ public class PersonCardTest {
                 .withTasks("task 1")
                 .build();
 
-        runOnFxThread(() -> {
-            PersonCard card = new PersonCard(person, 1, addressBook);
-            Scene scene = new Scene(card.getRoot());
+        PersonCard card = new PersonCard(person, 1, addressBook);
 
-            assertEquals("Free.  Workload:  0", label(scene, "availability").getText());
-            assertEquals("1. [X] task 1", ((Label) flowPane(scene, "tasks").getChildren().get(0)).getText());
-            return null;
-        });
+        assertEquals("Free.  Workload:  0", label(card, "availability").getText());
+        assertEquals("1. [X] task 1", ((Label) flowPane(card, "tasks").getChildren().get(0)).getText());
     }
 
     @Test
@@ -98,18 +81,14 @@ public class PersonCardTest {
                 List.of(new PersonProject(9)),
                 Arrays.asList(new PersonTask(9, 9), new PersonTask(0, 9)));
 
-        runOnFxThread(() -> {
-            PersonCard card = new PersonCard(person, 1, addressBook);
-            Scene scene = new Scene(card.getRoot());
+        PersonCard card = new PersonCard(person, 1, addressBook);
 
-            assertEquals("1. ", ((Label) flowPane(scene, "projects").getChildren().get(0)).getText());
-            assertEquals("1. [ ] [invalid-task-reference]", ((Label) flowPane(scene, "tasks")
-                    .getChildren().get(0)).getText());
-            assertEquals("2. [ ] [invalid-task-reference]", ((Label) flowPane(scene, "tasks")
-                    .getChildren().get(1)).getText());
-            assertEquals("Free.  Workload:  0", label(scene, "availability").getText());
-            return null;
-        });
+        assertEquals("1. ", ((Label) flowPane(card, "projects").getChildren().get(0)).getText());
+        assertEquals("1. [ ] [invalid-task-reference]", ((Label) flowPane(card, "tasks")
+            .getChildren().get(0)).getText());
+        assertEquals("2. [ ] [invalid-task-reference]", ((Label) flowPane(card, "tasks")
+            .getChildren().get(1)).getText());
+        assertEquals("Free.  Workload:  0", label(card, "availability").getText());
     }
 
     @Test
@@ -138,11 +117,8 @@ public class PersonCardTest {
         }
 
         Person person = builder.build();
-        return runOnFxThread(() -> {
-            PersonCard card = new PersonCard(person, 1, addressBook);
-            Scene scene = new Scene(card.getRoot());
-            return label(scene, "availability").getText();
-        });
+        PersonCard card = new PersonCard(person, 1, addressBook);
+        return label(card, "availability").getText();
     }
 
     private static AddressBook addressBookWithProjectTasks(int taskCount) {
@@ -159,30 +135,37 @@ public class PersonCardTest {
         return Arrays.asList(tasks);
     }
 
-    private static Label label(Scene scene, String fxId) {
-        return (Label) scene.lookup("#" + fxId);
+    private static Label label(PersonCard card, String fieldName) {
+        return getField(card, fieldName, Label.class);
     }
 
-    private static javafx.scene.layout.FlowPane flowPane(Scene scene, String fxId) {
-        return (javafx.scene.layout.FlowPane) scene.lookup("#" + fxId);
+    private static javafx.scene.layout.FlowPane flowPane(PersonCard card, String fieldName) {
+        return getField(card, fieldName, javafx.scene.layout.FlowPane.class);
     }
 
-    private static <T> T runOnFxThread(java.util.function.Supplier<T> supplier) {
-        AtomicReference<T> result = new AtomicReference<>();
-        CountDownLatch latch = new CountDownLatch(1);
-
-        Platform.runLater(() -> {
-            result.set(supplier.get());
-            latch.countDown();
-        });
-
+    private static <T> T getField(PersonCard card, String fieldName, Class<T> fieldType) {
         try {
-            assertTrue(latch.await(5, TimeUnit.SECONDS));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            Field field = PersonCard.class.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return fieldType.cast(field.get(card));
+        } catch (ReflectiveOperationException e) {
             throw new AssertionError(e);
         }
+    }
 
-        return result.get();
+    private static void bootstrapJavaFx() {
+        try {
+            Class<?> platformImplClass = Class.forName("com.sun.javafx.application.PlatformImpl");
+            Method startupMethod = platformImplClass.getDeclaredMethod("startup", Runnable.class);
+            startupMethod.setAccessible(true);
+            startupMethod.invoke(null, (Runnable) () -> { });
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            if (!(cause instanceof IllegalStateException)) {
+                throw new AssertionError(cause);
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError(e);
+        }
     }
 }

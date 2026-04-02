@@ -14,6 +14,7 @@ import seedu.taskforge.model.project.Project;
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
+    Predicate<Project> PREDICATE_SHOW_ALL_PROJECTS = unused -> true;
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.
@@ -106,6 +107,10 @@ public interface Model {
      * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
      */
     void setPerson(Person target, Person editedPerson);
+
+    ObservableList<Project> getFilteredProjectList();
+
+    void updateFilteredProjectList(Predicate<Project> predicate);
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();

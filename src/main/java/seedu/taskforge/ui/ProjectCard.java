@@ -1,8 +1,5 @@
 package seedu.taskforge.ui;
 
-import java.util.List;
-import java.util.stream.IntStream;
-
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -11,16 +8,15 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
-import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
 
-/**
- * An UI component that displays information of a {@code Person}.
- */
-public class PersonCard extends UiPart<Region> {
+import java.util.List;
+import java.util.stream.IntStream;
 
-    private static final String FXML = "PersonListCard.fxml";
+public class ProjectCard extends UiPart<Region> {
+    private static final String FXML = "ProjectListCard.fxml";
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -30,49 +26,26 @@ public class PersonCard extends UiPart<Region> {
      * @see <a href="https://github.com/se-edu/addressbook-level4/issues/336">The issue on AddressBook level 4</a>
      */
 
-    public final Person person;
+    public final Project project;
 
     @FXML
     private HBox cardPane;
     @FXML
-    private Label name;
-    @FXML
     private Label id;
     @FXML
-    private Label phone;
-    @FXML
-    private Label email;
-    @FXML
-    private Label availability;
-    @FXML
-    private Circle availabilityIndicator;
-    @FXML
-    private FlowPane projects;
+    private Label projectTitle;
     @FXML
     private FlowPane tasks;
 
     /**
-     * Creates a {@code PersonCode} with the given {@code Person} and index to display.
+     * Creates a {@code ProjectCode} with the given {@code Project} and index to display.
      */
-    public PersonCard(Person person, int displayedIndex) {
+    public ProjectCard(Project project, int displayedIndex) {
         super(FXML);
-        this.person = person;
+        this.project = project;
         id.setText(displayedIndex + ". ");
-        name.setText(person.getName().fullName);
-        phone.setText(person.getPhone().value);
-        email.setText(person.getEmail().value);
-
-        String availabilityString = person.getAvailability().toString();
-        availability.setText(availabilityString + ".  Workload:  " + person.getWorkload());
-        availabilityIndicator.getStyleClass().add(availabilityString);
-
-        List<Project> projectList = person.getProjects();
-        List<Task> taskList = person.getTasks();
-
-        IntStream.range(0, projectList.size())
-                .forEach(i -> projects.getChildren().add(
-                        new Label((i + 1) + ". " + projectList.get(i).title)
-                ));
+        projectTitle.setText(project.toString());
+        List<Task> taskList = project.getTasks();
 
         for(int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i);

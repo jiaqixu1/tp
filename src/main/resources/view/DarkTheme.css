@@ -337,14 +337,24 @@
     -fx-background-radius: 0;
 }
 
+.task-not-done {
+    -fx-fill: transparent;
+    -fx-stroke: #18b0b5;
+    -fx-stroke-width: 1.5;
+}
+
+.task-done {
+    -fx-fill: #b7f29b;
+}
+
 #tasks {
-    -fx-hgap: 7;
+    -fx-hgap: 10;
     -fx-vgap: 3;
 }
 
 #tasks .label {
     -fx-text-fill: white;
-    -fx-background-color: #B59410;
+    -fx-background-color: #7c8530;
     -fx-padding: 1 3 1 3;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
@@ -352,7 +362,7 @@
 }
 
 #projects {
-    -fx-hgap: 7;
+    -fx-hgap: 10;
     -fx-vgap: 3;
 }
 

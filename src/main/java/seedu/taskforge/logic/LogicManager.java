@@ -16,6 +16,7 @@ import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.project.Project;
 import seedu.taskforge.storage.Storage;
 
 /**
@@ -69,6 +70,11 @@ public class LogicManager implements Logic {
     @Override
     public ObservableList<Person> getFilteredPersonList() {
         return model.getFilteredPersonList();
+    }
+
+    @Override
+    public ObservableList<Project> getFilteredProjectList() {
+        return model.getFilteredProjectList();
     }
 
     @Override

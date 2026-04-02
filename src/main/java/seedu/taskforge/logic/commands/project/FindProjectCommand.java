@@ -2,13 +2,16 @@ package seedu.taskforge.logic.commands.project;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.Model;
+import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
 import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.project.ProjectContainsKeywordsPredicate;
 
 /**
  * Finds and lists all projects whose names contain any of the given keywords.
@@ -47,6 +50,11 @@ public class FindProjectCommand extends ProjectCommand {
         String projectsList = IntStream.range(0, matchedProjects.size())
                 .mapToObj(i -> (i + 1) + ". " + matchedProjects.get(i).title)
                 .collect(Collectors.joining("\n"));
+
+        ProjectContainsKeywordsPredicate predicate = new ProjectContainsKeywordsPredicate();
+        predicate.setProjectKeywords(keywords);
+
+        model.updateFilteredProjectList(predicate);
 
         return new CommandResult(MESSAGE_PROJECTS_FOUND + "\n" + projectsList);
     }

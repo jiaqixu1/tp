@@ -332,7 +332,7 @@ This ensures a person can only be assigned to valid existing projects.
 TaskForge supports task management using 10 commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
 - `task delete PROJECT_INDEX -i TASK_INDEX`
-- `task edit PROJECT_NAME -i TASK_INDEX -n NEW_TASK_NAME`
+- `task edit PROJECT_INDEX -i TASK_INDEX -n NEW_TASK_NAME`
 - `task list -n PROJECT_NAME`
 - `task find KEYWORD [MORE_KEYWORDS]`
 - `task assign INDEX -n TASK_NAME`
@@ -352,7 +352,7 @@ TaskForge supports task management using 10 commands:
 2. **Logic layer**
     - `AddTaskCommand` adds new task(s) to a project in the global project list.
     - `DeleteTaskCommand` removes task(s) from a project by project index and task index.
-    - `EditTaskCommand` renames a task in a project by project name and task index.
+    - `EditTaskCommand` renames a task in a project by project index and task index.
     - `ListTaskCommand` lists all task(s) from a specified project by project name.
     - `FindTaskCommand` finds task(s) across all projects by keyword(s).
     - `AssignTaskCommand` assigns existing task(s) to a person.
@@ -395,7 +395,7 @@ TaskForge supports task management using 10 commands:
 - `AddressBook#cascadeRemoveDeletedProjectTasksFromPersons()` automatically removes the deleted task from all persons who have it assigned.
 
 **Task editing in project (`task edit`)**:
-- `EditTaskCommand` validates that the target project exists by project name and that the task index is within bounds.
+- `EditTaskCommand` validates that the project index and task index is within bounds.
 - The command renames the selected project task and rejects duplicates via `MESSAGE_DUPLICATE_TASK`.
 - Before applying the rename, the command snapshots people currently assigned to the original task.
 - After updating the project, it reassigns each affected person to the renamed task so assignments are preserved.
@@ -439,7 +439,7 @@ TaskForge supports task management using 10 commands:
 
 - `AddTaskCommandParser` parses the preamble as the target project `INDEX` and parses task names from repeated `-n` prefixes.
 - `DeleteTaskCommandParser` parses the preamble as the target project `INDEX` and parses task indexes from repeated `-i` prefixes.
-- `EditTaskCommandParser` parses the preamble as target `PROJECT_NAME`, parses task index from `-i`, and parses the new task name from `-n`.
+- `EditTaskCommandParser` parses the preamble as target `PROJECT_INDEX`, parses task index from `-i`, and parses the new task name from `-n`.
 - `ListTaskCommandParser` parses project name from `-n PROJECT_NAME`.
 - `FindTaskCommandParser` parses one or more keyword tokens from the argument preamble.
 - `AssignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
@@ -454,7 +454,7 @@ TaskForge supports task management using 10 commands:
 - Person-targeting commands (`task assign`, `task unassign`, `task view`) resolve the target person from `model.getFilteredPersonList()` using the supplied person `INDEX`.
 - If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
 - `AddTaskCommand` and `DeleteTaskCommand` resolve the target project from the list and validate the project index before executing.
-- `EditTaskCommand` resolves the target project by name and validates the provided task index before executing.
+- `EditTaskCommand` resolves the target project by index and validates both the project index and task index before executing.
 - `ListTaskCommand` resolves the target project by project name and fails if the project does not exist.
 - `FindTaskCommand` resolves across all project task lists and returns matching task entries in `taskName - projectName` format.
 - On success, `AddTaskCommand`, `DeleteTaskCommand`, `EditTaskCommand`, `AssignTaskCommand`, and `UnassignTaskCommand` update the model.

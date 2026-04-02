@@ -268,9 +268,9 @@ Examples:
 
 Edits the name of an existing task in a project.
 
-Format: `task edit PROJECT_NAME -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`
+Format: `task edit PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`
 
-* Edits the task at `TASK_INDEX_FROM_PROJECT` in the project named `PROJECT_NAME`.
+* Edits the task at `TASK_INDEX_FROM_PROJECT` in the project with index `PROJECT_INDEX`.
 * `TASK_INDEX_FROM_PROJECT` refers to the task numbering shown for that project in the app.
 * `TASK_INDEX_FROM_PROJECT` **must be a positive integer** `1, 2, 3, ...`
 * `NEW_TASK_NAME` must be alphanumeric (only letters, numbers and spaces), between 1 to 64 characters.
@@ -278,8 +278,8 @@ Format: `task edit PROJECT_NAME -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`
 * If the edited task is assigned to any person, TaskForge preserves those assignments by reassigning the renamed task.
 
 Examples:
-* `task edit Alpha -i 1 -n Prepare sprint report`
-* `task edit Project X -i 2 -n Finalize API contract`
+* `task edit 1 -i 1 -n Prepare sprint report`
+* `task edit 3 -i 2 -n Finalize API contract`
 
 #### Listing all tasks in a project : `task list`
 
@@ -436,7 +436,7 @@ Action | Format, Examples
 **Add Project** | `project add PROJECT_NAME`<br> e.g., `project add WebApp`
 **Add Task** | `task add PROJECT_INDEX -n TASK_NAME`<br> e.g., `task add 1 -n Write report`
 **Delete Task** | `task delete PROJECT_INDEX -i TASK_INDEX`<br> e.g., `task delete 1 -i 2`
-**Edit Task** | `task edit PROJECT_NAME -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`<br> e.g., `task edit Alpha -i 1 -n Prepare sprint report`
+**Edit Task** | `task edit PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`<br> e.g., `task edit 1 -i 1 -n Prepare sprint report`
 **List Tasks by Project** | `task list -n PROJECT_NAME`<br> e.g., `task list -n Alpha`
 **Find Tasks** | `task find KEYWORD [MORE_KEYWORDS]`<br> e.g., `task find report bug`
 **Assign Task** | `task assign INDEX -n TASK_NAME`<br> e.g., `task assign 1 -n Draft proposal`

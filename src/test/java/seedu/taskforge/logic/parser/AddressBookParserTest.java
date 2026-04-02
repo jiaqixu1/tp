@@ -211,8 +211,8 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_editTask() throws Exception {
         EditTaskCommand command = (EditTaskCommand) parser.parseCommand(EditTaskCommand.COMMAND_WORD
-                + " " + EditTaskCommand.SUBCOMMAND_WORD + " alpha -i 1 -n Write report");
-        assertEquals(new EditTaskCommand(new Project("alpha"), INDEX_FIRST_TASK,
+                + " " + EditTaskCommand.SUBCOMMAND_WORD + " 1 -i 1 -n Write report");
+        assertEquals(new EditTaskCommand(INDEX_FIRST_PROJECT, INDEX_FIRST_TASK,
                 ParserUtil.parseTask("Write report")), command);
     }
 

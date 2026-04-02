@@ -12,7 +12,6 @@ import seedu.taskforge.logic.parser.ArgumentTokenizer;
 import seedu.taskforge.logic.parser.Parser;
 import seedu.taskforge.logic.parser.ParserUtil;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
-import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
 
 /**
@@ -26,12 +25,14 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_INDEX, PREFIX_NAME);
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_INDEX, PREFIX_NAME);
 
-        String projectName = argMultimap.getPreamble().trim();
-        if (projectName.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditTaskCommand.MESSAGE_USAGE));
-        }
+        Index index;
 
-        Project project = ParserUtil.parseProject(projectName);
+        try {
+            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+        } catch (ParseException pe) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    EditTaskCommand.MESSAGE_USAGE), pe);
+        }
 
         if (argMultimap.getValue(PREFIX_INDEX).isEmpty() || argMultimap.getValue(PREFIX_NAME).isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditTaskCommand.MESSAGE_USAGE));
@@ -40,7 +41,7 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
         Index taskIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEX).get());
         Task newTask = ParserUtil.parseTask(argMultimap.getValue(PREFIX_NAME).get());
 
-        return new EditTaskCommand(project, taskIndex, newTask);
+        return new EditTaskCommand(index, taskIndex, newTask);
     }
 }
 

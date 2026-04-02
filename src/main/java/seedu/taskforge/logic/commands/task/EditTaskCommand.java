@@ -25,24 +25,24 @@ public class EditTaskCommand extends TaskCommand {
 
     public static final String MESSAGE_SUCCESS = "Task edited in project: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PROJECT_NAME -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME";
-    public static final String MESSAGE_PROJECT_NOT_FOUND = "The project was not found in the address book.";
-    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
+            + SUBCOMMAND_WORD + " PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUND = "Project index is out of bound.";
+    public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUND = "Task index is out of bound";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this project!";
 
-    private final Project targetProject;
+    private final Index projectIndex;
     private final Index taskIndex;
     private final Task newTask;
 
     /**
      * Creates an EditTaskCommand to edit a task in a project.
      */
-    public EditTaskCommand(Project targetProject, Index taskIndex, Task newTask) {
-        requireNonNull(targetProject);
+    public EditTaskCommand(Index projectIndex, Index taskIndex, Task newTask) {
+        requireNonNull(projectIndex);
         requireNonNull(taskIndex);
         requireNonNull(newTask);
 
-        this.targetProject = targetProject;
+        this.projectIndex = projectIndex;
         this.taskIndex = taskIndex;
         this.newTask = newTask;
     }
@@ -51,16 +51,19 @@ public class EditTaskCommand extends TaskCommand {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Project projectToEdit = model.getProjectList().stream()
-                .filter(project -> project.equals(targetProject))
-                .findFirst()
-                .orElseThrow(() -> new CommandException(MESSAGE_PROJECT_NOT_FOUND));
+        List<Project> projectList = model.getProjectList();
+
+        if (projectIndex.getZeroBased() >= projectList.size()) {
+            throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUND);
+        }
+
+        Project projectToEdit = projectList.get(projectIndex.getZeroBased());
 
         Task taskToEdit;
         try {
             taskToEdit = projectToEdit.getTasks().get(taskIndex.getZeroBased());
         } catch (IndexOutOfBoundsException e) {
-            throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
+            throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUND);
         }
 
         List<Person> assignedPersons = findPersonsAssignedToTask(model, projectToEdit.title, taskToEdit);
@@ -141,14 +144,14 @@ public class EditTaskCommand extends TaskCommand {
         }
 
         EditTaskCommand otherEditTaskCommand = (EditTaskCommand) other;
-        return targetProject.equals(otherEditTaskCommand.targetProject)
+        return projectIndex.equals(otherEditTaskCommand.projectIndex)
                 && taskIndex.equals(otherEditTaskCommand.taskIndex)
                 && newTask.equals(otherEditTaskCommand.newTask);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(targetProject, taskIndex, newTask);
+        return Objects.hash(projectIndex, taskIndex, newTask);
     }
 }
 

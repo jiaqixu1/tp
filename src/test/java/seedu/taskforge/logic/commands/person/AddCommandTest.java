@@ -55,8 +55,7 @@ public class AddCommandTest {
         AddCommand addCommand = new AddCommand(validPerson);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON,
-                () -> addCommand.execute(modelStub));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -67,8 +66,8 @@ public class AddCommandTest {
         Person person = new PersonBuilder().build();
         AddCommand command = new AddCommand(person, List.of(new Project("beta")), List.of());
 
-        assertThrows(CommandException.class, "The project to assign does not exist in the address book.",
-                () -> command.execute(modelStub));
+        assertThrows(CommandException.class, "The project to assign does not exist in the address book.", () ->
+            command.execute(modelStub));
     }
 
     @Test
@@ -79,8 +78,8 @@ public class AddCommandTest {
         Person person = new PersonBuilder().build();
         AddCommand command = new AddCommand(person, List.of(new Project("alpha")), List.of(new Task("task B")));
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS,
-                () -> command.execute(modelStub));
+        assertThrows(CommandException.class,
+                AddCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS, () -> command.execute(modelStub));
     }
 
     @Test
@@ -92,8 +91,7 @@ public class AddCommandTest {
         AddCommand command = new AddCommand(person, List.of(new Project("alpha")),
                 Arrays.asList(new Task("task A"), new Task("task A")));
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_TASK,
-                () -> command.execute(modelStub));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_TASK, () -> command.execute(modelStub));
     }
 
     @Test

@@ -56,8 +56,7 @@ public class SampleDataUtilTest {
 
     @Test
     public void getPersonProjectList_unknownProject_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> SampleDataUtil.getPersonProjectList("Missing Project"));
+        assertThrows(IllegalArgumentException.class, () -> SampleDataUtil.getPersonProjectList("Missing Project"));
     }
 
     @Test

@@ -56,6 +56,53 @@ public class PersonCardTest {
         assertEquals(Availability.AVAILABLE, invokeCalculateAvailability(-1));
     }
 
+    @Test
+    public void formatAvailabilityText_returnsExpectedString() {
+        assertEquals("Available.  Workload:  2", PersonCard.formatAvailabilityText(2));
+    }
+
+    @Test
+    public void resolveProjectTitle_validAndInvalidIndex() {
+        List<Project> projects = List.of(new Project("alpha"));
+
+        assertEquals("Alpha", PersonCard.resolveProjectTitle(new seedu.taskforge.model.person.PersonProject(0),
+                projects));
+        assertEquals("", PersonCard.resolveProjectTitle(new seedu.taskforge.model.person.PersonProject(1), projects));
+    }
+
+    @Test
+    public void buildProjectDisplayLabels_formatsOrdinalAndFallbackTitle() {
+        List<Project> projects = List.of(new Project("alpha"));
+        List<seedu.taskforge.model.person.PersonProject> personProjects = List.of(
+                new seedu.taskforge.model.person.PersonProject(0),
+                new seedu.taskforge.model.person.PersonProject(1));
+
+        assertEquals(List.of("1. Alpha", "2. "), PersonCard.buildProjectDisplayLabels(personProjects, projects));
+    }
+
+    @Test
+    public void resolveTaskDisplay_doneAndInvalidTaskReference() {
+        Task doneTask = new Task("task 1");
+        doneTask.setDone();
+        List<Project> projects = List.of(new Project("alpha", List.of(doneTask)));
+
+        assertEquals("[X] task 1", PersonCard.resolveTaskDisplay(new PersonTask(0, 0), projects));
+        assertEquals("[ ] [invalid-task-reference]", PersonCard.resolveTaskDisplay(new PersonTask(0, 2), projects));
+        assertEquals("[ ] [invalid-task-reference]", PersonCard.resolveTaskDisplay(new PersonTask(2, 0), projects));
+    }
+
+    @Test
+    public void buildTaskDisplayLabels_formatsOrdinalAndStatuses() {
+        Task doneTask = new Task("task 1");
+        doneTask.setDone();
+        Task todoTask = new Task("task 2");
+        List<Project> projects = List.of(new Project("alpha", List.of(doneTask, todoTask)));
+        List<PersonTask> personTasks = List.of(new PersonTask(0, 0), new PersonTask(0, 1), new PersonTask(0, 9));
+
+        assertEquals(List.of("1. [X] task 1", "2. [ ] task 2", "3. [ ] [invalid-task-reference]"),
+                PersonCard.buildTaskDisplayLabels(personTasks, projects));
+    }
+
     private static int invokeCalculateWorkload(List<PersonTask> personTasks, List<Project> projects) {
         return PersonCard.calculateWorkload(personTasks, projects);
     }

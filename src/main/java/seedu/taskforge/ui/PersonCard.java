@@ -71,40 +71,53 @@ public class PersonCard extends UiPart<Region> {
 
         int workload = calculateWorkload(taskList, globalProjectList);
         String availabilityString = calculateAvailability(workload).toString();
-        availability.setText(availabilityString + ".  Workload:  " + workload);
+        availability.setText(formatAvailabilityText(workload));
         availabilityIndicator.getStyleClass().add(availabilityString);
 
-        IntStream.range(0, personProjectList.size())
-                .forEach(i -> {
-                    PersonProject personProject = personProjectList.get(i);
-                    int projectIndex = personProject.getProjectIndex();
-                    String projectTitle = "";
-                    if (projectIndex >= 0 && projectIndex < globalProjectList.size()) {
-                        projectTitle = globalProjectList.get(projectIndex).title;
-                    }
-                    projects.getChildren().add(
-                            new Label((i + 1) + ". " + projectTitle)
-                    );
-                });
-        IntStream.range(0, taskList.size())
-                .forEach(i -> {
-                    PersonTask personTask = taskList.get(i);
-                    String taskLabel = "[invalid-task-reference]";
-                    String status = "[ ] ";
-                    int projectIndex = personTask.getProjectIndex();
-                    int taskIndex = personTask.getTaskIndex();
-                    if (projectIndex >= 0 && projectIndex < globalProjectList.size()) {
-                        List<Task> projectTasks = globalProjectList.get(projectIndex).getTasks();
-                        if (taskIndex >= 0 && taskIndex < projectTasks.size()) {
-                            Task task = projectTasks.get(taskIndex);
-                            taskLabel = task.description;
-                            status = task.getStatus() ? "[X] " : "[ ] ";
-                        }
-                    }
-                    tasks.getChildren().add(
-                            new Label((i + 1) + ". " + status + taskLabel)
-                    );
-                });
+        buildProjectDisplayLabels(personProjectList, globalProjectList)
+                .forEach(labelText -> projects.getChildren().add(new Label(labelText)));
+        buildTaskDisplayLabels(taskList, globalProjectList)
+                .forEach(labelText -> tasks.getChildren().add(new Label(labelText)));
+    }
+
+    static String formatAvailabilityText(int workload) {
+        return calculateAvailability(workload) + ".  Workload:  " + workload;
+    }
+
+    static List<String> buildProjectDisplayLabels(List<PersonProject> personProjects, List<Project> globalProjects) {
+        return IntStream.range(0, personProjects.size())
+                .mapToObj(i -> (i + 1) + ". " + resolveProjectTitle(personProjects.get(i), globalProjects))
+                .toList();
+    }
+
+    static List<String> buildTaskDisplayLabels(List<PersonTask> personTasks, List<Project> globalProjects) {
+        return IntStream.range(0, personTasks.size())
+                .mapToObj(i -> (i + 1) + ". " + resolveTaskDisplay(personTasks.get(i), globalProjects))
+                .toList();
+    }
+
+    static String resolveProjectTitle(PersonProject personProject, List<Project> globalProjects) {
+        int projectIndex = personProject.getProjectIndex();
+        if (projectIndex >= 0 && projectIndex < globalProjects.size()) {
+            return globalProjects.get(projectIndex).title;
+        }
+        return "";
+    }
+
+    static String resolveTaskDisplay(PersonTask personTask, List<Project> globalProjects) {
+        String taskLabel = "[invalid-task-reference]";
+        String status = "[ ] ";
+        int projectIndex = personTask.getProjectIndex();
+        int taskIndex = personTask.getTaskIndex();
+        if (projectIndex >= 0 && projectIndex < globalProjects.size()) {
+            List<Task> projectTasks = globalProjects.get(projectIndex).getTasks();
+            if (taskIndex >= 0 && taskIndex < projectTasks.size()) {
+                Task task = projectTasks.get(taskIndex);
+                taskLabel = task.description;
+                status = task.getStatus() ? "[X] " : "[ ] ";
+            }
+        }
+        return status + taskLabel;
     }
 
     static int calculateWorkload(List<PersonTask> personTasks, List<Project> globalProjects) {

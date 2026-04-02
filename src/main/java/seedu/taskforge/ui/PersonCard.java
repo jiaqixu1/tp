@@ -107,7 +107,7 @@ public class PersonCard extends UiPart<Region> {
                 });
     }
 
-    private static int calculateWorkload(List<PersonTask> personTasks, List<Project> globalProjects) {
+    static int calculateWorkload(List<PersonTask> personTasks, List<Project> globalProjects) {
         int workload = 0;
         for (PersonTask personTask : personTasks) {
             int projectIndex = personTask.getProjectIndex();
@@ -126,7 +126,7 @@ public class PersonCard extends UiPart<Region> {
         return workload;
     }
 
-    private static Availability calculateAvailability(int workload) {
+    static Availability calculateAvailability(int workload) {
         return workload == Person.FREE
                 ? Availability.FREE
                 : workload <= Person.AVAILABLE

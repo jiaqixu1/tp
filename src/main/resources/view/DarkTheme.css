@@ -151,8 +151,10 @@
     -fx-font-family: "Segoe UI Light";
     -fx-font-size: 13pt;
     -fx-text-fill: white;
-    -fx-padding: 0 0 0 5;
-    -fx-text-alignment: left;
+}
+
+.result-display .label {
+    -fx-text-fill: black !important;
 }
 
 .status-bar .label {

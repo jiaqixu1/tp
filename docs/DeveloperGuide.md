@@ -576,7 +576,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 	 * 1a1. TaskForge displays an error message.
 	 * 1a2. User enters the command again.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
-   
+
    Use case resumes from step 2.
 
 * 2a. TaskForge could not find the mentioned contact.

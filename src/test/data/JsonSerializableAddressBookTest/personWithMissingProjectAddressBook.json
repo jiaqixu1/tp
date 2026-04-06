@@ -7,7 +7,7 @@
       "name": "John Doe",
       "phone": "91234567",
       "email": "john@example.com",
-      "projects": [{ "title": "beta", "tasks": [] }],
+      "projects": [{ "projectIndex": 1 }],
       "tasks": []
     }
   ]

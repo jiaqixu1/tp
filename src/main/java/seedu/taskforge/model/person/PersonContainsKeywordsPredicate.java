@@ -58,7 +58,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 && isKeywordMatch(person, phoneKeywords, p -> p.getPhone().value)
                 && isKeywordMatch(person, emailKeywords, p -> p.getEmail().value)
                 && isKeywordMatchForCollection(person, taskKeywords, p -> p.getTasks().stream()
-                        .map(task -> task.description).toList())
+                    .map(PersonTask::toString).toList())
                 && isKeywordMatchForCollection(person, projectKeywords, p -> p.getProjects().stream()
                         .map(project -> project.toString()).toList());
     }

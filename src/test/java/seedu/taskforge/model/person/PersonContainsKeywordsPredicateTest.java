@@ -161,15 +161,16 @@ public class PersonContainsKeywordsPredicateTest {
     public void test_taskContainsKeywords_returnsTrue() {
         // One keyword
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
-                .setTaskKeywords(Collections.singletonList("Task1"));
+                .setTaskKeywords(Collections.singletonList("taskIndex=0}"));
         assertTrue(predicate.test(new PersonBuilder().withTasks("Task1", "Task2").build()));
 
         // Multiple keywords
-        predicate = new PersonContainsKeywordsPredicate().setTaskKeywords(Arrays.asList("Task1", "Task2"));
+        predicate = new PersonContainsKeywordsPredicate().setTaskKeywords(Arrays.asList(
+                "taskIndex=0}", "taskIndex=1}"));
         assertTrue(predicate.test(new PersonBuilder().withTasks("Task1").build()));
 
         // Mixed-case keywords
-        predicate = new PersonContainsKeywordsPredicate().setTaskKeywords(Arrays.asList("tASk1"));
+        predicate = new PersonContainsKeywordsPredicate().setTaskKeywords(Arrays.asList("tASkInDeX=0}"));
         assertTrue(predicate.test(new PersonBuilder().withTasks("Task1").build()));
     }
 
@@ -177,16 +178,21 @@ public class PersonContainsKeywordsPredicateTest {
     public void test_projectContainsKeywords_returnsTrue() {
         // One keyword
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
-                .setProjectKeywords(Collections.singletonList("Project1"));
+                .setProjectKeywords(Collections.singletonList(
+                        "seedu.taskforge.model.person.PersonProject{projectIndex=0}"));
         assertTrue(predicate.test(new PersonBuilder().withProjects("Project1", "Project2").build()));
 
         // Multiple keywords
         predicate = new PersonContainsKeywordsPredicate()
-                .setProjectKeywords(Arrays.asList("Project1", "Project2"));
+                .setProjectKeywords(Arrays.asList(
+                        "seedu.taskforge.model.person.PersonProject{projectIndex=0}",
+                        "seedu.taskforge.model.person.PersonProject{projectIndex=1}"));
         assertTrue(predicate.test(new PersonBuilder().withProjects("Project1").build()));
 
         // Mixed-case keywords
-        predicate = new PersonContainsKeywordsPredicate().setProjectKeywords(Arrays.asList("pROjEcT1"));
+        predicate = new PersonContainsKeywordsPredicate()
+                .setProjectKeywords(Arrays.asList(
+                        "sEEDu.tASKfORGE.mODEL.pERSON.pERSoNpROjECt{pROjEcTiNdEx=0}"));
         assertTrue(predicate.test(new PersonBuilder().withProjects("Project1").build()));
     }
 
@@ -196,8 +202,9 @@ public class PersonContainsKeywordsPredicateTest {
                 .setNameKeywords(Collections.singletonList("Alice"))
                 .setPhoneKeywords(Collections.singletonList("91234567"))
                 .setEmailKeywords(Collections.singletonList("alice@example.com"))
-                .setTaskKeywords(Collections.singletonList("Task1"))
-                .setProjectKeywords(Collections.singletonList("Project1"));
+                .setTaskKeywords(Collections.singletonList("taskIndex=0}"))
+                .setProjectKeywords(Collections.singletonList(
+                        "seedu.taskforge.model.person.PersonProject{projectIndex=0}"));
         assertTrue(predicate.test(new PersonBuilder()
                 .withName("Alice")
                 .withPhone("91234567")

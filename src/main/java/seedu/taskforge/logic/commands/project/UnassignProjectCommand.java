@@ -19,9 +19,9 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
-import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 
 /**
  * Unassigns a project from an existing person in the address book.
@@ -92,23 +92,23 @@ public class UnassignProjectCommand extends ProjectCommand {
         Name name = personToEdit.getName();
         Phone phone = personToEdit.getPhone();
         Email email = personToEdit.getEmail();
-        List<Task> taskList = personToEdit.getTasks();
+        List<PersonTask> taskList = personToEdit.getTasks();
 
-        List<Project> newProjects = new ArrayList<>(personToEdit.getProjects());
-        List<Project> projectsToDelete = new ArrayList<>();
+        List<PersonProject> newPersonProjects = new ArrayList<>(personToEdit.getProjects());
+        List<PersonProject> personProjectsToDelete = new ArrayList<>();
         List<Index> indexToDelete = unassignProjectDescriptor.getProjectsIndexes()
                 .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
         for (int i = 0; i < indexToDelete.size(); ++i) {
             int projectIndex = indexToDelete.get(i).getZeroBased();
             try {
-                projectsToDelete.add(newProjects.get(projectIndex));
+                personProjectsToDelete.add(newPersonProjects.get(projectIndex));
             } catch (IndexOutOfBoundsException e) {
                 throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
             }
         }
-        newProjects.removeAll(projectsToDelete);
+        newPersonProjects.removeAll(personProjectsToDelete);
 
-        return new Person(name, phone, email, newProjects, taskList);
+        return new Person(name, phone, email, newPersonProjects, taskList);
     }
 
     @Override

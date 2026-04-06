@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 import seedu.taskforge.commons.util.ToStringBuilder;
-import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 /**
  * Represents a Person in the address book.
  * Guarantees: details are present and not null, field values are validated, immutable.
@@ -26,14 +24,14 @@ public class Person {
     private final Email email;
 
     // Data fields
-    private final List<Project> projects;
-    private final List<Task> tasks;
+    private final List<PersonProject> projects;
+    private final List<PersonTask> tasks;
 
     /**
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email,
-                  List<Project> projects, List<Task> tasks) {
+                  List<PersonProject> projects, List<PersonTask> tasks) {
         requireAllNonNull(name, phone, email, projects, tasks);
         this.name = name;
         this.phone = phone;
@@ -56,10 +54,10 @@ public class Person {
 
 
     /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
+     * Returns an immutable person project list, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    public List<Project> getProjects() {
+    public List<PersonProject> getProjects() {
         return projects;
     }
 
@@ -67,17 +65,16 @@ public class Person {
      * Returns an immutable task set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    public List<Task> getTasks() {
+    public List<PersonTask> getTasks() {
         return tasks;
     }
 
     /**
      * Returns the current workload count of this person.
-     * Workload is defined as the number of not done tasks assigned to the person.
-     * @return The number of tasks with status false (incomplete)
+     * Workload is defined as the number of assigned tasks.
      */
     public int getWorkload() {
-        return (int) tasks.stream().filter(t -> !t.getStatus()).count();
+        return tasks.size();
     }
 
     /**

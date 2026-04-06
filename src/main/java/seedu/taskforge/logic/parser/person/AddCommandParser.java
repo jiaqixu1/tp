@@ -7,6 +7,7 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,6 +21,7 @@ import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
@@ -51,9 +53,9 @@ public class AddCommandParser implements Parser<AddCommand> {
         List<Project> projectList = ParserUtil.parseProjects(argMultimap.getAllValues(PREFIX_PROJECT_TITLE));
         List<Task> taskList = ParserUtil.parseTasks(argMultimap.getAllValues(PREFIX_TASK));
 
-        Person person = new Person(name, phone, email, projectList, taskList);
+        Person person = new Person(name, phone, email, new ArrayList<>(), new ArrayList<PersonTask>());
 
-        return new AddCommand(person);
+        return new AddCommand(person, projectList, taskList);
     }
 
     /**

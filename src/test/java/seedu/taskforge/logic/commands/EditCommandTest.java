@@ -8,6 +8,7 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -15,6 +16,8 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +31,10 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
+import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.task.Task;
 import seedu.taskforge.testutil.EditPersonDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 
@@ -40,14 +47,19 @@ public class EditCommandTest {
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
-        Person editedPerson = new PersonBuilder().build();
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person editedPerson = new PersonBuilder(personToEdit)
+            .withName(PersonBuilder.DEFAULT_NAME)
+            .withPhone(PersonBuilder.DEFAULT_PHONE)
+            .withEmail(PersonBuilder.DEFAULT_EMAIL)
+            .build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
+        expectedModel.setPerson(personToEdit, editedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -147,6 +159,60 @@ public class EditCommandTest {
                 new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
 
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_assignProjectNotInAddressBook_failure() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setProjects(List.of(new Project("ghost project")));
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, "The project to assign does not exist in the address book");
+    }
+
+    @Test
+    public void execute_assignDuplicateTasks_failure() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setProjects(List.of(new Project(VALID_PROJECT_ALPHA)));
+        descriptor.setTasks(List.of(new Task(VALID_TASK_REFACTOR), new Task(VALID_TASK_REFACTOR)));
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_TASK);
+    }
+
+    @Test
+    public void execute_assignTaskWithInvalidAssignedProjectIndex_failure() {
+        AddressBook addressBook = new AddressBook();
+        addressBook.addProject(new Project(VALID_PROJECT_ALPHA, List.of(new Task(VALID_TASK_REFACTOR))));
+        Person malformedPerson = new PersonBuilder()
+                .withName("Malformed Person")
+                .withPhone("99999999")
+                .withEmail("malformed@example.com")
+                .build();
+        Person malformedWithInvalidProject = new Person(
+                malformedPerson.getName(),
+                malformedPerson.getPhone(),
+                malformedPerson.getEmail(),
+                List.of(new PersonProject(-1)),
+                List.of(new PersonTask(0, 0)));
+        addressBook.addPerson(malformedWithInvalidProject);
+        Model malformedModel = new ModelManager(addressBook, new UserPrefs());
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setTasks(List.of(new Task(VALID_TASK_REFACTOR)));
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, malformedModel, EditCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+    }
+
+    @Test
+    public void execute_assignTaskWithMismatchedProjectTitle_failure() {
+        Model localModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setTasks(List.of(new Task(VALID_TASK_REFACTOR, VALID_PROJECT_BETA)));
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, localModel, EditCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
     }
 
     @Test

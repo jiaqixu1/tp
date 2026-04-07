@@ -247,6 +247,8 @@ TaskForge supports project management through the parent command `project` with 
 
 1. **Model layer**
    - `UniqueProjectList` stores globally unique project entries.
+    - `Person` stores assigned projects as `List<PersonProject>`, where each `PersonProject` stores a project index refers to the index of Project inside the global UniqueProjectList.
+    - Project references are resolved against the global UniqueProjectList when rendering UI output or validating commands.
    - `AddressBook` exposes project operations through methods such as
      `hasProject`, `addProject`, `setProject`, `removeProject`, `cascadeRemoveProjectFromPersons`, and `getProjectList`.
 
@@ -273,7 +275,10 @@ TaskForge supports project management through the parent command `project` with 
 
 4. **Storage layer**
     - `JsonSerializableAddressBook` persists project entries in the `projects` JSON array.
+      - Person-side project assignments are persisted as project references (`PersonProject`) instead of persists Project object.
+      - During load, project references are validated against the global project list before persons are accepted.
     - During deserialization, projects are restored into the model so project entries persist across application restarts.
+      - `JsonSerializableAddressBook#toModelType()` validates cross-entity consistency for reference integrity.
 
 #### Validation and cascading behavior
 
@@ -284,7 +289,8 @@ TaskForge supports project management through the parent command `project` with 
 **Project deletion (`project delete`)**:
 - `DeleteProjectCommand` removes project(s) from the global `UniqueProjectList`.
 - `AddressBook#cascadeRemoveProjectFromPersons()` automatically removes all assignments of that project from contacts.
-- All tasks within that project are also removed through the `cascadeRemoveDeletedProjectTasksFromPersons()` function.
+- Tasks associated with that removed project are also removed from affected persons inside
+   `AddressBook#cascadeRemoveProjectFromPersons()`.
 
 **Project listing (`project list`)**:
 - `ListProjectCommand` retrieves and displays all projects in the global project list.
@@ -346,6 +352,7 @@ TaskForge supports task management using 10 commands:
 1. **Model layer**
    - `UniqueTaskList` stores task entries within each project.
    - `Project` exposes task operations through methods such as `hasTask`, `addTask`, `removeTask`, and `getTasks`.
+    - `Person` stores assigned tasks as `List<PersonTask>`, where each `PersonTask` stores `(projectIndex, taskIndex)` refers to the index of Project in the global UniqueProjectList and the index of task inside the UniqueTaskList of the Project.
    - `AddressBook` provides cascade deletion from all task assignments when a task is deleted from a project.
    - `Task` includes an `isDone` boolean field to track the completion status of a task. It provides `getStatus()`, `setDone()`, and `setNotDone()` methods.
 
@@ -379,9 +386,10 @@ TaskForge supports task management using 10 commands:
    - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
 
 4. **Storage layer**
-    - `JsonAdaptedTask` handles serialization/deserialization of task objects.
-    - `JsonAdaptedProject` and `JsonAdaptedPerson` includes a list of `JsonAdaptedTask` entries that are persisted in the JSON file.
+      - `JsonAdaptedTask` handles serialization/deserialization of task objects.
+      - Person-side task assignments are persisted as `PersonTask` references `(projectIndex, taskIndex)`.
     - During deserialization, tasks are restored into projects so task entries persist across application restarts.
+      - During deserialization, invalid task references (missing project index or task index) are rejected.
 
 #### Validation and cascading behavior
 
@@ -411,7 +419,7 @@ TaskForge supports task management using 10 commands:
 
 **Task assignment to person (`task assign`)**:
 - `AssignTaskCommand` validates whether or not task(s) exists in the person's assigned projects before assignment.
-- Uses `resolveTasksWithProjectTracking()` to track which project each task belongs to.
+- Resolves each selected task to a `(projectIndex, taskIndex)` pair before persisting assignment.
 - Rejects duplicate assignments via `MESSAGE_DUPLICATE_TASK`.
 
 **Task viewing (`task view`)**:
@@ -466,6 +474,12 @@ The `Person` model includes `getWorkload()` and `getAvailability()` methods to c
 
 `getWorkload()` returns the number of incomplete tasks, while `getAvailability()` returns an `Availability` enum (FREE, AVAILABLE, BUSY, OVERLOADED) based on predefined thresholds.
 The availability status is displayed in the `PersonCard` UI as a colored circle next to the number of workload.
+
+#### Model-storage consistency contract
+
+- Model side: assigned projects/tasks are stored on `Person` as references (`PersonProject`, `PersonTask`) to Project and Task.
+- Storage side: JSON loading enforces that project and task references remain valid against the global project or project's task lists before data is accepted.
+- This ensure consistent when editting data from the database.
 
 ### \[Proposed\] Data archiving
 
@@ -576,7 +590,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 	 * 1a1. TaskForge displays an error message.
 	 * 1a2. User enters the command again.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
-   
+
    Use case resumes from step 2.
 
 * 2a. TaskForge could not find the mentioned contact.

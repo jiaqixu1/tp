@@ -22,6 +22,8 @@ Class Name
 Class Phone
 Class Project
 Class Task
+Class PersonProject
+Class PersonTask
 
 Class I #FFFFFF
 }
@@ -48,10 +50,10 @@ Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
-Person *--> "~* projects" Project
-Person *--> "~* tasks" Task
-Project --> "0..1" Project : references
-Task --> "0..1" Task : references
+Person *--> "~* projects" PersonProject
+Person *--> "~* tasks" PersonTask
+PersonProject ..> Project : lookup
+PersonTask ..> Task : lookup
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I

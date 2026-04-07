@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_IMPLEMENT_X;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.taskforge.testutil.Assert.assertThrows;
@@ -29,7 +30,10 @@ public class AddTaskCommandTest {
     @Test
     public void execute_addOneTask_success() {
         Project firstProject = model.getProjectList().get(INDEX_FIRST_PROJECT.getZeroBased());
-        Project editedProject = new Project(firstProject.title, Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
+        Project editedProject = new Project(firstProject.title, Arrays.asList(
+            new Task(VALID_TASK_REFACTOR),
+            new Task(VALID_TASK_FIX_ERROR),
+            new Task(VALID_TASK_IMPLEMENT_X)));
 
         AddTaskCommand.AddTaskDescriptor descriptor = new AddTaskCommand.AddTaskDescriptor();
         descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));

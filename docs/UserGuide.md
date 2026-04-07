@@ -227,8 +227,8 @@ Format: `project unassign PERSON_INDEX -i PROJECT_INDEX`
 * To unassign multiple projects in one command, repeat the `-i` prefix.
 
 Examples:
-* `project delete 1 -i 2` deletes 2nd project from the 1st person in the `list`
-* `project delete 3 -i 1 -i 4` deletes 1st and 4th project from the 3rd person in the `list`
+* `project unassign 1 -i 2` unassigns the 2nd project from the 1st person in the `list`
+* `project unassign 3 -i 1 -i 4` unassigns the 1st and 4th projects from the 3rd person in the `list`
 
 ### Managing tasks
 
@@ -452,6 +452,7 @@ Action | Format, Examples
 **Find Person** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List Person** | `list`
 **Unassign Task** | `task unassign INDEX -i TASK_INDEX`<br> e.g., `task unassign 2 -i 1`
-**Unassign Project** | `project unassign INDEX -i PROJECT_INDEX`<br> e.g., `project unassgin 2 -i 1`
+**Edit Person** | `edit INDEX [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit INDEX -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
+**Unassign Project** | `project unassign INDEX -i PROJECT_INDEX`<br> e.g., `project unassign 2 -i 1`
 **View Projects** | `project list`
 **Help** | `help`

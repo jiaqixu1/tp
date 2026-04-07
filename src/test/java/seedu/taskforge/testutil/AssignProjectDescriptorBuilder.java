@@ -27,7 +27,6 @@ public class AssignProjectDescriptorBuilder {
      */
     public AssignProjectDescriptorBuilder(Person person) {
         descriptor = new AssignProjectDescriptor();
-        descriptor.setProjects(person.getProjects());
     }
 
     /**

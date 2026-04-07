@@ -51,7 +51,7 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Person expectedPerson = new PersonBuilder(BOB).build();
+        Person expectedPerson = new PersonBuilder(BOB).withProjects().withTasks().build();
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE
@@ -63,6 +63,8 @@ public class AddCommandParserTest {
         Person expectedPersonMultipleProjects = new PersonBuilder(BOB)
                 .withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).withTasks()
                 .build();
+        expectedPersonMultipleProjects = new PersonBuilder(expectedPersonMultipleProjects)
+                .withProjects().withTasks().build();
 
         assertParseSuccess(parser,
                 NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
@@ -73,6 +75,8 @@ public class AddCommandParserTest {
         Person expectedPersonMultipleTasks = new PersonBuilder(BOB).withProjects()
                 .withTasks(VALID_TASK_FIX_ERROR, VALID_TASK_REFACTOR)
                 .build();
+        expectedPersonMultipleTasks = new PersonBuilder(expectedPersonMultipleTasks)
+                .withProjects().withTasks().build();
 
         assertParseSuccess(parser,
                 NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB

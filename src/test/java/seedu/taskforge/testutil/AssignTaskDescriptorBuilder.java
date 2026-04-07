@@ -28,7 +28,6 @@ public class AssignTaskDescriptorBuilder {
      */
     public AssignTaskDescriptorBuilder(Person person) {
         descriptor = new AssignTaskDescriptor();
-        descriptor.setTasks(person.getTasks());
     }
 
     /**

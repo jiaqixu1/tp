@@ -208,17 +208,22 @@ public class UnassignTaskCommandTest {
     }
 
     @Test
-    public void execute_taskNotInAssignedProjects_failure() {
+    public void execute_taskNotInAssignedProjects_success() {
         Model modelWithMissingTask = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         modelWithMissingTask.setProject(new Project("alpha"), new Project("alpha", Arrays.asList(
             new Task(VALID_TASK_FIX_ERROR)
         )));
 
+        Person firstPerson = modelWithMissingTask.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person editedPerson = new PersonBuilder(firstPerson).withTasks().build();
         UnassignTaskDescriptor descriptor = new UnassignTaskDescriptorBuilder().withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(unassignTaskCommand, modelWithMissingTask,
-            TaskCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        Model expectedModel = new ModelManager(new AddressBook(modelWithMissingTask.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(firstPerson, editedPerson);
+
+        assertCommandSuccess(unassignTaskCommand, modelWithMissingTask, expectedMessage, expectedModel);
     }
 
     @Test

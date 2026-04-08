@@ -72,7 +72,9 @@ public class AssignTaskCommand extends TaskCommand {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail()));
     }
 
     /**

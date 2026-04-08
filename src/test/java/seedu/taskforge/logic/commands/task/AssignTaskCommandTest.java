@@ -63,7 +63,9 @@ public class AssignTaskCommandTest {
                 .withTasks(VALID_TASK_FIX_ERROR).build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -83,7 +85,9 @@ public class AssignTaskCommandTest {
                 .withTasks(VALID_TASK_FIX_ERROR).build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -146,7 +150,9 @@ public class AssignTaskCommandTest {
                 VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -167,7 +173,9 @@ public class AssignTaskCommandTest {
                 VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);

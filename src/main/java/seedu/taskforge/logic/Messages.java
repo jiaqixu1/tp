@@ -50,6 +50,14 @@ public class Messages {
     }
 
     /**
+     * Formats the {@code person} for display to the user in assign/unassign commands.
+     * Contains only the person's name, phone, and email for a more concise display.
+     */
+    public static String formatPersonSummary(Person person) {
+        return person.getName() + "; Phone: " + person.getPhone() + "; Email: " + person.getEmail();
+    }
+
+    /**
      * Formats the {@code project} for display to the user.
      */
     public static String format(Project project) {

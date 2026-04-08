@@ -77,7 +77,9 @@ public class UnassignProjectCommand extends ProjectCommand {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_UNASSIGN_PROJECT_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_UNASSIGN_PROJECT_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail()));
     }
 
     /**

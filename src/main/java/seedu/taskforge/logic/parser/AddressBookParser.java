@@ -11,6 +11,8 @@ import seedu.taskforge.commons.core.LogsCenter;
 import seedu.taskforge.logic.commands.Command;
 import seedu.taskforge.logic.commands.ExitCommand;
 import seedu.taskforge.logic.commands.HelpCommand;
+import seedu.taskforge.logic.commands.RedoCommand;
+import seedu.taskforge.logic.commands.UndoCommand;
 import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.ClearCommand;
 import seedu.taskforge.logic.commands.person.DeleteCommand;
@@ -24,6 +26,7 @@ import seedu.taskforge.logic.commands.project.FindProjectCommand;
 import seedu.taskforge.logic.commands.project.ListProjectCommand;
 import seedu.taskforge.logic.commands.project.ProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.ViewProjectMembersCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AssignTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
@@ -45,6 +48,7 @@ import seedu.taskforge.logic.parser.project.AssignProjectCommandParser;
 import seedu.taskforge.logic.parser.project.DeleteProjectCommandParser;
 import seedu.taskforge.logic.parser.project.FindProjectCommandParser;
 import seedu.taskforge.logic.parser.project.UnassignProjectCommandParser;
+import seedu.taskforge.logic.parser.project.ViewProjectMembersCommandParser;
 import seedu.taskforge.logic.parser.task.AddTaskCommandParser;
 import seedu.taskforge.logic.parser.task.AssignTaskCommandParser;
 import seedu.taskforge.logic.parser.task.DeleteTaskCommandParser;
@@ -125,6 +129,12 @@ public class AddressBookParser {
         case HelpCommand.COMMAND_WORD:
             return new HelpCommand();
 
+        case UndoCommand.COMMAND_WORD:
+            return new UndoCommand();
+
+        case RedoCommand.COMMAND_WORD:
+            return new RedoCommand();
+
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
@@ -159,6 +169,9 @@ public class AddressBookParser {
 
         case FindProjectCommand.SUBCOMMAND_WORD:
             return new FindProjectCommandParser().parse(arguments);
+
+        case ViewProjectMembersCommand.SUBCOMMAND_WORD:
+            return new ViewProjectMembersCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: project " + subinput);

@@ -2,70 +2,115 @@ package seedu.taskforge.logic.commands.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import seedu.taskforge.commons.core.GuiSettings;
+import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.CommandResult;
+import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.ReadOnlyUserPrefs;
+import seedu.taskforge.model.person.Email;
+import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.project.UniqueProjectList;
 
-public class FindProjectCommandTest {
+/**
+ * Unit tests for ViewProjectMembersCommand.
+ */
+public class ViewProjectMembersCommandTest {
+
+    private final Project alpha = new Project("Alpha");
+    private final Project beta = new Project("Beta");
+
+    private final Person alex = new Person(
+            new Name("Alex Yeoh"),
+            new Phone("87438807"),
+            new Email("alexyeoh@example.com"),
+            Arrays.asList(new PersonProject(0)),
+            Collections.emptyList());
+
+    private final Person bernice = new Person(
+            new Name("Bernice Yu"),
+            new Phone("99272758"),
+            new Email("berniceyu@example.com"),
+            Arrays.asList(new PersonProject(0), new PersonProject(1)),
+            Collections.emptyList());
+
+    private final Person charlotte = new Person(
+            new Name("Charlotte Oliveiro"),
+            new Phone("93210283"),
+            new Email("charlotte@example.com"),
+            Arrays.asList(new PersonProject(1)),
+            Collections.emptyList());
 
     @Test
-    public void execute_matchingProjects_success() {
-        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(
-                new Project("Alpha"),
-                new Project("Alpha Beta"),
-                new Project("Gamma")
-        );
+    public void execute_validProjectIndexWithMembers_success() throws Exception {
+        ModelStub modelStub = new ModelStubWithProjectAndPersonList(
+                new Project[] {alpha, beta},
+                new Person[] {alex, bernice, charlotte});
 
-        FindProjectCommand command = new FindProjectCommand(Arrays.asList("alpha"));
+        ViewProjectMembersCommand command = new ViewProjectMembersCommand(Index.fromOneBased(1));
         CommandResult result = command.execute(modelStub);
 
-        assertEquals("Found projects:\n1. Alpha\n2. Alpha Beta", result.getFeedbackToUser());
+        String expectedMessage = "Members in project Alpha:\n"
+                + "1. Alex Yeoh\n"
+                + "2. Bernice Yu";
+
+        assertEquals(expectedMessage, result.getFeedbackToUser());
     }
 
     @Test
-    public void execute_noMatchingProjects_success() {
-        ModelStubWithProjectList modelStub = new ModelStubWithProjectList(
-                new Project("Alpha"),
-                new Project("Beta")
-        );
+    public void execute_validProjectIndexWithNoMembers_success() throws Exception {
+        Project gamma = new Project("Gamma");
 
-        FindProjectCommand command = new FindProjectCommand(Arrays.asList("gamma"));
+        ModelStub modelStub = new ModelStubWithProjectAndPersonList(
+                new Project[] {alpha, beta, gamma},
+                new Person[] {alex, bernice, charlotte});
+
+        ViewProjectMembersCommand command = new ViewProjectMembersCommand(Index.fromOneBased(3));
         CommandResult result = command.execute(modelStub);
 
-        assertEquals(FindProjectCommand.MESSAGE_NO_PROJECT_FOUND, result.getFeedbackToUser());
+        assertEquals("There are no members in project: Gamma", result.getFeedbackToUser());
+    }
+
+    @Test
+    public void execute_invalidProjectIndex_throwsCommandException() {
+        ModelStub modelStub = new ModelStubWithProjectAndPersonList(
+                new Project[] {alpha, beta},
+                new Person[] {alex, bernice, charlotte});
+
+        ViewProjectMembersCommand command = new ViewProjectMembersCommand(Index.fromOneBased(3));
+
+        CommandException exception = assertThrows(CommandException.class, () -> command.execute(modelStub));
+
+        assertEquals(ViewProjectMembersCommand.MESSAGE_INVALID_PROJECT_INDEX, exception.getMessage());
     }
 
     @Test
     public void equals() {
-        FindProjectCommand findFirstCommand =
-                new FindProjectCommand(Arrays.asList("alpha"));
-        FindProjectCommand findSecondCommand =
-                new FindProjectCommand(Arrays.asList("beta"));
+        ViewProjectMembersCommand firstCommand = new ViewProjectMembersCommand(Index.fromOneBased(1));
+        ViewProjectMembersCommand secondCommand = new ViewProjectMembersCommand(Index.fromOneBased(2));
 
-        assertTrue(findFirstCommand.equals(findFirstCommand));
-
-        FindProjectCommand findFirstCommandCopy =
-                new FindProjectCommand(Arrays.asList("alpha"));
-        assertTrue(findFirstCommand.equals(findFirstCommandCopy));
-
-        assertFalse(findFirstCommand.equals(1));
-        assertFalse(findFirstCommand.equals(null));
-        assertFalse(findFirstCommand.equals(findSecondCommand));
+        assertTrue(firstCommand.equals(firstCommand));
+        assertTrue(firstCommand.equals(new ViewProjectMembersCommand(Index.fromOneBased(1))));
+        assertFalse(firstCommand.equals(secondCommand));
+        assertFalse(firstCommand.equals(1));
+        assertFalse(firstCommand.equals(null));
     }
 
     /**
@@ -194,20 +239,32 @@ public class FindProjectCommandTest {
     }
 
     /**
-     * A Model stub that contains a fixed project list.
+     * A Model stub that contains fixed project and person lists.
      */
-    private class ModelStubWithProjectList extends ModelStub {
-        private final UniqueProjectList uniqueProjectList = new UniqueProjectList();
+    private class ModelStubWithProjectAndPersonList extends ModelStub {
+        private final ObservableList<Project> projects = FXCollections.observableArrayList();
+        private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final FilteredList<Person> filteredPersons;
 
-        ModelStubWithProjectList(Project... projects) {
-            for (Project project : projects) {
-                uniqueProjectList.add(project);
-            }
+        ModelStubWithProjectAndPersonList(Project[] projects, Person[] persons) {
+            this.projects.addAll(projects);
+            this.persons.addAll(persons);
+            this.filteredPersons = new FilteredList<>(this.persons);
         }
 
         @Override
         public ObservableList<Project> getProjectList() {
-            return uniqueProjectList.asUnmodifiableObservableList();
+            return FXCollections.unmodifiableObservableList(projects);
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            return filteredPersons;
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            filteredPersons.setPredicate(predicate);
         }
     }
 }

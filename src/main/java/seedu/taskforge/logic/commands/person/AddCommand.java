@@ -108,7 +108,7 @@ public class AddCommand extends Command {
         );
 
         model.addPerson(personWithProjects);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(personWithProjects)));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.formatPersonSummary(personWithProjects)));
     }
 
     private static List<Project> globalProjectListOrEmpty(Model model) {

@@ -33,7 +33,7 @@ import seedu.taskforge.model.task.Task;
 public class AssignTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "assign";
 
-    public static final String MESSAGE_SUCCESS = "Task assigned: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task assigned to %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
             + SUBCOMMAND_WORD + " INDEX "
             + PREFIX_NAME + " TASK_NAME";

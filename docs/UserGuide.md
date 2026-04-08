@@ -465,4 +465,6 @@ Action | Format, Examples
 **Edit Person** | `edit INDEX [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit INDEX -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
 **Unassign Project** | `project unassign INDEX -i PROJECT_INDEX`<br> e.g., `project unassign 2 -i 1`
 **View Projects** | `project list`
+**Undo** | `undo`
+**Redo** | `redo`
 **Help** | `help`

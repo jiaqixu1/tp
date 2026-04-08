@@ -64,8 +64,7 @@ public class AssignTaskCommandTest {
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
         String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
-            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
-            + "; Email: " + editedPerson.getEmail());
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -86,8 +85,7 @@ public class AssignTaskCommandTest {
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
-            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
-            + "; Email: " + editedPerson.getEmail());
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -151,8 +149,7 @@ public class AssignTaskCommandTest {
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
         String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
-            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
-            + "; Email: " + editedPerson.getEmail());
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -174,8 +171,7 @@ public class AssignTaskCommandTest {
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
-            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
-            + "; Email: " + editedPerson.getEmail());
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);

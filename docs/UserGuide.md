@@ -315,16 +315,18 @@ Examples:
 
 Assigns one or more tasks to a person.
 
-Format: `task assign INDEX -n TASK_NAME`
+Format: `task assign INDEX -i TASK_INDEX`
 
 * Adds task(s) to the person at the specified `INDEX`.
 * The person index refers to the index number shown in the displayed person list.
 * The person index **must be a positive integer** `1, 2, 3, ...`
-* To assign multiple tasks in one command, repeat the `-n` prefix.
+* `TASK_INDEX` refers to task numbering from the selected person's assigned projects.
+* `TASK_INDEX` **must be a positive integer** `1, 2, 3, ...`
+* To assign multiple tasks in one command, repeat the `-i` prefix.
 
 Examples:
-* `task assign 1 -n Write report`
-* `task assign 2 -n Prepare slides -n Rehearse demo`
+* `task assign 1 -i 2`
+* `task assign 2 -i 1 -i 3`
 
 #### Unassigning a task : `task unassign`
 
@@ -440,7 +442,7 @@ Action | Format, Examples
 **Edit Task** | `task edit PROJECT_NAME -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`<br> e.g., `task edit Alpha -i 1 -n Prepare sprint report`
 **List Tasks by Project** | `task list -n PROJECT_NAME`<br> e.g., `task list -n Alpha`
 **Find Tasks** | `task find KEYWORD [MORE_KEYWORDS]`<br> e.g., `task find report bug`
-**Assign Task** | `task assign INDEX -n TASK_NAME`<br> e.g., `task assign 1 -n Draft proposal`
+**Assign Task** | `task assign INDEX -i TASK_INDEX`<br> e.g., `task assign 1 -i 2`
 **Assign Project** | `project assign INDEX -i PROJECT_INDEX`<br> e.g., `project assign 1 -i 2`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`

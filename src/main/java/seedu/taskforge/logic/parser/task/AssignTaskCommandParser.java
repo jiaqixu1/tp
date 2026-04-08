@@ -2,7 +2,7 @@ package seedu.taskforge.logic.parser.task;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -17,10 +17,9 @@ import seedu.taskforge.logic.parser.ArgumentTokenizer;
 import seedu.taskforge.logic.parser.Parser;
 import seedu.taskforge.logic.parser.ParserUtil;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
-import seedu.taskforge.model.task.Task;
 
 /**
- * Parses input arguments and creates a new AssignTaskCommand object
+ * Parses input arguments and creates a new AssignTaskCommand object.
  */
 public class AssignTaskCommandParser implements Parser<AssignTaskCommand> {
 
@@ -31,11 +30,9 @@ public class AssignTaskCommandParser implements Parser<AssignTaskCommand> {
      */
     public AssignTaskCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_INDEX);
 
         Index index;
-
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
@@ -44,8 +41,8 @@ public class AssignTaskCommandParser implements Parser<AssignTaskCommand> {
         }
 
         AssignTaskDescriptor assignTaskDescriptor = new AssignTaskDescriptor();
-
-        parseTasksForAdd(argMultimap.getAllValues(PREFIX_NAME)).ifPresent(assignTaskDescriptor::setTasks);
+        parseTaskIndexesForAssign(argMultimap.getAllValues(PREFIX_INDEX))
+                .ifPresent(assignTaskDescriptor::setTasksIndexes);
 
         if (!assignTaskDescriptor.isTaskFieldEdited()) {
             throw new ParseException(AssignTaskCommand.MESSAGE_NOT_EDITED);
@@ -54,18 +51,14 @@ public class AssignTaskCommandParser implements Parser<AssignTaskCommand> {
         return new AssignTaskCommand(index, assignTaskDescriptor);
     }
 
-    /**
-     * Parses {@code Collection<String> tasks} into a {@code List<Task>} if {@code tasks} is non-empty.
-     * If {@code tasks} contain only one element which is an empty string, it will be parsed into a
-     * {@code List<Task>} containing zero tasks.
-     */
-    private Optional<List<Task>> parseTasksForAdd(Collection<String> tasks) throws ParseException {
-        assert tasks != null;
+    private Optional<List<Index>> parseTaskIndexesForAssign(Collection<String> taskIndexes) throws ParseException {
+        assert taskIndexes != null;
 
-        if (tasks.isEmpty()) {
+        if (taskIndexes.isEmpty()) {
             return Optional.empty();
         }
-        Collection<String> taskSet = tasks.size() == 1 && tasks.contains("") ? Collections.emptyList() : tasks;
-        return Optional.of(ParserUtil.parseTasks(taskSet));
+        Collection<String> taskSet = taskIndexes.size() == 1 && taskIndexes.contains("")
+                ? Collections.emptyList() : taskIndexes;
+        return Optional.of(ParserUtil.parseTaskIndexes(taskSet));
     }
 }

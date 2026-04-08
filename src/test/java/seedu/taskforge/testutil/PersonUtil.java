@@ -114,12 +114,12 @@ public class PersonUtil {
      */
     public static String getAssignTaskDescriptorDetails(AssignTaskDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
-        if (descriptor.getTasks().isPresent()) {
-            List<Task> tasks = descriptor.getTasks().get();
-            if (tasks.isEmpty()) {
-                sb.append(PREFIX_NAME).append(" ");
+        if (descriptor.getTasksIndexes().isPresent()) {
+            List<Index> indexes = descriptor.getTasksIndexes().get();
+            if (indexes.isEmpty()) {
+                sb.append(PREFIX_INDEX).append(" ");
             } else {
-                tasks.forEach(s -> sb.append(PREFIX_NAME).append(s.description).append(" "));
+                indexes.forEach(s -> sb.append(PREFIX_INDEX).append(s.getOneBased()).append(" "));
             }
         }
         return sb.toString();

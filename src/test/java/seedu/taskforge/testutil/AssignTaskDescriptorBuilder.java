@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.task.AssignTaskCommand.AssignTaskDescriptor;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.task.Task;
 
 /**
  * A utility class to help with building AssignTaskDescriptor objects.
@@ -30,13 +30,11 @@ public class AssignTaskDescriptorBuilder {
         descriptor = new AssignTaskDescriptor();
     }
 
-    /**
-     * Parses the {@code tasks} into a {@code List<Task>} and set it to the {@code EditPersonDescriptor}
-     * that we are building.
-     */
-    public AssignTaskDescriptorBuilder withTasks(String... tasks) {
-        List<Task> taskSet = Stream.of(tasks).map(Task::new).collect(Collectors.toList());
-        descriptor.setTasks(taskSet);
+    public AssignTaskDescriptorBuilder withTaskIndexes(String... indexes) {
+        List<Index> taskIndexSet = Stream.of(indexes)
+                .map(s -> Index.fromOneBased(Integer.parseInt(s)))
+                .collect(Collectors.toList());
+        descriptor.setTasksIndexes(taskIndexSet);
         return this;
     }
 

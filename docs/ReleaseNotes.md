@@ -7,11 +7,10 @@
 - `COMMAND` - SHORT COMMAND DESCRIPTION
 
 ## Task related commands
-- `COMMAND` - SHORT COMMAND DESCRIPTION
+- `task assign PERSON_INDEX -i TASK_INDEX` - uses `TASK_INDEX` now, previously used `TASK_NAME`
 
 ## Project related commands
-- `COMMAND` - SHORT COMMAND DESCRIPTION
-  - `project un/assign PERSON_INDEX -i PROJECT_INDEX` - uses `PROJECT_INDEX` now, previously used `PROJECT_NAME`
+  - `project assign PERSON_INDEX -i PROJECT_INDEX` - uses `PROJECT_INDEX` now, previously used `PROJECT_NAME`
 
 ## Screenshots for new commands and changes added
 - PASTED SCREENSHOT

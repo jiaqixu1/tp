@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-class HelpCommandTest {
+public class HelpCommandTest {
 
     @Test
-    void execute_showsHelp() {
+    public void execute_showHelp() {
         HelpCommand helpCommand = new HelpCommand();
 
         CommandResult commandResult = helpCommand.execute(null);
@@ -17,5 +17,11 @@ class HelpCommandTest {
         assertEquals(HelpCommand.SHOWING_HELP_MESSAGE, commandResult.getFeedbackToUser());
         assertTrue(commandResult.isShowHelp());
         assertFalse(commandResult.isExit());
+    }
+
+    @Test
+    public void messageUsage_correct() {
+        assertEquals("help: Shows in-app help instructions.\nExample: help",
+                HelpCommand.MESSAGE_USAGE);
     }
 }

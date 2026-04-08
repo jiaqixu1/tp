@@ -2,6 +2,7 @@ package seedu.taskforge.ui;
 
 import java.util.logging.Logger;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -30,6 +31,11 @@ public class PersonListPanel extends UiPart<Region> {
         this.addressBook = addressBook;
         personListView.setItems(personList);
         personListView.setCellFactory(listView -> new PersonListViewCell());
+
+        // Listen to changes in the project list and refresh the person list view when a change occurs
+        this.addressBook.getProjectList().addListener((ListChangeListener.Change<?> change) -> {
+            personListView.refresh();
+        });
     }
 
     /**

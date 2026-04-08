@@ -187,10 +187,6 @@ public class AddCommandTest {
             return FXCollections.observableArrayList();
         }
 
-        @Override
-        public ObservableList<Person> getPersonList() {
-            throw new AssertionError("This method should not be called.");
-        }
     }
 
     /**

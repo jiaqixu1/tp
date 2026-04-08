@@ -46,7 +46,9 @@ public class ViewProjectMembersCommand extends ProjectCommand {
 
         Project targetProject = projectList.get(targetIndex.getZeroBased());
 
-        List<Person> members = model.getPersonList().stream()
+        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+
+        List<Person> members = model.getFilteredPersonList().stream()
                 .filter(person -> person.getProjects().contains(targetProject))
                 .collect(Collectors.toList());
 

@@ -151,11 +151,6 @@ public class DeleteProjectCommandTest {
         }
 
         @Override
-        public ObservableList<Person> getPersonList() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public boolean hasPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }

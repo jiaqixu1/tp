@@ -2,6 +2,7 @@ package seedu.taskforge.logic.commands.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.CommandResult;
@@ -93,8 +95,7 @@ public class ViewProjectMembersCommandTest {
 
         ViewProjectMembersCommand command = new ViewProjectMembersCommand(Index.fromOneBased(3));
 
-        CommandException exception = org.junit.jupiter.api.Assertions.assertThrows(
-                CommandException.class, () -> command.execute(modelStub));
+        CommandException exception = assertThrows(CommandException.class, () -> command.execute(modelStub));
 
         assertEquals(ViewProjectMembersCommand.MESSAGE_INVALID_PROJECT_INDEX, exception.getMessage());
     }
@@ -201,11 +202,6 @@ public class ViewProjectMembersCommandTest {
         }
 
         @Override
-        public ObservableList<Person> getPersonList() {
-            return FXCollections.observableArrayList();
-        }
-
-        @Override
         public ObservableList<Person> getFilteredPersonList() {
             throw new AssertionError("This method should not be called.");
         }
@@ -222,10 +218,12 @@ public class ViewProjectMembersCommandTest {
     private class ModelStubWithProjectAndPersonList extends ModelStub {
         private final ObservableList<Project> projects = FXCollections.observableArrayList();
         private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final FilteredList<Person> filteredPersons;
 
         ModelStubWithProjectAndPersonList(Project[] projects, Person[] persons) {
             this.projects.addAll(projects);
             this.persons.addAll(persons);
+            this.filteredPersons = new FilteredList<>(this.persons);
         }
 
         @Override
@@ -234,8 +232,13 @@ public class ViewProjectMembersCommandTest {
         }
 
         @Override
-        public ObservableList<Person> getPersonList() {
-            return FXCollections.unmodifiableObservableList(persons);
+        public ObservableList<Person> getFilteredPersonList() {
+            return filteredPersons;
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            filteredPersons.setPredicate(predicate);
         }
     }
 }

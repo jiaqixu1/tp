@@ -27,7 +27,7 @@ public class AssignTaskCommandParserTest {
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, AssignTaskCommand.MESSAGE_USAGE);
 
-    private AssignTaskCommandParser parser = new AssignTaskCommandParser();
+    private final AssignTaskCommandParser parser = new AssignTaskCommandParser();
 
     @Test
     public void parse_missingTask_failure() {
@@ -87,6 +87,111 @@ public class AssignTaskCommandParserTest {
                 .withProjectTaskPairs(
                         new ProjectTaskPair(Index.fromOneBased(1), INDEX_FIRST_TASK),
                         new ProjectTaskPair(Index.fromOneBased(1), INDEX_SECOND_TASK))
+                .build();
+        AssignTaskCommand expectedCommand = new AssignTaskCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_mismatchedProjectTaskPairs_failure() {
+        // More project indices than task indices
+        assertParseFailure(parser, "1 " + PREFIX_PROJECT + "1 " + PREFIX_PROJECT + "2 " + PREFIX_INDEX + "1",
+                MESSAGE_INVALID_FORMAT);
+
+        // More task indices than project indices
+        assertParseFailure(parser, "1 " + PREFIX_INDEX + "1 " + PREFIX_INDEX + "2 " + PREFIX_PROJECT + "1",
+                MESSAGE_INVALID_FORMAT);
+    }
+
+    @Test
+    public void parse_differentProjectIndices_success() {
+        Index targetIndex = INDEX_SECOND_PERSON;
+        String userInput = targetIndex.getOneBased()
+                + " " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "1"
+                + " " + PREFIX_PROJECT + "2 " + PREFIX_INDEX + "1";
+
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(
+                        new ProjectTaskPair(Index.fromOneBased(1), INDEX_FIRST_TASK),
+                        new ProjectTaskPair(Index.fromOneBased(2), INDEX_FIRST_TASK))
+                .build();
+        AssignTaskCommand expectedCommand = new AssignTaskCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_largeIndices_success() {
+        Index targetIndex = INDEX_SECOND_PERSON;
+        String userInput = targetIndex.getOneBased()
+                + " " + PREFIX_PROJECT + "10 " + PREFIX_INDEX + "20";
+
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(
+                        new ProjectTaskPair(Index.fromOneBased(10), Index.fromOneBased(20)))
+                .build();
+        AssignTaskCommand expectedCommand = new AssignTaskCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_projectAndTaskAtBoundary_success() {
+        Index targetIndex = INDEX_SECOND_PERSON;
+        String userInput = targetIndex.getOneBased()
+                + " " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "1";
+
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(
+                        new ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(1)))
+                .build();
+        AssignTaskCommand expectedCommand = new AssignTaskCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_noProjectTaskPairs_failure() {
+        // Only person index, no pairs
+        assertParseFailure(parser, "1", AssignTaskCommand.MESSAGE_NOT_EDITED);
+    }
+
+    @Test
+    public void parse_invalidProjectIndexFormat_failure() {
+        // Non-numeric project index
+        assertParseFailure(parser, "1 " + PREFIX_PROJECT + "notanumber " + PREFIX_INDEX + "1",
+                ParserUtil.MESSAGE_INVALID_INDEX);
+
+        // Non-numeric with invalid format
+        assertParseFailure(parser, "1 " + PREFIX_PROJECT + "abc123 " + PREFIX_INDEX + "1",
+                ParserUtil.MESSAGE_INVALID_INDEX);
+    }
+
+    @Test
+    public void parse_invalidTaskIndexFormat_failure() {
+        // Non-numeric task index
+        assertParseFailure(parser, "1 " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "notanumber",
+                ParserUtil.MESSAGE_INVALID_INDEX);
+
+        // Non-numeric with invalid format
+        assertParseFailure(parser, "1 " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "abc123",
+                ParserUtil.MESSAGE_INVALID_INDEX);
+    }
+
+    @Test
+    public void parse_threeProjectTaskPairs_success() {
+        Index targetIndex = INDEX_SECOND_PERSON;
+        String userInput = targetIndex.getOneBased()
+                + " " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "1"
+                + " " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "2"
+                + " " + PREFIX_PROJECT + "2 " + PREFIX_INDEX + "1";
+
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(
+                        new ProjectTaskPair(Index.fromOneBased(1), INDEX_FIRST_TASK),
+                        new ProjectTaskPair(Index.fromOneBased(1), INDEX_SECOND_TASK),
+                        new ProjectTaskPair(Index.fromOneBased(2), INDEX_FIRST_TASK))
                 .build();
         AssignTaskCommand expectedCommand = new AssignTaskCommand(targetIndex, descriptor);
 

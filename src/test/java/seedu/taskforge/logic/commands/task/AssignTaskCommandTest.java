@@ -1,5 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
@@ -252,6 +253,101 @@ public class AssignTaskCommandTest {
         assertTrue(descriptor.isTaskFieldEdited());
         assertThrows(UnsupportedOperationException.class, () ->
                 descriptor.getProjectTaskPairs().get().clear());
+    }
+
+    @Test
+    public void projectTaskPair_equals() {
+        AssignTaskCommand.ProjectTaskPair pair1 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        AssignTaskCommand.ProjectTaskPair pair1Copy =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        AssignTaskCommand.ProjectTaskPair pair2 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(3));
+        AssignTaskCommand.ProjectTaskPair pair3 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(2), Index.fromOneBased(2));
+
+        // Test reflexivity: a.equals(a) is true
+        assertTrue(pair1.equals(pair1));
+
+        // Test symmetry: if a.equals(b) then b.equals(a)
+        assertTrue(pair1.equals(pair1Copy));
+        assertTrue(pair1Copy.equals(pair1));
+
+        // Test transitivity and consistency
+        AssignTaskCommand.ProjectTaskPair pair1Copy2 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        assertTrue(pair1.equals(pair1Copy2));
+        assertTrue(pair1Copy.equals(pair1Copy2));
+
+        // Test inequality with different task indices
+        assertFalse(pair1.equals(pair2));
+
+        // Test inequality with different project indices
+        assertFalse(pair1.equals(pair3));
+
+        // Test with different object types
+        assertFalse(pair1.equals("not a pair"));
+        assertFalse(pair1.equals(1));
+
+        // Test with null
+        assertFalse(pair1.equals(null));
+    }
+
+    @Test
+    public void projectTaskPair_hashCode() {
+        AssignTaskCommand.ProjectTaskPair pair1 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        AssignTaskCommand.ProjectTaskPair pair1Copy =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+
+        // Covers hashCode path and verifies determinism per instance.
+        assertEquals(pair1.hashCode(), pair1.hashCode());
+        assertEquals(pair1Copy.hashCode(), pair1Copy.hashCode());
+    }
+
+    @Test
+    public void projectTaskPair_getters() {
+        Index projectIndex = Index.fromOneBased(3);
+        Index taskIndex = Index.fromOneBased(5);
+        AssignTaskCommand.ProjectTaskPair pair =
+                new AssignTaskCommand.ProjectTaskPair(projectIndex, taskIndex);
+
+        assertTrue(pair.getProjectIndex().equals(projectIndex));
+        assertTrue(pair.getTaskIndex().equals(taskIndex));
+    }
+
+    @Test
+    public void assignTaskDescriptor_isTaskFieldEdited_empty() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+    }
+
+    @Test
+    public void assignTaskDescriptor_isTaskFieldEdited_withPairs() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
+        descriptor.setProjectTaskPairs(
+                Arrays.asList(
+                        new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(1))));
+        assertTrue(descriptor.isTaskFieldEdited());
+    }
+
+    @Test
+    public void assignTaskDescriptor_isTaskFieldEdited_emptyList() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
+        descriptor.setProjectTaskPairs(java.util.Collections.emptyList());
+        assertFalse(descriptor.isTaskFieldEdited());
+    }
+
+    @Test
+    public void execute_invalidProjectIndex_failure() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(
+                        new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(999), Index.fromOneBased(1)))
+                .build();
+        AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(assignTaskCommand, model,
+                AssignTaskCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
     }
 
 }

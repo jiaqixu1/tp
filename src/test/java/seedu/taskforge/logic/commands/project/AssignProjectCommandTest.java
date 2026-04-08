@@ -47,7 +47,8 @@ public class AssignProjectCommandTest {
         AssignProjectCommand assignProjectCommand = new AssignProjectCommand(indexFirstPerson, descriptor);
 
         String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson)
+        );
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -68,7 +69,7 @@ public class AssignProjectCommandTest {
         AssignProjectCommand assignProjectCommand = new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -132,7 +133,7 @@ public class AssignProjectCommandTest {
         AssignProjectCommand assignProjectCommand = new AssignProjectCommand(indexFirstPerson, descriptor);
 
         String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -154,7 +155,7 @@ public class AssignProjectCommandTest {
         AssignProjectCommand assignProjectCommand = new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(AssignProjectCommand.MESSAGE_ASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);

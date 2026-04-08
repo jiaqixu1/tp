@@ -1,62 +1,82 @@
 package seedu.taskforge.ui;
-
 import java.util.logging.Logger;
-
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import seedu.taskforge.commons.core.LogsCenter;
+import seedu.taskforge.logic.commands.HelpCommand;
+import seedu.taskforge.logic.commands.person.AddCommand;
+import seedu.taskforge.logic.commands.person.ClearCommand;
+import seedu.taskforge.logic.commands.person.DeleteCommand;
+import seedu.taskforge.logic.commands.person.EditCommand;
+import seedu.taskforge.logic.commands.person.FindCommand;
+import seedu.taskforge.logic.commands.person.ListCommand;
+import seedu.taskforge.logic.commands.project.AddProjectCommand;
+import seedu.taskforge.logic.commands.project.AssignProjectCommand;
+import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
+import seedu.taskforge.logic.commands.project.FindProjectCommand;
+import seedu.taskforge.logic.commands.project.ListProjectCommand;
+import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.task.AddTaskCommand;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand;
+import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
+import seedu.taskforge.logic.commands.task.EditTaskCommand;
+import seedu.taskforge.logic.commands.task.FindTaskCommand;
+import seedu.taskforge.logic.commands.task.ListTaskCommand;
+import seedu.taskforge.logic.commands.task.MarkTaskCommand;
+import seedu.taskforge.logic.commands.task.UnassignTaskCommand;
+import seedu.taskforge.logic.commands.task.UnmarkTaskCommand;
+import seedu.taskforge.logic.commands.task.ViewTasksCommand;
 
 /**
  * Controller for an in-app help page.
  */
 public class HelpWindow extends UiPart<Stage> {
 
-    public static final String HELP_MESSAGE =
-            "TaskForge Help\n\n"
-                    + "TaskForge helps you manage people, projects, and tasks.\n\n"
-                    + "Available commands:\n"
-                    + "1. Add Person: add -n NAME -p PHONE_NUMBER -e EMAIL [-l PROJECT_NAME] [-d TASK_NAME]\n"
-                    + "   Example: add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY\n\n"
-                    + "2. Add Project: project add PROJECT_NAME\n"
-                    + "   Example: project add WebApp\n\n"
-                    + "3. Add Task: task add PROJECT_INDEX -n TASK_NAME\n"
-                    + "   Example: task add 1 -n Write report\n\n"
-                    + "4. Delete Task: task delete PROJECT_INDEX -i TASK_INDEX\n"
-                    + "   Example: task delete 1 -i 2\n\n"
-                    + "5. List Tasks by Project: task list -n PROJECT_NAME\n"
-                    + "   Example: task list -n Alpha\n\n"
-                    + "6. Assign Task: task assign INDEX -n TASK_NAME\n"
-                    + "   Example: task assign 1 -n Draft proposal\n\n"
-                    + "7. Assign Project: project assign INDEX -n PROJECT_NAME\n"
-                    + "   Example: project assign 1 -n WebApp\n\n"
-                    + "8. Clear: clear\n\n"
-                    + "9. Delete Person: delete INDEX\n"
-                    + "   Example: delete 3\n\n"
-                    + "10. Delete Project: project delete INDEX\n"
-                    + "    Example: project delete 1\n\n"
-                    + "11. Find Project: project find KEYWORD [MORE_KEYWORDS]\n"
-                    + "    Example: project find Alpha Web\n\n"
-                    + "12. View Tasks: task view INDEX\n"
-                    + "    Example: task view 1\n\n"
-                    + "13. Edit Person: edit INDEX [-n NAME] [-p PHONE_NUMBER]"
-                    + " [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]\n"
-                    + "    Example: edit 1 -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY\n\n"
-                    + "14. Find Person: find KEYWORD [MORE_KEYWORDS]\n"
-                    + "    Example: find James Jake\n\n"
-                    + "15. List Person: list\n\n"
-                    + "16. Unassign Task: task unassign INDEX -i TASK_INDEX\n"
-                    + "    Example: task unassign 2 -i 1\n\n"
-                    + "17. Unassign Project: project unassign INDEX -i PROJECT_INDEX\n"
-                    + "    Example: project unassign 2 -i 1\n\n"
-                    + "18. View Projects: project list\n\n"
-                    + "19. Help: help";
-
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
 
+    public static final String HELP_MESSAGE =
+            "TaskForge Help\n\n"
+                    + "TaskForge helps you manage people, projects, and tasks.\n\n"
+
+                    + "PERSON COMMANDS\n"
+                    + "------------------------------\n"
+                    + AddCommand.MESSAGE_USAGE + "\n\n"
+                    + EditCommand.MESSAGE_USAGE + "\n\n"
+                    + DeleteCommand.MESSAGE_USAGE + "\n\n"
+                    + FindCommand.MESSAGE_USAGE + "\n\n"
+                    + ListCommand.MESSAGE_USAGE + "\n\n"
+
+                    + "PROJECT COMMANDS\n"
+                    + "------------------------------\n"
+                    + AddProjectCommand.MESSAGE_USAGE + "\n\n"
+                    + DeleteProjectCommand.MESSAGE_USAGE + "\n\n"
+                    + FindProjectCommand.MESSAGE_USAGE + "\n\n"
+                    + ListProjectCommand.MESSAGE_USAGE + "\n\n"
+                    + AssignProjectCommand.MESSAGE_USAGE + "\n\n"
+                    + UnassignProjectCommand.MESSAGE_USAGE + "\n\n"
+
+                    + "TASK COMMANDS\n"
+                    + "------------------------------\n"
+                    + AddTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + DeleteTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + EditTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + ListTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + FindTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + AssignTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + UnassignTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + ViewTasksCommand.MESSAGE_USAGE + "\n\n"
+                    + MarkTaskCommand.MESSAGE_USAGE + "\n\n"
+                    + UnmarkTaskCommand.MESSAGE_USAGE + "\n\n"
+
+                    + "GENERAL COMMANDS\n"
+                    + "------------------------------\n"
+                    + ClearCommand.MESSAGE_USAGE + "\n\n"
+                    + HelpCommand.MESSAGE_USAGE;
+
     @FXML
-    private Label helpMessage;
+    private TextArea helpMessage;
 
     /**
      * Creates a new HelpWindow.

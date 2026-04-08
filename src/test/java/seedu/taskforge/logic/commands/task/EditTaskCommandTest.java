@@ -1,5 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
@@ -107,5 +108,14 @@ public class EditTaskCommandTest {
         assertFalse(firstCommand.equals(1));
         assertFalse(firstCommand.equals((Object) null));
     }
-}
 
+    @Test
+    public void hashCode_sameValues_sameHashCode() {
+        EditTaskCommand firstCommand = new EditTaskCommand(INDEX_FIRST_PROJECT, INDEX_FIRST_TASK,
+                new Task(VALID_TASK_IMPLEMENT_X));
+        EditTaskCommand sameValuesCommand = new EditTaskCommand(INDEX_FIRST_PROJECT, INDEX_FIRST_TASK,
+                new Task(VALID_TASK_IMPLEMENT_X));
+
+        assertEquals(firstCommand.hashCode(), sameValuesCommand.hashCode());
+    }
+}

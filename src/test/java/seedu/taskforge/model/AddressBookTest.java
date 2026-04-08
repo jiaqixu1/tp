@@ -237,6 +237,30 @@ public class AddressBookTest {
     }
 
     @Test
+    public void setProject_taskEditedWithoutDeletingTask_doesNotCascadeAssignedTasks() {
+        Project alpha = new Project("alpha", List.of(
+                new Task("refactor code"),
+                new Task("fix error in tp project")));
+        Person person = new Person(
+                new Name("Task Owner"),
+                new Phone("99998888"),
+                new Email("owner@example.com"),
+                List.of(new PersonProject(0)),
+                List.of(new PersonTask(0, 0), new PersonTask(0, 1)));
+
+        addressBook.addProject(alpha);
+        addressBook.addPerson(person);
+
+        Project editedAlpha = new Project("alpha", List.of(
+                new Task("implement feature x"),
+                new Task("fix error in tp project")));
+        addressBook.setProject(alpha, editedAlpha);
+
+        List<PersonTask> updatedTasks = addressBook.getPersonList().get(0).getTasks();
+        assertEquals(List.of(new PersonTask(0, 0), new PersonTask(0, 1)), updatedTasks);
+    }
+
+    @Test
     public void getProjectList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> addressBook.getProjectList().remove(0));
     }

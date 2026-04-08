@@ -36,13 +36,9 @@ import seedu.taskforge.logic.commands.task.ViewTasksCommand;
  */
 public class HelpWindow extends UiPart<Stage> {
 
-    private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
-    private static final String FXML = "HelpWindow.fxml";
-
     public static final String HELP_MESSAGE =
             "TaskForge Help\n\n"
                     + "TaskForge helps you manage people, projects, and tasks.\n\n"
-
                     + "PERSON COMMANDS\n"
                     + "------------------------------\n"
                     + AddCommand.MESSAGE_USAGE + "\n\n"
@@ -50,7 +46,6 @@ public class HelpWindow extends UiPart<Stage> {
                     + DeleteCommand.MESSAGE_USAGE + "\n\n"
                     + FindCommand.MESSAGE_USAGE + "\n\n"
                     + ListCommand.MESSAGE_USAGE + "\n\n"
-
                     + "PROJECT COMMANDS\n"
                     + "------------------------------\n"
                     + AddProjectCommand.MESSAGE_USAGE + "\n\n"
@@ -59,7 +54,6 @@ public class HelpWindow extends UiPart<Stage> {
                     + ListProjectCommand.MESSAGE_USAGE + "\n\n"
                     + AssignProjectCommand.MESSAGE_USAGE + "\n\n"
                     + UnassignProjectCommand.MESSAGE_USAGE + "\n\n"
-
                     + "TASK COMMANDS\n"
                     + "------------------------------\n"
                     + AddTaskCommand.MESSAGE_USAGE + "\n\n"
@@ -72,11 +66,13 @@ public class HelpWindow extends UiPart<Stage> {
                     + ViewTasksCommand.MESSAGE_USAGE + "\n\n"
                     + MarkTaskCommand.MESSAGE_USAGE + "\n\n"
                     + UnmarkTaskCommand.MESSAGE_USAGE + "\n\n"
-
                     + "GENERAL COMMANDS\n"
                     + "------------------------------\n"
                     + ClearCommand.MESSAGE_USAGE + "\n\n"
                     + HelpCommand.MESSAGE_USAGE;
+
+    private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
+    private static final String FXML = "HelpWindow.fxml";
 
     @FXML
     private TextArea helpMessage;

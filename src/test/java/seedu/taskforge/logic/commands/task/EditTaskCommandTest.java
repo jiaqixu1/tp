@@ -9,7 +9,6 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_TASK;
-import static seedu.taskforge.testutil.TypicalPersons.ALICE;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -21,7 +20,6 @@ import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.UserPrefs;
-import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
 
@@ -30,27 +28,14 @@ public class EditTaskCommandTest {
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_editTask_successAndReassignsPeople() {
+    public void execute_editTask_success() {
         Project targetProject = new Project(VALID_PROJECT_ALPHA);
-        Project projectInModel = model.getProjectList().stream()
-                .filter(project -> project.equals(targetProject))
-                .findFirst()
-                .orElseThrow();
-        Person aliceInModel = model.getAddressBook().getPersonList().stream()
-                .filter(person -> person.isSamePerson(ALICE))
-                .findFirst()
-                .orElseThrow();
-        Person trackedAlice = new Person(aliceInModel.getName(), aliceInModel.getPhone(), aliceInModel.getEmail(),
-                aliceInModel.getProjects(), Arrays.asList(new Task(VALID_TASK_REFACTOR, projectInModel.title)));
-        model.setPerson(aliceInModel, trackedAlice);
 
         Task newTask = new Task(VALID_TASK_IMPLEMENT_X);
         EditTaskCommand editTaskCommand = new EditTaskCommand(targetProject, INDEX_FIRST_TASK, newTask);
 
         Project expectedEditedProject = new Project(VALID_PROJECT_ALPHA,
                 Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X), new Task(VALID_TASK_FIX_ERROR)));
-        Person expectedAlice = new Person(trackedAlice.getName(), trackedAlice.getPhone(), trackedAlice.getEmail(),
-                trackedAlice.getProjects(), Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X, projectInModel.title)));
 
         String expectedMessage = String.format(EditTaskCommand.MESSAGE_SUCCESS, expectedEditedProject);
 
@@ -60,12 +45,6 @@ public class EditTaskCommandTest {
                 .findFirst()
                 .orElseThrow();
         expectedModel.setProject(expectedProjectInModel, expectedEditedProject);
-
-        Person expectedAliceInModel = expectedModel.getAddressBook().getPersonList().stream()
-                .filter(person -> person.isSamePerson(trackedAlice))
-                .findFirst()
-                .orElseThrow();
-        expectedModel.setPerson(expectedAliceInModel, expectedAlice);
 
         assertCommandSuccess(editTaskCommand, model, expectedMessage, expectedModel);
     }

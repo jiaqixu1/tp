@@ -22,7 +22,7 @@ public class ViewTasksCommandParser implements Parser<ViewTasksCommand> {
             return new ViewTasksCommand(index);
         } catch (ParseException pe) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewTasksCommand.MESSAGE_USAGE), pe);
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewTasksCommand.MESSAGE_USAGE_VIEW), pe);
         }
     }
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.UniquePersonList;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.project.UniqueProjectList;
@@ -137,11 +139,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void setProject(Project target, Project editedProject) {
         requireNonNull(editedProject);
 
+        int targetProjectIndex = projects.asUnmodifiableObservableList().indexOf(target);
         List<Task> removedTasks = new ArrayList<>(target.getTasks());
         removedTasks.removeAll(editedProject.getTasks());
         projects.setProject(target, editedProject);
         if (!removedTasks.isEmpty()) {
-            cascadeRemoveDeletedProjectTasksFromPersons(editedProject, removedTasks);
+            cascadeRemoveDeletedProjectTasksFromPersons(targetProjectIndex, target, removedTasks);
         }
     }
 
@@ -151,24 +154,50 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removeProject(Project key) {
         requireNonNull(key);
+        int removedProjectIndex = projects.asUnmodifiableObservableList().indexOf(key);
         projects.remove(key);
-        cascadeRemoveProjectFromPersons(key);
+        cascadeRemoveProjectFromPersons(removedProjectIndex);
     }
 
     /**
      * Removes the given project from all contacts that have it in their project list.
      */
-    private void cascadeRemoveProjectFromPersons(Project projectToRemove) {
+    private void cascadeRemoveProjectFromPersons(int removedProjectIndex) {
         List<Person> allPersons = new ArrayList<>(persons.asUnmodifiableObservableList());
         for (Person person : allPersons) {
-            if (!person.getProjects().contains(projectToRemove)) {
+            List<PersonProject> updatedProjects = new ArrayList<>();
+            boolean changed = false;
+
+            for (PersonProject personProject : person.getProjects()) {
+                int projectIndex = personProject.getProjectIndex();
+                if (projectIndex == removedProjectIndex) {
+                    changed = true;
+                    continue;
+                }
+                if (projectIndex > removedProjectIndex) {
+                    updatedProjects.add(new PersonProject(projectIndex - 1));
+                    changed = true;
+                } else {
+                    updatedProjects.add(personProject);
+                }
+            }
+
+            if (!changed) {
                 continue;
             }
 
-            List<Project> updatedProjects = new ArrayList<>(person.getProjects());
-            updatedProjects.removeIf(projectToRemove::equals);
-            List<Task> updatedTasks = new ArrayList<>(person.getTasks());
-            updatedTasks.removeIf(task -> task.belongsToProject(projectToRemove.title));
+            List<PersonTask> updatedTasks = new ArrayList<>();
+            for (PersonTask personTask : person.getTasks()) {
+                if (personTask.getProjectIndex() == removedProjectIndex) {
+                    continue;
+                }
+                if (personTask.getProjectIndex() > removedProjectIndex) {
+                    updatedTasks.add(new PersonTask(personTask.getProjectIndex() - 1,
+                            personTask.getTaskIndex()));
+                } else {
+                    updatedTasks.add(personTask);
+                }
+            }
 
             Person updatedPerson = new Person(person.getName(), person.getPhone(), person.getEmail(),
                     updatedProjects, updatedTasks);
@@ -176,17 +205,51 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
     }
 
-    private void cascadeRemoveDeletedProjectTasksFromPersons(Project project, List<Task> deletedProjectTasks) {
+    private void cascadeRemoveDeletedProjectTasksFromPersons(int projectIndex, Project originalProject,
+                                                             List<Task> deletedProjectTasks) {
         List<Person> allPersons = new ArrayList<>(persons.asUnmodifiableObservableList());
+
+        List<Integer> deletedTaskIndices = new ArrayList<>();
+        for (Task deletedTask : deletedProjectTasks) {
+            int idx = originalProject.getTasks().indexOf(deletedTask);
+            if (idx >= 0) {
+                deletedTaskIndices.add(idx);
+            }
+        }
+
         for (Person person : allPersons) {
-            if (!person.getProjects().contains(project)) {
+            if (projectIndex < 0
+                    || person.getProjects().stream().noneMatch(pp -> pp.getProjectIndex() == projectIndex)) {
                 continue;
             }
 
-            List<Task> updatedTasks = new ArrayList<>(person.getTasks());
-            boolean changed = updatedTasks.removeIf(task ->
-                    task.belongsToProject(project.title) && deletedProjectTasks.stream()
-                            .anyMatch(deletedTask -> deletedTask.description.equals(task.description)));
+            List<PersonTask> updatedTasks = new ArrayList<>();
+            boolean changed = false;
+            for (PersonTask personTask : person.getTasks()) {
+                if (personTask.getProjectIndex() != projectIndex) {
+                    updatedTasks.add(personTask);
+                    continue;
+                }
+
+                if (deletedTaskIndices.contains(personTask.getTaskIndex())) {
+                    changed = true;
+                    continue;
+                }
+
+                int shift = 0;
+                for (int deletedIdx : deletedTaskIndices) {
+                    if (deletedIdx < personTask.getTaskIndex()) {
+                        shift++;
+                    }
+                }
+
+                if (shift > 0) {
+                    changed = true;
+                    updatedTasks.add(new PersonTask(projectIndex, personTask.getTaskIndex() - shift));
+                } else {
+                    updatedTasks.add(personTask);
+                }
+            }
 
             if (!changed) {
                 continue;

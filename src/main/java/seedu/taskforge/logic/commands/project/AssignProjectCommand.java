@@ -19,9 +19,10 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 
 /**
  * Assigns a project to an existing person in the address book.
@@ -81,7 +82,7 @@ public class AssignProjectCommand extends ProjectCommand {
             new CommandException(MESSAGE_PROJECT_NOT_FOUND)), model);
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, assignProjectDescriptor);
+        Person editedPerson = createEditedPerson(personToEdit, assignProjectDescriptor, model);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
@@ -109,33 +110,46 @@ public class AssignProjectCommand extends ProjectCommand {
      */
     private static Person createEditedPerson(
             Person personToEdit,
-            AssignProjectDescriptor assignProjectDescriptor) throws CommandException {
+            AssignProjectDescriptor assignProjectDescriptor,
+            Model model) throws CommandException {
         assert personToEdit != null;
 
         Name name = personToEdit.getName();
         Phone phone = personToEdit.getPhone();
         Email email = personToEdit.getEmail();
-        List<Task> taskList = personToEdit.getTasks();
+        List<PersonTask> taskList = personToEdit.getTasks();
 
-        List<Project> newProjects = new ArrayList<>(personToEdit.getProjects());
-        newProjects.addAll(assignProjectDescriptor.getProjects().orElseThrow(() ->
-                new CommandException(MESSAGE_PROJECT_NOT_FOUND)));
-        checkUniqueProjects(newProjects);
+        List<PersonProject> newPersonProjects = new ArrayList<>(personToEdit.getProjects());
+        List<Project> projectsToAssign = assignProjectDescriptor.getProjects().orElseThrow(() ->
+                new CommandException(MESSAGE_PROJECT_NOT_FOUND));
+        List<Project> globalProjectList = new ArrayList<>(model.getProjectList());
 
-        return new Person(name, phone, email, newProjects, taskList);
+        // Convert Projects to PersonProjects then add to the person's project list
+        for (Project project : projectsToAssign) {
+            int projectIndex = globalProjectList.indexOf(project);
+            if (projectIndex == -1) {
+                throw new CommandException(MESSAGE_PROJECT_NOT_FOUND);
+            }
+            PersonProject personProject = new PersonProject(projectIndex);
+            newPersonProjects.add(personProject);
+        }
+
+        checkUniquePersonProjects(newPersonProjects);
+
+        return new Person(name, phone, email, newPersonProjects, taskList);
     }
 
     /**
-     * Checks and returns a {@code List<Project>} if there is no duplicates.
+     * Checks and returns a {@code List<PersonProject>} if there are no duplicates.
      * A {@code CommandException} is thrown if there are duplicates.
-     *
      */
-    public static List<Project> checkUniqueProjects(List<Project> projects) throws CommandException {
-        long distinctCount = projects.stream().distinct().count();
-        if (distinctCount != projects.size()) {
+    public static List<PersonProject> checkUniquePersonProjects(List<PersonProject> personProjects)
+            throws CommandException {
+        long distinctCount = personProjects.stream().distinct().count();
+        if (distinctCount != personProjects.size()) {
             throw new CommandException(MESSAGE_DUPLICATE_PROJECT);
         }
-        return projects;
+        return personProjects;
     }
 
     @Override

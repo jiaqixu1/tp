@@ -19,9 +19,9 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
-import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 
 /**
  * Unassign task(s) from an existing person in the address book.
@@ -80,10 +80,10 @@ public class UnassignTaskCommand extends TaskCommand {
         Name name = personToEdit.getName();
         Phone phone = personToEdit.getPhone();
         Email email = personToEdit.getEmail();
-        List<Project> projectList = personToEdit.getProjects();
+        List<PersonProject> personProjectList = personToEdit.getProjects();
 
-        List<Task> newTasks = new ArrayList<>(personToEdit.getTasks());
-        List<Task> tasksToDelete = new ArrayList<>();
+        List<PersonTask> newTasks = new ArrayList<>(personToEdit.getTasks());
+        List<PersonTask> tasksToDelete = new ArrayList<>();
         List<Index> indexToDelete = unassignTaskDescriptor.getTasksIndexes()
                 .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
         for (int i = 0; i < indexToDelete.size(); ++i) {
@@ -95,25 +95,9 @@ public class UnassignTaskCommand extends TaskCommand {
             }
         }
 
-        checkTasksExistInAssignedProjects(tasksToDelete, personToEdit, model);
         newTasks.removeAll(tasksToDelete);
 
-        return new Person(name, phone, email, projectList, newTasks);
-    }
-
-    private static void checkTasksExistInAssignedProjects(List<Task> tasks, Person person, Model model)
-            throws CommandException {
-        List<Project> assignedProjects = person.getProjects();
-        List<Project> allProjects = model.getProjectList();
-
-        boolean allTasksExist = tasks.stream().allMatch(task ->
-                assignedProjects.stream().anyMatch(assignedProject ->
-                        allProjects.stream().anyMatch(project -> assignedProject.equals(project)
-                                && project.getTasks().contains(task))));
-
-        if (!allTasksExist) {
-            throw new CommandException(MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
-        }
+        return new Person(name, phone, email, personProjectList, newTasks);
     }
 
     @Override

@@ -3,7 +3,6 @@ package seedu.taskforge.logic.commands.task;
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import seedu.taskforge.commons.core.index.Index;
@@ -11,10 +10,8 @@ import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
-import seedu.taskforge.model.person.Email;
-import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.person.Phone;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
 
@@ -31,6 +28,7 @@ public class MarkTaskCommand extends TaskCommand {
 
     public static final String MESSAGE_MARK_TASK_SUCCESS = "Marked task as done: %1$s";
     public static final String MESSAGE_TASK_ALREADY_DONE = "This task is already marked as done.";
+    public static final String MESSAGE_INVALID_TASK_REFERENCE = "This task reference is invalid.";
 
     private final Index personIndex;
     private final Index taskIndex;
@@ -57,46 +55,39 @@ public class MarkTaskCommand extends TaskCommand {
         }
 
         Person personToEdit = lastShownList.get(personIndex.getZeroBased());
-        List<Task> taskList = personToEdit.getTasks();
+        List<PersonTask> taskList = personToEdit.getTasks();
 
         if (taskIndex.getZeroBased() >= taskList.size()) {
             throw new CommandException(DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
         }
 
-        Task taskToMark = taskList.get(taskIndex.getZeroBased());
-        if (taskToMark.getStatus()) {
+        PersonTask taskToMark = taskList.get(taskIndex.getZeroBased());
+        Task resolvedTask = resolveTask(model, taskToMark);
+        if (resolvedTask.getStatus()) {
             throw new CommandException(MESSAGE_TASK_ALREADY_DONE);
         }
 
-        Person editedPerson = createMarkedPerson(personToEdit, taskIndex);
+        Project project = model.getProjectList().get(taskToMark.getProjectIndex());
+        List<Task> updatedTasks = project.getTasks();
+        updatedTasks.get(taskToMark.getTaskIndex()).setDone();
+        Project editedProject = new Project(project.title, updatedTasks);
 
-        model.setPerson(personToEdit, editedPerson);
+        model.setProject(project, editedProject);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_MARK_TASK_SUCCESS, taskToMark.description));
+        return new CommandResult(String.format(MESSAGE_MARK_TASK_SUCCESS, resolvedTask.description));
     }
 
-    private static Person createMarkedPerson(Person personToEdit, Index taskIndex) {
-        assert personToEdit != null;
-
-        Name name = personToEdit.getName();
-        Phone phone = personToEdit.getPhone();
-        Email email = personToEdit.getEmail();
-        List<Project> projectList = personToEdit.getProjects();
-        List<Task> currentTasks = personToEdit.getTasks();
-
-        List<Task> updatedTasks = new ArrayList<>();
-        for (int i = 0; i < currentTasks.size(); i++) {
-            Task currentTask = currentTasks.get(i);
-            if (i == taskIndex.getZeroBased()) {
-                Task markedTask = new Task(currentTask.description, currentTask.getProjectTitle());
-                markedTask.setDone();
-                updatedTasks.add(markedTask);
-            } else {
-                updatedTasks.add(currentTask);
-            }
+    private static Task resolveTask(Model model, PersonTask personTask) throws CommandException {
+        int projectIndex = personTask.getProjectIndex();
+        int taskIndex = personTask.getTaskIndex();
+        if (projectIndex < 0 || projectIndex >= model.getProjectList().size()) {
+            throw new CommandException(MESSAGE_INVALID_TASK_REFERENCE);
         }
-
-        return new Person(name, phone, email, projectList, updatedTasks);
+        List<Task> projectTasks = model.getProjectList().get(projectIndex).getTasks();
+        if (taskIndex < 0 || taskIndex >= projectTasks.size()) {
+            throw new CommandException(MESSAGE_INVALID_TASK_REFERENCE);
+        }
+        return projectTasks.get(taskIndex);
     }
 
     @Override

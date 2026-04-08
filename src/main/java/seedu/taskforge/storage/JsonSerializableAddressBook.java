@@ -12,8 +12,9 @@ import seedu.taskforge.commons.exceptions.IllegalValueException;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonProject;
+import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 
 /**
  * An Immutable AddressBook that is serializable to JSON format.
@@ -74,32 +75,38 @@ class JsonSerializableAddressBook {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
             }
 
-            for (Project personProject : person.getProjects()) {
-                if (!addressBook.hasProject(personProject)) {
+            for (PersonProject personProject : person.getProjects()) {
+                int projectIndex = personProject.getProjectIndex();
+                if (projectIndex < 0 || projectIndex >= addressBook.getProjectList().size()) {
                     throw new IllegalValueException(String.format(
                             MESSAGE_PERSON_PROJECT_NOT_IN_PROJECT_LIST,
-                            person.getName(), personProject));
+                            person.getName(), projectIndex));
                 }
             }
 
-            for (Task personTask : person.getTasks()) {
-                boolean taskExistsInAssignedProjects;
-                if (personTask.getProjectTitle() != null) {
-                    taskExistsInAssignedProjects = person.getProjects().stream()
-                        .filter(personProject -> personProject.title.equals(personTask.getProjectTitle()))
-                        .anyMatch(personProject -> addressBook.getProjectList().stream()
-                            .anyMatch(project -> project.equals(personProject)
-                                && project.getTasks().contains(personTask)));
-                } else {
-                    taskExistsInAssignedProjects = person.getProjects().stream()
-                        .anyMatch(personProject -> addressBook.getProjectList().stream()
-                            .anyMatch(project -> project.equals(personProject)
-                                && project.getTasks().contains(personTask)));
-                }
-                if (!taskExistsInAssignedProjects) {
+            for (PersonTask personTask : person.getTasks()) {
+                int taskProjectIndex = personTask.getProjectIndex();
+                int taskIndex = personTask.getTaskIndex();
+
+                if (taskProjectIndex < 0 || taskProjectIndex >= addressBook.getProjectList().size()) {
                     throw new IllegalValueException(String.format(
-                            MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS,
-                            person.getName(), personTask.description));
+                        MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS,
+                        person.getName(), "[invalid-project-index]"));
+                }
+
+                Project project = addressBook.getProjectList().get(taskProjectIndex);
+                if (taskIndex < 0 || taskIndex >= project.getTasks().size()) {
+                    throw new IllegalValueException(String.format(
+                        MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS,
+                        person.getName(), "[invalid-task-index]"));
+                }
+
+                boolean projectAssignedToPerson = person.getProjects().stream()
+                    .anyMatch(pp -> pp.getProjectIndex() == taskProjectIndex);
+                if (!projectAssignedToPerson) {
+                    throw new IllegalValueException(String.format(
+                        MESSAGE_PERSON_TASK_NOT_IN_ASSIGNED_PROJECTS,
+                        person.getName(), project.getTasks().get(taskIndex).description));
                 }
             }
 

@@ -22,6 +22,8 @@ import seedu.taskforge.commons.exceptions.DataLoadingException;
 import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.ReadOnlyAddressBook;
 import seedu.taskforge.model.person.Person;
+import seedu.taskforge.model.person.PersonTask;
+import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.task.Task;
 
 public class JsonAddressBookStorageTest {
@@ -119,21 +121,24 @@ public class JsonAddressBookStorageTest {
         AddressBook original = getTypicalAddressBook();
 
         Person firstPerson = original.getPersonList().get(0);
-        Task firstTask = firstPerson.getTasks().get(0);
+        PersonTask firstPersonTask = firstPerson.getTasks().get(0);
+        Project firstProject = original.getProjectList().get(firstPersonTask.getProjectIndex());
+        Task firstTask = firstProject.getTasks().get(firstPersonTask.getTaskIndex());
         Task doneTask = new Task(firstTask.description, firstTask.getProjectTitle());
         doneTask.setDone();
 
-        List<Task> updatedTasks = new ArrayList<>(firstPerson.getTasks());
-        updatedTasks.set(0, doneTask);
-        Person personWithDoneTask = new Person(firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
-                firstPerson.getProjects(), updatedTasks);
-        original.setPerson(firstPerson, personWithDoneTask);
+        List<Task> updatedTasks = new ArrayList<>(firstProject.getTasks());
+        updatedTasks.set(firstPersonTask.getTaskIndex(), doneTask);
+        original.setProject(firstProject, new Project(firstProject.title, updatedTasks));
 
         JsonAddressBookStorage storage = new JsonAddressBookStorage(filePath);
         storage.saveAddressBook(original, filePath);
         ReadOnlyAddressBook readBack = storage.readAddressBook(filePath).get();
 
         Person readBackPerson = readBack.getPersonList().get(0);
-        assertTrue(readBackPerson.getTasks().get(0).getStatus());
+        PersonTask readBackTaskRef = readBackPerson.getTasks().get(0);
+        Task readBackTask = readBack.getProjectList().get(readBackTaskRef.getProjectIndex())
+            .getTasks().get(readBackTaskRef.getTaskIndex());
+        assertTrue(readBackTask.getStatus());
     }
 }

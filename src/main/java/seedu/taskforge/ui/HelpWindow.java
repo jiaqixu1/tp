@@ -1,8 +1,11 @@
 package seedu.taskforge.ui;
+
 import java.util.logging.Logger;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+
 import seedu.taskforge.commons.core.LogsCenter;
 import seedu.taskforge.logic.commands.HelpCommand;
 import seedu.taskforge.logic.commands.person.AddCommand;

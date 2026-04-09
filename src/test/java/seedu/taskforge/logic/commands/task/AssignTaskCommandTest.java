@@ -228,6 +228,18 @@ public class AssignTaskCommandTest {
     }
 
     @Test
+    public void execute_taskProjectNotAssignedToPerson_failure() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(
+                        new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(2), Index.fromOneBased(1)))
+                .build();
+        AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(assignTaskCommand, model,
+                AssignTaskCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+    }
+
+    @Test
     public void equals() {
         AssignTaskDescriptor firstDescriptor = new AssignTaskDescriptorBuilder()
                 .withTaskIndexes("3").build();

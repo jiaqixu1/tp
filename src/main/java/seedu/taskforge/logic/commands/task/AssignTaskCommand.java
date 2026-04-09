@@ -39,6 +39,8 @@ public class AssignTaskCommand extends TaskCommand {
     public static final String MESSAGE_NOT_EDITED = "At least one task to assign must be provided";
     public static final String MESSAGE_INVALID_TASK_DISPLAYED_INDEX = "Task index is out of bound";
     public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "Project index is out of bound";
+    public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
+            "Task to assigned does not exist in any person-assigned project.";
 
     private final Index index;
     private final AssignTaskDescriptor assignTaskDescriptor;
@@ -67,7 +69,8 @@ public class AssignTaskCommand extends TaskCommand {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         List<ProjectTaskPair> projectTaskPairs = assignTaskDescriptor.getProjectTaskPairs()
             .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
-        List<PersonTask> resolvedTasksToAssign = resolveTasksFromProjectTaskPairs(projectTaskPairs, model);
+        List<PersonTask> resolvedTasksToAssign = resolveTasksFromProjectTaskPairs(projectTaskPairs,
+            personToEdit.getProjects(), model);
         Person editedPerson = createEditedPerson(personToEdit, resolvedTasksToAssign);
 
         model.setPerson(personToEdit, editedPerson);
@@ -99,13 +102,14 @@ public class AssignTaskCommand extends TaskCommand {
     }
 
     private static List<PersonTask> resolveTasksFromProjectTaskPairs(List<ProjectTaskPair> projectTaskPairs,
-            Model model) throws CommandException {
+            List<PersonProject> assignedPersonProjects, Model model) throws CommandException {
         List<Project> allProjects = new ArrayList<>(model.getProjectList());
         List<PersonTask> resolvedTasks = new ArrayList<>();
 
         for (ProjectTaskPair pair : projectTaskPairs) {
             int projectIndex = pair.getProjectIndex().getZeroBased();
             int taskIndex = pair.getTaskIndex().getZeroBased();
+            PersonTask matchedTask = null;
 
             // Validate project index
             if (projectIndex < 0 || projectIndex >= allProjects.size()) {
@@ -118,7 +122,18 @@ public class AssignTaskCommand extends TaskCommand {
                 throw new CommandException(MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
             }
 
-            resolvedTasks.add(new PersonTask(projectIndex, taskIndex));
+            for (PersonProject personProject : assignedPersonProjects) {
+                if (personProject.getProjectIndex() == projectIndex) {
+                    matchedTask = new PersonTask(projectIndex, taskIndex);
+                    break;
+                }
+            }
+
+            if (matchedTask == null) {
+                throw new CommandException(MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+            }
+
+            resolvedTasks.add(matchedTask);
         }
 
         return resolvedTasks;

@@ -1,5 +1,7 @@
 package seedu.taskforge.ui;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
@@ -69,7 +71,8 @@ public class HelpWindow extends UiPart<Stage> {
                     + "------------------------------\n"
                     + ClearCommand.MESSAGE_USAGE + "\n\n"
                     + HelpCommand.MESSAGE_USAGE;
-
+    public static final String USER_GUIDE_URL =
+            "https://ay2526s2-cs2103t-w09-4.github.io/tp/UserGuide.html#quick-start";
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
 
@@ -121,5 +124,19 @@ public class HelpWindow extends UiPart<Stage> {
      */
     public void focus() {
         getRoot().requestFocus();
+    }
+
+    /**
+     * Shows URL
+     */
+    @FXML
+    private void handleOpenUserGuide() {
+        try {
+            Desktop.getDesktop().browse(
+                    new URI(USER_GUIDE_URL)
+            );
+        } catch (Exception e) {
+            logger.warning("Failed to open user guide: " + e.getMessage());
+        }
     }
 }

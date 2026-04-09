@@ -77,4 +77,19 @@ public class HelpWindowTest {
         assertTrue(HelpWindow.HELP_MESSAGE.contains("TASK COMMANDS"));
         assertTrue(HelpWindow.HELP_MESSAGE.contains("GENERAL COMMANDS"));
     }
+
+    @Test
+    public void userGuideUrl_correct() {
+        assertEquals(
+                "https://ay2526s2-cs2103t-w09-4.github.io/tp/UserGuide.html#quick-start",
+                HelpWindow.USER_GUIDE_URL
+        );
+    }
+
+    @Test
+    public void helpMessage_containsCommandUsage() {
+        assertTrue(HelpWindow.HELP_MESSAGE.contains("add"));
+        assertTrue(HelpWindow.HELP_MESSAGE.contains("project"));
+        assertTrue(HelpWindow.HELP_MESSAGE.contains("task"));
+    }
 }

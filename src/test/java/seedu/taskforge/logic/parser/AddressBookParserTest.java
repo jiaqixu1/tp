@@ -254,8 +254,8 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_listTask() throws Exception {
         ListTaskCommand command = (ListTaskCommand) parser.parseCommand(TaskCommand.COMMAND_WORD
-                + " " + ListTaskCommand.SUBCOMMAND_WORD + " -n alpha");
-        assertEquals(new ListTaskCommand(new Project("alpha")), command);
+                + " " + ListTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased());
+        assertEquals(new ListTaskCommand(INDEX_FIRST_PROJECT), command);
     }
 
     @Test

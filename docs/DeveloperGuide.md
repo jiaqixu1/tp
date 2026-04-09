@@ -340,7 +340,7 @@ TaskForge supports task management using 10 commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
 - `task delete PROJECT_INDEX -i TASK_INDEX`
 - `task edit PROJECT_NAME -i TASK_INDEX -n NEW_TASK_NAME`
-- `task list -n PROJECT_NAME`
+- `task list PROJECT_INDEX`
 - `task find KEYWORD [MORE_KEYWORDS]`
 - `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX`
 - `task unassign INDEX -i TASK_INDEX`
@@ -410,7 +410,7 @@ TaskForge supports task management using 10 commands:
 - After updating the project, it reassigns each affected person to the renamed task so assignments are preserved.
 
 **Task listing by project (`task list`)**:
-- `ListTaskCommand` validates that the provided project name exists in the global project list.
+- `ListTaskCommand` validates that the provided project index is valid in the global project list.
 - Retrieves and displays all tasks in the specified project.
 
 **Task finding by keyword (`task find`)**:

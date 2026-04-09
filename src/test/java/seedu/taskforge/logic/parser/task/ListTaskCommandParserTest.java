@@ -3,11 +3,12 @@ package seedu.taskforge.logic.parser.task;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.taskforge.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.task.ListTaskCommand;
-import seedu.taskforge.model.project.Project;
 
 public class ListTaskCommandParserTest {
 
@@ -18,14 +19,15 @@ public class ListTaskCommandParserTest {
 
     @Test
     public void parse_validArgs_success() {
-        assertParseSuccess(parser, " -n alpha", new ListTaskCommand(new Project("alpha")));
+        Index targetIndex = INDEX_FIRST_PROJECT;
+        assertParseSuccess(parser, " " + targetIndex.getOneBased(), new ListTaskCommand(targetIndex));
     }
 
     @Test
     public void parse_invalidArgs_failure() {
         assertParseFailure(parser, "alpha", MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, " -n", MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, " -n alpha -n beta", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "-1", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "1 2", MESSAGE_INVALID_FORMAT);
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
     }
 }

@@ -758,7 +758,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Guarantees**
 
-1. The previous change made to the address book is reverted.
+1. The previous change made to the taskforge is reverted.
 
 **MSS**
 

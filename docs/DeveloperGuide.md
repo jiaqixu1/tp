@@ -920,6 +920,41 @@ testers are expected to do more *exploratory* testing.
    4. Test case: `task assign 1 -pi 2 -i 1`<br>
       Expected: No data is changed. An error indicates that the task is not in the person's assigned projects.
 
+### Unassigning a project (`project unassign`)
+
+1. Unassigning project(s) from a person
+
+   1. Prerequisites: Prepare a minimal dataset using the following inputs:
+      `clear`
+      `add -n Alice -p 91234567 -e alice@example.com`
+      `project add Alpha`
+      `project add Beta`
+      `project assign 1 -i 1 -i 2`
+      `task add 1 -n Draft API`
+      `task add 2 -n Prepare Demo`
+      `task assign 1 -pi 1 -i 1 -pi 2 -i 1`
+   2. Test case: `project unassign 1 -i 2`<br>
+      Expected: Success message is shown. Alice no longer has the second assigned project, and `task view 1` no longer shows tasks that belong to that removed project. 
+   3. Test case: `project unassign 1 -i 3`<br>
+      Expected: No data is changed. An invalid project index error is shown.
+
+### Unassigning a task (`task unassign`)
+
+1. Unassigning task(s) from a person
+
+   1. Prerequisites: Prepare a minimal dataset using the following inputs:
+      `clear`
+      `add -n Alice -p 91234567 -e alice@example.com`
+      `project add Alpha`
+      `project assign 1 -i 1`
+      `task add 1 -n Draft API`
+      `task add 1 -n Prepare Demo`
+      `task assign 1 -pi 1 -i 1 -pi 1 -i 2`
+   2. Test case: `task unassign 1 -i 1`<br>
+      Expected: Success message is shown. `task view 1` no longer includes the first task from Alice's assigned-task list. 
+   3. Test case: `task unassign 1 -i 3`<br>
+      Expected: No data is changed. A task index out-of-bound error is shown.
+
 ### Editing a task (`task edit`)
 
 1. Renaming a task from a person's assigned task list

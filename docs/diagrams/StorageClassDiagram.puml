@@ -16,10 +16,10 @@ Class JsonUserPrefsStorage
 Class "<<interface>>\nStorage" as Storage
 Class StorageManager
 
-package "AddressBook Storage" #F4F6F6 {
-Class "<<interface>>\nAddressBookStorage" as AddressBookStorage
-Class JsonAddressBookStorage
-Class JsonSerializableAddressBook
+package "TaskForge Storage" #F4F6F6 {
+Class "<<interface>>\nTaskForgeStorage" as TaskForgeStorage
+Class JsonTaskForgeStorage
+Class JsonSerializableTaskForge
 Class JsonAdaptedPerson
 Class JsonAdaptedProject
 Class JsonAdaptedTask
@@ -32,17 +32,19 @@ HiddenOutside ..> Storage
 
 StorageManager .up.|> Storage
 StorageManager -up-> "1" UserPrefsStorage
-StorageManager -up-> "1" AddressBookStorage
+StorageManager -up-> "1" TaskForgeStorage
 
 Storage -left-|> UserPrefsStorage
-Storage -right-|> AddressBookStorage
+Storage -right-|> TaskForgeStorage
 
 JsonUserPrefsStorage .up.|> UserPrefsStorage
-JsonAddressBookStorage .up.|> AddressBookStorage
-JsonAddressBookStorage ..> JsonSerializableAddressBook
+JsonTaskForgeStorage .up.|> TaskForgeStorage
+JsonTaskForgeStorage ..> JsonSerializableTaskForge
 
-JsonSerializableAddressBook --> "*" JsonAdaptedPerson
-JsonSerializableAddressBook --> "*" JsonAdaptedProject
-JsonSerializableAddressBook --> "*" JsonAdaptedTask
+JsonSerializableTaskForge --> "*" JsonAdaptedPerson
+JsonSerializableTaskForge --> "*" JsonAdaptedProject
+JsonAdaptedProject --> "*" JsonAdaptedTask
+JsonAdaptedPerson ..> JsonAdaptedProject
+JsonAdaptedPerson ..> JsonAdaptedTask
 
 @enduml

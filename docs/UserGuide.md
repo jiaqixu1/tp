@@ -233,6 +233,18 @@ Examples:
 * `project unassign 1 -i 2` unassigns the 2nd project from the 1st person in the `list`
 * `project unassign 3 -i 1 -i 4` unassigns the 1st and 4th projects from the 3rd person in the `list`
 
+#### Viewing project members : `project members`
+
+Displays all persons assigned to a project.
+
+Format: `project members PROJECT_INDEX`
+
+* Shows all persons who are assigned to the specified project.
+* `PROJECT_INDEX` refers to the project index displayed by `project list`.
+* `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
+* The result lists all members associated with the project.
+* If no persons are assigned to the project, an empty result or message is shown.
+
 ### Managing tasks
 
 #### Adding a task to a project : `task add`
@@ -450,26 +462,27 @@ Action | Format, Examples
 **Add Person** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
 **Add Project** | `project add PROJECT_NAME`<br> e.g., `project add WebApp`
 **Add Task** | `task add PROJECT_INDEX -n TASK_NAME`<br> e.g., `task add 1 -n Write report`
-**Delete Task** | `task delete PROJECT_INDEX -i TASK_INDEX`<br> e.g., `task delete 1 -i 2`
+**Delete Task** | `task delete PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`<br> e.g., `task delete 1 -i 2`
 **Edit Task** | `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`<br> e.g., `task edit 1 -i 1 -n Prepare sprint report`
 **List Tasks by Project** | `task list PROJECT_INDEX`<br> e.g., `task list 1`
 **Find Tasks** | `task find KEYWORD [MORE_KEYWORDS]`<br> e.g., `task find report bug`
-**Assign Task** | `task assign PERSON_INDEX -pi PROJECT_INDEX i TASK_INDEX`<br> e.g., `task assign 1 -pi 1 -i 2`
+**Assign Task** | `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`<br> e.g., `task assign 1 -pi 1 -i 2`
+**Unassign Task** | `task unassign PERSON_INDEX -i TASK_INDEX_FROM_PERSON`<br> e.g., `task unassign 2 -i 1`
+**View Tasks** | `task view PERSON_INDEX`<br> e.g., `task view 1`
+**Mark Task** | `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`<br> e.g., `task mark 1 1`
+**Unmark Task** | `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`<br> e.g., `task unmark 1 1`
 **Assign Project** | `project assign PERSON_INDEX -i PROJECT_INDEX`<br> e.g., `project assign 1 -i 2`
-**Clear** | `clear`
-**Delete** | `delete PERSON_INDEX`<br> e.g., `delete 3`
-**Delete Project** | `project delete INDEX`<br> e.g., `project delete 1`
+**Unassign Project** | `project unassign PERSON_INDEX -i PROJECT_INDEX`<br> e.g., `project unassign 2 -i 1`
+**Add Project** | `project add PROJECT_NAME`<br> e.g., `project add WebApp`
+**Delete Project** | `project delete PROJECT_INDEX`<br> e.g., `project delete 1`
 **Find Project** | `project find KEYWORD [MORE_KEYWORDS]`<br> e.g., `project find Alpha Web`
-**View Tasks** | `task view PERSON_INDEX`<br> e.g.,`task view 1`
-**Mark Task** | `task mark PERSON_INDEX TASK_INDEX`<br> e.g., `task mark 1 1`
-**Unmark Task** | `task unmark PERSON_INDEX TASK_INDEX`<br> e.g., `task unmark 1 1`
-**Edit Person** | `edit PERSON_Index [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit PERSON_Index -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
+**View Project Members** | `project members PROJECT_INDEX`<br> e.g., `project members 1`
+**View Projects** | `project list`
+**Delete Person** | `delete PERSON_INDEX`<br> e.g., `delete 3`
+**Edit Person** | `edit PERSON_INDEX [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
 **Find Person** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List Person** | `list`
-**Unassign Task** | `task unassign PERSON_INDEX -i TASK_INDEX`<br> e.g., `task unassign 2 -i 1`
-**Edit Person** | `edit PERSON_INDEX [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit PERSON_INDEX -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
-**Unassign Project** | `project unassign PERSON_INDEX -i PROJECT_INDEX`<br> e.g., `project unassign 2 -i 1`
-**View Projects** | `project list`
+**Clear** | `clear`
 **Undo** | `undo`
 **Redo** | `redo`
 **Help** | `help`

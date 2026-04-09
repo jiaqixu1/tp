@@ -1102,6 +1102,122 @@ testers are expected to do more *exploratory* testing.
       Execeute `task add 1 -n Beta` and then `task add 2 -n Beta`.
       Expected: Allowed, because uniqueness is enforced per project task list.
 
+### Viewing all tasks per person
+1. Viewing all tasks of a person
+
+   i. Prerequistes: Execute the following commands before testing:
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `add -n Bob -p 22222222 -e bob@example.com`
+    - `project add Alpha`
+    - `project add Beta`
+    - `project assign 1 -i 1`
+    - `project assign 1 -i 2`
+    - `task add 1 -n AlphaTask`
+    - `task add 2 -n BetaTask`
+    - `task assign 1 -pi 1 -i 1`
+    - `task assign 1 -pi 2 -i 1`
+
+   ii. Test case: `task view 1`<br>
+   Expected: All tasks assigned to person `1` are displayed.
+
+   iii. Test case: `task view 2`<br>
+   Expected: No assigned tasks message is shown.
+
+   iv. Test case: `task view 0`<br>
+   Expected: Invalid person index error.
+
+   v. Test case: `task view 999`<br>
+   Expected: Invalid person index error.
+
+   vi. Test case: `task view abc`<br>
+   Expected: Invalid command format error.
+
+
+### Finding a project
+1. Finding project(s) by keyword
+
+   i. Prerequistes: Execute the following commands before testing:
+    - `clear`
+    - `project add Alpha`
+    - `project add Beta`
+    - `project add AlphaWeb`
+    - `project add Gamma`
+
+   ii. Test case: `project find Alpha`<br>
+   Expected: Projects containing `Alpha` are displayed.
+
+   iii. Test case: `project find Beta`<br>
+   Expected: Project `Beta` is displayed.
+
+   iv. Test case: `project find alpha`<br>
+   Expected: Behaviour depends on implementation (case-sensitive or case-insensitive).
+
+   v. Test case: `project find Zeta`<br>
+   Expected: No matching project found message.
+
+   vi. Test case: `project find`<br>
+   Expected: Invalid command format error.
+
+   vii. Test case: `project find Alpha Web`<br>
+   Expected: Projects matching the keywords are displayed.
+
+
+### Help command
+1. Opening the help window
+
+   i. Prerequistes: Launch the application.
+
+   ii. Test case: `help`<br>
+   Expected: Help window opens successfully and displays all commands.
+
+   iii. Test case: `help` (run multiple times)<br>
+   Expected: Help window remains stable or is brought to the front.
+
+   iv. Test case: `help extra`<br>
+   Expected: Invalid command format error.
+
+   v. Verification:
+   Ensure the help window includes:
+    - Person commands
+    - Project commands
+    - Task commands
+
+
+### Viewing all members under a project
+1. Viewing members of a project
+
+   i. Prerequistes: Execute the following commands before testing:
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `add -n Bob -p 22222222 -e bob@example.com`
+    - `add -n Charlie -p 33333333 -e charlie@example.com`
+    - `project add Alpha`
+    - `project add Beta`
+    - `project assign 1 -i 1`
+    - `project assign 2 -i 1`
+    - `project assign 3 -i 2`
+
+   ii. Test case: `project members 1`<br>
+   Expected: Members assigned to project `1` are displayed.
+
+   iii. Test case: `project members 2`<br>
+   Expected: Members assigned to project `2` are displayed.
+
+   iv. Test case: `project members 0`<br>
+   Expected: Invalid project index error.
+
+   v. Test case: `project members 999`<br>
+   Expected: Invalid project index error.
+
+   vi. Test case:
+    - `clear`
+    - `project add Alpha`
+    - `project members 1`<br>
+      Expected: No members in project message is shown.
+
+   vii. Test case: `project members abc`<br>
+   Expected: Invalid command format error.
 
 ### Saving data
 

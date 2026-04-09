@@ -285,15 +285,13 @@ Examples:
 
 Lists all tasks that belong to the specified project.
 
-Format: `task list -n PROJECT_NAME`
+Format: `task list PROJECT_INDEX`
 
-* Lists task(s) from the project named `PROJECT_NAME`.
-* `PROJECT_NAME` must match an existing project in TaskForge.
-* Project name matching is case-insensitive.
+* Lists task(s) from the `PROJECT_INDEX`.
+* `PROJECT_INDEX` refers to index in global project list.
 
 Examples:
-* `task list -n Alpha`
-* `task list -n Project X`
+* `task list 1`
 
 #### Finding tasks by keyword : `task find`
 
@@ -437,7 +435,7 @@ Action | Format, Examples
 **Add Task** | `task add PROJECT_INDEX -n TASK_NAME`<br> e.g., `task add 1 -n Write report`
 **Delete Task** | `task delete PROJECT_INDEX -i TASK_INDEX`<br> e.g., `task delete 1 -i 2`
 **Edit Task** | `task edit PROJECT_NAME -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`<br> e.g., `task edit Alpha -i 1 -n Prepare sprint report`
-**List Tasks by Project** | `task list -n PROJECT_NAME`<br> e.g., `task list -n Alpha`
+**List Tasks by Project** | `task list PROJECT_NAME`<br> e.g., `task list 1`
 **Find Tasks** | `task find KEYWORD [MORE_KEYWORDS]`<br> e.g., `task find report bug`
 **Assign Task** | `task assign INDEX -n TASK_NAME`<br> e.g., `task assign 1 -n Draft proposal`
 **Assign Project** | `project assign INDEX -n PROJECT_NAME`<br> e.g., `project assign 1 -n WebApp`

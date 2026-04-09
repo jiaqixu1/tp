@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
+import static seedu.taskforge.testutil.TypicalIndexes.INDEX_THIRD_PROJECT;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;

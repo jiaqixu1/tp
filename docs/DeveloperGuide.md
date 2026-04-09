@@ -822,15 +822,15 @@ testers are expected to do more *exploratory* testing.
 
 1. Initial launch
 
-   1. Download the jar file and copy into an empty folder
+   i. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   ii. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+   i. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   ii. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
@@ -839,36 +839,146 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a person while all persons are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   i. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
+   ii. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
+   iii. Test case: `delete 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   iv. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
 ### Finding a project
 
 1. Finding projects by name
 
-    1. Prerequisites: There are existing projects in the project list, e.g. `Alpha`, `Alpha Backend`, `Beta`.
+    i. Prerequisites: There are existing projects in the project list, e.g. `Alpha`, `Alpha Backend`, `Beta`.
 
-    1. Test case: `project find alpha`
+    ii. Test case: `project find alpha`
        Expected: All projects whose titles contain `alpha` are shown in the result display.
 
-    1. Test case: `project find beta`
+    iii. Test case: `project find beta`
        Expected: The matching project is shown in the result display.
 
-    1. Test case: `project find gamma`
+    iv. Test case: `project find gamma`
        Expected: A message is shown indicating that no matching projects were found.
 
-    1. Test case: `project find`
+    v. Test case: `project find`
        Expected: Invalid command format message is shown.
 
 1. _{ more test cases …​ }_
+
+### Adding a project
+
+1. Adding a project and verifying project uniqueness
+
+   i. Prerequisites: Start with sample data loaded.
+
+   ii. Test case: `project add Alpha`<br>
+      Expected: Project `Alpha` is added successfully and appears in project list.
+
+   iii. Test case: `project add Alpha` (run again)<br>
+      Expected: Command fails with duplicate-project error. No new project is added.
+
+   iv. Test case: `project add 你好`<br>
+      Expected: Invalid format/constraint error shown. No project is added.
+
+### Deleting a project
+
+1. Deleting a project and cascade cleanup all project instances
+
+   i. Prerequisites:
+      Use `project list` and note an existing project index (example: `1`).
+      Ensure at least one person is assigned to that project and has at least one task from it.
+
+   ii. Test case: `project delete 1`<br>
+      Expected: Project at index `1` is deleted. That project is deleted from every Persons/Contacts that have been assigned along with their tasks.
+
+   iii. Test case: `project delete 0`<br>
+      Expected: Invalid project index error. No data changed.
+
+### Adding a task
+
+1. Adding a task to a project and verifying task uniqueness in the project's task list
+
+   i. Prerequisites:
+      Use `project list` and note an existing project index (example: `1`).
+      Ensure at least one person is assigned to that project and has at least one task from it. Ensure the list have fewer than 999 entries.
+
+   ii. Test case: `task add 1 -n Review API`<br>
+      Expected: Task is added under project `1`.
+   
+   iii. Test case: `task add 1 -n Review API` (run again)<br>
+      Expected: Duplicate-task error for that project. No second copy is added.
+
+   iv. Test case: `task add 999 -n Review API`<br>
+      Expected: Project index out of bound error.
+
+### Deleting a task
+1. Deleting task(s) from a project and cascade cleanup all task instances
+
+   i. Prerequisites:
+      Ensure project `1` has at least two tasks and no more than 999 tasks.
+      Assign one of those tasks to a person using `task assign`.
+
+   ii. Test case: `task delete 1 -i 1`<br>
+      Expected: Task at index `1` in project `1` is deleted. Any contact/person assignment of that task is deleted. The other remaining task assignments of that contacts/persons will get their index renumbered.
+
+   iii. Test case: `task delete 1 -i 999`<br>
+      Expected: Task index out of bound error. No task removed.
+
+### Assigning a task
+1. Assigning task(s) to a person
+
+   i. Prerequisites:
+      Person at index `1` is assigned to project `1`.
+      Project `1` has at least one task.
+
+   ii. Test case: `task assign 1 -pi 1 -i 1`<br>
+      Expected: Task is assigned to person `1` successfully.
+
+   iii. Test case: `task assign 1 -pi 1 -i 1` (run again)<br>
+      Expected: Duplicate-task-assignment error.
+
+   iv. Test case: `task assign 1 -pi 0 -i 1`<br>
+      Expected: Invalid project index error.
+
+   v. Test case: `task assign 1 -pi 1 -i 0`<br>
+      Expected: Invalid task index error.
+
+   vi. Test case: `task assign 1 -pi 2 -i 1` where person `1` is not assigned to project `2`<br>
+      Expected: Task does not exist in any contact/person's project assigned error.
+
+### Unassigning a task
+1. Unassigning task(s) from a person
+
+   i. Prerequisites:
+      Person `1` already has assigned tasks (check using `task view 1`).
+
+   ii. Test case: `task unassign 1 -i 1`<br>
+      Expected: First task in that person's assigned-task view is removed.
+
+   iii. Test case: `task unassign 1 -i 999`<br>
+      Expected: Task index out of bound error. No task removed.
+
+1. Verifying `UniqueProjectList` and `UniqueTaskList` behavior through commands
+
+   i. Prerequisites: The project list has at least 2 entries.
+
+   i. `UniqueProjectList` check:
+      Add project title `Alpha` 2 times in a row using `project add Alpha` command
+      Expected: Second command fails as duplicate.
+
+   ii. `UniqueTaskList` check:
+      Add task title `Beta` 2 times in a row using `task add 1 -n Beta` command
+      Expected: Second command fails as duplicate.
+
+   iii. Control check:
+      Add same task name to a different project.
+      Execeute `task add 1 -n Beta` and then `task add 2 -n Beta`.
+      Expected: Allowed, because uniqueness is enforced per project task list.
 
 
 ### Saving data

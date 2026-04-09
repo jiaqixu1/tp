@@ -203,7 +203,7 @@ public class UnassignProjectCommandTest {
 
     @Test
     public void execute_unassignProjectRemovesTaskReferences_success() {
-        Model modelWithProjectTasks = new ModelManager(new AddressBook(), new UserPrefs());
+        Model modelWithProjectTasks = new ModelManager(new TaskForge(), new UserPrefs());
         modelWithProjectTasks.addProject(new seedu.taskforge.model.project.Project("Alpha"));
         modelWithProjectTasks.addProject(new seedu.taskforge.model.project.Project("Beta"));
 
@@ -233,7 +233,7 @@ public class UnassignProjectCommandTest {
 
         String expectedMessage = String.format(UnassignProjectCommand.MESSAGE_UNASSIGN_PROJECT_SUCCESS,
                 Messages.formatPersonSummary(expectedPerson));
-        Model expectedModel = new ModelManager(new AddressBook(modelWithProjectTasks.getAddressBook()),
+        Model expectedModel = new ModelManager(new TaskForge(modelWithProjectTasks.getTaskForge()),
                 new UserPrefs());
         expectedModel.setPerson(personWithProjectsAndTasks, expectedPerson);
 

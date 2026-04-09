@@ -103,7 +103,8 @@ public class ModelManager implements Model {
 
     @Override
     public void addProject(Project project) {
-        addressBook.addProject(project);
+        taskForge.addProject(project);
+        updateFilteredProjectList(PREDICATE_SHOW_ALL_PROJECTS);
     }
 
     @Override
@@ -144,24 +145,7 @@ public class ModelManager implements Model {
 
     /**
      * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
-     * {@code versionedAddressBook}
-     */
-    @Override
-    public ObservableList<Project> getFilteredProjectList() {
-        return filteredProjects;
-    }
-
-    @Override
-    public void updateFilteredProjectList(Predicate<Project> predicate) {
-        requireNonNull(predicate);
-        filteredProjects.setPredicate(predicate);
-    }
-
-    //=========== Filtered Project List Accessors =============================================================
-
-    /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
-     * {@code versionedAddressBook}
+     * {@code versionedTaskForge}
      */
     @Override
     public ObservableList<Project> getFilteredProjectList() {

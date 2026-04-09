@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.Messages;
-import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.TaskForge;
@@ -105,9 +104,9 @@ public class EditTaskCommandTest {
         Person malformedPerson = new Person(firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
                 firstPerson.getProjects(), List.of(new PersonTask(model.getProjectList().size(), 0)));
 
-        AddressBook malformedAddressBook = new AddressBook(model.getAddressBook());
-        malformedAddressBook.setPersons(List.of(malformedPerson));
-        Model malformedModel = new ModelManager(malformedAddressBook, new UserPrefs());
+        TaskForge malformedTaskForge = new TaskForge(model.getTaskForge());
+        malformedTaskForge.setPersons(List.of(malformedPerson));
+        Model malformedModel = new ModelManager(malformedTaskForge, new UserPrefs());
 
         EditTaskCommand editTaskCommand = new EditTaskCommand(INDEX_FIRST_PERSON, INDEX_FIRST_TASK,
                 new Task(VALID_TASK_IMPLEMENT_X));
@@ -121,9 +120,9 @@ public class EditTaskCommandTest {
         Person malformedPerson = new Person(firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
                 firstPerson.getProjects(), List.of(new PersonTask(0, model.getProjectList().get(0).getTasks().size())));
 
-        AddressBook malformedAddressBook = new AddressBook(model.getAddressBook());
-        malformedAddressBook.setPersons(List.of(malformedPerson));
-        Model malformedModel = new ModelManager(malformedAddressBook, new UserPrefs());
+        TaskForge malformedTaskForge = new TaskForge(model.getTaskForge());
+        malformedTaskForge.setPersons(List.of(malformedPerson));
+        Model malformedModel = new ModelManager(malformedTaskForge, new UserPrefs());
 
         EditTaskCommand editTaskCommand = new EditTaskCommand(INDEX_FIRST_PERSON, INDEX_FIRST_TASK,
                 new Task(VALID_TASK_IMPLEMENT_X));

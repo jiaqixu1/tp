@@ -122,27 +122,27 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
 
     /**
-     * Commits the current address book state to the undo/redo history.
+     * Commits the current taskforge state to the undo/redo history.
      */
-    void commitAddressBook(String input);
+    void commitTaskForge(String input);
 
     /**
-     * Restores the previous address book state.
+     * Restores the previous taskforge state.
      */
-    String undoAddressBook();
+    String undoTaskForge();
 
     /**
-     * Restores a previously undone address book state.
+     * Restores a previously undone taskforge state.
      */
-    String redoAddressBook();
+    String redoTaskForge();
 
     /**
      * Checks if an undo operation is possible.
      */
-    boolean canUndoAddressBook();
+    boolean canUndoTaskForge();
 
     /**
      * Checks if a redo operation is possible.
      */
-    boolean canRedoAddressBook();
+    boolean canRedoTaskForge();
 }

@@ -3,7 +3,7 @@ package seedu.taskforge.logic.commands;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.taskforge.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.taskforge.testutil.TypicalPersons.getTypicalTaskForge;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,9 @@ import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
 import seedu.taskforge.logic.commands.project.ListProjectCommand;
 import seedu.taskforge.logic.commands.task.ViewTasksCommand;
-import seedu.taskforge.model.AddressBook;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
+import seedu.taskforge.model.TaskForge;
 import seedu.taskforge.model.UserPrefs;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
@@ -28,8 +28,8 @@ public class UndoCommandTest {
 
     @BeforeEach
     public void setUp() {
-        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        model = new ModelManager(getTypicalTaskForge(), new UserPrefs());
+        expectedModel = new ModelManager(model.getTaskForge(), new UserPrefs());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class UndoCommandTest {
     @Test
     public void execute_withCommitHistory_success() throws CommandException {
         UndoCommand undoCommand = new UndoCommand();
-        expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel = new ModelManager(new TaskForge(model.getTaskForge()), new UserPrefs());
 
         Person person = new PersonBuilder().build();
         AddCommand addCommand = new AddCommand(person);

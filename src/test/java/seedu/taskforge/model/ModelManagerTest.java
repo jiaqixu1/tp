@@ -24,7 +24,6 @@ import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
 import seedu.taskforge.model.person.PersonProject;
 import seedu.taskforge.model.project.Project;
 import seedu.taskforge.model.project.ProjectContainsKeywordsPredicate;
-import seedu.taskforge.testutil.TaskForgeBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 import seedu.taskforge.testutil.TaskForgeBuilder;
 
@@ -57,14 +56,14 @@ public class ModelManagerTest {
     @Test
     public void setUserPrefs_validUserPrefs_copiesUserPrefs() {
         UserPrefs userPrefs = new UserPrefs();
-        userPrefs.setTaskForgeFilePath(Paths.get("taskforge/file/path"));
+        userPrefs.setTaskForgeFilePath(Paths.get("address/book/file/path"));
         userPrefs.setGuiSettings(new GuiSettings(1, 2, 3, 4));
         modelManager.setUserPrefs(userPrefs);
         assertEquals(userPrefs, modelManager.getUserPrefs());
 
         // Modifying userPrefs should not modify modelManager's userPrefs
         UserPrefs oldUserPrefs = new UserPrefs(userPrefs);
-        userPrefs.setTaskForgeFilePath(Paths.get("new/taskforge/file/path"));
+        userPrefs.setTaskForgeFilePath(Paths.get("new/address/book/file/path"));
         assertEquals(oldUserPrefs, modelManager.getUserPrefs());
     }
 
@@ -266,12 +265,12 @@ public class ModelManagerTest {
         assertTrue(modelManager.equals(modelManager));
 
         // null -> returns false
-        assertFalse(modelManager.equals((Object) null));
+        assertFalse(modelManager.equals(null));
 
         // different types -> returns false
         assertFalse(modelManager.equals(5));
 
-        // different TaskForge -> returns false
+        // different taskForge -> returns false
         assertFalse(modelManager.equals(new ModelManager(differentTaskForge, userPrefs)));
 
         // different filteredList -> returns false
@@ -288,7 +287,7 @@ public class ModelManagerTest {
         ProjectContainsKeywordsPredicate projectPredicate = new ProjectContainsKeywordsPredicate()
                 .setProjectKeywords(Arrays.asList(projectKeywords));
         modelManager.updateFilteredProjectList(projectPredicate);
-        assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
+        assertFalse(modelManager.equals(new ModelManager(taskForge, userPrefs)));
 
         modelManager.updateFilteredProjectList(PREDICATE_SHOW_ALL_PROJECTS);
 

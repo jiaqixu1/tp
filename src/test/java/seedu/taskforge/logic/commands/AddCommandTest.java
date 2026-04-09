@@ -173,27 +173,27 @@ public class AddCommandTest {
         }
 
         @Override
-        public void commitAddressBook(String input) {
+        public void commitTaskForge(String input) {
 
         }
 
         @Override
-        public String undoAddressBook() {
+        public String undoTaskForge() {
             return "";
         }
 
         @Override
-        public String redoAddressBook() {
+        public String redoTaskForge() {
             return "";
         }
 
         @Override
-        public boolean canUndoAddressBook() {
+        public boolean canUndoTaskForge() {
             return false;
         }
 
         @Override
-        public boolean canRedoAddressBook() {
+        public boolean canRedoTaskForge() {
             return false;
         }
 

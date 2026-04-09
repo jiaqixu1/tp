@@ -78,11 +78,6 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ObservableList<Project> getFilteredProjectList() {
-        return model.getFilteredProjectList();
-    }
-
-    @Override
     public Path getTaskForgeFilePath() {
         return model.getTaskForgeFilePath();
     }

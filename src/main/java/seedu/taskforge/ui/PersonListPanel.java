@@ -33,7 +33,7 @@ public class PersonListPanel extends UiPart<Region> {
         personListView.setCellFactory(listView -> new PersonListViewCell());
 
         // Listen to changes in the project list and refresh the person list view when a change occurs
-        this.addressBook.getProjectList().addListener((ListChangeListener.Change<?> change) -> {
+        this.taskForge.getProjectList().addListener((ListChangeListener.Change<?> change) -> {
             personListView.refresh();
         });
     }

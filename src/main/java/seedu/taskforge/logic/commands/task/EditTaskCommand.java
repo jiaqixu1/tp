@@ -73,7 +73,7 @@ public class EditTaskCommand extends TaskCommand {
         model.setProject(projectToEdit, editedProject);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        model.commitAddressBook(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
+        model.commitTaskForge(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
         return new CommandResult(String.format(MESSAGE_SUCCESS, editedProject));
     }
 

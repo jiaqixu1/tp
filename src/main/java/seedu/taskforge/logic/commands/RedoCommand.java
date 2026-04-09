@@ -14,10 +14,10 @@ public class RedoCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        if (!model.canRedoAddressBook()) {
+        if (!model.canRedoTaskForge()) {
             throw new CommandException(MESSAGE_FAILED);
         }
-        String input = model.redoAddressBook();
+        String input = model.redoTaskForge();
         return new CommandResult(String.format(MESSAGE_SUCCESS, input));
     }
 }

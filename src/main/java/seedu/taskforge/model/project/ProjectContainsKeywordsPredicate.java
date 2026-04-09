@@ -19,11 +19,13 @@ public class ProjectContainsKeywordsPredicate implements Predicate<Project> {
 
     public ProjectContainsKeywordsPredicate setProjectKeywords(List<String> projectKeywords) {
         this.projectKeywords = projectKeywords;
+        this.taskKeywords = null;
         return this;
     }
 
     public ProjectContainsKeywordsPredicate setTaskKeywords(List<String> taskKeywords) {
         this.taskKeywords = taskKeywords;
+        this.projectKeywords = null;
         return this;
     }
 
@@ -33,22 +35,14 @@ public class ProjectContainsKeywordsPredicate implements Predicate<Project> {
             return false;
         }
 
-        return isKeywordMatch(project, projectKeywords, p -> p.toString())
-                && isKeywordMatchForCollection(project, taskKeywords, p -> p.getTasks().stream()
-                .map(task -> task.description).toList());
-    }
+        if (isNonEmpty(projectKeywords)) {
+            return projectKeywords.stream()
+                    .anyMatch(keyword -> containsIgnoreCase(project.toString(), keyword));
+        }
 
-    private boolean isKeywordMatch(Project project, List<String> keywords,
-                                   java.util.function.Function<Project, String> fieldMapper) {
-        return !isNonEmpty(keywords) || keywords.stream()
-                .anyMatch(keyword -> containsIgnoreCase(fieldMapper.apply(project), keyword));
-    }
-
-    private boolean isKeywordMatchForCollection(Project project, List<String> keywords,
-                                                java.util.function.Function<Project, List<String>> collectionMapper) {
-        return !isNonEmpty(keywords) || keywords.stream()
-                .anyMatch(keyword -> collectionMapper.apply(project).stream()
-                        .anyMatch(fieldValue -> containsIgnoreCase(fieldValue, keyword)));
+        return taskKeywords.stream()
+                .anyMatch(keyword -> project.getTasks().stream()
+                        .anyMatch(task -> containsIgnoreCase(task.description, keyword)));
     }
 
     @Override

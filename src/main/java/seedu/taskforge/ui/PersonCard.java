@@ -28,6 +28,7 @@ import seedu.taskforge.model.task.Task;
 public class PersonCard extends UiPart<Region> {
 
     private static final String FXML = "PersonListCard.fxml";
+    private static final double PROJECT_BOX_WIDTH = 150;
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -102,22 +103,21 @@ public class PersonCard extends UiPart<Region> {
     private TitledPane createProjectBox(int displayIndex, int projectIndex, List<PersonTask> personTasks,
                                         List<Project> globalProjects) {
         VBox projectBoxContent = new VBox(4);
+        projectBoxContent.setId("tasks");
         projectBoxContent.getStyleClass().add("person-project-box");
 
-        int taskNumberInProject = 1;
         for (int i = 0; i < personTasks.size(); i++) {
             PersonTask personTask = personTasks.get(i);
             if (personTask.getProjectIndex() != projectIndex) {
                 continue;
             }
-            projectBoxContent.getChildren().add(createTaskDisplayRow(taskNumberInProject, i + 1,
-                    resolveTask(personTask, globalProjects)));
-            taskNumberInProject++;
+            projectBoxContent.getChildren().add(createTaskDisplayRow(i + 1, resolveTask(personTask, globalProjects)));
         }
 
         TitledPane projectBox = new TitledPane(displayIndex + ". " + resolveProjectTitle(projectIndex, globalProjects),
                 projectBoxContent);
         projectBox.setCollapsible(false);
+        projectBox.setMinWidth(PROJECT_BOX_WIDTH);
         projectBox.getStyleClass().add("person-project-pane");
         return projectBox;
     }
@@ -141,7 +141,7 @@ public class PersonCard extends UiPart<Region> {
         return null;
     }
 
-    static HBox createTaskDisplayRow(int displayIndex, int taskId, Task task) {
+    static HBox createTaskDisplayRow(int taskId, Task task) {
         Circle circle = new Circle(4);
         circle.getStyleClass().add("task-not-done");
         if (task != null && task.getStatus()) {
@@ -149,7 +149,7 @@ public class PersonCard extends UiPart<Region> {
         }
 
         String taskDescription = task != null ? task.description : "[invalid-task-reference]";
-        Label taskLabel = new Label(displayIndex + ". " + taskDescription + " (ID: " + taskId + ")");
+        Label taskLabel = new Label(taskDescription + " (ID: " + taskId + ")");
 
         HBox taskContainer = new HBox(2);
         taskContainer.setAlignment(Pos.CENTER_LEFT);

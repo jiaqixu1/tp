@@ -12,8 +12,8 @@ import seedu.taskforge.commons.util.ToStringBuilder;
  */
 public class GuiSettings implements Serializable {
 
-    private static final double DEFAULT_HEIGHT = 600;
-    private static final double DEFAULT_WIDTH = 1480;
+    private static final double DEFAULT_HEIGHT = 880;
+    private static final double DEFAULT_WIDTH = 1320;
 
     private final double windowWidth;
     private final double windowHeight;

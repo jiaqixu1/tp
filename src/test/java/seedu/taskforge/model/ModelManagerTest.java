@@ -3,7 +3,10 @@ package seedu.taskforge.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
+import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PROJECTS;
 import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalPersons.ALICE;
 import static seedu.taskforge.testutil.TypicalPersons.BENSON;
@@ -20,6 +23,7 @@ import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
 import seedu.taskforge.model.person.PersonProject;
 import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.project.ProjectContainsKeywordsPredicate;
 import seedu.taskforge.testutil.AddressBookBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 
@@ -213,13 +217,42 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void updateFilteredProjectList_nullPredicate_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.updateFilteredProjectList(null));
+    }
+
+    @Test
+    public void addProject_updatesFilteredList() {
+        Project alpha = new Project(VALID_PROJECT_ALPHA);
+        Project beta = new Project(VALID_PROJECT_BETA);
+        modelManager.addProject(alpha);
+        modelManager.updateFilteredProjectList(project -> false);
+
+        modelManager.addProject(beta);
+
+        assertEquals(Arrays.asList(alpha, beta), modelManager.getFilteredProjectList());
+    }
+
+    @Test
+    public void getFilteredProjectList_modifyList_throwsUnsupportedOperationException() {
+        Project alpha = new Project("alpha");
+        modelManager.addProject(alpha);
+
+        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredProjectList().remove(0));
+    }
+
+    @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
+        Person jack = new PersonBuilder().withName("Jack").build();
+        modelManager.addPerson(jack);
+
         assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredPersonList().remove(0));
     }
 
     @Test
     public void equals() {
-        AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
+        AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON)
+                .withProject(new Project(VALID_PROJECT_ALPHA)).withProject(new Project(VALID_PROJECT_BETA)).build();
         AddressBook differentAddressBook = new AddressBook();
         UserPrefs userPrefs = new UserPrefs();
 
@@ -241,14 +274,22 @@ public class ModelManagerTest {
         assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs)));
 
         // different filteredList -> returns false
-        String[] keywords = ALICE.getName().fullName.split("\\s+");
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
-                .setNameKeywords(Arrays.asList(keywords));
-        modelManager.updateFilteredPersonList(predicate);
+        String[] personKeywords = ALICE.getName().fullName.split("\\s+");
+        PersonContainsKeywordsPredicate personPredicate = new PersonContainsKeywordsPredicate()
+                .setNameKeywords(Arrays.asList(personKeywords));
+        modelManager.updateFilteredPersonList(personPredicate);
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
         modelManager.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
+        String[] projectKeywords = VALID_PROJECT_ALPHA.split("\\s+");
+        ProjectContainsKeywordsPredicate projectPredicate = new ProjectContainsKeywordsPredicate()
+                .setProjectKeywords(Arrays.asList(projectKeywords));
+        modelManager.updateFilteredProjectList(projectPredicate);
+        assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
+
+        modelManager.updateFilteredProjectList(PREDICATE_SHOW_ALL_PROJECTS);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();

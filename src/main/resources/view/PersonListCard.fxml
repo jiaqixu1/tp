@@ -16,12 +16,12 @@
     <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
     </columnConstraints>
-    <VBox alignment="CENTER_LEFT" minHeight="105" GridPane.columnIndex="0">
+    <VBox alignment="CENTER_LEFT" minHeight="105" spacing="7" GridPane.columnIndex="0">
       <padding>
         <Insets top="12" right="14" bottom="12" left="18" />
       </padding>
 
-      <HBox spacing="8" alignment="CENTER_LEFT">
+      <HBox spacing="6" alignment="CENTER_LEFT">
         <Circle fx:id="availabilityIndicator" radius="8" styleClass="availabilityIndicator" />
         <Label fx:id="availability" styleClass="cell_small_label" text="\$availability" />
       </HBox>
@@ -34,8 +34,9 @@
           </minWidth>
         </Label>
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
-        <Label fx:id="phone" styleClass="cell_big_label" text="\$phone" />
-        <Label fx:id="email" styleClass="cell_big_label" text="\$email" />
+        <Region prefWidth="14" />
+        <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
+        <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
       </HBox>
 
       <FlowPane fx:id="projects" rowValignment="TOP" />

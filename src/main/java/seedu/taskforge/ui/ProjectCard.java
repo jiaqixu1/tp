@@ -46,7 +46,7 @@ public class ProjectCard extends UiPart<Region> {
         List<Task> taskList = project.getTasks();
 
         for (int i = 0; i < taskList.size(); i++) {
-            tasks.getChildren().add(PersonCard.createTaskDisplayRow(i + 1, i + 1, taskList.get(i)));
+            tasks.getChildren().add(PersonCard.createTaskDisplayRow(i + 1, taskList.get(i)));
         }
     }
 }

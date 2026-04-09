@@ -1,5 +1,7 @@
 package seedu.taskforge.logic.commands.project;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -236,6 +238,36 @@ public class UnassignProjectCommandTest {
         expectedModel.setPerson(personWithProjectsAndTasks, expectedPerson);
 
         assertCommandSuccess(command, modelWithProjectTasks, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void hashCode_sameValues_sameHashCode() {
+        UnassignProjectCommand.UnassignProjectDescriptor firstDescriptor = new UnassignProjectDescriptorBuilder()
+                .withProjects("1").build();
+        UnassignProjectCommand.UnassignProjectDescriptor secondDescriptor = new UnassignProjectDescriptorBuilder()
+                .withProjects("1").build();
+        UnassignProjectCommand.UnassignProjectDescriptor differentDescriptor = new UnassignProjectDescriptorBuilder()
+                .withProjects("2").build();
+
+        UnassignProjectCommand firstCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, firstDescriptor);
+        UnassignProjectCommand sameValuesCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, secondDescriptor);
+        UnassignProjectCommand differentCommand = new UnassignProjectCommand(INDEX_SECOND_PERSON, differentDescriptor);
+
+        assertEquals(firstCommand.hashCode(), sameValuesCommand.hashCode());
+        assertNotEquals(firstCommand.hashCode(), differentCommand.hashCode());
+    }
+
+    @Test
+    public void descriptorHashCode_sameValues_sameHashCode() {
+        UnassignProjectCommand.UnassignProjectDescriptor firstDescriptor = new UnassignProjectDescriptorBuilder()
+                .withProjects("1", "2").build();
+        UnassignProjectCommand.UnassignProjectDescriptor sameValuesDescriptor = new UnassignProjectDescriptorBuilder()
+                .withProjects("1", "2").build();
+        UnassignProjectCommand.UnassignProjectDescriptor differentDescriptor = new UnassignProjectDescriptorBuilder()
+                .withProjects("1").build();
+
+        assertEquals(firstDescriptor.hashCode(), sameValuesDescriptor.hashCode());
+        assertNotEquals(firstDescriptor.hashCode(), differentDescriptor.hashCode());
     }
 
     private static Person expectedPersonAfterUnassign(Person person, int... projectIndexesToRemove) {

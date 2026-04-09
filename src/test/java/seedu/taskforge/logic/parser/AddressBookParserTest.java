@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.taskforge.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
@@ -229,8 +230,8 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_editTask() throws Exception {
         EditTaskCommand command = (EditTaskCommand) parser.parseCommand(EditTaskCommand.COMMAND_WORD
-                + " " + EditTaskCommand.SUBCOMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + INDEX_FIRST_TASK.getOneBased() + " -n Write report");
+                + " " + EditTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
+                + PREFIX_INDEX + " " + INDEX_FIRST_TASK.getOneBased() + " -n Write report");
         assertEquals(new EditTaskCommand(INDEX_FIRST_PERSON, INDEX_FIRST_TASK,
                 ParserUtil.parseTask("Write report")), command);
     }

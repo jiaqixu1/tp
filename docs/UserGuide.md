@@ -273,12 +273,11 @@ Edits the name of an existing task in a project.
 
 Format: `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`
 
-* Edits the task at `TASK_INDEX_FROM_PROJECT` in the project with index `PROJECT_INDEX`.
-* `TASK_INDEX_FROM_PROJECT` refers to the task numbering shown for that project in the app.
-* `TASK_INDEX_FROM_PROJECT` **must be a positive integer** `1, 2, 3, ...`
+* Edits the task at `TASK_INDEX_FROM_PERSON` from person with index `PERSON_INDEX`.
+* `TASK_INDEX_FROM_PERSON` refers to the task ID shown for that person in the app.
+* `TASK_INDEX_FROM_PERSON` **must be a positive integer** `1, 2, 3, ...`
 * `NEW_TASK_NAME` must be alphanumeric (only letters, numbers and spaces), between 1 to 64 characters.
-* Duplicate task names in the same project are not allowed.
-* If the edited task is assigned to any person, TaskForge preserves those assignments by reassigning the renamed task.
+* If the edited task is assigned to another person, TaskForge preserves those assignments by reassigning the renamed task.
 
 Examples:
 * `task edit 1 -i 1 -n Prepare sprint report`

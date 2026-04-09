@@ -25,10 +25,10 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_INDEX, PREFIX_NAME);
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_INDEX, PREFIX_NAME);
 
-        Index index;
+        Index personIndex;
 
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            personIndex = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     EditTaskCommand.MESSAGE_USAGE), pe);
@@ -41,7 +41,7 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
         Index taskIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEX).get());
         Task newTask = ParserUtil.parseTask(argMultimap.getValue(PREFIX_NAME).get());
 
-        return new EditTaskCommand(index, taskIndex, newTask);
+        return new EditTaskCommand(personIndex, taskIndex, newTask);
     }
 }
 

@@ -872,35 +872,72 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Assigning a project (`project assign`)
+
+1. Assigning one or more projects to a person
+
+   1. Prerequisites: Prepare a minimal dataset using the following inputs:
+      `clear`
+      `add -n Alice -p 91234567 -e alice@example.com`
+      `project add Alpha`
+      `project add Beta`
+   2. Test case: `project assign 1 -i 1`<br>
+      Expected: Success message is shown. `list` displays Alice with project `Alpha` assigned. 
+   3. Test case: `project assign 1 -i 2`<br>
+      Expected: Success message is shown. Alice now has both `Alpha` and `Beta` assigned. 
+   4. Test case: `project assign 1 -i 1` (run again)<br>
+      Expected: No data is changed. A duplicate project error is shown.
+
+### Assigning a task (`task assign`)
+
+1. Assigning project tasks to a person
+
+   1. Prerequisites: Start from a clean state and prepare this dataset:
+      `clear`
+      `add -n Alice -p 91234567 -e alice@example.com`
+      `project add Alpha`
+      `project add Beta`
+      `project assign 1 -i 1`
+      `task add 1 -n Draft API`
+      `task add 2 -n Prepare Demo`
+   2. Test case: `task assign 1 -pi 1 -i 1`<br>
+      Expected: Success message is shown. `task view 1` includes `Draft API`. 
+   3. Test case: `task assign 1 -pi 1 -i 1` (run again)<br>
+      Expected: No data is changed. A duplicate task error is shown. 
+   4. Test case: `task assign 1 -pi 2 -i 1`<br>
+      Expected: No data is changed. An error indicates that the task is not in the person's assigned projects.
+
 ### Editing a task (`task edit`)
 
 1. Renaming a task from a person's assigned task list
 
     1. Prerequisites: Prepare a minimal dataset using the following inputs:
-
        `clear`
-
        `add -n Alice -p 91234567 -e alice@example.com`
-
        `project add Alpha`
-
        `project assign 1 -i 1`
-
        `task add 1 -n Draft API`
-
        `task assign 1 -pi 1 -i 1`
-
-   2.Test case: `task edit 1 -i 1 -n Finalise API`<br>
-   Expected: Success message is shown. `task view 1` and `task list 1` both show `Finalise API`, and `Draft API` is no longer shown.
-
-   3.Test case: `task edit 2 -i 1 -n Anything`<br>
-   Expected: No data is changed. An invalid person index error is shown.
-
-   4.Test case: `task edit 1 -i 2 -n Anything`<br>
-   Expected: No data is changed. A task index out-of-bound error is shown.
-
-   5.Test case: `task add 1 -n Prepare Demo`, then `task edit 1 -i 1 -n Prepare Demo`<br>
+   2. Test case: `task edit 1 -i 1 -n Finalise API`<br>
+   Expected: Success message is shown. `task view 1` and `task list 1` both show `Finalise API`, and `Draft API` is no longer shown. 
+   3. Test case: `task edit 2 -i 1 -n Anything`<br>
+   Expected: No data is changed. An invalid person index error is shown. 
+   4. Test case: `task edit 1 -i 2 -n Anything`<br>
+   Expected: No data is changed. A task index out-of-bound error is shown. 
+   5. Test case: `task add 1 -n Prepare Demo`, then `task edit 1 -i 1 -n Prepare Demo`<br>
    Expected: No data is changed. A duplicate task error is shown.
+
+### Marking and unmarking a task (`task mark`, `task unmark`)
+
+1. Marking and unmarking a person's assigned task
+
+   1. Prerequisites: Reuse the dataset from the `task edit` section above. 
+   2. Test case: `task mark 1 1`<br>
+      Expected: Success message is shown.
+   3. Test case: `task mark 1 1` (run again)<br>
+      Expected: No data is changed. An error indicates that the task is already marked as done. 
+   4. Test case: `task unmark 1 1`<br>
+      Expected: Success message is shown.
 
 ### Saving data
 

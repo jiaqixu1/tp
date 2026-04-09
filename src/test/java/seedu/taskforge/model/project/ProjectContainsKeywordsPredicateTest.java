@@ -3,7 +3,6 @@ package seedu.taskforge.model.project;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 
 import java.util.Arrays;
@@ -74,8 +73,7 @@ public class ProjectContainsKeywordsPredicateTest {
                 .setTaskKeywords(Collections.singletonList("factor"));
         ProjectContainsKeywordsPredicate projectModeIgnoresEarlierTaskKeywords = new ProjectContainsKeywordsPredicate()
                 .setTaskKeywords(Collections.singletonList("deploy"))
-                .setProjectKeywords(Collections.singletonList("alp"))
-                ;
+                .setProjectKeywords(Collections.singletonList("alp"));
 
         assertTrue(taskModeIgnoresEarlierProjectKeywords.test(alpha));
         assertTrue(projectModeIgnoresEarlierTaskKeywords.test(alpha));

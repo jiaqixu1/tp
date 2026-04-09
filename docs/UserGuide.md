@@ -191,7 +191,8 @@ Format: `project find KEYWORD [MORE_KEYWORDS]`
 * The search is case-insensitive. e.g. `alpha` will match `Alpha`
 * The search is performed on project names only.
 * Projects matching at least one keyword will be shown (i.e. `OR` search).
-* The result is shown as plain text in the result display. It does not filter or change the person list.
+* The result is shown as plain text in the result display.
+* Filters the project list.
 
 Examples:
 * `project find alpha`
@@ -305,8 +306,9 @@ Format: `task find KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g. `report` will match `Write report`.
 * The search checks all task lists from every project.
-* A matching result is shown as `taskName - projectName`.
+* A matching result is shown as `taskName - projectName` in the dialog box.
 * Tasks matching at least one keyword will be shown (i.e. `OR` search).
+* Project list will filter projects that contain the matching tasks.
 
 Examples:
 * `task find report`

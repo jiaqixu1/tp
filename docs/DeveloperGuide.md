@@ -81,7 +81,7 @@ The `UI` component,
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+* depends on some classes in the `Model` component, as it displays `Person` object and `Project` object residing in the `Model`.
 
 ### Logic component
 
@@ -295,13 +295,14 @@ TaskForge supports project management through the parent command `project` with 
 **Project listing (`project list`)**:
 - `ListProjectCommand` retrieves and displays all projects in the global project list.
 - No validation is required; the command succeeds regardless of project count.
+- Updates the filtered project list to show all projects.
 
 **Project finding (`project find`)**:
 - `FindProjectCommand` validates that at least one keyword is provided.
 - `FindProjectCommandParser` throws a parse error if the user does not provide any keyword.
 - The command performs a case-insensitive search on project titles in the global project list.
 - A project is included in the result if its title contains at least one of the given keywords.
-- No data is modified during this operation; the command only returns a text-based result.
+- Updates the filtered project list to show matching projects.
 
 **Project assignment to person (`project assign`)**:
 - `AssignProjectCommand` resolves each `PROJECT_INDEX` against the global project list.
@@ -416,6 +417,7 @@ TaskForge supports task management using 10 commands:
 - `FindTaskCommand` iterates through task lists of all projects.
 - Matches tasks whose names contain any provided keywords.
 - Returns output in the format `taskName - projectName`.
+- Updates the filtered project list to show projects that contain matching tasks.
 
 **Task assignment to person (`task assign`)**:
 - `AssignTaskCommand` resolves each selected `TASK_INDEX` into a `(projectIndex, taskIndex)` pair based on tasks

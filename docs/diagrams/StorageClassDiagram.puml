@@ -3,10 +3,12 @@
 skinparam arrowThickness 1.1
 skinparam arrowColor STORAGE_COLOR
 skinparam classBackgroundColor STORAGE_COLOR
+skinparam packageStyle rectangle
+hide empty members
 
 package Storage as StoragePackage {
 
-package "UserPrefs Storage" #F4F6F6{
+package "UserPrefs Storage" #F4F6F6 {
 Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage
 Class JsonUserPrefsStorage
 }
@@ -14,12 +16,15 @@ Class JsonUserPrefsStorage
 Class "<<interface>>\nStorage" as Storage
 Class StorageManager
 
-package "AddressBook Storage" #F4F6F6{
-Class "<<interface>>\nAddressBookStorage" as AddressBookStorage
-Class JsonAddressBookStorage
-Class JsonSerializableAddressBook
+package "TaskForge Storage" #F4F6F6 {
+Class "<<interface>>\nTaskForgeStorage" as TaskForgeStorage
+Class JsonTaskForgeStorage
+Class JsonSerializableTaskForge
 Class JsonAdaptedPerson
-Class JsonAdaptedTag
+Class JsonAdaptedProject
+Class JsonAdaptedTask
+Class JsonAdaptedPersonProject
+Class JsonAdaptedPersonTask
 }
 
 }
@@ -29,15 +34,20 @@ HiddenOutside ..> Storage
 
 StorageManager .up.|> Storage
 StorageManager -up-> "1" UserPrefsStorage
-StorageManager -up-> "1" AddressBookStorage
+StorageManager -up-> "1" TaskForgeStorage
 
 Storage -left-|> UserPrefsStorage
-Storage -right-|> AddressBookStorage
+Storage -right-|> TaskForgeStorage
 
 JsonUserPrefsStorage .up.|> UserPrefsStorage
-JsonAddressBookStorage .up.|> AddressBookStorage
-JsonAddressBookStorage ..> JsonSerializableAddressBook
-JsonSerializableAddressBook --> "*" JsonAdaptedPerson
-JsonAdaptedPerson --> "*" JsonAdaptedTag
+JsonTaskForgeStorage .up.|> TaskForgeStorage
+JsonTaskForgeStorage ..> JsonSerializableTaskForge
+
+JsonSerializableTaskForge --> "*" JsonAdaptedPerson
+JsonSerializableTaskForge --> "*" JsonAdaptedProject
+
+JsonAdaptedProject --> "*" JsonAdaptedTask
+JsonAdaptedPerson --> "*" JsonAdaptedPersonProject
+JsonAdaptedPerson --> "*" JsonAdaptedPersonTask
 
 @enduml

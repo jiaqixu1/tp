@@ -856,6 +856,19 @@ testers are expected to do more *exploratory* testing.
    iv. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
+### Finding a person (`find`)
+
+1. Finding persons by prefixed keywords
+
+   1. Prerequisites: Prepare a minimal dataset using the following inputs:
+      `clear`
+      `add -n Alice Tan -p 91234567 -e alice@example.com`
+      `add -n Bob Lee -p 92345678 -e bob@example.com`
+   2. Test case: `find -n alice`<br>
+      Expected: One person is listed (`Alice Tan`).
+   3. Test case: `find -n carol`<br>
+      Expected: No person is listed (`0 persons listed!`).
+
 ### Finding a project
 
 1. Finding projects by name
@@ -881,6 +894,71 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Assigning a project (`project assign`)
+
+1. Assigning one or more projects to a person
+
+   1. Prerequisites: Prepare a minimal dataset using the following inputs:
+      `clear`
+      `add -n Alice -p 91234567 -e alice@example.com`
+      `project add Alpha`
+      `project add Beta`
+   2. Test case: `project assign 1 -i 1`<br>
+      Expected: Success message is shown. `list` displays Alice with project `Alpha` assigned.
+   3. Test case: `project assign 1 -i 2`<br>
+      Expected: Success message is shown. Alice now has both `Alpha` and `Beta` assigned.
+   4. Test case: `project assign 1 -i 1` (run again)<br>
+      Expected: No data is changed. A duplicate project error is shown.
+
+### Unassigning a project (`project unassign`)
+
+1. Unassigning project(s) from a person
+
+   1. Prerequisites: Prepare a minimal dataset using the following inputs:
+      `clear`
+      `add -n Alice -p 91234567 -e alice@example.com`
+      `project add Alpha`
+      `project add Beta`
+      `project assign 1 -i 1 -i 2`
+      `task add 1 -n Draft API`
+      `task add 2 -n Prepare Demo`
+      `task assign 1 -pi 1 -i 1 -pi 2 -i 1`
+   2. Test case: `project unassign 1 -i 2`<br>
+      Expected: Success message is shown. Alice no longer has the second assigned project, and `task view 1` no longer shows tasks that belong to that removed project.
+   3. Test case: `project unassign 1 -i 3`<br>
+      Expected: No data is changed. An invalid project index error is shown.
+
+### Editing a task (`task edit`)
+
+1. Renaming a task from a person's assigned task list
+
+    1. Prerequisites: Prepare a minimal dataset using the following inputs:
+       `clear`
+       `add -n Alice -p 91234567 -e alice@example.com`
+       `project add Alpha`
+       `project assign 1 -i 1`
+       `task add 1 -n Draft API`
+       `task assign 1 -pi 1 -i 1`
+   2. Test case: `task edit 1 -i 1 -n Finalise API`<br>
+   Expected: Success message is shown. `task view 1` and `task list 1` both show `Finalise API`, and `Draft API` is no longer shown.
+   3. Test case: `task edit 2 -i 1 -n Anything`<br>
+   Expected: No data is changed. An invalid person index error is shown.
+   4. Test case: `task edit 1 -i 2 -n Anything`<br>
+   Expected: No data is changed. A task index out-of-bound error is shown.
+   5. Test case: `task add 1 -n Prepare Demo`, then `task edit 1 -i 1 -n Prepare Demo`<br>
+   Expected: No data is changed. A duplicate task error is shown.
+
+### Marking and unmarking a task (`task mark`, `task unmark`)
+
+1. Marking and unmarking a person's assigned task
+
+   1. Prerequisites: Reuse the dataset from the `task edit` section above.
+   2. Test case: `task mark 1 1`<br>
+      Expected: Success message is shown.
+   3. Test case: `task mark 1 1` (run again)<br>
+      Expected: No data is changed. An error indicates that the task is already marked as done.
+   4. Test case: `task unmark 1 1`<br>
+      Expected: Success message is shown.
 ### Adding a project
 
 1. Adding a project and verifying project uniqueness

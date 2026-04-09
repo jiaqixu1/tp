@@ -839,7 +839,11 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a person while all persons are being shown
 
-   i. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `add -n Alice -p 11111111 -e alice@example.com`
+   - `add -n Bob -p 22222222 -e bob@example.com`
+   - `list`
 
    ii. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
@@ -854,7 +858,12 @@ testers are expected to do more *exploratory* testing.
 
 1. Finding projects by name
 
-    i. Prerequisites: There are existing projects in the project list, e.g. `Alpha`, `Alpha Backend`, `Beta`.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `project add Alpha`
+   - `project add Alpha Backend`
+   - `project add Beta`
+   - `project list`
 
     ii. Test case: `project find alpha`
        Expected: All projects whose titles contain `alpha` are shown in the result display.
@@ -874,7 +883,10 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a project and verifying project uniqueness
 
-   i. Prerequisites: Start with sample data loaded.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `list`
+   - `project list`
 
    ii. Test case: `project add Alpha`<br>
       Expected: Project `Alpha` is added successfully and appears in project list.
@@ -889,9 +901,16 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a project and cascade cleanup all project instances
 
-   i. Prerequisites:
-      Use `project list` and note an existing project index (example: `1`).
-      Ensure at least one person is assigned to that project and has at least one task from it.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `add -n Alice -p 11111111 -e alice@example.com`
+   - `project add Alpha`
+   - `project add Beta`
+   - `task add 1 -n SeedTask`
+   - `project assign 1 -i 1`
+   - `task assign 1 -pi 1 -i 1`
+   - `project list`
+   - `task view 1`
 
    ii. Test case: `project delete 1`<br>
       Expected: Project at index `1` is deleted. That project is deleted from every Persons/Contacts that have been assigned along with their tasks.
@@ -903,9 +922,11 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a task to a project and verifying task uniqueness in the project's task list
 
-   i. Prerequisites:
-      Use `project list` and note an existing project index (example: `1`).
-      Ensure at least one person is assigned to that project and has at least one task from it. Ensure the list have fewer than 999 entries.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `project add Alpha`
+   - `project list`
+   - `task list 1`
 
    ii. Test case: `task add 1 -n Review API`<br>
       Expected: Task is added under project `1`.
@@ -919,9 +940,15 @@ testers are expected to do more *exploratory* testing.
 ### Deleting a task
 1. Deleting task(s) from a project and cascade cleanup all task instances
 
-   i. Prerequisites:
-      Ensure project `1` has at least two tasks and no more than 999 tasks.
-      Assign one of those tasks to a person using `task assign`.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `add -n Alice -p 11111111 -e alice@example.com`
+   - `project add Alpha`
+   - `project assign 1 -i 1`
+   - `task add 1 -n TempA`
+   - `task add 1 -n TempB`
+   - `task assign 1 -pi 1 -i 1`
+   - `task view 1`
 
    ii. Test case: `task delete 1 -i 1`<br>
       Expected: Task at index `1` in project `1` is deleted. Any contact/person assignment of that task is deleted. The other remaining task assignments of that contacts/persons will get their index renumbered.
@@ -932,9 +959,15 @@ testers are expected to do more *exploratory* testing.
 ### Assigning a task
 1. Assigning task(s) to a person
 
-   i. Prerequisites:
-      Person at index `1` is assigned to project `1`.
-      Project `1` has at least one task.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `add -n Alice -p 11111111 -e alice@example.com`
+   - `project add Alpha`
+   - `project add Beta`
+   - `project assign 1 -i 1`
+   - `task add 1 -n AssignMe`
+   - `task add 2 -n BetaTask`
+   - `task view 1`
 
    ii. Test case: `task assign 1 -pi 1 -i 1`<br>
       Expected: Task is assigned to person `1` successfully.
@@ -954,8 +987,14 @@ testers are expected to do more *exploratory* testing.
 ### Unassigning a task
 1. Unassigning task(s) from a person
 
-   i. Prerequisites:
-      Person `1` already has assigned tasks (check using `task view 1`).
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `add -n Alice -p 11111111 -e alice@example.com`
+   - `project add Alpha`
+   - `project assign 1 -i 1`
+   - `task add 1 -n RemoveMe`
+   - `task assign 1 -pi 1 -i 1`
+   - `task view 1`
 
    ii. Test case: `task unassign 1 -i 1`<br>
       Expected: First task in that person's assigned-task view is removed.
@@ -965,7 +1004,10 @@ testers are expected to do more *exploratory* testing.
 
 1. Verifying `UniqueProjectList` and `UniqueTaskList` behavior through commands
 
-   i. Prerequisites: The project list has at least 2 entries.
+   i. Prerequistes: Execute the following commands before testing:
+   - `clear`
+   - `project add Alpha`
+   - `project add Beta`
 
    i. `UniqueProjectList` check:
       Add project title `Alpha` 2 times in a row using `project add Alpha` command

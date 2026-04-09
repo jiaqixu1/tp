@@ -315,7 +315,7 @@ Examples:
 
 Assigns one or more tasks to a person.
 
-Format: `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX`
+Format: `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`
 
 * Adds task(s) to the person at the specified `PERSON_INDEX`.
 * The person index refers to the index number shown in the displayed person list.

@@ -1258,6 +1258,85 @@ testers are expected to do more *exploratory* testing.
    vii. Test case: `project members abc`<br>
    Expected: Invalid command format error.
 
+### Undo command
+1. Undoing the previous command
+
+   i. Prerequistes: Execute the following commands before testing:
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `add -n Bob -p 22222222 -e bob@example.com`
+
+   ii. Test case: `delete 1`<br>
+   Then execute: `undo`<br>
+   Expected: The deletion is reversed and the deleted person reappears in the person list.
+
+   iii. Test case: `project add Alpha`<br>
+   Then execute: `undo`<br>
+   Expected: The addition of project Alpha is reversed and the project is removed.
+
+   iv. Test case: `project add Alpha`<br>
+   `project add Beta`<br>
+   Then execute: `undo`<br>
+   Expected: Only the most recent command is reversed. Project Beta is removed while project Alpha remains.
+
+   v. Test case: `clear`<br>
+   Then execute: `undo`<br>
+   Expected: The clear operation is reversed and the previously existing persons reappear.
+
+   vi. Test case: Start the application with a fresh state and execute undo immediately<br>
+   Expected: No undoable command error.
+
+   vii. Test case: Execute an invalid command such as abc<br>
+   Then execute: `undo`<br>
+   Expected: Invalid command does not affect undo history. No undoable command error if there was no previous valid state-changing command.
+
+   viii. Test case: `list`<br>
+   Then execute: `undo`<br>
+   Expected: No undoable command error, since list does not modify application state.
+
+
+### Redo command
+1. Redoing the previously undone command
+
+   i. Prerequistes: Execute the following commands before testing:
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `add -n Bob -p 22222222 -e bob@example.com`
+
+   ii. Test case: `delete 1`<br>
+   Then execute: `undo`<br>
+   Then execute: `redo`<br>
+   Expected: The deletion is reapplied and the deleted person is removed again.
+
+   iii. Test case: `project add Alpha`<br>
+   Then execute: `undo`<br>
+   Then execute: `redo`<br>
+   Expected: Project Alpha is added back.
+
+   iv. Test case: `project add Alpha`<br>
+   `project add Beta`<br>
+   Then execute: `undo`<br>
+   Then execute: `redo`<br>
+   Expected: Only the previously undone command is reapplied. Project Beta is added back.
+
+   v. Test case: Start the application with a fresh state and execute redo immediately<br>
+   Expected: No redoable command error.
+
+   vi. Test case: `project add Alpha`<br>
+   Then execute: `undo`<br>
+   Then execute: `project add Beta`<br>
+   Then execute: `redo`<br>
+   Expected: No redoable command error, because a new command clears the redo history.
+
+   vii. Test case: `clear`<br>
+   Then execute: `undo`<br>
+   Then execute: `redo`<br>
+   Expected: The clear command is reapplied and all persons are removed again.
+
+   viii. Test case: `list`<br>
+   Then execute: `redo`<br>
+   Expected: No redoable command error, since there was no previously undone state-changing command.
+
 ### Saving data
 
 1. Dealing with missing/corrupted data files

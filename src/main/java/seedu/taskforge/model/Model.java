@@ -72,11 +72,11 @@ public interface Model {
     void addProject(Project project);
 
     /**
-        * Replaces the given project {@code target} with {@code editedProject}.
-        * {@code target} must exist in the TaskForge.
-        * The project identity of {@code editedProject} must not be the same as
-        * another existing project in the TaskForge.
-        */
+     * Replaces the given project {@code target} with {@code editedProject}.
+     * {@code target} must exist in the TaskForge.
+     * The project identity of {@code editedProject} must not be the same as
+     * another existing project in the TaskForge.
+     */
     void setProject(Project target, Project editedProject);
 
     /**

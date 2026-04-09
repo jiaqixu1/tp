@@ -130,8 +130,8 @@ public class TaskForge implements ReadOnlyTaskForge {
     }
 
     /**
-        * Replaces the given project {@code target} in the list with
-        * {@code editedProject}.
+     * Replaces the given project {@code target} in the list with
+     * {@code editedProject}.
      * {@code target} must exist in the TaskForge.
      * The project identity of {@code editedProject} must not be the same as
      * another existing project in the TaskForge.
@@ -208,6 +208,10 @@ public class TaskForge implements ReadOnlyTaskForge {
         }
     }
 
+    /**
+     * Removes the given tasks from all contacts that have the task in their task list
+     * and shifts task indices accordingly.
+     */
     private void cascadeRemoveDeletedProjectTasksFromPersons(int projectIndex, Project originalProject,
                                                              List<Task> deletedProjectTasks) {
         List<Person> allPersons = new ArrayList<>(persons.asUnmodifiableObservableList());

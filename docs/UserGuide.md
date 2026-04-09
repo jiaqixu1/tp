@@ -363,7 +363,7 @@ Examples:
 
 #### Marking a task as done : `task mark`
 
-Marks a task as done for an existing person in the address book.
+Marks a task as done for an existing person.
 
 Format: `task mark PERSON_INDEX TASK_INDEX`
 
@@ -377,7 +377,7 @@ Example:
 
 #### Unmarking a task as done : `task unmark`
 
-Unmarks a task as done for an existing person in the address book.
+Unmarks a task as done for an existing person.
 
 Format: `task unmark PERSON_INDEX TASK_INDEX`
 
@@ -417,7 +417,7 @@ TaskForge data are saved in the hard disk automatically after any command that c
 
 ### Editing the data file
 
-TaskForge data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+TaskForge data are saved automatically as a JSON file `[JAR file location]/data/TaskForge.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file makes its format invalid, TaskForge will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>

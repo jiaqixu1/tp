@@ -57,7 +57,8 @@ public class UnassignTaskCommandTest {
                 .withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new TaskForge(model.getTaskForge()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -77,7 +78,8 @@ public class UnassignTaskCommandTest {
                 .withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new TaskForge(model.getTaskForge()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -137,7 +139,8 @@ public class UnassignTaskCommandTest {
                 .withTasks("1", "2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(indexSecondPerson, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new TaskForge(model.getTaskForge()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -157,7 +160,8 @@ public class UnassignTaskCommandTest {
                 .withTasks("1", "2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new TaskForge(model.getTaskForge()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -219,7 +223,8 @@ public class UnassignTaskCommandTest {
         UnassignTaskDescriptor descriptor = new UnassignTaskDescriptorBuilder().withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
         Model expectedModel = new ModelManager(new TaskForge(modelWithMissingTask.getTaskForge()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
 

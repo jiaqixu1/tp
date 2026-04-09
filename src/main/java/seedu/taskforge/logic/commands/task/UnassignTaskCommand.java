@@ -29,7 +29,7 @@ import seedu.taskforge.model.person.Phone;
 public class UnassignTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "unassign";
 
-    public static final String MESSAGE_SUCCESS = "Task unassigned: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task unassigned from %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
             + SUBCOMMAND_WORD + " INDEX "
             + PREFIX_INDEX + " TASK_INDEX";
@@ -65,7 +65,9 @@ public class UnassignTaskCommand extends TaskCommand {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
+        model.commitAddressBook(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
+        return new CommandResult(String.format(MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson)));
     }
 
     /**

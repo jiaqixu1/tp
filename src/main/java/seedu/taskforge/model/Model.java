@@ -14,6 +14,7 @@ import seedu.taskforge.model.project.Project;
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
+    Predicate<Project> PREDICATE_SHOW_ALL_PROJECTS = unused -> true;
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.
@@ -107,6 +108,10 @@ public interface Model {
      */
     void setPerson(Person target, Person editedPerson);
 
+    ObservableList<Project> getFilteredProjectList();
+
+    void updateFilteredProjectList(Predicate<Project> predicate);
+
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
 
@@ -115,4 +120,29 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Commits the current address book state to the undo/redo history.
+     */
+    void commitAddressBook(String input);
+
+    /**
+     * Restores the previous address book state.
+     */
+    String undoAddressBook();
+
+    /**
+     * Restores a previously undone address book state.
+     */
+    String redoAddressBook();
+
+    /**
+     * Checks if an undo operation is possible.
+     */
+    boolean canUndoAddressBook();
+
+    /**
+     * Checks if a redo operation is possible.
+     */
+    boolean canRedoAddressBook();
 }

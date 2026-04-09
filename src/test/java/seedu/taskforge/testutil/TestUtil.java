@@ -20,7 +20,7 @@ public class TestUtil {
     private static final Path SANDBOX_FOLDER = Paths.get("src", "test", "data", "sandbox");
 
     /**
-     * Appends {@code fileName} to the sandbox folder path and returns the resulting path.
+     * Returns the sandbox folder path with {@code fileName} appended.
      * Creates the sandbox folder if it doesn't exist.
      */
     public static Path getFilePathInSandboxFolder(String fileName) {

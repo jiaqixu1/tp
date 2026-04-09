@@ -1,6 +1,7 @@
 package seedu.taskforge.logic.commands.project;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PROJECTS;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class ListProjectCommand extends ProjectCommand {
                 .mapToObj(i -> (i + 1) + ". " + projectList.get(i).title)
                 .collect(Collectors.joining("\n"));
         String feedback = MESSAGE_SUCCESS + (projectsList.isEmpty() ? " None" : "\n" + projectsList);
+        model.updateFilteredProjectList(PREDICATE_SHOW_ALL_PROJECTS);
         return new CommandResult(feedback);
     }
 

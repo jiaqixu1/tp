@@ -23,7 +23,7 @@ public class ArgumentMultimap {
     private final Map<Prefix, List<String>> argMultimap = new HashMap<>();
 
     /**
-     * Associates the specified argument value with {@code prefix} key in this map.
+     * Adds the specified argument value to the map under the {@code prefix} key.
      * If the map previously contained a mapping for the key, the new value is appended to the list of existing values.
      *
      * @param prefix   Prefix key with which the specified argument value is to be associated

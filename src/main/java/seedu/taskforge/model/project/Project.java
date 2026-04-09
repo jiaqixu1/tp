@@ -86,7 +86,7 @@ public class Project {
     }
 
     /**
-     * Format state as text for viewing.
+     * Returns formatted state text for viewing.
      */
     @Override
     public String toString() {

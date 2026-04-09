@@ -37,7 +37,7 @@ public class JsonTaskForgeStorage implements TaskForgeStorage {
     }
 
     /**
-     * Similar to {@link #readTaskForge()}.
+     * Reads the address book data from {@code filePath}.
      *
      * @param filePath location of the data. Cannot be null.
      * @throws DataLoadingException if loading the data from storage failed.
@@ -65,7 +65,7 @@ public class JsonTaskForgeStorage implements TaskForgeStorage {
     }
 
     /**
-     * Similar to {@link #saveTaskForge(ReadOnlyTaskForge)}.
+     * Saves the address book data to {@code filePath}.
      *
      * @param filePath location of the data. Cannot be null.
      */

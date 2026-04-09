@@ -10,6 +10,7 @@ public abstract class ProjectCommand extends Command {
 
     public static final String COMMAND_WORD = "project";
 
-    public static final String MESSAGE_USAGE = "project should be followed by add/delete/list/assign/unassign/find!";
+    public static final String MESSAGE_USAGE = "project should be followed by "
+            + "add/delete/list/assign/unassign/find/members!";
 
 }

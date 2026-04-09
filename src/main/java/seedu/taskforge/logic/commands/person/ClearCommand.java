@@ -14,12 +14,14 @@ public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
     public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
-
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Clears all entries.\n"
+            + "Example: " + COMMAND_WORD;
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.setTaskForge(new TaskForge());
+        model.commitTaskForge(COMMAND_WORD);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

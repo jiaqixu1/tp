@@ -6,9 +6,11 @@ import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.CollectionUtil;
@@ -77,7 +79,9 @@ public class UnassignProjectCommand extends ProjectCommand {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_UNASSIGN_PROJECT_SUCCESS, Messages.format(editedPerson)));
+        model.commitAddressBook(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
+        return new CommandResult(String.format(MESSAGE_UNASSIGN_PROJECT_SUCCESS,
+            Messages.formatPersonSummary(editedPerson)));
     }
 
     /**
@@ -92,23 +96,29 @@ public class UnassignProjectCommand extends ProjectCommand {
         Name name = personToEdit.getName();
         Phone phone = personToEdit.getPhone();
         Email email = personToEdit.getEmail();
-        List<PersonTask> taskList = personToEdit.getTasks();
+        List<PersonTask> personTaskList = new ArrayList<>(personToEdit.getTasks());
 
         List<PersonProject> newPersonProjects = new ArrayList<>(personToEdit.getProjects());
         List<PersonProject> personProjectsToDelete = new ArrayList<>();
+        Set<Integer> removedProjectIndexes = new HashSet<>();
         List<Index> indexToDelete = unassignProjectDescriptor.getProjectsIndexes()
                 .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
         for (int i = 0; i < indexToDelete.size(); ++i) {
             int projectIndex = indexToDelete.get(i).getZeroBased();
             try {
-                personProjectsToDelete.add(newPersonProjects.get(projectIndex));
+                PersonProject projectToDelete = newPersonProjects.get(projectIndex);
+                personProjectsToDelete.add(projectToDelete);
+                removedProjectIndexes.add(projectToDelete.getProjectIndex());
             } catch (IndexOutOfBoundsException e) {
                 throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
             }
         }
         newPersonProjects.removeAll(personProjectsToDelete);
+        personTaskList.removeIf(
+            personTask -> removedProjectIndexes.contains(personTask.getProjectIndex())
+        );
 
-        return new Person(name, phone, email, newPersonProjects, taskList);
+        return new Person(name, phone, email, newPersonProjects, personTaskList);
     }
 
     @Override
@@ -127,6 +137,11 @@ public class UnassignProjectCommand extends ProjectCommand {
                 && unassignProjectDescriptor.equals(otherUnassignProjectCommand.unassignProjectDescriptor);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(index, unassignProjectDescriptor);
+    }
+
     /**
      * Stores the projects to unassign from the person.
      */
@@ -140,7 +155,7 @@ public class UnassignProjectCommand extends ProjectCommand {
          * A defensive copy of {@code projects} is used internally.
          */
         public UnassignProjectDescriptor(UnassignProjectDescriptor toCopy) {
-            setProjectsIndexes(toCopy.indexes);
+            this.indexes = (toCopy.indexes != null) ? new ArrayList<>(toCopy.indexes) : null;
         }
 
         /**
@@ -180,6 +195,11 @@ public class UnassignProjectCommand extends ProjectCommand {
 
             UnassignProjectDescriptor deleteProjectDescriptor = (UnassignProjectDescriptor) other;
             return Objects.equals(indexes, deleteProjectDescriptor.indexes);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(indexes);
         }
     }
 }

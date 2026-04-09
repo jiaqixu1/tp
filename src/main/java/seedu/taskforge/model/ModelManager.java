@@ -20,9 +20,10 @@ import seedu.taskforge.model.project.Project;
 public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final TaskForge taskForge;
+    private final VersionedTaskForge taskForge;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final FilteredList<Project> filteredProjects;
 
     /**
      * Initializes a ModelManager with the given TaskForge and userPrefs.
@@ -32,9 +33,10 @@ public class ModelManager implements Model {
 
         logger.fine("Initializing with address book: " + taskForge + " and user prefs " + userPrefs);
 
-        this.taskForge = new TaskForge(taskForge);
+        this.taskForge = new VersionedTaskForge(taskForge);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.taskForge.getPersonList());
+        filteredProjects = new FilteredList<>(this.taskForge.getProjectList());
     }
 
     public ModelManager() {
@@ -101,7 +103,7 @@ public class ModelManager implements Model {
 
     @Override
     public void addProject(Project project) {
-        taskForge.addProject(project);
+        addressBook.addProject(project);
     }
 
     @Override
@@ -138,6 +140,40 @@ public class ModelManager implements Model {
         taskForge.setPerson(target, editedPerson);
     }
 
+    //=========== Filtered Project List Accessors =============================================================
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
+    @Override
+    public ObservableList<Project> getFilteredProjectList() {
+        return filteredProjects;
+    }
+
+    @Override
+    public void updateFilteredProjectList(Predicate<Project> predicate) {
+        requireNonNull(predicate);
+        filteredProjects.setPredicate(predicate);
+    }
+
+    //=========== Filtered Project List Accessors =============================================================
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
+    @Override
+    public ObservableList<Project> getFilteredProjectList() {
+        return filteredProjects;
+    }
+
+    @Override
+    public void updateFilteredProjectList(Predicate<Project> predicate) {
+        requireNonNull(predicate);
+        filteredProjects.setPredicate(predicate);
+    }
+
     //=========== Filtered Person List Accessors =============================================================
 
     /**
@@ -156,6 +192,31 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void commitTaskForge(String input) {
+        taskForge.commit(input);
+    }
+
+    @Override
+    public String undoTaskForge() {
+        return taskForge.undo();
+    }
+
+    @Override
+    public String redoTaskForge() {
+        return taskForge.redo();
+    }
+
+    @Override
+    public boolean canUndoTaskForge() {
+        return taskForge.canUndo();
+    }
+
+    @Override
+    public boolean canRedoTaskForge() {
+        return taskForge.canRedo();
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -169,7 +230,10 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return taskForge.equals(otherModelManager.taskForge)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredPersons.equals(otherModelManager.filteredPersons)
+                && filteredProjects.equals(otherModelManager.filteredProjects);
     }
+
+
 
 }

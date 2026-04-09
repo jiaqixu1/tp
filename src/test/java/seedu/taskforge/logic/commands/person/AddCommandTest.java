@@ -44,7 +44,7 @@ public class AddCommandTest {
 
         CommandResult commandResult = new AddCommand(validPerson).execute(modelStub);
 
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.formatPersonSummary(validPerson)),
                 commandResult.getFeedbackToUser());
         assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
     }
@@ -187,6 +187,31 @@ public class AddCommandTest {
         }
 
         @Override
+        public void commitAddressBook(String input) {
+
+        }
+
+        @Override
+        public String undoAddressBook() {
+            return "";
+        }
+
+        @Override
+        public String redoAddressBook() {
+            return "";
+        }
+
+        @Override
+        public boolean canUndoAddressBook() {
+            return false;
+        }
+
+        @Override
+        public boolean canRedoAddressBook() {
+            return false;
+        }
+
+        @Override
         public boolean hasProject(Project project) {
             throw new AssertionError("This method should not be called.");
         }
@@ -209,6 +234,16 @@ public class AddCommandTest {
         @Override
         public ObservableList<Project> getProjectList() {
             return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public ObservableList<Project> getFilteredProjectList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredProjectList(Predicate<Project> predicate) {
+            throw new AssertionError("This method should not be called.");
         }
     }
 
@@ -257,6 +292,11 @@ public class AddCommandTest {
 
         @Override
         public ObservableList<Project> getProjectList() {
+            return FXCollections.observableArrayList(projects);
+        }
+
+        @Override
+        public ObservableList<Project> getFilteredProjectList() {
             return FXCollections.observableArrayList(projects);
         }
     }

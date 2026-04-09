@@ -156,6 +156,16 @@ public class ListProjectCommandTest {
         }
 
         @Override
+        public ObservableList<Project> getFilteredProjectList() {
+            return null;
+        }
+
+        @Override
+        public void updateFilteredProjectList(Predicate<Project> predicate) {
+
+        }
+
+        @Override
         public ObservableList<Person> getFilteredPersonList() {
             throw new AssertionError("This method should not be called.");
         }
@@ -163,6 +173,31 @@ public class ListProjectCommandTest {
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void commitAddressBook(String input) {
+
+        }
+
+        @Override
+        public String undoAddressBook() {
+            return "";
+        }
+
+        @Override
+        public String redoAddressBook() {
+            return "";
+        }
+
+        @Override
+        public boolean canUndoAddressBook() {
+            return false;
+        }
+
+        @Override
+        public boolean canRedoAddressBook() {
+            return false;
         }
     }
 

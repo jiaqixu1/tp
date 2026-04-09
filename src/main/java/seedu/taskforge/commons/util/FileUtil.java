@@ -66,7 +66,7 @@ public class FileUtil {
     }
 
     /**
-     * Assumes file exists
+     * Reads the content of an existing file.
      */
     public static String readFromFile(Path file) throws IOException {
         return new String(Files.readAllBytes(file), CHARSET);

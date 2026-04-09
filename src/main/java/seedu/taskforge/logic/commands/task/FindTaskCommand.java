@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.project.Project;
+import seedu.taskforge.model.project.ProjectContainsKeywordsPredicate;
 import seedu.taskforge.model.task.Task;
 
 /**
@@ -57,6 +58,11 @@ public class FindTaskCommand extends TaskCommand {
         String taskList = IntStream.range(0, matchedTaskLines.size())
                 .mapToObj(i -> (i + 1) + ". " + matchedTaskLines.get(i))
                 .collect(Collectors.joining("\n"));
+
+        ProjectContainsKeywordsPredicate predicate = new ProjectContainsKeywordsPredicate();
+        predicate.setTaskKeywords(keywords);
+
+        model.updateFilteredProjectList(predicate);
 
         return new CommandResult(MESSAGE_TASKS_FOUND + "\n" + taskList);
     }

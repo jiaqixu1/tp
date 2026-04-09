@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.taskforge.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.testutil.Assert.assertThrows;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
@@ -18,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.ExitCommand;
 import seedu.taskforge.logic.commands.HelpCommand;
+import seedu.taskforge.logic.commands.RedoCommand;
+import seedu.taskforge.logic.commands.UndoCommand;
 import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.ClearCommand;
 import seedu.taskforge.logic.commands.person.DeleteCommand;
@@ -122,9 +125,22 @@ public class TaskForgeParserTest {
     }
 
     @Test
+    public void parseCommand_undo() throws Exception {
+        assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD) instanceof UndoCommand);
+        assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + " 3") instanceof UndoCommand);
+    }
+
+    @Test
+    public void parseCommand_redo() throws Exception {
+        assertTrue(parser.parseCommand(RedoCommand.COMMAND_WORD) instanceof RedoCommand);
+        assertTrue(parser.parseCommand(RedoCommand.COMMAND_WORD + " 3") instanceof RedoCommand);
+    }
+
+    @Test
     public void parseCommand_assignProject() throws Exception {
         Person person = new PersonBuilder().build();
-        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder(person).withProjects("alpha").build();
+        AssignProjectDescriptor descriptor = new AssignProjectDescriptorBuilder(person)
+                .withProjectIndexes("1").build();
         AssignProjectCommand command = (AssignProjectCommand) parser.parseCommand(AssignProjectCommand.COMMAND_WORD
                 + " " + AssignProjectCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
                 + " " + PersonUtil.getAssignProjectDescriptorDetails(descriptor));
@@ -172,7 +188,10 @@ public class TaskForgeParserTest {
 
     @Test
     public void parseCommand_assignTask() throws Exception {
-        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTasks("Write report").build();
+        AssignTaskCommand.ProjectTaskPair pair = new AssignTaskCommand.ProjectTaskPair(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON);
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(pair).build();
         AssignTaskCommand command = (AssignTaskCommand) parser.parseCommand(AssignTaskCommand.COMMAND_WORD
                 + " " + AssignTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
                 + " " + PersonUtil.getAssignTaskDescriptorDetails(descriptor));
@@ -211,8 +230,9 @@ public class TaskForgeParserTest {
     @Test
     public void parseCommand_editTask() throws Exception {
         EditTaskCommand command = (EditTaskCommand) parser.parseCommand(EditTaskCommand.COMMAND_WORD
-                + " " + EditTaskCommand.SUBCOMMAND_WORD + " alpha -i 1 -n Write report");
-        assertEquals(new EditTaskCommand(new Project("alpha"), INDEX_FIRST_TASK,
+                + " " + EditTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
+                + PREFIX_INDEX + " " + INDEX_FIRST_TASK.getOneBased() + " -n Write report");
+        assertEquals(new EditTaskCommand(INDEX_FIRST_PERSON, INDEX_FIRST_TASK,
                 ParserUtil.parseTask("Write report")), command);
     }
 
@@ -235,8 +255,8 @@ public class TaskForgeParserTest {
     @Test
     public void parseCommand_listTask() throws Exception {
         ListTaskCommand command = (ListTaskCommand) parser.parseCommand(TaskCommand.COMMAND_WORD
-                + " " + ListTaskCommand.SUBCOMMAND_WORD + " -n alpha");
-        assertEquals(new ListTaskCommand(new Project("alpha")), command);
+                + " " + ListTaskCommand.SUBCOMMAND_WORD + " " + INDEX_FIRST_PROJECT.getOneBased());
+        assertEquals(new ListTaskCommand(INDEX_FIRST_PROJECT), command);
     }
 
     @Test

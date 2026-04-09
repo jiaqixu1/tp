@@ -1,7 +1,7 @@
 package seedu.taskforge.logic.commands.project;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -33,27 +33,27 @@ public class AssignProjectCommand extends ProjectCommand {
 
     public static final String MESSAGE_ASSIGN_PROJECT_SUCCESS = "Project assigned: %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_NAME + " PROJECT_NAME";
+            + SUBCOMMAND_WORD + " PERSON_INDEX "
+            + PREFIX_INDEX + " PROJECT_INDEX";
     public static final String MESSAGE_DUPLICATE_PROJECT = "This project already exists for this person!";
-    public static final String MESSAGE_PROJECT_NOT_FOUND = "The project to assign does not exist in the address book";
     public static final String MESSAGE_NOT_EDITED = "At least one project to assign must be provided";
+    public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "The project index provided is invalid";
 
-    private final Index index;
+    private final Index personIndex;
     private final AssignProjectDescriptor assignProjectDescriptor;
 
     /**
      * Creates a AssignProjectCommand to assign the specified {@code Project} to the person
      * at the specified {@code Index}.
      *
-     * @param index The index of the person in the filtered person list to assign the project to.
+     * @param personIndex The index of the person in the filtered person list to assign the project to.
      * @param assignProjectDescriptor The project to be assigned to the person.
      */
-    public AssignProjectCommand(Index index, AssignProjectDescriptor assignProjectDescriptor) {
+    public AssignProjectCommand(Index personIndex, AssignProjectDescriptor assignProjectDescriptor) {
         super();
-        requireNonNull(index);
+        requireNonNull(personIndex);
         requireNonNull(assignProjectDescriptor);
-        this.index = index;
+        this.personIndex = personIndex;
         this.assignProjectDescriptor = new AssignProjectDescriptor(assignProjectDescriptor);
     }
 
@@ -70,7 +70,7 @@ public class AssignProjectCommand extends ProjectCommand {
 
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
+        if (personIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
@@ -78,30 +78,14 @@ public class AssignProjectCommand extends ProjectCommand {
             throw new CommandException(MESSAGE_NOT_EDITED);
         }
 
-        validateProjectsExist(assignProjectDescriptor.getProjects().orElseThrow(() ->
-            new CommandException(MESSAGE_PROJECT_NOT_FOUND)), model);
-
-        Person personToEdit = lastShownList.get(index.getZeroBased());
+        Person personToEdit = lastShownList.get(personIndex.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, assignProjectDescriptor, model);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_ASSIGN_PROJECT_SUCCESS, Messages.format(editedPerson)));
-    }
-
-    /**
-     * Validates that all given projects exist in the model.
-     *
-     * @param projects The list of projects to validate.
-     * @param model The model containing the existing projects.
-     * @throws CommandException If any project in the list does not exist in the model.
-     */
-    public static void validateProjectsExist(List<Project> projects, Model model) throws CommandException {
-        for (Project project : projects) {
-            if (!model.hasProject(project)) {
-                throw new CommandException(MESSAGE_PROJECT_NOT_FOUND);
-            }
-        }
+        model.commitAddressBook(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
+        return new CommandResult(String.format(MESSAGE_ASSIGN_PROJECT_SUCCESS,
+            Messages.formatPersonSummary(editedPerson)));
     }
 
     /**
@@ -120,15 +104,15 @@ public class AssignProjectCommand extends ProjectCommand {
         List<PersonTask> taskList = personToEdit.getTasks();
 
         List<PersonProject> newPersonProjects = new ArrayList<>(personToEdit.getProjects());
-        List<Project> projectsToAssign = assignProjectDescriptor.getProjects().orElseThrow(() ->
-                new CommandException(MESSAGE_PROJECT_NOT_FOUND));
+        List<Index> projectIndexesToAssign = assignProjectDescriptor.getProjectIndexes().orElseThrow(() ->
+                new CommandException(MESSAGE_NOT_EDITED));
         List<Project> globalProjectList = new ArrayList<>(model.getProjectList());
 
-        // Convert Projects to PersonProjects then add to the person's project list
-        for (Project project : projectsToAssign) {
-            int projectIndex = globalProjectList.indexOf(project);
-            if (projectIndex == -1) {
-                throw new CommandException(MESSAGE_PROJECT_NOT_FOUND);
+        // Convert selected project indexes to PersonProjects and add them to the person's project list.
+        for (Index projectIndexToAssign : projectIndexesToAssign) {
+            int projectIndex = projectIndexToAssign.getZeroBased();
+            if (projectIndex >= globalProjectList.size()) {
+                throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
             }
             PersonProject personProject = new PersonProject(projectIndex);
             newPersonProjects.add(personProject);
@@ -164,7 +148,7 @@ public class AssignProjectCommand extends ProjectCommand {
         }
 
         AssignProjectCommand otherAssignProjectCommand = (AssignProjectCommand) other;
-        return index.equals(otherAssignProjectCommand.index)
+        return personIndex.equals(otherAssignProjectCommand.personIndex)
                 && assignProjectDescriptor.equals(otherAssignProjectCommand.assignProjectDescriptor);
     }
 
@@ -172,7 +156,7 @@ public class AssignProjectCommand extends ProjectCommand {
      * Stores the projects to assign to the person.
      */
     public static class AssignProjectDescriptor {
-        private List<Project> projects;
+        private List<Index> indexes;
 
         public AssignProjectDescriptor() {}
 
@@ -181,15 +165,15 @@ public class AssignProjectCommand extends ProjectCommand {
          * A defensive copy of {@code projects} is used internally.
          */
         public AssignProjectDescriptor(AssignProjectDescriptor toCopy) {
-            setProjects(toCopy.projects);
+            setProjectsIndexes(toCopy.indexes);
         }
 
         /**
          * Sets {@code projects} to this object's {@code projects}.
          * A defensive copy of {@code projects} is used internally.
          */
-        public void setProjects(List<Project> projects) {
-            this.projects = (projects != null) ? new ArrayList<>(projects) : null;
+        public void setProjectsIndexes(List<Index> indexes) {
+            this.indexes = (indexes != null) ? new ArrayList<>(indexes) : null;
         }
 
         /**
@@ -197,15 +181,15 @@ public class AssignProjectCommand extends ProjectCommand {
          * if modification is attempted.
          * Returns {@code Optional#empty()} if {@code projects} is null.
          */
-        public Optional<List<Project>> getProjects() {
-            return (projects != null) ? Optional.of(Collections.unmodifiableList(projects)) : Optional.empty();
+        public Optional<List<Index>> getProjectIndexes() {
+            return (indexes != null) ? Optional.of(Collections.unmodifiableList(indexes)) : Optional.empty();
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isProjectFieldEdited() {
-            return CollectionUtil.isAnyNonNull(projects) && !projects.isEmpty();
+            return CollectionUtil.isAnyNonNull(indexes) && !indexes.isEmpty();
         }
 
         @Override
@@ -220,7 +204,7 @@ public class AssignProjectCommand extends ProjectCommand {
             }
 
             AssignProjectDescriptor addProjectDescriptor = (AssignProjectDescriptor) other;
-            return Objects.equals(projects, addProjectDescriptor.projects);
+            return Objects.equals(indexes, addProjectDescriptor.indexes);
         }
     }
 }

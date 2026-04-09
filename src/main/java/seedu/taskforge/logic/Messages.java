@@ -33,20 +33,11 @@ public class Messages {
     }
 
     /**
-     * Formats the {@code person} for display to the user.
+     * Formats the {@code person} for display to the user in assign/unassign commands.
+     * Contains only the person's name, phone, and email for a more concise display.
      */
-    public static String format(Person person) {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(person.getName())
-                .append("; Phone: ")
-                .append(person.getPhone())
-                .append("; Email: ")
-                .append(person.getEmail())
-                .append("; Projects: ");
-        person.getProjects().forEach(builder::append);
-        builder.append("; Tasks: ");
-        person.getTasks().forEach(builder::append);
-        return builder.toString();
+    public static String formatPersonSummary(Person person) {
+        return person.getName() + "; Phone: " + person.getPhone() + "; Email: " + person.getEmail();
     }
 
     /**

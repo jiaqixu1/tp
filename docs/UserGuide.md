@@ -81,6 +81,7 @@ Format: `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK] [-l PROJECT]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tasks and projects (including 0)
+A person must have valid unique phone number and email.
 </div>
 
 Examples:
@@ -200,18 +201,19 @@ Examples:
 
 Assigns a project to a person
 
-Format: `project assign PERSON_INDEX -n PROJECT_NAME`
+Format: `project assign PERSON_INDEX -i PROJECT_INDEX`
 
 * Assigns project(s) from `project list` to a person.
-* Project should exist in `project list` before being assigned to a person.
 * `PERSON_INDEX` refers to the person index that's displayed on `list`
+* `PROJECT_INDEX` refers to the project index that's displayed on `project list`
 * `PERSON_INDEX` **must be a positive integer** `1, 2, 3, ...`
+* `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
 * The same project cannot be assigned twice to the same person (no duplicates)
-* To assign multiple projects in one command, repeat the `-n` prefix.
+* To assign multiple projects in one command, repeat the `-i` prefix.
 
 Example:
-* `project assign 1 -n WebApp` checks whether the project named WebApp exists, then assigns the project to the 1st person in the `list`
-* `project assign 2 -n WebApp -n MobileApp` assigns multiple projects to the 2nd person in the `list`
+* `project assign 1 -i 2` assigns the 2nd project in `project list` to the 1st person in the `list`
+* `project assign 2 -i 1 -i 3` assigns multiple projects to the 2nd person in the `list`
 
 #### Unassigning a project : `project unassign`
 
@@ -312,16 +314,20 @@ Examples:
 
 Assigns one or more tasks to a person.
 
-Format: `task assign INDEX -n TASK_NAME`
+Format: `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX`
 
 * Adds task(s) to the person at the specified `INDEX`.
 * The person index refers to the index number shown in the displayed person list.
 * The person index **must be a positive integer** `1, 2, 3, ...`
-* To assign multiple tasks in one command, repeat the `-n` prefix.
+* `PROJECT_INDEX` refers to a project index in the displayed project list.
+* `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
+* `TASK_INDEX` refers to task numbering from the selected person's assigned projects.
+* `TASK_INDEX` **must be a positive integer** `1, 2, 3, ...`
+* To assign multiple tasks in one command, repeat the `-i` prefix.
 
 Examples:
-* `task assign 1 -n Write report`
-* `task assign 2 -n Prepare slides -n Rehearse demo`
+* `task assign 1 -pi 1 -i 2`
+* `task assign 2 -pi 1 -i 3`
 
 #### Unassigning a task : `task unassign`
 
@@ -387,6 +393,16 @@ Clears all entries from TaskForge.
 
 Format: `clear`
 
+### Undoing previous command : `undo`
+Reverts the last change made in TaskForge.
+
+Format: `undo`
+
+### Redoing previous command : `redo`
+Reapplies the last undone change, effectively canceling the undo.
+
+Format: `redo`
+
 ### Exiting the program : `exit`
 
 Exits the program.
@@ -437,8 +453,8 @@ Action | Format, Examples
 **Edit Task** | `task edit PROJECT_NAME -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME`<br> e.g., `task edit Alpha -i 1 -n Prepare sprint report`
 **List Tasks by Project** | `task list PROJECT_NAME`<br> e.g., `task list 1`
 **Find Tasks** | `task find KEYWORD [MORE_KEYWORDS]`<br> e.g., `task find report bug`
-**Assign Task** | `task assign INDEX -n TASK_NAME`<br> e.g., `task assign 1 -n Draft proposal`
-**Assign Project** | `project assign INDEX -n PROJECT_NAME`<br> e.g., `project assign 1 -n WebApp`
+**Assign Task** | `task assign PERSON_INDEX -pi PROJECT_INDEX i TASK_INDEX`<br> e.g., `task assign 1 -pi 1 -i 2`
+**Assign Project** | `project assign INDEX -i PROJECT_INDEX`<br> e.g., `project assign 1 -i 2`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Delete Project** | `project delete INDEX`<br> e.g., `project delete 1`
@@ -453,4 +469,6 @@ Action | Format, Examples
 **Edit Person** | `edit INDEX [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-l PROJECT_NAME] [-d TASK_NAME]…​` <br> e.g., `edit INDEX -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
 **Unassign Project** | `project unassign INDEX -i PROJECT_INDEX`<br> e.g., `project unassign 2 -i 1`
 **View Projects** | `project list`
+**Undo** | `undo`
+**Redo** | `redo`
 **Help** | `help`

@@ -140,8 +140,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(editedProject);
 
         int targetProjectIndex = projects.asUnmodifiableObservableList().indexOf(target);
-        List<Task> removedTasks = new ArrayList<>(target.getTasks());
-        removedTasks.removeAll(editedProject.getTasks());
+        List<Task> removedTasks = new ArrayList<>();
+        if (editedProject.getTasks().size() < target.getTasks().size()) {
+            removedTasks = new ArrayList<>(target.getTasks());
+            removedTasks.removeAll(editedProject.getTasks());
+        }
         projects.setProject(target, editedProject);
         if (!removedTasks.isEmpty()) {
             cascadeRemoveDeletedProjectTasksFromPersons(targetProjectIndex, target, removedTasks);

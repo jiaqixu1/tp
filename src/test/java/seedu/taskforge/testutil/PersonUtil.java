@@ -4,6 +4,7 @@ import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
@@ -82,12 +83,12 @@ public class PersonUtil {
      */
     public static String getAssignProjectDescriptorDetails(AssignProjectDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
-        if (descriptor.getProjects().isPresent()) {
-            List<Project> projects = descriptor.getProjects().get();
-            if (projects.isEmpty()) {
-                sb.append(PREFIX_NAME).append(" ");
+        if (descriptor.getProjectIndexes().isPresent()) {
+            List<Index> indexes = descriptor.getProjectIndexes().get();
+            if (indexes.isEmpty()) {
+                sb.append(PREFIX_INDEX).append(" ");
             } else {
-                projects.forEach(s -> sb.append(PREFIX_NAME).append(s.title).append(" "));
+                indexes.forEach(s -> sb.append(PREFIX_INDEX).append(s.getOneBased()).append(" "));
             }
         }
         return sb.toString();
@@ -114,13 +115,11 @@ public class PersonUtil {
      */
     public static String getAssignTaskDescriptorDetails(AssignTaskDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
-        if (descriptor.getTasks().isPresent()) {
-            List<Task> tasks = descriptor.getTasks().get();
-            if (tasks.isEmpty()) {
-                sb.append(PREFIX_NAME).append(" ");
-            } else {
-                tasks.forEach(s -> sb.append(PREFIX_NAME).append(s.description).append(" "));
-            }
+        if (descriptor.getProjectTaskPairs().isPresent()) {
+            descriptor.getProjectTaskPairs().get().forEach(pair ->
+                sb.append(PREFIX_PROJECT).append(pair.getProjectIndex().getOneBased()).append(" ")
+                  .append(PREFIX_INDEX).append(pair.getTaskIndex().getOneBased()).append(" ")
+            );
         }
         return sb.toString();
     }

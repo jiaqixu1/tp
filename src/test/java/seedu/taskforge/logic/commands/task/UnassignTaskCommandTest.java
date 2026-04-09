@@ -57,7 +57,9 @@ public class UnassignTaskCommandTest {
                 .withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -77,7 +79,9 @@ public class UnassignTaskCommandTest {
                 .withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -137,7 +141,9 @@ public class UnassignTaskCommandTest {
                 .withTasks("1", "2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(indexSecondPerson, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -157,7 +163,9 @@ public class UnassignTaskCommandTest {
                 .withTasks("1", "2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -219,7 +227,9 @@ public class UnassignTaskCommandTest {
         UnassignTaskDescriptor descriptor = new UnassignTaskDescriptorBuilder().withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(UnassignTaskCommand.MESSAGE_SUCCESS,
+            editedPerson.getName() + "; Phone: " + editedPerson.getPhone()
+            + "; Email: " + editedPerson.getEmail());
         Model expectedModel = new ModelManager(new AddressBook(modelWithMissingTask.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
 

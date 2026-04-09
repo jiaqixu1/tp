@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.project.AssignProjectCommand.AssignProjectDescriptor;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.project.Project;
 
 /**
  * A utility class to help with building AssignProjectDescriptor objects.
@@ -29,13 +29,20 @@ public class AssignProjectDescriptorBuilder {
         descriptor = new AssignProjectDescriptor();
     }
 
+
     /**
-     * Parses the {@code projects} into a {@code List<Project>} and set it to the {@code AssignProjectDescriptor}
-     * that we are building.
+     * Sets the project indexes in the {@code AssignProjectDescriptor} using the provided string representations
+     * of indexes. Each string is parsed as a one-based index, converted to an {@code Index} object, and stored in
+     * a list.
+     *
+     * @param indexes A varargs string array where each element represents a one-based project index.
+     * @return The current {@code AssignProjectDescriptorBuilder} instance with updated project indexes.
      */
-    public AssignProjectDescriptorBuilder withProjects(String... projects) {
-        List<Project> projectSet = Stream.of(projects).map(Project::new).collect(Collectors.toList());
-        descriptor.setProjects(projectSet);
+    public AssignProjectDescriptorBuilder withProjectIndexes(String... indexes) {
+        List<Index> projectIndexSet = Stream.of(indexes)
+                .map(s -> Index.fromOneBased(Integer.parseInt(s)))
+                .collect(Collectors.toList());
+        descriptor.setProjectsIndexes(projectIndexSet);
         return this;
     }
 

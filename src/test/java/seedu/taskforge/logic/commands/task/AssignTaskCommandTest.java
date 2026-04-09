@@ -1,5 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
@@ -60,10 +61,11 @@ public class AssignTaskCommandTest {
         Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR).build();
 
         AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_FIX_ERROR).build();
+                .withTaskIndexes("2").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -80,10 +82,11 @@ public class AssignTaskCommandTest {
         Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR).build();
 
         AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_FIX_ERROR).build();
+                .withTaskIndexes("2").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -95,7 +98,7 @@ public class AssignTaskCommandTest {
     public void execute_addOneTaskDuplicateUnfilteredList_exceptionThrown() {
         Index indexFirstPerson = Index.fromOneBased(1);
         AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_REFACTOR).build();
+                .withTaskIndexes("1").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
         assertCommandFailure(assignTaskCommand, model, AssignTaskCommand.MESSAGE_DUPLICATE_TASK);
@@ -105,7 +108,7 @@ public class AssignTaskCommandTest {
     public void execute_addOneTaskDuplicateFilteredList_exceptionThrown() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_REFACTOR).build();
+                .withTaskIndexes("1").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(assignTaskCommand, model, AssignTaskCommand.MESSAGE_DUPLICATE_TASK);
@@ -114,9 +117,8 @@ public class AssignTaskCommandTest {
     @Test
     public void execute_addMultipleTasksDuplicateUnfilteredList_exceptionThrown() {
         Index indexFirstPerson = Index.fromOneBased(1);
-        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y,
-                VALID_TASK_IMPLEMENT_Z, VALID_TASK_REFACTOR).build();
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTaskIndexes("2", "3", "4", "5",
+                "1").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
         assertCommandFailure(assignTaskCommand, model, AssignTaskCommand.MESSAGE_DUPLICATE_TASK);
@@ -125,9 +127,8 @@ public class AssignTaskCommandTest {
     @Test
     public void execute_addMultipleTasksDuplicateFilteredList_exceptionThrown() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y,
-                VALID_TASK_IMPLEMENT_Z, VALID_TASK_REFACTOR).build();
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTaskIndexes("2", "3", "4", "5",
+                "1").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(assignTaskCommand, model, AssignTaskCommand.MESSAGE_DUPLICATE_TASK);
@@ -142,11 +143,12 @@ public class AssignTaskCommandTest {
         Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR,
                 VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
 
-        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTaskIndexes("2", "3", "4", "5")
+                .build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(indexFirstPerson, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -163,11 +165,12 @@ public class AssignTaskCommandTest {
         Person editedPerson = personInList.withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR,
                 VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
 
-        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTasks(VALID_TASK_FIX_ERROR,
-                VALID_TASK_IMPLEMENT_X, VALID_TASK_IMPLEMENT_Y, VALID_TASK_IMPLEMENT_Z).build();
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder().withTaskIndexes("2", "3", "4", "5")
+                .build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(AssignTaskCommand.MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -192,7 +195,7 @@ public class AssignTaskCommandTest {
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_IMPLEMENT_X).build();
+                .withTaskIndexes("3").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(outOfBoundIndex, descriptor);
 
         assertCommandFailure(assignTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -210,26 +213,26 @@ public class AssignTaskCommandTest {
         assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
 
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(outOfBoundIndex,
-                new AssignTaskDescriptorBuilder().withTasks(VALID_TASK_IMPLEMENT_X).build());
+                new AssignTaskDescriptorBuilder().withTaskIndexes("3").build());
 
         assertCommandFailure(assignTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
-    public void execute_taskNotInAssignedProjects_failure() {
+    public void execute_invalidTaskIndex_failure() {
         AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
-                .withTasks("non existent task").build();
+                .withTaskIndexes("999").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(assignTaskCommand, model, TaskCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+        assertCommandFailure(assignTaskCommand, model, AssignTaskCommand.MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
     }
 
     @Test
     public void equals() {
         AssignTaskDescriptor firstDescriptor = new AssignTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_IMPLEMENT_X).build();
+                .withTaskIndexes("3").build();
         AssignTaskDescriptor secondDescriptor = new AssignTaskDescriptorBuilder()
-                .withTasks(VALID_TASK_IMPLEMENT_Y).build();
+                .withTaskIndexes("4").build();
 
         AssignTaskCommand firstCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, firstDescriptor);
         AssignTaskCommand sameValuesCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, firstDescriptor);
@@ -247,9 +250,108 @@ public class AssignTaskCommandTest {
         AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
         assertFalse(descriptor.isTaskFieldEdited());
 
-        descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
+        descriptor.setProjectTaskPairs(
+                Arrays.asList(
+                        new AssignTaskCommand.ProjectTaskPair(
+                                Index.fromOneBased(1), Index.fromOneBased(3))));
         assertTrue(descriptor.isTaskFieldEdited());
-        assertThrows(UnsupportedOperationException.class, () -> descriptor.getTasks().get().clear());
+        assertThrows(UnsupportedOperationException.class, () ->
+                descriptor.getProjectTaskPairs().get().clear());
+    }
+
+    @Test
+    public void projectTaskPair_equals() {
+        AssignTaskCommand.ProjectTaskPair pair1 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        AssignTaskCommand.ProjectTaskPair pair1Copy =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        AssignTaskCommand.ProjectTaskPair pair2 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(3));
+        AssignTaskCommand.ProjectTaskPair pair3 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(2), Index.fromOneBased(2));
+
+        // Test reflexivity: a.equals(a) is true
+        assertTrue(pair1.equals(pair1));
+
+        // Test symmetry: if a.equals(b) then b.equals(a)
+        assertTrue(pair1.equals(pair1Copy));
+        assertTrue(pair1Copy.equals(pair1));
+
+        // Test transitivity and consistency
+        AssignTaskCommand.ProjectTaskPair pair1Copy2 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        assertTrue(pair1.equals(pair1Copy2));
+        assertTrue(pair1Copy.equals(pair1Copy2));
+
+        // Test inequality with different task indices
+        assertFalse(pair1.equals(pair2));
+
+        // Test inequality with different project indices
+        assertFalse(pair1.equals(pair3));
+
+        // Test with different object types
+        assertFalse(pair1.equals("not a pair"));
+        assertFalse(pair1.equals(1));
+
+        // Test with null
+        assertFalse(pair1.equals(null));
+    }
+
+    @Test
+    public void projectTaskPair_hashCode() {
+        AssignTaskCommand.ProjectTaskPair pair1 =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+        AssignTaskCommand.ProjectTaskPair pair1Copy =
+                new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(2));
+
+        // Covers hashCode path and verifies determinism per instance.
+        assertEquals(pair1.hashCode(), pair1.hashCode());
+        assertEquals(pair1Copy.hashCode(), pair1Copy.hashCode());
+    }
+
+    @Test
+    public void projectTaskPair_getters() {
+        Index projectIndex = Index.fromOneBased(3);
+        Index taskIndex = Index.fromOneBased(5);
+        AssignTaskCommand.ProjectTaskPair pair =
+                new AssignTaskCommand.ProjectTaskPair(projectIndex, taskIndex);
+
+        assertTrue(pair.getProjectIndex().equals(projectIndex));
+        assertTrue(pair.getTaskIndex().equals(taskIndex));
+    }
+
+    @Test
+    public void assignTaskDescriptor_isTaskFieldEdited_empty() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
+        assertFalse(descriptor.isTaskFieldEdited());
+    }
+
+    @Test
+    public void assignTaskDescriptor_isTaskFieldEdited_withPairs() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
+        descriptor.setProjectTaskPairs(
+                Arrays.asList(
+                        new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(1))));
+        assertTrue(descriptor.isTaskFieldEdited());
+    }
+
+    @Test
+    public void assignTaskDescriptor_isTaskFieldEdited_emptyList() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptor();
+        descriptor.setProjectTaskPairs(java.util.Collections.emptyList());
+        assertFalse(descriptor.isTaskFieldEdited());
+    }
+
+    @Test
+    public void execute_invalidProjectIndex_failure() {
+        AssignTaskDescriptor descriptor = new AssignTaskDescriptorBuilder()
+                .withProjectTaskPairs(
+                        new AssignTaskCommand.ProjectTaskPair(Index.fromOneBased(999), Index.fromOneBased(1)))
+                .build();
+        AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(assignTaskCommand, model,
+                AssignTaskCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
     }
 
 }

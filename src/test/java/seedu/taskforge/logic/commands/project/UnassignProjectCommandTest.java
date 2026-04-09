@@ -36,7 +36,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(indexFirstPerson, descriptor);
 
         String expectedMessage = String.format(UnassignProjectCommand.MESSAGE_UNASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -57,7 +57,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(UnassignProjectCommand.MESSAGE_UNASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -122,7 +122,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(indexSecondPerson, descriptor);
 
         String expectedMessage = String.format(UnassignProjectCommand.MESSAGE_UNASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -143,7 +143,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(UnassignProjectCommand.MESSAGE_UNASSIGN_PROJECT_SUCCESS,
-                Messages.format(editedPerson));
+                Messages.formatPersonSummary(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);

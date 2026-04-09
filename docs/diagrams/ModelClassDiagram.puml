@@ -16,7 +16,6 @@ Class UniquePersonList
 Class UniqueProjectList
 Class UniqueTaskList
 Class Person
-Class Address
 Class Email
 Class Name
 Class Phone
@@ -49,7 +48,6 @@ UniqueTaskList --> "~* contains" Task
 Person *--> Name
 Person *--> Phone
 Person *--> Email
-Person *--> Address
 Person *--> "~* projects" PersonProject
 Person *--> "~* tasks" PersonTask
 PersonProject ..> Project : lookup
@@ -61,8 +59,6 @@ UniqueProjectList -[hidden]right-> I
 UniqueTaskList -[hidden]right-> I
 
 Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
 Project -[hidden]right-> Task
 
 ModelManager --> "~* filtered" Person

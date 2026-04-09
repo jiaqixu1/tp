@@ -4,18 +4,18 @@ skinparam ArrowFontStyle plain
 
 box Model MODEL_COLOR_T1
 participant ":Model" as Model MODEL_COLOR
-participant ":VersionedAddressBook" as VersionedAddressBook MODEL_COLOR
+participant ":VersionedTaskForge" as VersionedTaskForge MODEL_COLOR
 end box
 
-[-> Model : undoAddressBook()
+[-> Model : undoTaskForge()
 activate Model
 
-Model -> VersionedAddressBook : undo()
-activate VersionedAddressBook
+Model -> VersionedTaskForge : undo()
+activate VersionedTaskForge
 
-VersionedAddressBook -> VersionedAddressBook :resetData(ReadOnlyAddressBook)
-VersionedAddressBook --> Model :
-deactivate VersionedAddressBook
+VersionedTaskForge -> VersionedTaskForge :resetData(ReadOnlyTaskForge)
+VersionedTaskForge --> Model :
+deactivate VersionedTaskForge
 
 [<-- Model
 deactivate Model

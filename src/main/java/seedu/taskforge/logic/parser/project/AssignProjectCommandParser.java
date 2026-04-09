@@ -2,7 +2,7 @@ package seedu.taskforge.logic.parser.project;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +17,6 @@ import seedu.taskforge.logic.parser.ArgumentTokenizer;
 import seedu.taskforge.logic.parser.Parser;
 import seedu.taskforge.logic.parser.ParserUtil;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
-import seedu.taskforge.model.project.Project;
 
 /**
  * Parses input arguments and creates a new AssignProjectCommand object.
@@ -35,7 +34,7 @@ public class AssignProjectCommandParser implements Parser<AssignProjectCommand> 
     public AssignProjectCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+                ArgumentTokenizer.tokenize(args, PREFIX_INDEX);
 
         Index index;
 
@@ -48,8 +47,8 @@ public class AssignProjectCommandParser implements Parser<AssignProjectCommand> 
 
         AssignProjectDescriptor assignProjectDescriptor = new AssignProjectDescriptor();
 
-        parseProjectsForAdd(argMultimap.getAllValues(PREFIX_NAME))
-                .ifPresent(assignProjectDescriptor::setProjects);
+        parseProjectsIndexesForAssign(argMultimap.getAllValues(PREFIX_INDEX))
+                .ifPresent(assignProjectDescriptor::setProjectsIndexes);
 
         if (!assignProjectDescriptor.isProjectFieldEdited()) {
             throw new ParseException(AssignProjectCommand.MESSAGE_NOT_EDITED);
@@ -58,19 +57,15 @@ public class AssignProjectCommandParser implements Parser<AssignProjectCommand> 
         return new AssignProjectCommand(index, assignProjectDescriptor);
     }
 
-    /**
-     * Parses {@code Collection<String> projects} into a {@code List<Project>} if {@code projects} is non-empty.
-     * If {@code projects} contain only one element which is an empty string, it will be parsed into a
-     * {@code List<Project>} containing zero projects.
-     */
-    private Optional<List<Project>> parseProjectsForAdd(Collection<String> projects) throws ParseException {
-        assert projects != null;
+    private Optional<List<Index>> parseProjectsIndexesForAssign(Collection<String> projectIndexes)
+            throws ParseException {
+        assert projectIndexes != null;
 
-        if (projects.isEmpty()) {
+        if (projectIndexes.isEmpty()) {
             return Optional.empty();
         }
-        Collection<String> projectSet = (projects.size() == 1)
-                && projects.contains("") ? Collections.emptyList() : projects;
-        return Optional.of(ParserUtil.parseProjects(projectSet));
+        Collection<String> projectSet = (projectIndexes.size() == 1)
+                && projectIndexes.contains("") ? Collections.emptyList() : projectIndexes;
+        return Optional.of(ParserUtil.parseProjectIndexes(projectSet));
     }
 }

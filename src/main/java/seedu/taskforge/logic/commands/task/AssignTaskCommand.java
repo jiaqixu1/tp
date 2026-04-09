@@ -1,7 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import seedu.taskforge.model.person.PersonProject;
 import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 
 /**
  * Assigns task(s) to an existing person in the address book.
@@ -33,12 +31,14 @@ import seedu.taskforge.model.task.Task;
 public class AssignTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "assign";
 
-    public static final String MESSAGE_SUCCESS = "Task assigned: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task assigned to %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_NAME + " TASK_NAME";
+            + SUBCOMMAND_WORD + " PERSON_INDEX "
+            + "[-pi PROJECT_INDEX -i TASK_INDEX]...";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to assign must be provided";
+    public static final String MESSAGE_INVALID_TASK_DISPLAYED_INDEX = "Task index is out of bound";
+    public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "Project index is out of bound";
 
     private final Index index;
     private final AssignTaskDescriptor assignTaskDescriptor;
@@ -65,14 +65,16 @@ public class AssignTaskCommand extends TaskCommand {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        List<Task> tasksToAssign = assignTaskDescriptor.getTasks()
+        List<ProjectTaskPair> projectTaskPairs = assignTaskDescriptor.getProjectTaskPairs()
             .orElseThrow(() -> new CommandException(MESSAGE_NOT_EDITED));
-        List<PersonTask> resolvedTasksToAssign = resolveTasksWithProjectTracking(tasksToAssign, personToEdit, model);
+        List<PersonTask> resolvedTasksToAssign = resolveTasksFromProjectTaskPairs(projectTaskPairs, model);
         Person editedPerson = createEditedPerson(personToEdit, resolvedTasksToAssign);
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
+        model.commitAddressBook(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
+        return new CommandResult(String.format(MESSAGE_SUCCESS,
+            Messages.formatPersonSummary(editedPerson)));
     }
 
     /**
@@ -96,33 +98,27 @@ public class AssignTaskCommand extends TaskCommand {
         return new Person(name, phone, email, personProjectList, newTasks);
     }
 
-    private static List<PersonTask> resolveTasksWithProjectTracking(List<Task> tasks, Person person, Model model)
-            throws CommandException {
-        List<PersonProject> assignedPersonProjects = person.getProjects();
+    private static List<PersonTask> resolveTasksFromProjectTaskPairs(List<ProjectTaskPair> projectTaskPairs,
+            Model model) throws CommandException {
         List<Project> allProjects = new ArrayList<>(model.getProjectList());
-
         List<PersonTask> resolvedTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            PersonTask matchedTask = null;
-            for (PersonProject personProject : assignedPersonProjects) {
-                int projectIndex = personProject.getProjectIndex();
-                if (projectIndex >= 0 && projectIndex < allProjects.size()) {
-                    Project project = allProjects.get(projectIndex);
-                    if (task.getProjectTitle() != null && !project.title.equals(task.getProjectTitle())) {
-                        continue;
-                    }
-                    int taskIndex = project.getTasks().indexOf(task);
-                    if (taskIndex >= 0) {
-                        matchedTask = new PersonTask(projectIndex, taskIndex);
-                        break;
-                    }
-                }
+
+        for (ProjectTaskPair pair : projectTaskPairs) {
+            int projectIndex = pair.getProjectIndex().getZeroBased();
+            int taskIndex = pair.getTaskIndex().getZeroBased();
+
+            // Validate project index
+            if (projectIndex < 0 || projectIndex >= allProjects.size()) {
+                throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
             }
 
-            if (matchedTask == null) {
-                throw new CommandException(MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
+            // Validate task index within the project
+            List<seedu.taskforge.model.task.Task> tasksInProject = allProjects.get(projectIndex).getTasks();
+            if (taskIndex < 0 || taskIndex >= tasksInProject.size()) {
+                throw new CommandException(MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
             }
-            resolvedTasks.add(matchedTask);
+
+            resolvedTasks.add(new PersonTask(projectIndex, taskIndex));
         }
 
         return resolvedTasks;
@@ -133,7 +129,7 @@ public class AssignTaskCommand extends TaskCommand {
      * A {@code CommandException} is thrown if there are duplicates.
      *
      */
-    public static List<PersonTask> checkUniqueTasks(List<PersonTask> tasks) throws CommandException {
+    public static void checkUniqueTasks(List<PersonTask> tasks) throws CommandException {
         Set<String> uniqueTaskRefs = new HashSet<>();
         boolean hasDuplicates = tasks.stream()
                 .map(task -> task.getProjectIndex() + ":" + task.getTaskIndex())
@@ -141,7 +137,6 @@ public class AssignTaskCommand extends TaskCommand {
         if (hasDuplicates) {
             throw new CommandException(MESSAGE_DUPLICATE_TASK);
         }
-        return tasks;
     }
 
     @Override
@@ -164,40 +159,42 @@ public class AssignTaskCommand extends TaskCommand {
      * Stores the tasks to add to the person.
      */
     public static class AssignTaskDescriptor {
-        private List<Task> tasks;
+        private List<ProjectTaskPair> projectTaskPairs;
 
         public AssignTaskDescriptor() {}
 
         /**
          * Copy constructor.
-         * A defensive copy of {@code tasks} is used internally.
+         * A defensive copy of {@code projectTaskPairs} is used internally.
          */
         public AssignTaskDescriptor(AssignTaskDescriptor toCopy) {
-            setTasks(toCopy.tasks);
+            setProjectTaskPairs(toCopy.projectTaskPairs);
         }
 
         /**
-         * Sets {@code tasks} to this object's {@code tasks}.
-         * A defensive copy of {@code tasks} is used internally.
+         * Sets {@code projectTaskPairs} to this object's {@code projectTaskPairs}.
+         * A defensive copy of {@code projectTaskPairs} is used internally.
          */
-        public void setTasks(List<Task> tasks) {
-            this.tasks = (tasks != null) ? new ArrayList<>(tasks) : null;
+        public void setProjectTaskPairs(List<ProjectTaskPair> projectTaskPairs) {
+            this.projectTaskPairs = (projectTaskPairs != null) ? new ArrayList<>(projectTaskPairs) : null;
         }
 
         /**
-         * Returns an unmodifiable task set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tasks} is null.
+         * Returns an unmodifiable list of project-task pairs, which throws
+         * {@code UnsupportedOperationException} if modification is attempted.
+         * Returns {@code Optional#empty()} if {@code projectTaskPairs} is null.
          */
-        public Optional<List<Task>> getTasks() {
-            return (tasks != null) ? Optional.of(Collections.unmodifiableList(tasks)) : Optional.empty();
+        public Optional<List<ProjectTaskPair>> getProjectTaskPairs() {
+            return (projectTaskPairs != null)
+                    ? Optional.of(Collections.unmodifiableList(projectTaskPairs))
+                    : Optional.empty();
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isTaskFieldEdited() {
-            return CollectionUtil.isAnyNonNull(tasks) && !tasks.isEmpty();
+            return CollectionUtil.isAnyNonNull(projectTaskPairs) && !projectTaskPairs.isEmpty();
         }
 
         @Override
@@ -212,7 +209,53 @@ public class AssignTaskCommand extends TaskCommand {
             }
 
             AssignTaskDescriptor assignTaskDescriptor = (AssignTaskDescriptor) other;
-            return Objects.equals(tasks, assignTaskDescriptor.tasks);
+            return Objects.equals(projectTaskPairs, assignTaskDescriptor.projectTaskPairs);
+        }
+    }
+
+    /**
+     * Represents a pair of project index and task index.
+     */
+    public static class ProjectTaskPair {
+        private final Index projectIndex;
+        private final Index taskIndex;
+
+        /**
+         * Creates a new ProjectTaskPair with the specified project and task indices.
+         *
+         * @param projectIndex the index of the project (must not be null)
+         * @param taskIndex the index of the task (must not be null)
+         */
+        public ProjectTaskPair(Index projectIndex, Index taskIndex) {
+            this.projectIndex = requireNonNull(projectIndex);
+            this.taskIndex = requireNonNull(taskIndex);
+        }
+
+        public Index getProjectIndex() {
+            return projectIndex;
+        }
+
+        public Index getTaskIndex() {
+            return taskIndex;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == this) {
+                return true;
+            }
+
+            if (!(other instanceof ProjectTaskPair)) {
+                return false;
+            }
+
+            ProjectTaskPair otherPair = (ProjectTaskPair) other;
+            return projectIndex.equals(otherPair.projectIndex) && taskIndex.equals(otherPair.taskIndex);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(projectIndex, taskIndex);
         }
     }
 }

@@ -148,11 +148,11 @@ Classes used by multiple components are in the `seedu.taskforge.commons` package
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Undo/redo feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 
 * `VersionedAddressBook#commit()` — Saves the current address book state in its history.
 * `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
@@ -205,7 +205,7 @@ The `redo` command does the opposite — it calls `Model#redoAddressBook()`,
 
 </div>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
@@ -238,7 +238,7 @@ TaskForge supports project management through the parent command `project` with 
 - `project add PROJECT_NAME`
 - `project delete PROJECT_INDEX`
 - `project list`
-- `project assign INDEX -n PROJECT_NAME`
+- `project assign INDEX -i PROJECT_INDEX`
 - `project unassign INDEX -i PROJECT_INDEX`
 - `project find [KEYWORD]`
 
@@ -304,8 +304,8 @@ TaskForge supports project management through the parent command `project` with 
 - No data is modified during this operation; the command only returns a text-based result.
 
 **Project assignment to person (`project assign`)**:
-- `AssignProjectCommand` validates whether project(s) exist in the global project list first.
-- Uses `model.hasProject(project)` to verify project existence.
+- `AssignProjectCommand` resolves each `PROJECT_INDEX` against the global project list.
+- Invalid `PROJECT_INDEX` values are rejected.
 - Rejects duplicate assignments via `MESSAGE_DUPLICATE_PROJECT`.
 
 **Project unassignment from person (`project unassign`)**:
@@ -317,11 +317,11 @@ TaskForge supports project management through the parent command `project` with 
 - `AddProjectCommandParser` parses the preamble as the new project `NAME`.
 - `DeleteProjectCommandParser` parses the preamble as the target project `INDEX`.
 - `ListProjectCommandParser` takes no arguments; the entire input after `list` is discarded.
-- `AssignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project names from repeated `-n` prefixes.
+- `AssignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project indexes from repeated `-i` prefixes.
 - `UnassignProjectCommandParser` parses the preamble as the target person `INDEX` and parses project indexes from repeated `-i` prefixes.
 - `FindProjectCommandParser` parses the input into one or more keywords.
 - If no project payload is provided (e.g., `project assign 1` or `project unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
-- Similarly, if an empty project name is provided (e.g., `project assign 1 -n` or `project unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+- Similarly, if an empty project payload is provided (e.g., `project assign 1 -i` or `project unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 
 #### Execution behavior and validation in person-related commands
 
@@ -341,7 +341,7 @@ TaskForge supports task management using 10 commands:
 - `task edit PROJECT_NAME -i TASK_INDEX -n NEW_TASK_NAME`
 - `task list -n PROJECT_NAME`
 - `task find KEYWORD [MORE_KEYWORDS]`
-- `task assign INDEX -n TASK_NAME`
+- `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX`
 - `task unassign INDEX -i TASK_INDEX`
 - `task view INDEX`
 - `task mark PERSON_INDEX TASK_INDEX`
@@ -418,8 +418,9 @@ TaskForge supports task management using 10 commands:
 - Returns output in the format `taskName - projectName`.
 
 **Task assignment to person (`task assign`)**:
-- `AssignTaskCommand` validates whether or not task(s) exists in the person's assigned projects before assignment.
-- Resolves each selected task to a `(projectIndex, taskIndex)` pair before persisting assignment.
+- `AssignTaskCommand` resolves each selected `TASK_INDEX` into a `(projectIndex, taskIndex)` pair based on tasks
+  available from the person's assigned projects.
+- Invalid `TASK_INDEX` values are rejected.
 - Rejects duplicate assignments via `MESSAGE_DUPLICATE_TASK`.
 
 **Task viewing (`task view`)**:
@@ -450,12 +451,12 @@ TaskForge supports task management using 10 commands:
 - `EditTaskCommandParser` parses the preamble as target `PROJECT_NAME`, parses task index from `-i`, and parses the new task name from `-n`.
 - `ListTaskCommandParser` parses project name from `-n PROJECT_NAME`.
 - `FindTaskCommandParser` parses one or more keyword tokens from the argument preamble.
-- `AssignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task names from repeated `-n` prefixes.
+- `AssignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
 - `UnassignTaskCommandParser` parses the preamble as the target person `INDEX` and parses task indexes from repeated `-i` prefixes.
 - `ViewTasksCommandParser` parses the preamble as the target person `INDEX`.
 - `MarkTaskCommandParser` and `UnmarkTaskCommandParser` parse the preamble as the target person `INDEX` and target task `INDEX`.
 - If no task payload is provided (e.g., `task assign 1` or `task unassign 1`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
-- Similarly, if an empty task name or task index is provided (e.g., `task assign 1 -n` or `task unassign 1 -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
+- Similarly, if an empty task payload is provided (e.g., `task assign 1 -i` or `task unassign 1 -pi`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 
 #### Execution behavior and validation
 
@@ -517,23 +518,23 @@ _{Explain here how the data archiving feature will be implemented}_
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
 | Priority | As a …​ | I want to …​                           | So that I can…​                                                              |
-|----------|------|----------------------------------------|------------------------------------------------------------------------------|
-| `* * *`  | user | add a contact                          | keep track of project members.                                               |
-| `* * *`  | user | delete a contact                       | remove outdated information or remove a member from the project.             |
-| `* * *`  | user | add a project                          | keep track of projects.                                                      |
-| `* * *`  | user | remove a project                       | remove completed or discarded project.                                       |
-| `* * *`  | user | assign a project to a contact          | assign member to the project                                                 |
-| `* * *`  | user | unassign a project from a contact      | remove members from a project                                                |
-| `* * *`  | user | add tasks to contact                   | clearly know about their responsibilities                                    |
-| `* * *`  | user | delete tasks from a contact            | easily remove tasks that is falsely assigned to the contact or has been done |
-| `* * *`  | user | view all contacts                      | see all the project members contacts                                         |
-| `* * *`  | user | view all projects                      | easily have an overview of all projects                                      |
-| `* * *`  | user | view all tasks assigned to the contact | see all the tasks assigned to a contact                                      |
-| `* * *`  | user | find projects by name                  | quickly locate relevant projects from the global project list                |
-| `* * *`  | user | find contacts by any parameters        | quickly find someone                                                         |
-| `*`      | user | view team member's availability        | who is free to take on work                                                  |
-
-
+|---------|------|----------------------------------------|------------------------------------------------------------------------------|
+| `* * *` | user | add a contact                          | keep track of project members.                                               |
+| `* * *` | user | delete a contact                       | remove outdated information or remove a member from the project.             |
+| `* * *` | user | add a project                          | keep track of projects.                                                      |
+| `* * *` | user | remove a project                       | remove completed or discarded project.                                       |
+| `* * *` | user | assign a project to a contact          | assign member to the project                                                 |
+| `* * *` | user | unassign a project from a contact      | remove members from a project                                                |
+| `* * *` | user | add tasks to contact                   | clearly know about their responsibilities                                    |
+| `* * *` | user | delete tasks from a contact            | easily remove tasks that is falsely assigned to the contact or has been done |
+| `* * *` | user | view all contacts                      | see all the project members contacts                                         |
+| `* * *` | user | view all projects                      | easily have an overview of all projects                                      |
+| `* * *` | user | view all tasks assigned to the contact | see all the tasks assigned to a contact                                      |
+| `* * *` | user | find projects by name                  | quickly locate relevant projects from the global project list                |
+| `* * *` | user | find contacts by any parameters        | quickly find someone                                                         |
+| `*`     | user | view team member's availability        | who is free to take on work                                                  |
+| `* * `  | user | undo the last action                   | recover from mistakes                                                       |
+| `* * `  | user | redo the last action                   | restore changes if I undo by mistake                                     |
 
 *{More to be added}*
 
@@ -705,6 +706,29 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
+**Use case: UC07 - Undo previous command**
+
+**Actor**: User
+
+**Guarantees**
+
+1. The previous change made to the address book is reverted.
+
+**MSS**
+
+1. User requests to undo previous command.
+2. TaskForge checks if there is a previous state available.
+3. TaskForge shifts the current state into the previous state.
+4. TaskForge confirms to the user that the last action has been undone and displays the previous state.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. No previous state available.
+    * 2a1. TaskForge displays error message.
+
+    Use case ends.
 
 *{More to be added}*
 

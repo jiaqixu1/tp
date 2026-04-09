@@ -12,5 +12,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_TASK = new Prefix("-d");
     public static final Prefix PREFIX_PROJECT_TITLE = new Prefix("-l");
     public static final Prefix PREFIX_INDEX = new Prefix("-i");
+    public static final Prefix PREFIX_PROJECT = new Prefix("-pi");
 
 }

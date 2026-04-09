@@ -46,7 +46,8 @@ public class AddCommand extends Command {
             + PREFIX_TASK + "refactor code";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in taskforge";
+    public static final String MESSAGE_DUPLICATE_PERSON = "Another person with the "
+            + "same name, phone, or email already exists in taskforge";
     public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
             "Task to assign does not exist in any assigned project.";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
@@ -107,7 +108,8 @@ public class AddCommand extends Command {
         );
 
         model.addPerson(personWithProjects);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(personWithProjects)));
+        model.commitAddressBook(COMMAND_WORD);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.formatPersonSummary(personWithProjects)));
     }
 
     private static List<Project> globalProjectListOrEmpty(Model model) {

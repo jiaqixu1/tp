@@ -1,12 +1,12 @@
 package seedu.taskforge.testutil;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.task.AssignTaskCommand.AssignTaskDescriptor;
+import seedu.taskforge.logic.commands.task.AssignTaskCommand.ProjectTaskPair;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.task.Task;
 
 /**
  * A utility class to help with building AssignTaskDescriptor objects.
@@ -31,12 +31,35 @@ public class AssignTaskDescriptorBuilder {
     }
 
     /**
-     * Parses the {@code tasks} into a {@code List<Task>} and set it to the {@code EditPersonDescriptor}
-     * that we are building.
+     * Sets the task indexes to the {@code AssignTaskDescriptor} being built.
+     * The provided indexes are parsed as one-based integers and converted to {@code Index} objects.
+     * Assumes a default project index of 1 for backward compatibility.
+     *
+     * @param indexes One-based string representations of task indexes to be assigned.
+     * @return The {@code AssignTaskDescriptorBuilder} instance with the updated task indexes.
      */
-    public AssignTaskDescriptorBuilder withTasks(String... tasks) {
-        List<Task> taskSet = Stream.of(tasks).map(Task::new).collect(Collectors.toList());
-        descriptor.setTasks(taskSet);
+    public AssignTaskDescriptorBuilder withTaskIndexes(String... indexes) {
+        List<ProjectTaskPair> pairs = new ArrayList<>();
+        for (String index : indexes) {
+            // Default to project index 1 for backward compatibility
+            pairs.add(new ProjectTaskPair(Index.fromOneBased(1), Index.fromOneBased(Integer.parseInt(index))));
+        }
+        descriptor.setProjectTaskPairs(pairs);
+        return this;
+    }
+
+    /**
+     * Sets the project-task pairs to the {@code AssignTaskDescriptor} being built.
+     *
+     * @param pairs Project-task pairs to be assigned.
+     * @return The {@code AssignTaskDescriptorBuilder} instance with the updated pairs.
+     */
+    public AssignTaskDescriptorBuilder withProjectTaskPairs(ProjectTaskPair... pairs) {
+        List<ProjectTaskPair> pairList = new ArrayList<>();
+        for (ProjectTaskPair pair : pairs) {
+            pairList.add(pair);
+        }
+        descriptor.setProjectTaskPairs(pairList);
         return this;
     }
 

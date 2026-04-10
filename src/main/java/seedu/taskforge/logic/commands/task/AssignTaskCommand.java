@@ -77,7 +77,7 @@ public class AssignTaskCommand extends TaskCommand {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.commitTaskForge(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
         return new CommandResult(String.format(MESSAGE_SUCCESS,
-            Messages.formatPersonSummary(editedPerson)));
+                editedPerson.getName() + " (" + editedPerson.getEmail() + ")"));
     }
 
     /**

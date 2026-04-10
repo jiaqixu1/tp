@@ -31,7 +31,7 @@ public class AssignProjectCommand extends ProjectCommand {
 
     public static final String SUBCOMMAND_WORD = "assign";
 
-    public static final String MESSAGE_ASSIGN_PROJECT_SUCCESS = "Project assigned: %1$s";
+    public static final String MESSAGE_ASSIGN_PROJECT_SUCCESS = "Project assigned to %1$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
             + SUBCOMMAND_WORD + " PERSON_INDEX "
             + PREFIX_INDEX + " PROJECT_INDEX";
@@ -85,7 +85,7 @@ public class AssignProjectCommand extends ProjectCommand {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.commitTaskForge(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
         return new CommandResult(String.format(MESSAGE_ASSIGN_PROJECT_SUCCESS,
-            Messages.formatPersonSummary(editedPerson)));
+                editedPerson.getName() + " (" + editedPerson.getEmail() + ")"));
     }
 
     /**

@@ -81,7 +81,7 @@ public class UnassignProjectCommand extends ProjectCommand {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.commitTaskForge(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
         return new CommandResult(String.format(MESSAGE_UNASSIGN_PROJECT_SUCCESS,
-                editedPerson.getName() + " (" + editedPerson.getEmail() + ")"));
+            Messages.formatPersonSummary(editedPerson)));
     }
 
     /**

@@ -67,7 +67,7 @@ public class UnassignTaskCommand extends TaskCommand {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.commitTaskForge(String.format("%s %s", COMMAND_WORD, SUBCOMMAND_WORD));
         return new CommandResult(String.format(MESSAGE_SUCCESS,
-            editedPerson.getName() + " (" + editedPerson.getEmail() + ")"));
+            Messages.formatPersonSummary(editedPerson)));
     }
 
     /**

@@ -140,7 +140,7 @@ Deletes the specified person from TaskForge.
 Format: `delete PERSON_INDEX`
 
 * Deletes the person at the specified `PERSON_INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* `PERSON_INDEX` to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
@@ -156,7 +156,7 @@ Adds a new project to TaskForge into the project list.
 Format: `project add PROJECT_TITLE`
 
 * Adds a new project with the specified project title.
-* Project title must be alphanumeric (only letters and numbers), between 1 to 64 characters.
+* `PROJECT_TITLE` must be alphanumeric (only letters and numbers), between 1 to 64 characters.
 * Duplicate project title are not allowed.
 * Project titles are automatically normalized to title case. For each word, the first letter is capitalized and the remaining letters are converted to lowercase.
 
@@ -177,7 +177,7 @@ Deletes a project by its index in the displayed project list.
 Format: `project delete PROJECT_INDEX`
 
 * Deletes the project at the specified `PROJECT_INDEX`.
-* `PROJECT_INDEX` refers to the project index number displayed in `project list.`
+* `PROJECT_INDEX` refers to the project index displayed in `project list.`
 * `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
 
 Example:
@@ -208,7 +208,7 @@ Format: `project assign PERSON_INDEX {-i PROJECT_INDEX}`
 * Assigns project(s) from `project list` to a person.
 * `PERSON_INDEX` refers to the person index displayed in `list`
 * `PROJECT_INDEX` refers to the project index displayed in `project list`
-* Both `PERSON_INDEX` and `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
+* `PERSON_INDEX` and `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
 * The same project cannot be assigned twice to the same person (no duplicates)
 * To assign multiple projects in one command, repeat the `-i` prefix.
 
@@ -225,7 +225,7 @@ Format: `project unassign PERSON_INDEX {-i PROJECT_INDEX_FROM_PERSON}`
 * Unassigns project(s) from the person at the specified `INDEX`.
 * `PROJECT_INDEX_FROM_PERSON` refers to the project index of the person's project list.
 * `PERSON_INDEX` refers to the person index displayed in `list`
-* Both `PERSON_INDEX` and `PROJECT_INDEX_FROM_PERSON` **must be positive integers** `1, 2, 3, ...`
+* `PERSON_INDEX` and `PROJECT_INDEX_FROM_PERSON` **must be positive integers** `1, 2, 3, ...`
 * To unassign multiple projects in one command, repeat the `-i` prefix.
 
 Examples:
@@ -253,8 +253,8 @@ Adds task(s) to a project in the project list.
 Format: `task add PROJECT_INDEX {-n TASK_NAME}`
 
 * Adds new task(s) with the specified `TASK_NAME` to the project at the specified `PROJECT_INDEX`.
-* The project index refers to the index number shown by `project list`.
-* The project index **must be a positive integer** `1, 2, 3, ...`
+* `PROJECT_INDEX` refers to the project index displayed in `project list`.
+* `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
 * `TASK_NAME` must be alphanumeric (only letters, numbers and spaces), between 1 to 64 characters.
 * Duplicate tasks within the same project are not allowed.
 * Task names are case-sensitive. For example, `TASK` and `task` are treated as different task names.
@@ -272,7 +272,7 @@ Format: `task delete PROJECT_INDEX {-i TASK_INDEX_FROM_PROJECT}`
 
 * Deletes task(s) from the project at the specified `PROJECT_INDEX`.
 * `TASK_INDEX_FROM_PROJECT` refers to the task ID shown in the specified project.
-* Both `PROJECT_INDEX` and `TASK_INDEX_FROM_PROJECT` **must be positive integers** `1, 2, 3, ...`
+* `PROJECT_INDEX` and `TASK_INDEX_FROM_PROJECT` **must be positive integers** `1, 2, 3, ...`
 * To delete multiple tasks from the same project in one command, repeat the `-i` prefix.
 
 Examples:
@@ -332,7 +332,7 @@ Format: `task assign PERSON_INDEX {-pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT}
 * `PERSON_INDEX` refers to the person index displayed in `list`.
 * `PROJECT_INDEX` refers to the project index displayed in `project list`.
 * `TASK_INDEX_FROM_PROJECT` refers to the task ID shown in the specified project.
-* `PERSON_INDEX`, `PROJECT_INDEX`, `TASK_INDEX_FROM_PROJECT` **must be a positive integer** `1, 2, 3, ...`
+* `PERSON_INDEX`, `PROJECT_INDEX`, and `TASK_INDEX_FROM_PROJECT` **must be a positive integer** `1, 2, 3, ...`
 * To assign multiple tasks to a person in one command, repeat each -pi and -i pair with the corresponding indexes.
 
 Examples:
@@ -362,7 +362,7 @@ Format: `task view PERSON_INDEX`
 
 * Shows all tasks assigned to the person at the specified `PERSON_INDEX`.
 * `PERSON_INDEX` refers to the person index displayed in `list`.
-* The index **must be a positive integer** `1, 2, 3, ...`
+* `PERSON_INDEX` **must be a positive integer** `1, 2, 3, ...`
 * If the person has no tasks, a message will be shown.
 
 Example:

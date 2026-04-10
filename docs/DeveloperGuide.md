@@ -11,7 +11,8 @@ title: Developer Guide
 
 * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
 * Widespread code reuse of AI-generated work (GitHub Copilot) by Hsu, used for auto complete, generate alternative solutions, generate fixes/help with debugging, generate some code solutions.
-* Widespread code reuse of AI-generated work (GitHub Copilot) by Kevin, used to plan the idea of some unit test cases, suggesting implementation solutions and generating some error log messages. All of the content generating by AI has been closely revised before committing and pushing to the repo
+* Widespread code reuse of AI-generated work (Codex) by Kevin, used to generate some methods and solutions, help understand and decide relevant JavaFX features, UI color suggestions, generate potential fixes for bugs, and polish documentation. It was also used for generate and refine tests. I reviewed, adapted, and verified the final submitted work myself. 
+* Widespread code reuse of AI-generated work (GitHub Copilot) by Kevin, used to plan the idea of some unit test cases, suggesting implementation solutions and generating some error log messages. All of the content generating by AI has been closely revised before committing and pushing to the repo.
 * Code reuse of AB3 UserGuide and DeveloperGuide sections.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -1338,10 +1339,10 @@ testers are expected to do more *exploratory* testing.
    Then execute: `redo`<br>
    Expected: No redoable command error, since there was no previously undone state-changing command.
 
-### Saving data
+## **Appendix: Planned Enhancements**
 
-1. Dealing with missing/corrupted data files
+Team Size: 4
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+1. **Make window restoration more robust for multi-screen setups**: The current behavior can restore the GUI off-screen when the previous session was on a secondary screen that is no longer connected. To tackle this, our team plan to validate window coordinates against available screen bounds when starting the app and automatically reposition the GUI on the primary screen if needed.
 
-1. _{ more test cases …​ }_
+2. **Make Help Window re-open behavior more intuitive after minimize**: The current behavior keeps the original Help Window minimized when `help` is triggered again, and the new Help Window did not appear. To tackle this, we plan to detect the minimized state of the Help Window and then, restore or focus on the existing Help Window.

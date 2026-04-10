@@ -36,7 +36,7 @@ public class UnassignProjectCommand extends ProjectCommand {
             + SUBCOMMAND_WORD + " INDEX "
             + PREFIX_INDEX + " PROJECT_INDEX";
 
-    public static final String MESSAGE_UNASSIGN_PROJECT_SUCCESS = "Project unassigned: %1$s";
+    public static final String MESSAGE_UNASSIGN_PROJECT_SUCCESS = "Project unassigned from %1$s";
 
     public static final String MESSAGE_NOT_EDITED = "At least one project to unassign must be provided";
 

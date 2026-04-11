@@ -42,6 +42,12 @@ TaskForge is a **desktop app for managing contacts, optimized for use via a Comm
 
 ## Features
 
+This section is split into 4 subsections:
+- [General](#general): Commands that are not specific to any particular feature.
+- [Person](#person): Commands related to managing persons in TaskForge.
+- [Project](#project): Commands related to managing projects in TaskForge.
+- [Task](#task): Commands related to managing tasks in TaskForge.
+
 <div markdown="block" class="alert alert-info">
 
 **:information_source: Notes about the command format:**<br>
@@ -67,7 +73,11 @@ TaskForge is a **desktop app for managing contacts, optimized for use via a Comm
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-### Viewing help : `help`
+--------------------------------------------------------------------------------------------------------------------
+
+### General
+
+#### Viewing help : `help`
 
 Shows a message explaining all the commands and contains a button to open the UserGuide.
 
@@ -75,8 +85,35 @@ Shows a message explaining all the commands and contains a button to open the Us
 
 Format: `help`
 
+#### Clearing all entries : `clear`
 
-### Adding a person: `add`
+Clears all entries (persons, projects, and tasks) from TaskForge.
+
+Format: `clear`
+
+#### Undoing previous command : `undo`
+
+Reverts the last change made in TaskForge.
+
+Format: `undo`
+
+#### Redoing previous command : `redo`
+
+Reapplies the last undone change, effectively canceling the undo.
+
+Format: `redo`
+
+#### Exiting the program : `exit`
+
+Exits the program.
+
+Format: `exit`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Person
+
+#### Adding a person: `add`
 
 Adds a person to TaskForge.
 
@@ -91,13 +128,13 @@ Examples:
 * `add -n John Doe -p 98765432 -e johnd@example.com`
 * `add -n Betsy Crowe -d newTask2 -e betsycrowe@example.com -p 1234567 -d newTask1`
 
-### Listing all persons : `list`
+#### Listing all persons : `list`
 
 Shows a list of all persons in TaskForge.
 
 Format: `list`
 
-### Editing a person : `edit`
+#### Editing a person : `edit`
 
 Edits an existing person in TaskForge.
 
@@ -114,7 +151,7 @@ Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -n Betsy Crower -d` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tasks.
 
-### Locating persons by multiple fields: `find`
+#### Locating persons by multiple fields: `find`
 
 Finds persons whose fields (name, phone, email, tasks, projects) match the given keywords.
 
@@ -133,7 +170,7 @@ Examples:
 * `find -n Alice -p 91234567` returns any person named `Alice` whose phone number is `91234567`.
 * `find -d "Task 1" -l ProjectA` returns any person who has a task containing "Task 1" and belongs to project `ProjectA`.
 
-### Deleting a person : `delete`
+#### Deleting a person : `delete`
 
 Deletes the specified person from TaskForge.
 
@@ -147,7 +184,9 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd person in TaskForge.
 * `find -n Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
-### Managing projects
+--------------------------------------------------------------------------------------------------------------------
+
+### Project
 
 #### Adding a project : `project add`
 
@@ -244,7 +283,9 @@ Format: `project members PROJECT_INDEX`
 * The result lists all members associated with the project.
 * If no persons are assigned to the project, an empty result or message is shown.
 
-### Managing tasks
+--------------------------------------------------------------------------------------------------------------------
+
+### Task
 
 #### Adding a task to a project : `task add`
 
@@ -255,7 +296,7 @@ Format: `task add PROJECT_INDEX {-n TASK_NAME}`
 * Adds new task(s) with the specified `TASK_NAME` to the project at the specified `PROJECT_INDEX`.
 * `PROJECT_INDEX` refers to the project index displayed in `project list`.
 * `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
-* `TASK_NAME` must be alphanumeric (only letters, numbers and spaces), between 1 to 64 characters.
+* `TASK_NAME` must be alphanumeric (only letters, numbers, and spaces), between 1 to 64 characters.
 * Duplicate tasks within the same project are not allowed.
 * Task names are case-sensitive. For example, `TASK` and `task` are treated as different task names.
 * To add multiple tasks to the same project in one command, repeat the `-n` prefix.
@@ -395,30 +436,6 @@ Format: `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 
 Example:
 * `task unmark 1 1` marks the 1st task of the 1st person as not done.
-
-### Clearing all entries : `clear`
-
-Clears all entries(persons, projects, and tasks) from TaskForge.
-
-Format: `clear`
-
-### Undoing previous command : `undo`
-
-Reverts the last change made in TaskForge.
-
-Format: `undo`
-
-### Redoing previous command : `redo`
-
-Reapplies the last undone change, effectively canceling the undo.
-
-Format: `redo`
-
-### Exiting the program : `exit`
-
-Exits the program.
-
-Format: `exit`
 
 ### Saving the data
 

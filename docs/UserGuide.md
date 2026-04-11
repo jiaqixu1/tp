@@ -116,6 +116,8 @@ Exits the program.
 
 Format: `exit`
 
+[↑ Back to Features](#features)
+
 --------------------------------------------------------------------------------------------------------------------
 
 ### Person
@@ -196,6 +198,8 @@ Examples:
 * `find -n alex david` returns `Alex Yeoh`, `David Li`
 * `find -n Alice -p 91234567` returns any person named `Alice` whose phone number is `91234567`.
 * `find -d "Task 1" -l ProjectA` returns any person who has a task containing "Task 1" and belongs to project `ProjectA`.
+
+[↑ Back to Features](#features)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -310,6 +314,8 @@ Format: `project members PROJECT_INDEX`
 * `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
 * The result lists all members associated with the project.
 * If no persons are assigned to the project, an empty result or message is shown.
+
+[↑ Back to Features](#features)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -480,6 +486,8 @@ Format: `task view PERSON_INDEX`
 
 Example:
 * `task view 1`
+
+[↑ Back to Features](#features)
 
 --------------------------------------------------------------------------------------------------------------------
 

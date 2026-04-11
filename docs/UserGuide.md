@@ -77,6 +77,13 @@ This section is split into 4 subsections:
 
 ### General
 
+There are 5 general commands that deals with clearing all entries, undoing the previous command, redoing the previous command, viewing help, and exiting the program.
+- [clear](#clearing-all-entries--clear)
+- [undo](#undoing-previous-command--undo)
+- [redo](#redoing-previous-command--redo)
+- [help](#viewing-help--help)
+- [exit](#exiting-the-program--exit)
+
 #### Clearing all entries : `clear`
 
 Clears all entries (persons, projects, and tasks) from TaskForge.
@@ -112,6 +119,12 @@ Format: `exit`
 --------------------------------------------------------------------------------------------------------------------
 
 ### Person
+There are 5 basic person commands that deal with adding, deleting, editing, listing, and finding persons in TaskForge.
+- [add](#adding-a-person-add)
+- [delete](#deleting-a-person--delete)
+- [edit](#editing-a-person--edit)
+- [list](#listing-all-persons--list)
+- [find](#locating-persons-by-multiple-fields-find)
 
 #### Adding a person: `add`
 
@@ -187,6 +200,20 @@ Examples:
 --------------------------------------------------------------------------------------------------------------------
 
 ### Project
+
+There are 4 basic project commands and 3 project management commands. Basic commands deal with adding, deleting, listing, and finding projects.
+While project management commands deal with assigning/unassigning projects to/from persons and viewing project members.
+
+Basic commands:
+- [add](#adding-a-project--project-add)
+- [delete](#deleting-a-project--project-delete)
+- [list](#viewing-all-projects--project-list)
+- [find](#finding-projects-by-name--project-find)
+
+Project management commands:
+- [assign](#assigning-a-project--project-assign)
+- [unassign](#unassigning-a-project--project-unassign)
+- [members](#viewing-project-members--project-members)
 
 #### Adding a project : `project add`
 
@@ -287,6 +314,22 @@ Format: `project members PROJECT_INDEX`
 --------------------------------------------------------------------------------------------------------------------
 
 ### Task
+There are 4 basic task commands and 6 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
+While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project/person.
+
+Basic commands:
+- [add](#adding-a-task-to-a-project--task-add)
+- [delete](#deleting-a-task-from-a-project--task-delete)
+- [edit](#editing-a-task-in-a-project--task-edit)
+- [find](#finding-tasks-by-keyword--task-find)
+
+Task management commands:
+- [assign](#assigning-a-task--task-assign)
+- [unassign](#unassigning-a-task--task-unassign)
+- [mark](#marking-a-task-as-done--task-mark)
+- [unmark](#unmarking-a-task-as-done--task-unmark)
+- [list](#listing-all-tasks-in-a-project--task-list)
+- [view](#viewing-all-tasks-of-a-person--task-view)
 
 #### Adding a task to a project : `task add`
 

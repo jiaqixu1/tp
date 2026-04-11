@@ -459,11 +459,11 @@ This summary is split into 4 main sections:
 
 Action | Format | Example
 --------|--------|--------
-**Add** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]… [-l PROJECT]…` | `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
-**Delete** | `delete PERSON_INDEX` | `delete 3`
-**Edit** | `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-d TASK]…​ [-l PROJECT]…​` | `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
-**List** | `list` |
-**Find** | `find KEYWORD [MORE_KEYWORDS]` | `find James Jake`
+**[Add](#adding-a-person-add)** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]… [-l PROJECT]…` | `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
+**[Delete](#deleting-a-person--delete)** | `delete PERSON_INDEX` | `delete 3`
+**[Edit](#editing-a-person--edit)** | `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-d TASK]…​ [-l PROJECT]…​` | `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
+**[List](#listing-all-persons--list)** | `list` |
+**[Find](#locating-persons-by-multiple-fields-find)** | `find KEYWORD [MORE_KEYWORDS]` | `find James Jake`
 
 ---
 
@@ -473,18 +473,18 @@ Action | Format | Example
 
 Action | Format | Example
 --------|--------|--------
-**Add** | `project add PROJECT_TITLE` | `project add WebApp`
-**Delete** | `project delete PROJECT_INDEX` | `project delete 1`
-**List** | `project list` |
-**Find** | `project find KEYWORD [MORE_KEYWORDS]` | `project find Alpha Web`
+**[Add](#adding-a-project--project-add)** | `project add PROJECT_TITLE` | `project add WebApp`
+**[Delete](#deleting-a-project--project-delete)** | `project delete PROJECT_INDEX` | `project delete 1`
+**[List](#viewing-all-projects--project-list)** | `project list` |
+**[Find](#finding-projects-by-name--project-find)** | `project find KEYWORD [MORE_KEYWORDS]` | `project find Alpha Web`
 
 #### Management
 
 Action | Format | Example
 --------|--------|--------
-**Assign** | `project assign PERSON_INDEX {-i PROJECT_INDEX}` | `project assign 1 -i 2`
-**Unassign** | `project unassign PERSON_INDEX {-i PROJECT_INDEX_FROM_PERSON}` | `project unassign 2 -i 1`
-**List members** | `project members PROJECT_INDEX` | `project members 1`
+**[Assign](#assigning-a-project--project-assign)** | `project assign PERSON_INDEX {-i PROJECT_INDEX}` | `project assign 1 -i 2`
+**[Unassign](#unassigning-a-project--project-unassign)** | `project unassign PERSON_INDEX {-i PROJECT_INDEX_FROM_PERSON}` | `project unassign 2 -i 1`
+**[List members](#viewing-project-members--project-members)** | `project members PROJECT_INDEX` | `project members 1`
 
 ---
 
@@ -494,21 +494,21 @@ Action | Format | Example
 
 Action | Format | Example
 --------|--------|--------
-**Add** | `task add PROJECT_INDEX {-n TASK_NAME}` | `task add 1 -n Write report`
-**Delete** | `task delete PROJECT_INDEX {-i TASK_INDEX_FROM_PROJECT}` | `task delete 1 -i 2`
-**Edit** | `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME` | `task edit 1 -i 1 -n Prepare sprint report`
-**Find** | `task find KEYWORD [MORE_KEYWORDS]` | `task find report bug`
+**[Add](#adding-a-task-to-a-project--task-add)** | `task add PROJECT_INDEX {-n TASK_NAME}` | `task add 1 -n Write report`
+**[Delete](#deleting-a-task-from-a-project--task-delete)** | `task delete PROJECT_INDEX {-i TASK_INDEX_FROM_PROJECT}` | `task delete 1 -i 2`
+**[Edit](#editing-a-task-in-a-project--task-edit)** | `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME` | `task edit 1 -i 1 -n Prepare sprint report`
+**[Find](#finding-tasks-by-keyword--task-find)** | `task find KEYWORD [MORE_KEYWORDS]` | `task find report bug`
 
 #### Management
 
 Action | Format | Example
 --------|--------|--------
-**Assign** | `task assign PERSON_INDEX {-pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT}` | `task assign 1 -pi 1 -i 2`
-**Unassign** | `task unassign PERSON_INDEX {-i TASK_INDEX_FROM_PERSON}` | `task unassign 2 -i 1`
-**Mark** | `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON` | `task mark 1 1`
-**Unmark** | `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON` | `task unmark 1 1`
-**List by project** | `task list PROJECT_INDEX` | `task list 1`
-**List by person** | `task view PERSON_INDEX` | `task view 1`
+**[Assign](#assigning-a-task--task-assign)** | `task assign PERSON_INDEX {-pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT}` | `task assign 1 -pi 1 -i 2`
+**[Unassign](#unassigning-a-task--task-unassign)** | `task unassign PERSON_INDEX {-i TASK_INDEX_FROM_PERSON}` | `task unassign 2 -i 1`
+**[Mark](#marking-a-task-as-done--task-mark)** | `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON` | `task mark 1 1`
+**[Unmark](#unmarking-a-task-as-done--task-unmark)** | `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON` | `task unmark 1 1`
+**[List by project](#listing-all-tasks-in-a-project--task-list)** | `task list PROJECT_INDEX` | `task list 1`
+**[List by person](#viewing-all-tasks-of-a-person--task-view)** | `task view PERSON_INDEX` | `task view 1`
 
 ---
 
@@ -516,8 +516,8 @@ Action | Format | Example
 
 Action | Format
 --------|--------
-**Clear** | `clear`
-**Undo** | `undo`
-**Redo** | `redo`
-**Help** | `help`
-**Exit** | `exit`
+**[Clear](#clearing-all-entries--clear)** | `clear`
+**[Undo](#undoing-previous-command--undo)** | `undo`
+**[Redo](#redoing-previous-command--redo)** | `redo`
+**[Help](#viewing-help--help)** | `help`
+**[Exit](#exiting-the-program--exit)** | `exit`

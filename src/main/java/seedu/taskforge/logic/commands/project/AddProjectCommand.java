@@ -17,8 +17,8 @@ public class AddProjectCommand extends ProjectCommand {
     public static final String SUBCOMMAND_WORD = "add";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
-            + ": Adds a project to the TaskForge. "
-            + "Parameters: PROJECT_TITLE\n"
+            + ": Adds one or more projects to TaskForge.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " {PROJECT_TITLE}\n"
             + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " alpha";
 
     public static final String MESSAGE_SUCCESS = "New project added: %1$s";

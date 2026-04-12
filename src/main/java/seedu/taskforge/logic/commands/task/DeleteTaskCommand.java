@@ -1,6 +1,7 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,8 +25,10 @@ public class DeleteTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "delete";
 
     public static final String MESSAGE_SUCCESS = "Task deleted from project: %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PROJECT_INDEX -i TASK_INDEX";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Deletes one or more tasks from a project.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PROJECT_INDEX {" + PREFIX_INDEX + "TASK_INDEX}\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_INDEX + "1";
     public static final String MESSAGE_NOT_EDITED = "At least one task to delete must be provided";
     public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
     public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";

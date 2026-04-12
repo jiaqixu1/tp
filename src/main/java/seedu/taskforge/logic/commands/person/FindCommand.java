@@ -23,13 +23,15 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose fields contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: [" + PREFIX_NAME + "NAME] "
+            + "the specified keywords (case-insensitive, whole-word match only) and displays them in person list.\n"
+            + "Format: " + COMMAND_WORD + " [" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_TASK + "TASK]...\n"
+            + "[" + PREFIX_TASK + "TASK]..."
             + "[" + PREFIX_PROJECT_TITLE + "PROJECT]...\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice bob " + PREFIX_PHONE + "91234567";
+
+    public static final String MESSAGE_TYPE_LIST = " (Type 'list' to show the full person list again)";
 
     private final PersonContainsKeywordsPredicate predicate;
 
@@ -43,7 +45,8 @@ public class FindCommand extends Command {
         // call another function to get composed predicates here then call model update filteredpersonlist on that
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+                String.format(Messages.MESSAGE_PERSONS_MATCHED_OVERVIEW + MESSAGE_TYPE_LIST,
+                        model.getFilteredPersonList().size()));
     }
 
     @Override

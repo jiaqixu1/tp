@@ -22,8 +22,8 @@ public class UnmarkTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "unmark";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
-            + ": Unmarks the task identified by the task index as done for the person identified by the person index.\n"
-            + "Parameters: PERSON_INDEX TASK_INDEX\n"
+            + ": Marks a person's task as not done. Changes the done status of every instance of the task.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PERSON_INDEX TASK_INDEX\n"
             + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 1";
 
     public static final String MESSAGE_UNMARK_TASK_SUCCESS = "Marked task as not done: %1$s";

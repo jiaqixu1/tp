@@ -2,6 +2,7 @@ package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -30,9 +31,10 @@ public class UnassignTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "unassign";
 
     public static final String MESSAGE_SUCCESS = "Task unassigned from %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_INDEX + " TASK_INDEX";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Unassigns one or more tasks from a person.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PERSON_INDEX {" + PREFIX_INDEX + "TASK_INDEX}\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_INDEX + "1 ";
     public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
     public static final String MESSAGE_NOT_EDITED = "At least one task to unassign must be provided";
 

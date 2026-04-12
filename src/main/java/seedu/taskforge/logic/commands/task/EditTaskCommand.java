@@ -1,6 +1,8 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
@@ -24,8 +26,10 @@ public class EditTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "edit";
 
     public static final String MESSAGE_SUCCESS = "Task edited in project: %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PERSON_INDEX -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Edits a task assigned to a person.\n" + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + " PERSON_INDEX " + PREFIX_INDEX + "TASK_INDEX " + PREFIX_NAME + "NEW_TASK_NAME\n" + "Example: "
+            + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_INDEX + "1 " + PREFIX_NAME + "Implement search";
     public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
     public static final String MESSAGE_INVALID_TASK_REFERENCE = "This task reference is invalid.";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this project!";

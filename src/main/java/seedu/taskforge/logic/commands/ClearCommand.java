@@ -1,9 +1,7 @@
-package seedu.taskforge.logic.commands.person;
+package seedu.taskforge.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import seedu.taskforge.logic.commands.Command;
-import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.TaskForge;
 
@@ -13,7 +11,7 @@ import seedu.taskforge.model.TaskForge;
 public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
-    public static final String MESSAGE_SUCCESS = "TaskForge has been cleared!";
+    public static final String MESSAGE_SUCCESS = "All data in TaskForge has been cleared. Type 'undo' to restore.";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Clears all entries.\n"
             + "Example: " + COMMAND_WORD;
 

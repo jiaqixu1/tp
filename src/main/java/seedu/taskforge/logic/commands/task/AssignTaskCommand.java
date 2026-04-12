@@ -1,6 +1,8 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -32,9 +34,11 @@ public class AssignTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "assign";
 
     public static final String MESSAGE_SUCCESS = "Task assigned to %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PERSON_INDEX "
-            + "[-pi PROJECT_INDEX -i TASK_INDEX]...";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Assigns one or more tasks from projects to a person.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PERSON_INDEX "
+            + "{" + PREFIX_PROJECT + "PROJECT_INDEX " + PREFIX_INDEX + "TASK_INDEX}\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "1 ";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to assign must be provided";
     public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";

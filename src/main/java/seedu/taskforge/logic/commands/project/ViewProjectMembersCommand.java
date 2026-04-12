@@ -20,12 +20,12 @@ public class ViewProjectMembersCommand extends ProjectCommand {
 
     public static final String SUBCOMMAND_WORD = "members";
 
-    public static final String MESSAGE_USAGE = ProjectCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD
-            + ": Views all members under the project identified by the index number in the project list.\n"
-            + "Parameters: PROJECT_INDEX (must be a positive integer)\n"
-            + "Example: " + ProjectCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD + " 2";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Shows all members assigned to the specified project.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PROJECT_INDEX\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 2";
 
-    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "The project index provided is out of bounds.";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
     public static final String MESSAGE_NO_MEMBERS = "There are no members in project: %s";
     public static final String MESSAGE_MEMBERS_HEADER = "Members in project %s:\n%s";
 

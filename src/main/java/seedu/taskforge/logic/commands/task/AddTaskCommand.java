@@ -1,6 +1,8 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,8 +26,10 @@ public class AddTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "add";
 
     public static final String MESSAGE_SUCCESS = "Task added to project: %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PROJECT_INDEX -n TASK_NAME";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Adds one or more tasks to a project.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PROJECT_INDEX {" + PREFIX_NAME + "TASK_NAME}\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_NAME + "Refactor code";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this project!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to add must be provided";
     public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";

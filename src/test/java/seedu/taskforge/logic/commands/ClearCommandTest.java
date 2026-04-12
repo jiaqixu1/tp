@@ -5,7 +5,6 @@ import static seedu.taskforge.testutil.TypicalPersons.getTypicalTaskForge;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.taskforge.logic.commands.person.ClearCommand;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.TaskForge;

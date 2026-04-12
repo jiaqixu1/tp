@@ -16,7 +16,7 @@ public class Messages {
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
     public static final String MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS = "The person index provided is out of bounds.";
-    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
+    public static final String MESSAGE_PERSONS_MATCHED_OVERVIEW = "Found %1$d matching person(s).";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
 
@@ -37,7 +37,7 @@ public class Messages {
      * Contains only the person's name, phone, and email for a more concise display.
      */
     public static String formatPersonSummary(Person person) {
-        return person.getName() + "; Phone: " + person.getPhone() + "; Email: " + person.getEmail();
+        return person.getName() + " (Phone: " + person.getPhone() + ", Email: " + person.getEmail() + ")";
     }
 
     /**

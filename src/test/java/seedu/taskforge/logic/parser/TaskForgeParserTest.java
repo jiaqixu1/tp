@@ -22,7 +22,7 @@ import seedu.taskforge.logic.commands.HelpCommand;
 import seedu.taskforge.logic.commands.RedoCommand;
 import seedu.taskforge.logic.commands.UndoCommand;
 import seedu.taskforge.logic.commands.person.AddCommand;
-import seedu.taskforge.logic.commands.person.ClearCommand;
+import seedu.taskforge.logic.commands.ClearCommand;
 import seedu.taskforge.logic.commands.person.DeleteCommand;
 import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;

@@ -18,7 +18,6 @@ public abstract class TaskCommand extends Command {
             + "unassign/"
             + "mark/"
             + "unmark/"
-            + "view/"
             + "find";
     public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
             "The task must exist in at least one project assigned to the person.";

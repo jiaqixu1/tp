@@ -37,7 +37,6 @@ import seedu.taskforge.logic.commands.task.MarkTaskCommand;
 import seedu.taskforge.logic.commands.task.TaskCommand;
 import seedu.taskforge.logic.commands.task.UnassignTaskCommand;
 import seedu.taskforge.logic.commands.task.UnmarkTaskCommand;
-import seedu.taskforge.logic.commands.task.ViewTasksCommand;
 import seedu.taskforge.logic.parser.exceptions.ParseException;
 import seedu.taskforge.logic.parser.person.AddCommandParser;
 import seedu.taskforge.logic.parser.person.DeleteCommandParser;
@@ -58,7 +57,6 @@ import seedu.taskforge.logic.parser.task.ListTaskCommandParser;
 import seedu.taskforge.logic.parser.task.MarkTaskCommandParser;
 import seedu.taskforge.logic.parser.task.UnassignTaskCommandParser;
 import seedu.taskforge.logic.parser.task.UnmarkTaskCommandParser;
-import seedu.taskforge.logic.parser.task.ViewTasksCommandParser;
 
 /**
  * Parses user input.
@@ -216,9 +214,6 @@ public class TaskForgeParser {
 
         case UnmarkTaskCommand.SUBCOMMAND_WORD:
             return new UnmarkTaskCommandParser().parse(arguments);
-
-        case ViewTasksCommand.SUBCOMMAND_WORD:
-            return new ViewTasksCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: task " + subinput);

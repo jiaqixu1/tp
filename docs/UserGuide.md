@@ -493,20 +493,6 @@ Format: `task list PROJECT_INDEX`
 Examples:
 * `task list 1`
 
-#### Viewing all tasks of a person : `task view`
-
-Displays all tasks assigned to a person.
-
-Format: `task view PERSON_INDEX`
-
-* Shows all tasks assigned to the person at the specified `PERSON_INDEX`.
-* `PERSON_INDEX` refers to the person index displayed in `list`.
-* `PERSON_INDEX` **must be a positive integer** `1, 2, 3, ...`
-* If the person has no tasks, a message will be shown.
-
-Example:
-* `task view 1`
-
 [↑ Back to Features](#features)
 
 --------------------------------------------------------------------------------------------------------------------
@@ -549,7 +535,6 @@ Action | Format, Examples
 **Find Tasks** | `task find KEYWORD [MORE_KEYWORDS]`<br> e.g., `task find report bug`
 **Assign Task** | `task assign PERSON_INDEX {-pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT}`<br> e.g., `task assign 1 -pi 1 -i 2`
 **Unassign Task** | `task unassign PERSON_INDEX {-i TASK_INDEX_FROM_PERSON}`<br> e.g., `task unassign 2 -i 1`
-**View Tasks** | `task view PERSON_INDEX`<br> e.g., `task view 1`
 **Mark Task** | `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`<br> e.g., `task mark 1 1`
 **Unmark Task** | `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`<br> e.g., `task unmark 1 1`
 **Add Project** | `project add PROJECT_TITLE`<br> e.g., `project add WebApp`

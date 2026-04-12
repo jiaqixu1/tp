@@ -305,14 +305,13 @@ Examples:
 
 #### Viewing project members : `project members`
 
-Displays all persons assigned to a project.
+Displays all persons assigned to a project, including name, phone number and email address.
 
 Format: `project members PROJECT_INDEX`
 
 * Shows all persons who are assigned to the specified project.
 * `PROJECT_INDEX` refers to the project index displayed in `project list`.
 * `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
-* The result lists all members associated with the project.
 * If no persons are assigned to the project, an empty result or message is shown.
 
 [↑ Back to Features](#features)

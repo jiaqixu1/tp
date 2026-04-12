@@ -27,8 +27,8 @@ public class DeleteTaskCommand extends TaskCommand {
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
             + SUBCOMMAND_WORD + " PROJECT_INDEX -i TASK_INDEX";
     public static final String MESSAGE_NOT_EDITED = "At least one task to delete must be provided";
-    public static final String MESSAGE_INVALID_PROJECT_INDEX = "The project index provided is invalid.";
-    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
+    public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
 
     private final Index projectIndex;
     private final DeleteTaskDescriptor deleteTaskDescriptor;
@@ -50,7 +50,7 @@ public class DeleteTaskCommand extends TaskCommand {
         List<Project> projectList = model.getProjectList();
 
         if (projectIndex.getZeroBased() >= projectList.size()) {
-            throw new CommandException(MESSAGE_INVALID_PROJECT_INDEX);
+            throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
         }
 
         Project projectToEdit = projectList.get(projectIndex.getZeroBased());
@@ -75,7 +75,7 @@ public class DeleteTaskCommand extends TaskCommand {
             try {
                 tasksToDelete.add(editedProject.getTasks().get(taskIndex));
             } catch (IndexOutOfBoundsException e) {
-                throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
+                throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
             }
         }
 
@@ -84,7 +84,7 @@ public class DeleteTaskCommand extends TaskCommand {
                 editedProject.getUniqueTaskList().remove(task);
             }
         } catch (TaskNotFoundException tnfe) {
-            throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
+            throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
         }
 
         return editedProject;

@@ -33,7 +33,7 @@ public class UnassignTaskCommand extends TaskCommand {
     public static final String MESSAGE_USAGE = COMMAND_WORD + " "
             + SUBCOMMAND_WORD + " INDEX "
             + PREFIX_INDEX + " TASK_INDEX";
-    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
+    public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
     public static final String MESSAGE_NOT_EDITED = "At least one task to unassign must be provided";
 
     private final Index index;
@@ -57,7 +57,7 @@ public class UnassignTaskCommand extends TaskCommand {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
@@ -93,7 +93,7 @@ public class UnassignTaskCommand extends TaskCommand {
             try {
                 tasksToDelete.add(newTasks.get(taskIndex));
             } catch (IndexOutOfBoundsException e) {
-                throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
+                throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
             }
         }
 

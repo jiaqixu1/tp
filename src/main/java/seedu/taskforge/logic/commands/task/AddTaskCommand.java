@@ -28,7 +28,7 @@ public class AddTaskCommand extends TaskCommand {
             + SUBCOMMAND_WORD + " PROJECT_INDEX -n TASK_NAME";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this project!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to add must be provided";
-    public static final String MESSAGE_INVALID_PROJECT_INDEX = "The project index provided is invalid.";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
 
     private final Index projectIndex;
     private final AddTaskDescriptor addTaskDescriptor;
@@ -50,7 +50,7 @@ public class AddTaskCommand extends TaskCommand {
         List<Project> projectList = model.getProjectList();
 
         if (projectIndex.getZeroBased() >= projectList.size()) {
-            throw new CommandException(MESSAGE_INVALID_PROJECT_INDEX);
+            throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
         }
 
         Project projectToEdit = projectList.get(projectIndex.getZeroBased());

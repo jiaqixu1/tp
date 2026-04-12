@@ -57,7 +57,7 @@ public class DeleteTaskCommandTest {
         descriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(2)));
         DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(INDEX_FIRST_PROJECT, descriptor);
 
-        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class DeleteTaskCommandTest {
         descriptor.setTaskIndexes(Arrays.asList(Index.fromOneBased(1)));
         DeleteTaskCommand deleteTaskCommand = new DeleteTaskCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_INVALID_PROJECT_INDEX);
+        assertCommandFailure(deleteTaskCommand, model, DeleteTaskCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

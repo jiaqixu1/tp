@@ -6,7 +6,6 @@ import java.util.List;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.commons.util.ToStringBuilder;
-import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
@@ -25,6 +24,7 @@ public class DeleteProjectCommand extends ProjectCommand {
             + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PROJECT_SUCCESS = "Deleted Project: %1$s";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
 
     private final Index targetIndex;
 
@@ -38,7 +38,7 @@ public class DeleteProjectCommand extends ProjectCommand {
         List<Project> lastShownList = model.getProjectList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
         }
 
         Project projectToDelete = lastShownList.get(targetIndex.getZeroBased());
@@ -68,4 +68,3 @@ public class DeleteProjectCommand extends ProjectCommand {
                 .toString();
     }
 }
-

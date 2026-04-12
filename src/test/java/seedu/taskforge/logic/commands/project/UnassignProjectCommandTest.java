@@ -81,7 +81,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(indexFirstPerson, descriptor);
 
         assertCommandFailure(unassignProjectCommand, model,
-                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                UnassignProjectCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(unassignProjectCommand, model,
-                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                UnassignProjectCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(indexFirstPerson, descriptor);
 
         assertCommandFailure(unassignProjectCommand, model,
-                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                UnassignProjectCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(unassignProjectCommand, model,
-                UnassignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                UnassignProjectCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class UnassignProjectCommandTest {
                 .withProjects("1").build();
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(unassignProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(unassignProjectCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     /**
@@ -198,7 +198,7 @@ public class UnassignProjectCommandTest {
         UnassignProjectCommand unassignProjectCommand = new UnassignProjectCommand(outOfBoundIndex,
                 new UnassignProjectDescriptorBuilder().withProjects("1").build());
 
-        assertCommandFailure(unassignProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(unassignProjectCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

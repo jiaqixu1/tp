@@ -12,6 +12,7 @@ import static seedu.taskforge.testutil.TypicalPersons.getTypicalTaskForge;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
+import seedu.taskforge.logic.Messages;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.TaskForge;
@@ -83,7 +84,7 @@ public class ViewTasksCommandTest {
     public void execute_invalidIndex_failure() {
         Index invalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         ViewTasksCommand command = new ViewTasksCommand(invalidIndex);
-        assertCommandFailure(command, model, ViewTasksCommand.MESSAGE_INVALID_PERSON_INDEX);
+        assertCommandFailure(command, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

@@ -56,7 +56,7 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "Another person with the "
-            + "same name, phone, or email already exists in taskforge";
+            + "same phone or email already exists in taskforge";
     public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
             "Task to assign does not exist in any assigned project.";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
@@ -82,7 +82,7 @@ public class EditCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());

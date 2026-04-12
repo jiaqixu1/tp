@@ -23,7 +23,7 @@ public class ListTaskCommand extends TaskCommand {
 
     public static final String MESSAGE_USAGE_LIST = COMMAND_WORD + " " + SUBCOMMAND_WORD
             + " PROJECT_INDEX";
-    public static final String MESSAGE_INVALID_PROJECT_INDEX = "The project index provided is invalid.";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
     public static final String MESSAGE_SUCCESS = "Listed tasks for project %1$s:";
 
     private final Index projectIndex;
@@ -40,7 +40,7 @@ public class ListTaskCommand extends TaskCommand {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         if (projectIndex.getZeroBased() >= model.getProjectList().size()) {
-            throw new CommandException(MESSAGE_INVALID_PROJECT_INDEX);
+            throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
         }
 
         Project project = model.getProjectList().get(projectIndex.getZeroBased());

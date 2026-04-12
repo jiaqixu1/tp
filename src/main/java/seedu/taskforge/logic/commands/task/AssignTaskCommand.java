@@ -37,10 +37,10 @@ public class AssignTaskCommand extends TaskCommand {
             + "[-pi PROJECT_INDEX -i TASK_INDEX]...";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to assign must be provided";
-    public static final String MESSAGE_INVALID_TASK_DISPLAYED_INDEX = "Task index is out of bound";
-    public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "Project index is out of bound";
+    public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
     public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
-            "Task to assigned does not exist in any person-assigned project.";
+            "Task does not exist in any project assigned to the person.";
 
     private final Index index;
     private final AssignTaskDescriptor assignTaskDescriptor;
@@ -63,7 +63,7 @@ public class AssignTaskCommand extends TaskCommand {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
@@ -113,13 +113,13 @@ public class AssignTaskCommand extends TaskCommand {
 
             // Validate project index
             if (projectIndex < 0 || projectIndex >= allProjects.size()) {
-                throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
             }
 
             // Validate task index within the project
             List<seedu.taskforge.model.task.Task> tasksInProject = allProjects.get(projectIndex).getTasks();
             if (taskIndex < 0 || taskIndex >= tasksInProject.size()) {
-                throw new CommandException(MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
+                throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
             }
 
             for (PersonProject personProject : assignedPersonProjects) {

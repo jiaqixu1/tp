@@ -98,7 +98,7 @@ public class ViewProjectMembersCommandTest {
 
         CommandException exception = assertThrows(CommandException.class, () -> command.execute(modelStub));
 
-        assertEquals(ViewProjectMembersCommand.MESSAGE_INVALID_PROJECT_INDEX, exception.getMessage());
+        assertEquals(ViewProjectMembersCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS, exception.getMessage());
     }
 
     @Test

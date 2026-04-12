@@ -25,7 +25,7 @@ public class ViewProjectMembersCommand extends ProjectCommand {
             + "Parameters: PROJECT_INDEX (must be a positive integer)\n"
             + "Example: " + ProjectCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD + " 2";
 
-    public static final String MESSAGE_INVALID_PROJECT_INDEX = "The project index provided is invalid.";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "The project index provided is out of bounds.";
     public static final String MESSAGE_NO_MEMBERS = "There are no members in project: %s";
     public static final String MESSAGE_MEMBERS_HEADER = "Members in project %s:\n%s";
 
@@ -40,7 +40,7 @@ public class ViewProjectMembersCommand extends ProjectCommand {
 
         List<Project> projectList = model.getProjectList();
         if (targetIndex.getZeroBased() >= projectList.size()) {
-            throw new CommandException(MESSAGE_INVALID_PROJECT_INDEX);
+            throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
         }
 
         Project targetProject = projectList.get(targetIndex.getZeroBased());

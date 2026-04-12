@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import seedu.taskforge.commons.core.index.Index;
+import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
@@ -26,7 +27,6 @@ public class ViewTasksCommand extends TaskCommand {
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + TaskCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD + " 2";
 
-    public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid.";
     public static final String MESSAGE_NO_TASKS = "%s has no tasks.";
     public static final String MESSAGE_TASKS_HEADER = "Tasks for %s: %s";
 
@@ -42,7 +42,7 @@ public class ViewTasksCommand extends TaskCommand {
 
         List<Person> lastShownList = model.getFilteredPersonList();
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(MESSAGE_INVALID_PERSON_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person person = lastShownList.get(targetIndex.getZeroBased());

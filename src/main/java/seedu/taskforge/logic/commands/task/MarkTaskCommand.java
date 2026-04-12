@@ -28,6 +28,7 @@ public class MarkTaskCommand extends TaskCommand {
 
     public static final String MESSAGE_MARK_TASK_SUCCESS = "Marked task as done: %1$s";
     public static final String MESSAGE_TASK_ALREADY_DONE = "This task is already marked as done.";
+    public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
     public static final String MESSAGE_INVALID_TASK_REFERENCE = "This task reference is invalid.";
 
     private final Index personIndex;
@@ -51,14 +52,14 @@ public class MarkTaskCommand extends TaskCommand {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (personIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person personToEdit = lastShownList.get(personIndex.getZeroBased());
         List<PersonTask> taskList = personToEdit.getTasks();
 
         if (taskIndex.getZeroBased() >= taskList.size()) {
-            throw new CommandException(DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+            throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
         }
 
         PersonTask taskToMark = taskList.get(taskIndex.getZeroBased());

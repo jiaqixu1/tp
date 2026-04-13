@@ -174,10 +174,9 @@ There are 5 basic person commands that deal with adding, deleting, editing, list
 
 Adds a person to TaskForge.
 
-Format: `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]…​ [-l PROJECT]…​`
+Format: `add -n NAME -p PHONE_NUMBER -e EMAIL
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tasks and projects (including 0)
 A person must have valid unique phone number and email.
 </div>
 
@@ -204,7 +203,6 @@ A person must have valid unique phone number and email.
 
 Examples:
 * `add -n John Doe -p 98765432 -e johnd@example.com`
-* `add -n Betsy Crowe -d newTask2 -e betsycrowe@example.com -p 1234567 -d newTask1`
 
 #### Deleting a person : `delete`
 
@@ -383,7 +381,7 @@ Format: `project members PROJECT_INDEX`
 --------------------------------------------------------------------------------------------------------------------
 
 ### Task
-There are 4 basic task commands and 6 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
+There are 4 basic task commands and 5 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
 While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project/person.
 
 Basic commands:

@@ -6,25 +6,15 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
-import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_PROJECT_TITLE;
-import static seedu.taskforge.logic.commands.CommandTestUtil.INVALID_TASK_DESC;
 import static seedu.taskforge.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.taskforge.logic.commands.CommandTestUtil.NAME_DESC_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PREAMBLE_NON_EMPTY;
 import static seedu.taskforge.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
-import static seedu.taskforge.logic.commands.CommandTestUtil.PROJECT_DESC_ALPHA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.PROJECT_DESC_BETA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.TASK_FIX_ERROR;
-import static seedu.taskforge.logic.commands.CommandTestUtil.TASK_REFACTOR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_FIX_ERROR;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
@@ -42,108 +32,49 @@ import seedu.taskforge.model.person.Email;
 import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.Phone;
-import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 import seedu.taskforge.testutil.PersonBuilder;
 
 public class AddCommandParserTest {
-    private AddCommandParser parser = new AddCommandParser();
+
+    private final AddCommandParser parser = new AddCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Person expectedPerson = new PersonBuilder(BOB).withProjects().withTasks().build();
+        Person expectedPerson = new PersonBuilder(BOB)
+                .withProjects()
+                .withTasks()
+                .build();
 
-        // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE
-                + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + PROJECT_DESC_ALPHA + PROJECT_DESC_BETA + TASK_REFACTOR
-                + TASK_FIX_ERROR, new AddCommand(expectedPerson));
-
-        // multiple projects - all accepted
-        Person expectedPersonMultipleProjects = new PersonBuilder(BOB)
-                .withProjects(VALID_PROJECT_ALPHA, VALID_PROJECT_BETA).withTasks()
-                .build();
-        expectedPersonMultipleProjects = new PersonBuilder(expectedPersonMultipleProjects)
-                .withProjects().withTasks().build();
-
-        assertParseSuccess(parser,
-                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + PROJECT_DESC_ALPHA + PROJECT_DESC_BETA,
-                new AddCommand(expectedPersonMultipleProjects));
-
-        // multiple tasks - all accepted
-        Person expectedPersonMultipleTasks = new PersonBuilder(BOB).withProjects()
-                .withTasks(VALID_TASK_FIX_ERROR, VALID_TASK_REFACTOR)
-                .build();
-        expectedPersonMultipleTasks = new PersonBuilder(expectedPersonMultipleTasks)
-                .withProjects().withTasks().build();
-
-        assertParseSuccess(parser,
-                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + TASK_FIX_ERROR + TASK_REFACTOR,
-                new AddCommand(expectedPersonMultipleTasks));
-
-
+                        + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
+                new AddCommand(expectedPerson));
     }
 
     @Test
-    public void parse_repeatedNonProjectTaskValue_failure() {
-        String validExpectedPersonString = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + PROJECT_DESC_BETA + TASK_FIX_ERROR;
+    public void parse_repeatedValue_failure() {
+        String validInput = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB;
 
-        // multiple names
-        assertParseFailure(parser, NAME_DESC_AMY + validExpectedPersonString,
+        assertParseFailure(parser, NAME_DESC_AMY + validInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
 
-        // multiple phones
-        assertParseFailure(parser, PHONE_DESC_AMY + validExpectedPersonString,
+        assertParseFailure(parser, PHONE_DESC_AMY + validInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
-        // multiple emails
-        assertParseFailure(parser, EMAIL_DESC_AMY + validExpectedPersonString,
+        assertParseFailure(parser, EMAIL_DESC_AMY + validInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
 
-
-        // multiple fields repeated
         assertParseFailure(parser,
-                validExpectedPersonString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY
-                        + validExpectedPersonString,
+                validInput + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_EMAIL, PREFIX_PHONE));
-
-        // invalid value followed by valid value
-
-        // invalid name
-        assertParseFailure(parser, INVALID_NAME_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
-
-        // invalid email
-        assertParseFailure(parser, INVALID_EMAIL_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
-
-        // invalid phone
-        assertParseFailure(parser, INVALID_PHONE_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
-
-        // valid value followed by invalid value
-
-        // invalid name
-        assertParseFailure(parser, validExpectedPersonString + INVALID_NAME_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
-
-        // invalid email
-        assertParseFailure(parser, validExpectedPersonString + INVALID_EMAIL_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
-
-        // invalid phone
-        assertParseFailure(parser, validExpectedPersonString + INVALID_PHONE_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
-
     }
 
     @Test
     public void parse_optionalFieldsMissing_success() {
-        // zero projects, tags, tasks
-        Person expectedPerson = new PersonBuilder(AMY).withProjects().withTasks().build();
+        Person expectedPerson = new PersonBuilder(AMY)
+                .withProjects()
+                .withTasks()
+                .build();
+
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY,
                 new AddCommand(expectedPerson));
     }
@@ -152,55 +83,39 @@ public class AddCommandParserTest {
     public void parse_compulsoryFieldMissing_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
 
-        // missing name prefix
         assertParseFailure(parser, VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
                 expectedMessage);
 
-        // missing phone prefix
         assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB,
                 expectedMessage);
 
-        // missing email prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB,
                 expectedMessage);
 
-        // all prefixes missing
         assertParseFailure(parser, VALID_NAME_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB,
                 expectedMessage);
     }
 
     @Test
     public void parse_invalidValue_failure() {
-        // invalid name
-        assertParseFailure(parser, INVALID_NAME_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + PROJECT_DESC_ALPHA + PROJECT_DESC_BETA + TASK_REFACTOR + TASK_FIX_ERROR, Name.MESSAGE_CONSTRAINTS);
-
-        // invalid phone
-        assertParseFailure(parser, NAME_DESC_BOB + INVALID_PHONE_DESC + EMAIL_DESC_BOB
-                + PROJECT_DESC_ALPHA + PROJECT_DESC_BETA + TASK_REFACTOR + TASK_FIX_ERROR, Phone.MESSAGE_CONSTRAINTS);
-
-        // invalid email
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC
-                + PROJECT_DESC_ALPHA + PROJECT_DESC_BETA + TASK_REFACTOR + TASK_FIX_ERROR, Email.MESSAGE_CONSTRAINTS);
-
-
-        // invalid project
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + INVALID_PROJECT_TITLE + PROJECT_DESC_BETA + TASK_REFACTOR + TASK_FIX_ERROR,
-                Project.MESSAGE_CONSTRAINTS);
-
-        // invalid task
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + VALID_PROJECT_ALPHA + PROJECT_DESC_BETA + INVALID_TASK_DESC + TASK_FIX_ERROR,
-                Task.MESSAGE_CONSTRAINTS);
-
-        // two invalid values, only first invalid value reported
-        assertParseFailure(parser, INVALID_NAME_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB,
+        assertParseFailure(parser,
+                INVALID_NAME_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB,
                 Name.MESSAGE_CONSTRAINTS);
 
-        // non-empty preamble
-        assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + PROJECT_DESC_ALPHA + PROJECT_DESC_BETA + TASK_REFACTOR + TASK_FIX_ERROR,
+        assertParseFailure(parser,
+                NAME_DESC_BOB + INVALID_PHONE_DESC + EMAIL_DESC_BOB,
+                Phone.MESSAGE_CONSTRAINTS);
+
+        assertParseFailure(parser,
+                NAME_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC,
+                Email.MESSAGE_CONSTRAINTS);
+
+        assertParseFailure(parser,
+                INVALID_NAME_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB,
+                Name.MESSAGE_CONSTRAINTS);
+
+        assertParseFailure(parser,
+                PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 }

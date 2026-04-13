@@ -4,11 +4,8 @@ import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 import seedu.taskforge.logic.commands.person.AddCommand;
@@ -23,8 +20,6 @@ import seedu.taskforge.model.person.Name;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.person.PersonTask;
 import seedu.taskforge.model.person.Phone;
-import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 
 /**
  * Parses input arguments and creates a new AddCommand object
@@ -38,8 +33,7 @@ public class AddCommandParser implements Parser<AddCommand> {
      */
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                        PREFIX_PROJECT_TITLE, PREFIX_TASK);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -50,12 +44,10 @@ public class AddCommandParser implements Parser<AddCommand> {
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        List<Project> projectList = ParserUtil.parseProjects(argMultimap.getAllValues(PREFIX_PROJECT_TITLE));
-        List<Task> taskList = ParserUtil.parseTasks(argMultimap.getAllValues(PREFIX_TASK));
 
         Person person = new Person(name, phone, email, new ArrayList<>(), new ArrayList<PersonTask>());
 
-        return new AddCommand(person, projectList, taskList);
+        return new AddCommand(person);
     }
 
     /**
@@ -65,5 +57,4 @@ public class AddCommandParser implements Parser<AddCommand> {
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
-
 }

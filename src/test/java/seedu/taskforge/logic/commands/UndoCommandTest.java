@@ -2,7 +2,6 @@ package seedu.taskforge.logic.commands;
 
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalTaskForge;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,6 @@ import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.FindCommand;
 import seedu.taskforge.logic.commands.person.ListCommand;
 import seedu.taskforge.logic.commands.project.ListProjectCommand;
-import seedu.taskforge.logic.commands.task.ViewTasksCommand;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.TaskForge;
@@ -62,14 +60,12 @@ public class UndoCommandTest {
         FindCommand findCommand = new FindCommand(new PersonContainsKeywordsPredicate());
         ListCommand listCommand = new ListCommand();
         ListProjectCommand listProjectCommand = new ListProjectCommand();
-        ViewTasksCommand viewTasksCommand = new ViewTasksCommand(INDEX_FIRST_PERSON);
         HelpCommand helpCommand = new HelpCommand();
         ExitCommand exitCommand = new ExitCommand();
 
         findCommand.execute(model);
         listCommand.execute(model);
         listProjectCommand.execute(model);
-        viewTasksCommand.execute(model);
         helpCommand.execute(model);
         exitCommand.execute(model);
 

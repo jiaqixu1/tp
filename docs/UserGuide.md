@@ -3,7 +3,21 @@ layout: page
 title: User Guide
 ---
 
-TaskForge is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TaskForge can get your contact management tasks done faster than traditional GUI apps.
+TaskForge is a **desktop app for project management**, optimized for project/team managers and leaders who prefer typing commands.
+It combines a fast Command Line Interface (CLI) with visual lists so you can verify changes at a glance.
+
+**Value proposition**: TaskForge brings value to those who find existing project management apps cumbersome to use due to issues such as:
+- complicated user interface with features that are unnecessary
+- limited features available for free users, requiring users to subscribe to paid plans to access essential features
+- lack of support for efficient keyboard-based interactions
+
+**Target users**:
+- Working professionals or students who are project/team managers, and leaders.
+- Users comfortable reading simple command formats like `add -n NAME -p PHONE`.
+- Users comfortable with basic command-line usage (e.g., running `java -jar ...`).
+> [!NOTE]
+> This guide is intended for users who are comfortable with basic command-line usage.
+> If you are new to command-line interfaces, you may need to familiarize themselves with Java installation and command syntax before using the application effectively.
 
 * Table of Contents
 {:toc}
@@ -167,6 +181,27 @@ A person can have any number of tasks and projects (including 0)
 A person must have valid unique phone number and email.
 </div>
 
+**Input constraints:**
+* **Name**
+    * Can contain only alphanumeric characters and spaces.
+    * Cannot be blank.
+    * Duplicate names are allowed.
+
+* **Phone number**
+    * Must contain numbers only.
+    * Must be at least 3 digits long.
+    * Must be unique across all persons.
+
+* **Email**
+    * Must be in the format `local-part@domain`.
+    * The local-part may contain only alphanumeric characters and the special characters `+`, `_`, `.`, `-`.
+    * The local-part must not start or end with a special character.
+    * The domain consists of domain labels separated by periods.
+    * The domain must end with a label that is at least 2 characters long.
+    * Each domain label must start and end with an alphanumeric character.
+    * Each domain label may contain hyphens, but only between alphanumeric characters.
+    * Must be unique across all persons.
+
 Examples:
 * `add -n John Doe -p 98765432 -e johnd@example.com`
 * `add -n Betsy Crowe -d newTask2 -e betsycrowe@example.com -p 1234567 -d newTask1`
@@ -221,6 +256,7 @@ Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS] [-d TAS
 * When multiple fields are specified, only persons matching ALL specified fields will be returned (i.e. `AND` search).
   e.g. `find -n Alice -p 91234567` will return only persons named Alice AND with the phone number 91234567.
 * Only full words will be matched e.g. `Han` will not match `Hans`.
+* If no one is found by the keywords searched, the message will display "0 persons. listed".
 
 Examples:
 * `find -n John` returns `john` and `John Doe`
@@ -255,9 +291,9 @@ Adds a new project to TaskForge into the project list.
 Format: `project add PROJECT_TITLE`
 
 * Adds a new project with the specified project title.
-* `PROJECT_TITLE` must be alphanumeric (only letters and numbers), between 1 to 64 characters.
+* `PROJECT_TITLE` must contain letters, numbers, and spaces only, and it should be between 1 to 64 characters.
 * Duplicate project title are not allowed.
-* Project titles are automatically normalized to title case. For each word, the first letter is capitalized and the remaining letters are converted to lowercase.
+* Project titles are automatically normalized to title case, where for each word(separated by space) in the project name, the first letter is capitalized and the remaining letters are converted to lowercase.
 
 Examples:
 * `project add web app` adds a new project named `Web App`.
@@ -364,7 +400,6 @@ Task management commands:
 - [mark](#marking-a-task-as-done--task-mark)
 - [unmark](#unmarking-a-task-as-done--task-unmark)
 - [list](#listing-all-tasks-in-a-project--task-list)
-- [view](#viewing-all-tasks-of-a-person--task-view)
 
 #### Adding a task to a project : `task add`
 
@@ -413,7 +448,7 @@ Format: `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`
 * `NEW_TASK_NAME` must follow the same naming constraints as `TASK_NAME` in `task add`.
 
 Example:
-* `task edit 1 -i 1 -n Prepare sprint report` renames the 2nd task from 1st person to `Prepare sprint report`
+* `task edit 1 -i 2 -n Prepare sprint report` renames the 2nd task from 1st person to `Prepare sprint report`
 
 #### Finding tasks by keyword : `task find`
 
@@ -503,20 +538,6 @@ Format: `task list PROJECT_INDEX`
 
 Examples:
 * `task list 1`
-
-#### Viewing all tasks of a person : `task view`
-
-Displays all tasks assigned to a person.
-
-Format: `task view PERSON_INDEX`
-
-* Shows all tasks assigned to the person at the specified `PERSON_INDEX`.
-* `PERSON_INDEX` refers to the person index displayed in `list`.
-* `PERSON_INDEX` **must be a positive integer** `1, 2, 3, ...`
-* If the person has no tasks, a message will be shown.
-
-Example:
-* `task view 1`
 
 [↑ Back to Features](#features)
 

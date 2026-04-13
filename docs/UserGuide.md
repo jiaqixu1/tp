@@ -148,7 +148,7 @@ Format: `redo`
 
 Shows a message explaining all the commands and contains a button to open the User Guide.
 
-![help message](images/helpMessage.png)
+![help message](images/HelpCommandMessage.png)
 
 Format: `help`
 
@@ -164,6 +164,9 @@ Format: `exit`
 
 ### Person
 There are 5 basic person commands that deal with adding, deleting, editing, listing, and finding persons in TaskForge.
+
+![Add command success](images/AddCommand.png)
+
 - [add](#adding-a-person-add)
 - [delete](#deleting-a-person--delete)
 - [edit](#editing-a-person--edit)
@@ -291,6 +294,8 @@ Examples:
 There are 4 basic project commands and 3 project management commands. Basic commands deal with adding, deleting, listing, and finding projects.
 While project management commands deal with assigning/unassigning projects to/from persons and viewing project members.
 
+![Project add command success](images/ProjectAddCommand.png)
+
 Basic commands:
 - [add](#adding-a-project--project-add)
 - [delete](#deleting-a-project--project-delete)
@@ -404,6 +409,8 @@ Format: `project members PROJECT_INDEX`
 ### Task
 There are 4 basic task commands and 5 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
 While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project.
+
+![Task add command success](images/TaskAddCommand.png)
 
 Basic commands:
 - [add](#adding-a-task-to-a-project--task-add)
@@ -583,6 +590,13 @@ _Details coming soon ..._
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TaskForge home folder.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Known issues
+
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 

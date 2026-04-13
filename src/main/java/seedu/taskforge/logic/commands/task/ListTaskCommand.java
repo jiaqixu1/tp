@@ -21,7 +21,7 @@ public class ListTaskCommand extends TaskCommand {
 
     public static final String SUBCOMMAND_WORD = "list";
 
-    public static final String MESSAGE_USAGE_LIST = COMMAND_WORD + " " + SUBCOMMAND_WORD
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
             + ": Lists all tasks in a project.\n"
             + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PROJECT_INDEX\n"
             + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1";

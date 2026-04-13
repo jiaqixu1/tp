@@ -10,6 +10,8 @@ public class UndoCommand extends Command {
 
     public static final String COMMAND_WORD = "undo";
     public static final String MESSAGE_SUCCESS = "Undo previous command: %s";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undoes the previous state-changing command.\n"
+            + "Example: " + COMMAND_WORD;
     public static final String MESSAGE_FAILED = "Unable to undo!";
 
     @Override

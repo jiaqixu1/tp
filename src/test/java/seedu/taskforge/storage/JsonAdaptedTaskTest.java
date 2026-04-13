@@ -18,7 +18,7 @@ public class JsonAdaptedTaskTest {
     public void toModelType_doneTask_success() throws Exception {
         JsonAdaptedTask adaptedTask = new JsonAdaptedTask(VALID_TASK, true);
 
-        Task modelTask = adaptedTask.toModelType();
+        Task modelTask = adaptedTask.toModelType("alpha");
 
         assertTrue(modelTask.getStatus());
     }
@@ -27,7 +27,7 @@ public class JsonAdaptedTaskTest {
     public void toModelType_missingDoneField_defaultsToNotDone() throws Exception {
         JsonAdaptedTask adaptedTask = new JsonAdaptedTask(VALID_TASK, null);
 
-        Task modelTask = adaptedTask.toModelType();
+        Task modelTask = adaptedTask.toModelType("alpha");
 
         assertFalse(modelTask.getStatus());
     }
@@ -35,7 +35,7 @@ public class JsonAdaptedTaskTest {
     @Test
     public void toModelType_invalidTask_throwsIllegalValueException() {
         JsonAdaptedTask adaptedTask = new JsonAdaptedTask(INVALID_TASK, false);
-        assertThrows(IllegalValueException.class, Task.MESSAGE_CONSTRAINTS, adaptedTask::toModelType);
+        assertThrows(IllegalValueException.class, Task.MESSAGE_CONSTRAINTS, () -> adaptedTask.toModelType("alpha"));
     }
 }
 

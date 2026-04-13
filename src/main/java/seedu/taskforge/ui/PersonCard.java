@@ -140,7 +140,7 @@ public class PersonCard extends UiPart<Region> {
         }
 
         String taskDescription = task != null ? task.description : "[invalid-task-reference]";
-        Label taskLabel = new Label(taskDescription + " (ID: " + taskId + ")");
+        Label taskLabel = new Label(taskDescription + " (IDX: " + taskId + ")");
 
         HBox taskContainer = new HBox(2);
         taskContainer.setAlignment(Pos.CENTER_LEFT);

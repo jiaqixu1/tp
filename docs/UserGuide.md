@@ -182,9 +182,9 @@ Format: `list`
 
 #### Locating persons by multiple fields: `find`
 
-Finds persons whose fields (name, phone, email, tasks, projects) match the given keywords.
+Finds persons whose fields (name, phone, email) match the given keywords.
 
-Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS] [-d TASK_KEYWORDS] [-l PROJECT_KEYWORDS]`
+Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`
 * For a specific field, persons matching at least one keyword will be returned (i.e. `OR` search).
@@ -197,7 +197,6 @@ Examples:
 * `find -n John` returns `john` and `John Doe`
 * `find -n alex david` returns `Alex Yeoh`, `David Li`
 * `find -n Alice -p 91234567` returns any person named `Alice` whose phone number is `91234567`.
-* `find -d "Task 1" -l ProjectA` returns any person who has a task containing "Task 1" and belongs to project `ProjectA`.
 
 [↑ Back to Features](#features)
 
@@ -541,7 +540,7 @@ Action | Format, Examples
 **View Projects** | `project list`
 **Delete Person** | `delete PERSON_INDEX`<br> e.g., `delete 3`
 **Edit Person** | `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-d TASK]…​ [-l PROJECT]…​` <br> e.g., `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
-**Find Person** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find Person** | `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]`<br> e.g., `find -n James -p 91234567`
 **List Person** | `list`
 **Clear** | `clear`
 **Undo** | `undo`

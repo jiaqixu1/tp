@@ -280,7 +280,7 @@ TaskForge supports project management through the parent command `project` with 
 - `project list`
 - `project assign PERSON_INDEX -i PROJECT_INDEX`
 - `project unassign PERSON_INDEX -i PROJECT_INDEX`
-- `project find [KEYWORD]`
+- `project find KEYWORD [MORE_KEYWORDS]`
 - `project members PROJECT_INDEX`
 
 #### Implementation overview
@@ -385,14 +385,14 @@ This ensures a person can only be assigned to valid existing projects.
 
 ### Task management feature (`task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task mark`, `task unmark`)
 
-TaskForge supports task management using 10 commands:
+TaskForge supports task management using 9 commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
 - `task delete PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`
 - `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`
 - `task list PROJECT_INDEX`
 - `task find KEYWORD [MORE_KEYWORDS]`
 - `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`
-- `task unassign INDEX -i TASK_INDEX_FROM_PERSON`
+- `task unassign PERSON_INDEX -i TASK_INDEX_FROM_PERSON`
 - `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 - `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 
@@ -419,7 +419,7 @@ TaskForge supports task management using 10 commands:
     - `TaskForgeParser` routes `task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task mark`, and `task unmark` to their corresponding command parsers/commands.
 
 3. **Parser flow**
-   - `TaskForge#parseCommand` routes top-level `task` input to `TaskForgeParser#handleTask`.
+   - `TaskForgeParser#parseCommand` routes top-level `task` input to `TaskForgeParser#handleTask`.
    - `handleTask` extracts the task subcommand and dispatches as follows:
       - `add` -> `AddTaskCommandParser`
       - `delete` -> `DeleteTaskCommandParser`
@@ -449,7 +449,7 @@ TaskForge supports task management using 10 commands:
 - `DeleteTaskCommand` removes task(s) from a project by project index and task index.
 - `TaskForge#cascadeRemoveDeletedProjectTasksFromPersons()` automatically removes the deleted task from all persons who have it assigned.
 
-**Task editing in project (`task edit`)**:
+**Task editing from assigned person (`task edit`)**:
 - `EditTaskCommand` validates that the person index and task index is within bounds.
 - The command renames the selected project task and rejects duplicates via `MESSAGE_DUPLICATE_TASK`.
 - Before applying the rename, the command snapshots people currently assigned to the original task.
@@ -466,9 +466,9 @@ TaskForge supports task management using 10 commands:
 - Updates the filtered project list to show projects that contain matching tasks.
 
 **Task assignment to person (`task assign`)**:
-- `AssignTaskCommand` resolves each selected `TASK_INDEX` into a `(projectIndex, taskIndex)` pair based on tasks
+- AssignTaskCommand resolves each `(PROJECT_INDEX, TASK_INDEX_FROM_PROJECT)` pair against the global project list and the selected project's task list.
   available from the person's assigned projects.
-- Invalid `TASK_INDEX` values are rejected.
+- Invalid `TASK_INDEX_FROM_PROJECT` values are rejected.
 - Rejects duplicate assignments via `MESSAGE_DUPLICATE_TASK`.
 
 **Task unassignment from person (`task unassign`)**:
@@ -507,7 +507,7 @@ TaskForge supports task management using 10 commands:
 - If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
 - `AddTaskCommand` and `DeleteTaskCommand` resolve the target project from the list and validate the project index before executing.
 - `EditTaskCommand` resolves the target person by index and validates both the person index and task index before executing.
-- `ListTaskCommand` resolves the target project by project name and fails if the project does not exist.
+- `ListTaskCommand` resolves the target project by project index and fails if the project does not exist.
 - `FindTaskCommand` resolves across all project task lists and returns matching task entries in `taskName - projectName` format.
 - On success, `AddTaskCommand`, `DeleteTaskCommand`, `EditTaskCommand`, `AssignTaskCommand`, and `UnassignTaskCommand` update the model.
 - `ListTaskCommand` and `FindTaskCommand` only retrieve and display information without modifying model data.
@@ -523,7 +523,7 @@ The availability status is displayed in the `PersonCard` UI as a colored circle 
 
 - Model side: assigned projects/tasks are stored on `Person` as references (`PersonProject`, `PersonTask`) to Project and Task.
 - Storage side: JSON loading enforces that project and task references remain valid against the global project or project's task lists before data is accepted.
-- This ensure consistent when editing data from the database.
+- This ensures consistency when editing data directly in the JSON storage file.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -555,24 +555,25 @@ The availability status is displayed in the `PersonCard` UI as a colored circle 
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                           | So that I can…​                                                              |
-|---------|------|----------------------------------------|------------------------------------------------------------------------------|
-| `* * *` | user | add a person                          | keep track of project members.                                               |
-| `* * *` | user | delete a person                       | remove outdated information or remove a member from the project.             |
-| `* * *` | user | add a project                          | keep track of projects.                                                      |
-| `* * *` | user | remove a project                       | remove completed or discarded project.                                       |
-| `* * *` | user | assign a project to a person          | assign member to the project                                                 |
-| `* * *` | user | unassign a project from a person      | remove members from a project                                                |
-| `* * *` | user | add tasks to person                   | clearly know about their responsibilities                                    |
-| `* * *` | user | delete tasks from a person            | easily remove tasks that is falsely assigned to the person or has been done |
+| Priority | As a …​ | I want to …​                          | So that I can…​                                                             |
+|---------|------|---------------------------------------|-----------------------------------------------------------------------------|
+| `* * *` | user | add a person                          | keep track of project members.                                              |
+| `* * *` | user | delete a person                       | remove outdated information or remove a member from the project.            |
+| `* * *` | user | add a project                         | keep track of projects.                                                     |
+| `* * *` | user | remove a project                      | remove completed or discarded project.                                      |
+| `* * *` | user | assign a project to a person          | assign member to the project                                                |
+| `* * *` | user | unassign a project from a person      | remove members from a project                                               |
+| `* * *` | user | assign tasks to person                | clearly know about their responsibilities                                   |
+| `* * *` | user | unassign tasks from a person          | easily remove tasks that is falsely assigned to the person or has been done |
 | `* * *` | user | view all persons                      | see all the project members persons                                         |
-| `* * *` | user | view all projects                      | easily have an overview of all projects                                      |
+| `* * *` | user | view all projects                     | easily have an overview of all projects                                     |
+| `* * *` | user | view all persons under a project      | see all the members under a project                                         |
 | `* * *` | user | view all tasks assigned to the person | see all the tasks assigned to a person                                      |
-| `* * *` | user | find projects by name                  | quickly locate relevant projects from the global project list                |
-| `* * *` | user | find persons by any parameters        | quickly find someone                                                         |
-| `*`     | user | view person's availability        | who is free to take on work                                                  |
-| `* * `  | user | undo the last action                   | recover from mistakes                                                       |
-| `* * `  | user | redo the last action                   | restore changes if I undo by mistake                                     |
+| `* * *` | user | find projects by name                 | quickly locate relevant projects from the global project list               |
+| `* * *` | user | find persons by any parameters        | quickly find someone                                                        |
+| `*`     | user | view person's availability            | who is free to take on work                                                 |
+| `* * `  | user | undo the last action                  | recover from mistakes                                                       |
+| `* * `  | user | redo the last action                  | restore changes if I undo by mistake                                        |
 
 *{More to be added}*
 
@@ -743,7 +744,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2. TaskForge displays the list of persons.
 3. User requests to assign a task to a person.
 4. TaskForge checks the existence of the person
-5. TaskForge assigns a project to a person and displays success message.
+5. TaskForge assigns a task to a person and displays success message.
 
    Use case ends.
 
@@ -1227,35 +1228,6 @@ testers are expected to do more *exploratory* testing.
       Execeute `task add 1 -n Beta` and then `task add 2 -n Beta`.
       Expected: Allowed, because uniqueness is enforced per project task list.
 
-### Finding a project
-1. Finding project(s) by keyword
-
-   i. Prerequistes: Execute the following commands before testing:
-    - `clear`
-    - `project add Alpha`
-    - `project add Beta`
-    - `project add AlphaWeb`
-    - `project add Gamma`
-
-   ii. Test case: `project find Alpha`<br>
-   Expected: Projects containing `Alpha` are displayed.
-
-   iii. Test case: `project find Beta`<br>
-   Expected: Project `Beta` is displayed.
-
-   iv. Test case: `project find alpha`<br>
-   Expected: Behaviour depends on implementation (case-sensitive or case-insensitive).
-
-   v. Test case: `project find Zeta`<br>
-   Expected: No matching project found message.
-
-   vi. Test case: `project find`<br>
-   Expected: Invalid command format error.
-
-   vii. Test case: `project find Alpha Web`<br>
-   Expected: Projects matching the keywords are displayed.
-
-
 ### Help command
 1. Opening the help window
 
@@ -1401,7 +1373,7 @@ Team Size: 4
 
 3. **Improve error message for multiple task assignments**: The current behavior generates a general error message for every duplicate or invalid task assignment when executing the `assign` command. To tackle this, we plan to add the task details, such as the task name, in the error message so users can identify which assignment caused the issue.
 
-4. **Improve person name validation**: The current behaviour only accepts names containing alphabet characters. In the future, we plan to improve name validation to accept valid names containing special characters (for example: ', -).
+4. **Improve person name validation**: The current behaviour only accepts names containing alphanumerics and spaces. In the future, we plan to improve name validation to accept valid names containing special characters (for example: ', -).
 
 5. **Allow more phone numbers format**: The current implementation only support phone number entries with number only. We plan to improve our validator to accept more phone number formats.
 

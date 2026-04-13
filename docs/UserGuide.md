@@ -326,7 +326,7 @@ While task management commands deal with assigning/unassigning tasks to/from per
 Basic commands:
 - [add](#adding-a-task-to-a-project--task-add)
 - [delete](#deleting-a-task-from-a-project--task-delete)
-- [edit](#editing-a-task-in-a-project--task-edit)
+- [edit](#editing-a-task-assigned-to-a-person--task-edit)
 - [find](#finding-tasks-by-keyword--task-find)
 
 Task management commands:

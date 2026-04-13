@@ -61,7 +61,7 @@ class JsonAdaptedProject {
 
         List<Task> modelTasks = new ArrayList<>();
         for (JsonAdaptedTask task : tasks) {
-            modelTasks.add(task.toModelType());
+            modelTasks.add(task.toModelType(title));
         }
 
         return new Project(title, modelTasks);

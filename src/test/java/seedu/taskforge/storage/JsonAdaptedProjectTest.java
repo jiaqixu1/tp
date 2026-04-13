@@ -27,6 +27,7 @@ public class JsonAdaptedProjectTest {
 
         assertEquals(new Project("alpha", Arrays.asList(new Task("Refactor"), new Task("Fix bug"))), modelProject);
         assertEquals(2, modelProject.getTasks().size());
+        assertEquals("alpha", modelProject.getTasks().get(0).getProjectTitle());
     }
 
     @Test

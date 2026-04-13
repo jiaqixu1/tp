@@ -12,7 +12,6 @@ import seedu.taskforge.model.task.Task;
 class JsonAdaptedTask {
 
     private final String description;
-    private final String projectTitle;
     private final Boolean isDone;
 
     /**
@@ -20,15 +19,9 @@ class JsonAdaptedTask {
      */
     @JsonCreator
     public JsonAdaptedTask(@JsonProperty("description") String description,
-                           @JsonProperty("projectTitle") String projectTitle,
                            @JsonProperty("isDone") Boolean isDone) {
         this.description = description;
-        this.projectTitle = projectTitle;
         this.isDone = isDone;
-    }
-
-    public JsonAdaptedTask(String description, String projectTitle) {
-        this(description, projectTitle, null);
     }
 
     /**
@@ -36,7 +29,6 @@ class JsonAdaptedTask {
      */
     public JsonAdaptedTask(Task source) {
         description = source.description;
-        projectTitle = source.getProjectTitle();
         isDone = source.getStatus();
     }
 
@@ -50,6 +42,10 @@ class JsonAdaptedTask {
      * @throws IllegalValueException if there were any data constraints violated in the adapted task.
      */
     public Task toModelType() throws IllegalValueException {
+        return toModelType(null);
+    }
+
+    public Task toModelType(String projectTitle) throws IllegalValueException {
         if (!Task.isValidTaskDescription(description)) {
             throw new IllegalValueException(Task.MESSAGE_CONSTRAINTS);
         }

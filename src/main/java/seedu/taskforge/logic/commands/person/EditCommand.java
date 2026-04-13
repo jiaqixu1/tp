@@ -73,7 +73,7 @@ public class EditCommand extends Command {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
-        if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
+        if (hasConflictingIdentity(model, personToEdit, editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
@@ -82,6 +82,16 @@ public class EditCommand extends Command {
         model.commitTaskForge(COMMAND_WORD);
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS,
             Messages.formatPersonSummary(editedPerson)));
+    }
+
+    /**
+     * Returns true if another person (excluding {@code personToEdit}) has the same phone or email
+     * as {@code editedPerson}.
+     */
+    private static boolean hasConflictingIdentity(Model model, Person personToEdit, Person editedPerson) {
+        return model.getTaskForge().getPersonList().stream()
+                .filter(person -> !person.equals(personToEdit))
+                .anyMatch(editedPerson::isSamePerson);
     }
 
     /**

@@ -148,7 +148,7 @@ Format: `redo`
 
 Shows a message explaining all the commands and contains a button to open the UserGuide.
 
-![help message](images/helpMessage.png)
+![help message](images/HelpCommandMessage.png)
 
 Format: `help`
 

@@ -98,7 +98,7 @@ This section is split into 4 subsections:
   e.g. in `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `-n NAME [-d TASK]` can be used as `-n John Doe -d task1` or as `-n John Doe`.
+  e.g `[-n NAME] [-e EMAIL]` can be used as `-n John Doe -e johndoe@gmail.com` or as `-n John Doe` or as `-e johndoe@gmail.com`.
 
 * Items with `…`​ after square brackets can be used multiple times including zero times.<br>
   e.g. `[-d TASK]…​` can be used as ` ` (i.e. 0 times), `-d task1`, `-d task2 -d task3` etc.
@@ -230,6 +230,27 @@ Format: `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL]`
 > [!NOTE]
 > Project and task assignments are managed by the `project assign/unassign` and `task assign/unassign` commands.
 
+**Input constraints:**
+* **Name**
+    * Can contain only alphanumeric characters and spaces.
+    * Cannot be blank.
+    * Duplicate names are allowed.
+
+* **Phone number**
+    * Must contain numbers only.
+    * Must be at least 3 digits long.
+    * Must be unique across all persons.
+
+* **Email**
+    * Must be in the format `local-part@domain`.
+    * The local-part may contain only alphanumeric characters and the special characters `+`, `_`, `.`, `-`.
+    * The local-part must not start or end with a special character.
+    * The domain consists of domain labels separated by periods.
+    * The domain must end with a label that is at least 2 characters long.
+    * Each domain label must start and end with an alphanumeric character.
+    * Each domain label may contain hyphens, but only between alphanumeric characters.
+    * Must be unique across all persons.
+
 Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -n Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
@@ -314,7 +335,6 @@ Example:
 Displays all projects currently available in TaskForge.
 
 Format: `project list`
-
 
 #### Finding projects by name : `project find`
 
@@ -578,7 +598,7 @@ This summary is split into 4 main sections:
 
 Action | Format | Example
 --------|--------|--------
-**[Add](#adding-a-person-add)** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]… [-l PROJECT]…` | `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
+**[Add](#adding-a-person-add)** | `add -n NAME -p PHONE_NUMBER -e EMAIL` | `add -n James Ho -p 22224444 -e jamesho@example.com`
 **[Delete](#deleting-a-person--delete)** | `delete PERSON_INDEX` | `delete 3`
 **[Edit](#editing-a-person--edit)** | `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL]` | `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
 **[List](#listing-all-persons--list)** | `list` |

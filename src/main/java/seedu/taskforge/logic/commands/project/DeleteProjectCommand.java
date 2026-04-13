@@ -19,8 +19,8 @@ public class DeleteProjectCommand extends ProjectCommand {
     public static final String SUBCOMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
-            + ": Deletes one or more project from TaskForge.\n"
-            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " {PROJECT_INDEX}\n"
+            + ": Deletes a project from TaskForge.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PROJECT_INDEX\n"
             + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PROJECT_SUCCESS = "Deleted Project: %1$s";

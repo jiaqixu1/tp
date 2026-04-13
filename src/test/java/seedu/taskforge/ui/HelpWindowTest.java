@@ -27,7 +27,6 @@ import seedu.taskforge.logic.commands.task.ListTaskCommand;
 import seedu.taskforge.logic.commands.task.MarkTaskCommand;
 import seedu.taskforge.logic.commands.task.UnassignTaskCommand;
 import seedu.taskforge.logic.commands.task.UnmarkTaskCommand;
-import seedu.taskforge.logic.commands.task.ViewTasksCommand;
 
 public class HelpWindowTest {
 
@@ -59,7 +58,6 @@ public class HelpWindowTest {
                 + FindTaskCommand.MESSAGE_USAGE + "\n\n"
                 + AssignTaskCommand.MESSAGE_USAGE + "\n\n"
                 + UnassignTaskCommand.MESSAGE_USAGE + "\n\n"
-                + ViewTasksCommand.MESSAGE_USAGE + "\n\n"
                 + MarkTaskCommand.MESSAGE_USAGE + "\n\n"
                 + UnmarkTaskCommand.MESSAGE_USAGE + "\n\n"
                 + "GENERAL COMMANDS\n"

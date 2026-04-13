@@ -382,7 +382,7 @@ When a user adds or edits a person including changing project assignments, each 
 
 This ensures a person can only be assigned to valid existing projects.
 
-### Task management feature (`task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task view`, `task mark`, `task unmark`)
+### Task management feature (`task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task mark`, `task unmark`)
 
 TaskForge supports task management using 10 commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
@@ -392,7 +392,6 @@ TaskForge supports task management using 10 commands:
 - `task find KEYWORD [MORE_KEYWORDS]`
 - `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`
 - `task unassign INDEX -i TASK_INDEX_FROM_PERSON`
-- `task view PERSON_INDEX`
 - `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 - `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 
@@ -413,11 +412,10 @@ TaskForge supports task management using 10 commands:
     - `FindTaskCommand` finds task(s) across all projects by keyword(s).
     - `AssignTaskCommand` assigns existing task(s) to a person.
     - `UnassignTaskCommand` unassigns task(s) from a person.
-    - `ViewTasksCommand` displays all tasks assigned to a person.
     - `MarkTaskCommand` marks a task as done for a specific person.
     - `UnmarkTaskCommand` marks a task as not done for a specific person.
     - `TaskForgeParser` routes task subcommands to their corresponding command parsers/commands.
-    - `TaskForgeParser` routes `task add`, `task delete`, `task list`, `task find`, `task assign`, `task unassign`, and `task view` to their corresponding command parsers/commands.
+    - `TaskForgeParser` routes `task add`, `task delete`, `task list`, `task find`, `task assign`, and `task unassign` to their corresponding command parsers/commands.
 
 3. **Parser flow**
    - `TaskForge#parseCommand` routes top-level `task` input to `TaskForgeParser#handleTask`.
@@ -429,7 +427,6 @@ TaskForge supports task management using 10 commands:
       - `find` -> `FindTaskCommandParser`
       - `assign` -> `AssignTaskCommandParser`
       - `unassign` -> `UnassignTaskCommandParser`
-      - `view` -> `ViewTasksCommandParser`
       - `mark` -> `MarkTaskCommandParser`
       - `unmark` -> `UnmarkTaskCommandParser`
    - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
@@ -473,10 +470,6 @@ TaskForge supports task management using 10 commands:
 - Invalid `TASK_INDEX` values are rejected.
 - Rejects duplicate assignments via `MESSAGE_DUPLICATE_TASK`.
 
-**Task viewing (`task view`)**:
-- `ViewTasksCommand` retrieves the selected person's task list and displays all tasks assigned to that person.
-- No validation is required; the command only retrieves and displays information.
-
 **Task unassignment from person (`task unassign`)**:
 - `UnassignTaskCommand` removes task(s) from a person by task index.
 - Validates whether or not the task exist in the person's assigned projects before unassignment.
@@ -503,21 +496,20 @@ TaskForge supports task management using 10 commands:
 - `FindTaskCommandParser` parses the input into one or more keywords.
 - `AssignTaskCommandParser` parses the preamble as the target `PERSON_INDEX`, parses `PROJECT_INDEX` from `-pi`, and parses one or more `TASK_INDEX_FROM_PROJECT` values using repeated `-i` prefixes.
 - `UnassignTaskCommandParser` parses the preamble as the target `PERSON_INDEX` and parses one or more `TASK_INDEX_FROM_PERSON` values using repeated `-i` prefixes.
-- `ViewTasksCommandParser` parses the preamble as the target `PERSON_INDEX`.
 - `MarkTaskCommandParser` and `UnmarkTaskCommandParser` parse the preamble as the target `PERSON_INDEX` followed by `TASK_INDEX_FROM_PERSON`.
 - If no task indexes are provided where required (e.g., `task delete PROJECT_INDEX`, `task assign PERSON_INDEX -pi PROJECT_INDEX`, or `task unassign PERSON_INDEX`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 - If an incomplete task argument is provided (e.g., `task delete PROJECT_INDEX -i`, `task assign PERSON_INDEX -pi PROJECT_INDEX -i`, or `task unassign PERSON_INDEX -i`), parsing fails with the corresponding `MESSAGE_NOT_EDITED`.
 
 #### Execution behavior and validation
 
-- Person-targeting command`, `task unassign`, `task view`) resolve the target person from `model.getFilteredPersonList()` using the supplied person `PERSON_INDEX`.
+- Person-targeting command `task unassign` resolve the target person from `model.getFilteredPersonList()` using the supplied person `PERSON_INDEX`.
 - If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
 - `AddTaskCommand` and `DeleteTaskCommand` resolve the target project from the list and validate the project index before executing.
 - `EditTaskCommand` resolves the target person by index and validates both the person index and task index before executing.
 - `ListTaskCommand` resolves the target project by project name and fails if the project does not exist.
 - `FindTaskCommand` resolves across all project task lists and returns matching task entries in `taskName - projectName` format.
 - On success, `AddTaskCommand`, `DeleteTaskCommand`, `EditTaskCommand`, `AssignTaskCommand`, and `UnassignTaskCommand` update the model.
-- `ListTaskCommand`, `FindTaskCommand`, and `ViewTasksCommand` only retrieve and display information without modifying model data.
+- `ListTaskCommand` and `FindTaskCommand` only retrieve and display information without modifying model data.
 
 #### Availability feature
 
@@ -722,36 +714,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-**Use case: UC06 View all tasks assigned to a contact**
-
-**Guarantees**
-
-1. The tasks assigned to the selected contact are displayed if the input is valid.
-2. No data is modified during this operation.
-
-**MSS**
-
-1. User requests to view all contacts.
-2. TaskForge displays the list of contacts.
-3. User requests to view all tasks assigned to a contact.
-4. TaskForge displays all tasks assigned to the selected contact.
-
-   Use case ends.
-
-**Extensions**
-
-* 1a. The specified contact index is invalid.
-    * 3a1. TaskForge displays an error message.
-    * 3a2. User enters a valid command again.
-
-      Use case resumes at step 4.
-
-* 1b. The selected contact has no assigned tasks.
-    * 3b1. TaskForge displays a message indicating that the contact has no tasks.
-
-      Use case ends.
-
-**Use case: UC07 - Undo previous command**
+**Use case: UC06 - Undo previous command**
 
 **Actor**: User
 
@@ -965,7 +928,7 @@ testers are expected to do more *exploratory* testing.
       `task add 2 -n Prepare Demo`
       `task assign 1 -pi 1 -i 1 -pi 2 -i 1`
    ii. Test case: `project unassign 1 -i 2`<br>
-      Expected: Success message is shown. Alice no longer has the second assigned project, and `task view 1` no longer shows tasks that belong to that removed project.
+      Expected: Success message is shown. Alice no longer has the second assigned project.
    iii. Test case: `project unassign 1 -i 3`<br>
       Expected: No data is changed. An invalid project index error is shown.
 
@@ -981,7 +944,7 @@ testers are expected to do more *exploratory* testing.
        `task add 1 -n Draft API`
        `task assign 1 -pi 1 -i 1`
    ii. Test case: `task edit 1 -i 1 -n Finalise API`<br>
-   Expected: Success message is shown. `task view 1` and `task list 1` both show `Finalise API`, and `Draft API` is no longer shown.
+   Expected: Success message is shown. `task list 1` shows `Finalise API`, and `Draft API` is no longer shown.
    iii. Test case: `task edit 2 -i 1 -n Anything`<br>
    Expected: No data is changed. An invalid person index error is shown.
    iv. Test case: `task edit 1 -i 2 -n Anything`<br>
@@ -1031,7 +994,6 @@ testers are expected to do more *exploratory* testing.
    - `project assign 1 -i 1`
    - `task assign 1 -pi 1 -i 1`
    - `project list`
-   - `task view 1`
 
    ii. Test case: `project delete 1`<br>
       Expected: Project at index `1` is deleted. That project is deleted from every Persons/Contacts that have been assigned along with their tasks.
@@ -1069,7 +1031,6 @@ testers are expected to do more *exploratory* testing.
    - `task add 1 -n TempA`
    - `task add 1 -n TempB`
    - `task assign 1 -pi 1 -i 1`
-   - `task view 1`
 
    ii. Test case: `task delete 1 -i 1`<br>
       Expected: Task at index `1` in project `1` is deleted. Any contact/person assignment of that task is deleted. The other remaining task assignments of that contacts/persons will get their index renumbered.
@@ -1088,7 +1049,6 @@ testers are expected to do more *exploratory* testing.
    - `project assign 1 -i 1`
    - `task add 1 -n AssignMe`
    - `task add 2 -n BetaTask`
-   - `task view 1`
 
    ii. Test case: `task assign 1 -pi 1 -i 1`<br>
       Expected: Task is assigned to person `1` successfully.
@@ -1115,7 +1075,6 @@ testers are expected to do more *exploratory* testing.
    - `project assign 1 -i 1`
    - `task add 1 -n RemoveMe`
    - `task assign 1 -pi 1 -i 1`
-   - `task view 1`
 
    ii. Test case: `task unassign 1 -i 1`<br>
       Expected: First task in that person's assigned-task view is removed.
@@ -1142,38 +1101,6 @@ testers are expected to do more *exploratory* testing.
       Add same task name to a different project.
       Execeute `task add 1 -n Beta` and then `task add 2 -n Beta`.
       Expected: Allowed, because uniqueness is enforced per project task list.
-
-### Viewing all tasks per person
-1. Viewing all tasks of a person
-
-   i. Prerequistes: Execute the following commands before testing:
-    - `clear`
-    - `add -n Alice -p 11111111 -e alice@example.com`
-    - `add -n Bob -p 22222222 -e bob@example.com`
-    - `project add Alpha`
-    - `project add Beta`
-    - `project assign 1 -i 1`
-    - `project assign 1 -i 2`
-    - `task add 1 -n AlphaTask`
-    - `task add 2 -n BetaTask`
-    - `task assign 1 -pi 1 -i 1`
-    - `task assign 1 -pi 2 -i 1`
-
-   ii. Test case: `task view 1`<br>
-   Expected: All tasks assigned to person `1` are displayed.
-
-   iii. Test case: `task view 2`<br>
-   Expected: No assigned tasks message is shown.
-
-   iv. Test case: `task view 0`<br>
-   Expected: Invalid person index error.
-
-   v. Test case: `task view 999`<br>
-   Expected: Invalid person index error.
-
-   vi. Test case: `task view abc`<br>
-   Expected: Invalid command format error.
-
 
 ### Finding a project
 1. Finding project(s) by keyword

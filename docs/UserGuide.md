@@ -3,7 +3,21 @@ layout: page
 title: User Guide
 ---
 
-TaskForge is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TaskForge can get your contact management tasks done faster than traditional GUI apps.
+TaskForge is a **desktop app for project management**, optimized for project/team managers and leaders who prefer typing commands.
+It combines a fast Command Line Interface (CLI) with visual lists so you can verify changes at a glance.
+
+**Value proposition**: TaskForge brings value to those who find existing project management apps cumbersome to use due to issues such as:
+- complicated user interface with features that are unnecessary
+- limited features available for free users, requiring users to subscribe to paid plans to access essential features
+- lack of support for efficient keyboard-based interactions
+
+**Target users**:
+- Working professionals or students who are project/team managers, and leaders.
+- Users comfortable reading simple command formats like `add -n NAME -p PHONE`.
+- Users comfortable with basic command-line usage (e.g., running `java -jar ...`).
+> [!NOTE]
+> This guide is intended for users who are comfortable with basic command-line usage.
+> If you are new to command-line interfaces, you may need to familiarize themselves with Java installation and command syntax before using the application effectively.
 
 * Table of Contents
 {:toc}
@@ -524,20 +538,6 @@ Format: `task list PROJECT_INDEX`
 
 Examples:
 * `task list 1`
-
-#### Viewing all tasks of a person : `task view`
-
-Displays all tasks assigned to a person.
-
-Format: `task view PERSON_INDEX`
-
-* Shows all tasks assigned to the person at the specified `PERSON_INDEX`.
-* `PERSON_INDEX` refers to the person index displayed in `list`.
-* `PERSON_INDEX` **must be a positive integer** `1, 2, 3, ...`
-* If the person has no tasks, a message will be shown.
-
-Example:
-* `task view 1`
 
 [↑ Back to Features](#features)
 

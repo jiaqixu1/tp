@@ -415,7 +415,7 @@ TaskForge supports task management using 10 commands:
     - `MarkTaskCommand` marks a task as done for a specific person.
     - `UnmarkTaskCommand` marks a task as not done for a specific person.
     - `TaskForgeParser` routes task subcommands to their corresponding command parsers/commands.
-    - `TaskForgeParser` routes `task add`, `task delete`, `task list`, `task find`, `task assign`, and `task unassign` to their corresponding command parsers/commands.
+    - `TaskForgeParser` routes `task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task mark`, and `task unmark` to their corresponding command parsers/commands.
 
 3. **Parser flow**
    - `TaskForge#parseCommand` routes top-level `task` input to `TaskForgeParser#handleTask`.

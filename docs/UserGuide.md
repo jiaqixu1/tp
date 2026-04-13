@@ -119,7 +119,7 @@ This section is split into 4 subsections:
 
 ### General
 
-There are 5 general commands that deals with clearing all entries, undoing the previous command, redoing the previous command, viewing help, and exiting the program.
+There are 5 general commands that deal with clearing all entries, undoing the previous command, redoing the previous command, viewing help, and exiting the program.
 - [clear](#clearing-all-entries--clear)
 - [undo](#undoing-previous-command--undo)
 - [redo](#redoing-previous-command--redo)
@@ -146,7 +146,7 @@ Format: `redo`
 
 #### Viewing help : `help`
 
-Shows a message explaining all the commands and contains a button to open the UserGuide.
+Shows a message explaining all the commands and contains a button to open the User Guide.
 
 ![help message](images/helpMessage.png)
 
@@ -174,7 +174,7 @@ There are 5 basic person commands that deal with adding, deleting, editing, list
 
 Adds a person to TaskForge.
 
-Format: `add -n NAME -p PHONE_NUMBER -e EMAIL
+Format: `add -n NAME -p PHONE_NUMBER -e EMAIL`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person must have valid unique phone number and email.
@@ -211,7 +211,7 @@ Deletes the specified person from TaskForge.
 Format: `delete PERSON_INDEX`
 
 * Deletes the person at the specified `PERSON_INDEX`.
-* `PERSON_INDEX` to the index number shown in the displayed person list.
+* `PERSON_INDEX` refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
@@ -311,7 +311,7 @@ Format: `project add PROJECT_TITLE`
 * Adds a new project with the specified project title.
 * `PROJECT_TITLE` must contain letters, numbers, and spaces only, and it should be between 1 to 64 characters.
 * Duplicate project titles are not allowed.
-* Project titles are automatically normalized to title case, where each word(separated by space) in the project name, the first letter is capitalized and the remaining letters are converted to lowercase.
+* Project titles are automatically normalized to title case, where each word (separated by space) in the project name, the first letter is capitalized and the remaining letters are converted to lowercase.
 
 Examples:
 * `project add web app` adds a new project named `Web App`.
@@ -403,7 +403,7 @@ Format: `project members PROJECT_INDEX`
 
 ### Task
 There are 4 basic task commands and 5 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
-While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project/person.
+While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project.
 
 Basic commands:
 - [add](#adding-a-task-to-a-project--task-add)
@@ -459,7 +459,7 @@ Edits the name of a task assigned to a person.
 
 Format: `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`
 
-* Edits the task at `TASK_INDEX_FROM_PERSON` from person with index `PERSON_INDEX`.
+* Edits the task at `TASK_INDEX_FROM_PERSON` from the person with index `PERSON_INDEX`.
 * `TASK_INDEX_FROM_PERSON` refers to the task index shown for the specified person.
 * `TASK_INDEX_FROM_PERSON` **must be a positive integer** `1, 2, 3, ...`
 * `NEW_TASK_NAME` must follow the same naming constraints as `TASK_NAME` in `task add`.
@@ -518,7 +518,7 @@ Examples:
 
 #### Marking a task as done : `task mark`
 
-Marks a task as done for an existing person.
+Marks a person's task as done. Changes the done status of every instance of the task.
 
 Format: `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 
@@ -532,7 +532,7 @@ Example:
 
 #### Unmarking a task as done : `task unmark`
 
-Unmarks a task as done for an existing person.
+Marks a person's task as not done. Changes the done status of every instance of the task.
 
 Format: `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 

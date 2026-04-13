@@ -68,7 +68,7 @@ public class HelpWindow extends UiPart<Stage> {
                     + "GENERAL COMMANDS\n"
                     + "------------------------------\n"
                     + ClearCommand.MESSAGE_USAGE + "\n\n"
-                    + HelpCommand.MESSAGE_USAGE;
+                    + HelpCommand.MESSAGE_USAGE + "\n\n";
     public static final String USER_GUIDE_URL =
             "https://ay2526s2-cs2103t-w09-4.github.io/tp/UserGuide.html#quick-start";
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);

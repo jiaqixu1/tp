@@ -13,6 +13,7 @@ title: Developer Guide
 * Widespread code reuse of AI-generated work (GitHub Copilot) by Hsu, used for auto complete, generate alternative solutions, generate fixes/help with debugging, generate some code solutions.
 * Widespread code reuse of AI-generated work (Codex) by Kevin, used to generate some methods and solutions, help understand and decide relevant JavaFX features, UI color suggestions, generate potential fixes for bugs, and polish documentation. It was also used for generate and refine tests. I reviewed, adapted, and verified the final submitted work myself. 
 * Widespread code reuse of AI-generated work (GitHub Copilot) by Vu, used to plan the idea of some unit test cases, suggesting implementation solutions and generating some error log messages. All of the content generating by AI has been closely revised before committing and pushing to the repo.
+* Widespread code reuse of AI-generated work (ChatGPT) by Jiaqi, used for debugging, generating alternative solutions, improving code clarity. All generated content was carefully reviewed, adapted, and verified before committing and pushing to the repo.
 * Code reuse of AB3 UserGuide and DeveloperGuide sections.
 
 --------------------------------------------------------------------------------------------------------------------

@@ -51,23 +51,18 @@ public class FindCommandParserTest {
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(Arrays.asList("Alice"))
                 .setPhoneKeywords(Arrays.asList("91234567"))
-                .setEmailKeywords(Arrays.asList("alice@example.com"))
-                .setTaskKeywords(Arrays.asList("Task1"))
-                .setProjectKeywords(Arrays.asList("Project1"));
+                .setEmailKeywords(Arrays.asList("alice@example.com"));
         FindCommand expectedFindCommand = new FindCommand(predicate);
-        assertParseSuccess(parser, " -n Alice -p 91234567 -e alice@example.com -d Task1 -l Project1",
-                expectedFindCommand);
+        assertParseSuccess(parser, " -n Alice -p 91234567 -e alice@example.com", expectedFindCommand);
 
         // multiple keywords in one field
         predicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(Arrays.asList("Alice", "Bob"))
                 .setPhoneKeywords(Arrays.asList("91234567", "8888"))
-                .setEmailKeywords(Arrays.asList("alice@example.com", "bob@example.com"))
-                .setTaskKeywords(Arrays.asList("Task1", "Task2"))
-                .setProjectKeywords(Arrays.asList("Project1", "Project2"));
+                .setEmailKeywords(Arrays.asList("alice@example.com", "bob@example.com"));
         expectedFindCommand = new FindCommand(predicate);
-        assertParseSuccess(parser, " -n Alice Bob -p 91234567 8888 -e alice@example.com bob@example.com "
-                + "-d Task1 Task2 -l Project1 Project2", expectedFindCommand);
+        assertParseSuccess(parser, " -n Alice Bob -p 91234567 8888 -e alice@example.com bob@example.com",
+                expectedFindCommand);
 
         // duplicate prefixes
         PersonContainsKeywordsPredicate predicate2 = new PersonContainsKeywordsPredicate()
@@ -85,26 +80,17 @@ public class FindCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
         assertParseFailure(parser, " -e   ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
-        assertParseFailure(parser, " -d   ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
-        assertParseFailure(parser, " -l   ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
 
         // multiple parameters with empty whitespace string for parameters
-        assertParseFailure(parser, " -n -p 91234567 -e email@gmail.com -d Task1 -l project1 ",
+        assertParseFailure(parser, " -n -p 91234567 -e email@gmail.com ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
 
-        assertParseFailure(parser, " -n Alice -p -e email@gmail.com -d Task1 -l project1 ",
+        assertParseFailure(parser, " -n Alice -p -e email@gmail.com ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
 
-        assertParseFailure(parser, " -n Alice -p 91234567 -e email@gmail.com -d -l project1 ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
-
-        assertParseFailure(parser, " -n Alice -p 91234567 -e -d Task1 -l project1 ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
-
-        assertParseFailure(parser, " -n Alice -p 91234567 -e email@gmail.com -d Task1 -l   ",
+        assertParseFailure(parser, " -n Alice -p 91234567 -e ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
     }
+
 
 }

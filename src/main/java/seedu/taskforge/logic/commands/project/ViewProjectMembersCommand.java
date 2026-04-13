@@ -34,6 +34,7 @@ public class ViewProjectMembersCommand extends ProjectCommand {
     public ViewProjectMembersCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
@@ -59,10 +60,21 @@ public class ViewProjectMembersCommand extends ProjectCommand {
         }
 
         String memberString = IntStream.range(0, members.size())
-                .mapToObj(i -> (i + 1) + ". " + members.get(i).getName().fullName)
+                .mapToObj(i -> formatMember(i, members.get(i)))
                 .collect(Collectors.joining("\n"));
 
         return new CommandResult(String.format(MESSAGE_MEMBERS_HEADER, targetProject.title, memberString));
+    }
+
+    /**
+     * Formats a project member for display.
+     */
+    private String formatMember(int displayIndex, Person person) {
+        return String.format("%d. %s | Phone: %s | Email: %s",
+                displayIndex + 1,
+                person.getName().fullName,
+                person.getPhone().value,
+                person.getEmail().value);
     }
 
     @Override

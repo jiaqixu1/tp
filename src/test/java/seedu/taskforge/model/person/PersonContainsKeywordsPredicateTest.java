@@ -25,18 +25,10 @@ public class PersonContainsKeywordsPredicateTest {
         List<String> emailKeywords = Collections.singletonList("alice@example.com");
         List<String> differentEmailKeywords = Collections.singletonList("bob@example.com");
 
-        List<String> taskKeywords = Collections.singletonList("Task1");
-        List<String> differentTaskKeywords = Collections.singletonList("Task2");
-
-        List<String> projectKeywords = Collections.singletonList("Project1");
-        List<String> differentProjectKeywords = Collections.singletonList("Project2");
-
         PersonContainsKeywordsPredicate basePredicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(nameKeywords)
                 .setPhoneKeywords(phoneKeywords)
-                .setEmailKeywords(emailKeywords)
-                .setTaskKeywords(taskKeywords)
-                .setProjectKeywords(projectKeywords);
+                .setEmailKeywords(emailKeywords);
 
         // same object -> returns true
         assertTrue(basePredicate.equals(basePredicate));
@@ -45,9 +37,7 @@ public class PersonContainsKeywordsPredicateTest {
         PersonContainsKeywordsPredicate basePredicateCopy = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(nameKeywords)
                 .setPhoneKeywords(phoneKeywords)
-                .setEmailKeywords(emailKeywords)
-                .setTaskKeywords(taskKeywords)
-                .setProjectKeywords(projectKeywords);
+                .setEmailKeywords(emailKeywords);
         assertTrue(basePredicate.equals(basePredicateCopy));
 
         // different types -> returns false
@@ -60,46 +50,22 @@ public class PersonContainsKeywordsPredicateTest {
         PersonContainsKeywordsPredicate differentNamePredicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(differentNameKeywords)
                 .setPhoneKeywords(phoneKeywords)
-                .setEmailKeywords(emailKeywords)
-                .setTaskKeywords(taskKeywords)
-                .setProjectKeywords(projectKeywords);
+                .setEmailKeywords(emailKeywords);
         assertFalse(basePredicate.equals(differentNamePredicate));
 
         // different phoneKeywords -> returns false
         PersonContainsKeywordsPredicate differentPhonePredicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(nameKeywords)
                 .setPhoneKeywords(differentPhoneKeywords)
-                .setEmailKeywords(emailKeywords)
-                .setTaskKeywords(taskKeywords)
-                .setProjectKeywords(projectKeywords);
+                .setEmailKeywords(emailKeywords);
         assertFalse(basePredicate.equals(differentPhonePredicate));
 
         // different emailKeywords -> returns false
         PersonContainsKeywordsPredicate differentEmailPredicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(nameKeywords)
                 .setPhoneKeywords(phoneKeywords)
-                .setEmailKeywords(differentEmailKeywords)
-                .setTaskKeywords(taskKeywords)
-                .setProjectKeywords(projectKeywords);
+                .setEmailKeywords(differentEmailKeywords);
         assertFalse(basePredicate.equals(differentEmailPredicate));
-
-        // different taskKeywords -> returns false
-        PersonContainsKeywordsPredicate differentTaskPredicate = new PersonContainsKeywordsPredicate()
-                .setNameKeywords(nameKeywords)
-                .setPhoneKeywords(phoneKeywords)
-                .setEmailKeywords(emailKeywords)
-                .setTaskKeywords(differentTaskKeywords)
-                .setProjectKeywords(projectKeywords);
-        assertFalse(basePredicate.equals(differentTaskPredicate));
-
-        // different projectKeywords -> returns false
-        PersonContainsKeywordsPredicate differentProjectPredicate = new PersonContainsKeywordsPredicate()
-                .setNameKeywords(nameKeywords)
-                .setPhoneKeywords(phoneKeywords)
-                .setEmailKeywords(emailKeywords)
-                .setTaskKeywords(taskKeywords)
-                .setProjectKeywords(differentProjectKeywords);
-        assertFalse(basePredicate.equals(differentProjectPredicate));
     }
 
     @Test
@@ -133,10 +99,6 @@ public class PersonContainsKeywordsPredicateTest {
         predicate = new PersonContainsKeywordsPredicate()
                 .setPhoneKeywords(Arrays.asList("91234567", "88887777"));
         assertTrue(predicate.test(new PersonBuilder().withPhone("91234567").build()));
-
-        // Mixed-case keywords (not applicable for phone, but following pattern)
-        predicate = new PersonContainsKeywordsPredicate().setPhoneKeywords(Arrays.asList("91234567"));
-        assertTrue(predicate.test(new PersonBuilder().withPhone("91234567").build()));
     }
 
     @Test
@@ -158,60 +120,22 @@ public class PersonContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_taskContainsKeywords_returnsTrue() {
-        // One keyword
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
-                .setTaskKeywords(Collections.singletonList("taskIndex=0}"));
-        assertTrue(predicate.test(new PersonBuilder().withTasks("Task1", "Task2").build()));
-
-        // Multiple keywords
-        predicate = new PersonContainsKeywordsPredicate().setTaskKeywords(Arrays.asList(
-                "taskIndex=0}", "taskIndex=1}"));
-        assertTrue(predicate.test(new PersonBuilder().withTasks("Task1").build()));
-
-        // Mixed-case keywords
-        predicate = new PersonContainsKeywordsPredicate().setTaskKeywords(Arrays.asList("tASkInDeX=0}"));
-        assertTrue(predicate.test(new PersonBuilder().withTasks("Task1").build()));
-    }
-
-    @Test
-    public void test_projectContainsKeywords_returnsTrue() {
-        // One keyword
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
-                .setProjectKeywords(Collections.singletonList(
-                        "seedu.taskforge.model.person.PersonProject{projectIndex=0}"));
-        assertTrue(predicate.test(new PersonBuilder().withProjects("Project1", "Project2").build()));
-
-        // Multiple keywords
-        predicate = new PersonContainsKeywordsPredicate()
-                .setProjectKeywords(Arrays.asList(
-                        "seedu.taskforge.model.person.PersonProject{projectIndex=0}",
-                        "seedu.taskforge.model.person.PersonProject{projectIndex=1}"));
-        assertTrue(predicate.test(new PersonBuilder().withProjects("Project1").build()));
-
-        // Mixed-case keywords
-        predicate = new PersonContainsKeywordsPredicate()
-                .setProjectKeywords(Arrays.asList(
-                        "sEEDu.tASKfORGE.mODEL.pERSON.pERSoNpROjECt{pROjEcTiNdEx=0}"));
-        assertTrue(predicate.test(new PersonBuilder().withProjects("Project1").build()));
-    }
-
-    @Test
     public void test_multipleFieldsContainsKeywords_returnsTrue() {
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
                 .setNameKeywords(Collections.singletonList("Alice"))
                 .setPhoneKeywords(Collections.singletonList("91234567"))
-                .setEmailKeywords(Collections.singletonList("alice@example.com"))
-                .setTaskKeywords(Collections.singletonList("taskIndex=0}"))
-                .setProjectKeywords(Collections.singletonList(
-                        "seedu.taskforge.model.person.PersonProject{projectIndex=0}"));
+                .setEmailKeywords(Collections.singletonList("alice@example.com"));
         assertTrue(predicate.test(new PersonBuilder()
                 .withName("Alice")
                 .withPhone("91234567")
                 .withEmail("alice@example.com")
-                .withTasks("Task1")
-                .withProjects("Project1")
                 .build()));
+    }
+
+    @Test
+    public void test_noFieldChecked_returnsFalse() {
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate();
+        assertFalse(predicate.test(new PersonBuilder().build()));
     }
 
     @Test
@@ -224,12 +148,6 @@ public class PersonContainsKeywordsPredicateTest {
         // Non-matching keyword
         predicate = new PersonContainsKeywordsPredicate().setNameKeywords(Arrays.asList("Carol"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-
-        // Keywords match phone and email, but does not match name
-        predicate = new PersonContainsKeywordsPredicate()
-                .setNameKeywords(Arrays.asList("12345", "alice@email.com"));
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice").withPhone("12345")
-                .withEmail("alice@email.com").build()));
     }
 
     @Test
@@ -246,22 +164,6 @@ public class PersonContainsKeywordsPredicateTest {
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
                 .setEmailKeywords(Arrays.asList("alice@email.com"));
         assertFalse(predicate.test(new PersonBuilder().withEmail("bob@email.com").build()));
-    }
-
-    @Test
-    public void test_taskDoesNotContainKeywords_returnsFalse() {
-        // Non-matching keyword
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
-                .setTaskKeywords(Arrays.asList("Task1"));
-        assertFalse(predicate.test(new PersonBuilder().withTasks("Task2").build()));
-    }
-
-    @Test
-    public void test_projectDoesNotContainKeywords_returnsFalse() {
-        // Non-matching keyword
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate()
-                .setProjectKeywords(Arrays.asList("Project1"));
-        assertFalse(predicate.test(new PersonBuilder().withProjects("Project2").build()));
     }
 
     @Test
@@ -286,7 +188,7 @@ public class PersonContainsKeywordsPredicateTest {
                 .setNameKeywords(keywords);
 
         String expected = PersonContainsKeywordsPredicate.class.getCanonicalName() + "{nameKeywords=" + keywords
-                + ", phoneKeywords=null, emailKeywords=null, taskKeywords=null, projectKeywords=null}";
+                + ", phoneKeywords=null, emailKeywords=null}";
         assertEquals(expected, predicate.toString());
     }
 }

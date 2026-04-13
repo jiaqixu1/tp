@@ -66,11 +66,9 @@ public class ViewProjectMembersCommandTest {
 
         ViewProjectMembersCommand command = new ViewProjectMembersCommand(Index.fromOneBased(1));
         CommandResult result = command.execute(modelStub);
-
         String expectedMessage = "Members in project Alpha:\n"
-                + "1. Alex Yeoh\n"
-                + "2. Bernice Yu";
-
+                + "1. Alex Yeoh | Phone: 87438807 | Email: alexyeoh@example.com\n"
+                + "2. Bernice Yu | Phone: 99272758 | Email: berniceyu@example.com";
         assertEquals(expectedMessage, result.getFeedbackToUser());
     }
 

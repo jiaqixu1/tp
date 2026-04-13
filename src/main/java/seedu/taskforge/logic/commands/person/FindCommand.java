@@ -4,8 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
 import seedu.taskforge.commons.util.ToStringBuilder;
 import seedu.taskforge.logic.Messages;
@@ -15,7 +13,7 @@ import seedu.taskforge.model.Model;
 import seedu.taskforge.model.person.PersonContainsKeywordsPredicate;
 
 /**
- * Finds and lists all persons in TaskForge whose name contains any of the argument keywords.
+ * Finds and lists all persons in TaskForge whose selected fields contain any of the argument keywords.
  * Keyword matching is case insensitive.
  */
 public class FindCommand extends Command {
@@ -26,9 +24,7 @@ public class FindCommand extends Command {
             + "the specified keywords (case-insensitive, whole-word match only) and displays them in person list.\n"
             + "Format: " + COMMAND_WORD + " [" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
-            + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_TASK + "TASK]..."
-            + "[" + PREFIX_PROJECT_TITLE + "PROJECT]...\n"
+            + "[" + PREFIX_EMAIL + "EMAIL]\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice bob " + PREFIX_PHONE + "91234567";
 
     public static final String MESSAGE_TYPE_LIST = " (Type 'list' to show the full person list again)";
@@ -42,7 +38,6 @@ public class FindCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        // call another function to get composed predicates here then call model update filteredpersonlist on that
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_MATCHED_OVERVIEW + MESSAGE_TYPE_LIST,

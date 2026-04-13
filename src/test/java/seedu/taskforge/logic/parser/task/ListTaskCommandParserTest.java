@@ -14,7 +14,7 @@ import seedu.taskforge.logic.parser.ParserUtil;
 public class ListTaskCommandParserTest {
 
     private static final String MESSAGE_INVALID_FORMAT =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListTaskCommand.MESSAGE_USAGE_LIST);
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListTaskCommand.MESSAGE_USAGE);
 
     private final ListTaskCommandParser parser = new ListTaskCommandParser();
 

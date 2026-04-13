@@ -10,7 +10,6 @@ import static seedu.taskforge.testutil.TypicalPersons.ALICE;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,6 @@ import seedu.taskforge.model.ReadOnlyUserPrefs;
 import seedu.taskforge.model.TaskForge;
 import seedu.taskforge.model.person.Person;
 import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 import seedu.taskforge.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -59,39 +57,15 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_projectMissing_throwsCommandException() {
+    public void execute_personAdded_hasNoProjectsOrTasks() throws Exception {
         ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
-        modelStub.projects.add(new Project("alpha", Arrays.asList(new Task("task A"))));
-
         Person person = new PersonBuilder().build();
-        AddCommand command = new AddCommand(person, List.of(new Project("beta")), List.of());
 
-        assertThrows(CommandException.class, "The project to assign does not exist in the TaskForge.", () ->
-            command.execute(modelStub));
-    }
+        new AddCommand(person).execute(modelStub);
 
-    @Test
-    public void execute_taskMissingInAssignedProject_throwsCommandException() {
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
-        modelStub.projects.add(new Project("alpha", Arrays.asList(new Task("task A"))));
-
-        Person person = new PersonBuilder().build();
-        AddCommand command = new AddCommand(person, List.of(new Project("alpha")), List.of(new Task("task B")));
-
-        assertThrows(CommandException.class,
-                AddCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS, () -> command.execute(modelStub));
-    }
-
-    @Test
-    public void execute_duplicateTaskReference_throwsCommandException() {
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
-        modelStub.projects.add(new Project("alpha", Arrays.asList(new Task("task A"))));
-
-        Person person = new PersonBuilder().build();
-        AddCommand command = new AddCommand(person, List.of(new Project("alpha")),
-                Arrays.asList(new Task("task A"), new Task("task A")));
-
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_TASK, () -> command.execute(modelStub));
+        Person addedPerson = modelStub.personsAdded.get(0);
+        assertTrue(addedPerson.getProjects().isEmpty());
+        assertTrue(addedPerson.getTasks().isEmpty());
     }
 
     @Test
@@ -188,7 +162,6 @@ public class AddCommandTest {
 
         @Override
         public void commitTaskForge(String input) {
-
         }
 
         @Override
@@ -264,7 +237,6 @@ public class AddCommandTest {
 
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
-        final ArrayList<Project> projects = new ArrayList<>();
 
         @Override
         public boolean hasPerson(Person person) {
@@ -281,9 +253,6 @@ public class AddCommandTest {
         @Override
         public ReadOnlyTaskForge getTaskForge() {
             TaskForge taskForge = new TaskForge();
-            for (Project project : projects) {
-                taskForge.addProject(project);
-            }
             for (Person person : personsAdded) {
                 taskForge.addPerson(person);
             }
@@ -292,12 +261,12 @@ public class AddCommandTest {
 
         @Override
         public ObservableList<Project> getProjectList() {
-            return FXCollections.observableArrayList(projects);
+            return FXCollections.observableArrayList();
         }
 
         @Override
         public ObservableList<Project> getFilteredProjectList() {
-            return FXCollections.observableArrayList(projects);
+            return FXCollections.observableArrayList();
         }
     }
 }

@@ -160,10 +160,9 @@ There are 5 basic person commands that deal with adding, deleting, editing, list
 
 Adds a person to TaskForge.
 
-Format: `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]…​ [-l PROJECT]…​`
+Format: `add -n NAME -p PHONE_NUMBER -e EMAIL
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tasks and projects (including 0)
 A person must have valid unique phone number and email.
 </div>
 
@@ -190,7 +189,6 @@ A person must have valid unique phone number and email.
 
 Examples:
 * `add -n John Doe -p 98765432 -e johnd@example.com`
-* `add -n Betsy Crowe -d newTask2 -e betsycrowe@example.com -p 1234567 -d newTask1`
 
 #### Deleting a person : `delete`
 
@@ -371,7 +369,7 @@ Format: `project members PROJECT_INDEX`
 --------------------------------------------------------------------------------------------------------------------
 
 ### Task
-There are 4 basic task commands and 6 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
+There are 4 basic task commands and 5 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
 While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project/person.
 
 Basic commands:
@@ -524,20 +522,6 @@ Format: `task list PROJECT_INDEX`
 
 Examples:
 * `task list 1`
-
-#### Viewing all tasks of a person : `task view`
-
-Displays all tasks assigned to a person.
-
-Format: `task view PERSON_INDEX`
-
-* Shows all tasks assigned to the person at the specified `PERSON_INDEX`.
-* `PERSON_INDEX` refers to the person index displayed in `list`.
-* `PERSON_INDEX` **must be a positive integer** `1, 2, 3, ...`
-* If the person has no tasks, a message will be shown.
-
-Example:
-* `task view 1`
 
 [↑ Back to Features](#features)
 

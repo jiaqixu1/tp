@@ -32,15 +32,17 @@ public class UnassignProjectCommand extends ProjectCommand {
 
     public static final String SUBCOMMAND_WORD = "unassign";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " INDEX "
-            + PREFIX_INDEX + " PROJECT_INDEX";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Unassigns a project from a person.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PERSON_INDEX {"
+            + PREFIX_INDEX + "PROJECT_INDEX_OF_PERSON}\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_INDEX + "1";
 
     public static final String MESSAGE_UNASSIGN_PROJECT_SUCCESS = "Project unassigned from %1$s";
 
     public static final String MESSAGE_NOT_EDITED = "At least one project to unassign must be provided";
 
-    public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "The project index provided is invalid";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
 
     private final Index index;
     private final UnassignProjectDescriptor unassignProjectDescriptor;
@@ -71,7 +73,7 @@ public class UnassignProjectCommand extends ProjectCommand {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
@@ -110,7 +112,7 @@ public class UnassignProjectCommand extends ProjectCommand {
                 personProjectsToDelete.add(projectToDelete);
                 removedProjectIndexes.add(projectToDelete.getProjectIndex());
             } catch (IndexOutOfBoundsException e) {
-                throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
             }
         }
         newPersonProjects.removeAll(personProjectsToDelete);

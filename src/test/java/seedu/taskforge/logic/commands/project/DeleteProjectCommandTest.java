@@ -15,7 +15,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.taskforge.commons.core.GuiSettings;
 import seedu.taskforge.commons.core.index.Index;
-import seedu.taskforge.logic.Messages;
 import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.logic.commands.exceptions.CommandException;
 import seedu.taskforge.model.Model;
@@ -50,7 +49,8 @@ public class DeleteProjectCommandTest {
 
         assertThrows(
                 CommandException.class,
-                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () -> deleteProjectCommand.execute(modelStub));
+                DeleteProjectCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS, () ->
+                        deleteProjectCommand.execute(modelStub));
     }
 
     @Test
@@ -241,4 +241,3 @@ public class DeleteProjectCommandTest {
         }
     }
 }
-

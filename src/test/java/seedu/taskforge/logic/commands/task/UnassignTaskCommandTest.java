@@ -94,7 +94,7 @@ public class UnassignTaskCommandTest {
                 .withTasks("2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(indexFirstPerson, descriptor);
 
-        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class UnassignTaskCommandTest {
                 .withTasks("2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class UnassignTaskCommandTest {
                 .withTasks("1", "2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(indexFirstPerson, descriptor);
 
-        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -124,7 +124,7 @@ public class UnassignTaskCommandTest {
                 .withTasks("1", "2").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+        assertCommandFailure(unassignTaskCommand, model, UnassignTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -191,7 +191,7 @@ public class UnassignTaskCommandTest {
                 .withTasks("1").build();
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(unassignTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(unassignTaskCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     /**
@@ -208,7 +208,7 @@ public class UnassignTaskCommandTest {
         UnassignTaskCommand unassignTaskCommand = new UnassignTaskCommand(outOfBoundIndex,
                 new UnassignTaskDescriptorBuilder().withTasks("1").build());
 
-        assertCommandFailure(unassignTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(unassignTaskCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

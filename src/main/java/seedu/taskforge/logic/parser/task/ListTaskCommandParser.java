@@ -18,12 +18,15 @@ public class ListTaskCommandParser implements Parser<ListTaskCommand> {
     public ListTaskCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
+        if (args.trim().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    ListTaskCommand.MESSAGE_USAGE));
+        }
         try {
             Index projectIndex = ParserUtil.parseIndex(args);
             return new ListTaskCommand(projectIndex);
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                            ListTaskCommand.MESSAGE_USAGE_LIST), pe);
+            throw new ParseException(pe.getMessage());
         }
     }
 }

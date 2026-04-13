@@ -43,7 +43,7 @@ public class ListTaskCommandTest {
     public void execute_invalidProjectIndex_failure() {
         Index outOfBoundsIndex = Index.fromOneBased(model.getProjectList().size() + 1);
         ListTaskCommand command = new ListTaskCommand(outOfBoundsIndex);
-        assertCommandFailure(command, model, ListTaskCommand.MESSAGE_INVALID_PROJECT_INDEX);
+        assertCommandFailure(command, model, ListTaskCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

@@ -28,13 +28,15 @@ public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_INDEX);
 
+        if (argMultimap.getPreamble().trim().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    DeleteTaskCommand.MESSAGE_USAGE));
+        }
         Index index;
-
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    DeleteTaskCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(pe.getMessage());
         }
 
         DeleteTaskDescriptor deleteTaskDescriptor = new DeleteTaskDescriptor();

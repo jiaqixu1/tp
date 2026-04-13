@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.logic.commands.HelpCommand;
+import seedu.taskforge.logic.commands.RedoCommand;
+import seedu.taskforge.logic.commands.UndoCommand;
 import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.ClearCommand;
 import seedu.taskforge.logic.commands.person.DeleteCommand;
@@ -18,6 +20,7 @@ import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
 import seedu.taskforge.logic.commands.project.FindProjectCommand;
 import seedu.taskforge.logic.commands.project.ListProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.ViewProjectMembersCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AssignTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
@@ -49,6 +52,7 @@ public class HelpWindowTest {
                 + ListProjectCommand.MESSAGE_USAGE + "\n\n"
                 + AssignProjectCommand.MESSAGE_USAGE + "\n\n"
                 + UnassignProjectCommand.MESSAGE_USAGE + "\n\n"
+                + ViewProjectMembersCommand.MESSAGE_USAGE + "\n\n"
                 + "TASK COMMANDS\n"
                 + "------------------------------\n"
                 + AddTaskCommand.MESSAGE_USAGE + "\n\n"
@@ -63,6 +67,8 @@ public class HelpWindowTest {
                 + "GENERAL COMMANDS\n"
                 + "------------------------------\n"
                 + ClearCommand.MESSAGE_USAGE + "\n\n"
+                + UndoCommand.MESSAGE_USAGE + "\n\n"
+                + RedoCommand.MESSAGE_USAGE + "\n\n"
                 + HelpCommand.MESSAGE_USAGE;
 
         assertEquals(expected, HelpWindow.HELP_MESSAGE);

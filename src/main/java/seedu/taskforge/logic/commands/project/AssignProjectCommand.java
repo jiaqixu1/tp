@@ -32,12 +32,13 @@ public class AssignProjectCommand extends ProjectCommand {
     public static final String SUBCOMMAND_WORD = "assign";
 
     public static final String MESSAGE_ASSIGN_PROJECT_SUCCESS = "Project assigned to %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PERSON_INDEX "
-            + PREFIX_INDEX + " PROJECT_INDEX";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Assigns one or more projects to a person.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PERSON_INDEX {" + PREFIX_INDEX + "PROJECT_INDEX}\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_INDEX + "1";
     public static final String MESSAGE_DUPLICATE_PROJECT = "This project already exists for this person!";
     public static final String MESSAGE_NOT_EDITED = "At least one project to assign must be provided";
-    public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "The project index provided is invalid";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
 
     private final Index personIndex;
     private final AssignProjectDescriptor assignProjectDescriptor;
@@ -71,7 +72,7 @@ public class AssignProjectCommand extends ProjectCommand {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (personIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         if (!assignProjectDescriptor.isProjectFieldEdited()) {
@@ -112,7 +113,7 @@ public class AssignProjectCommand extends ProjectCommand {
         for (Index projectIndexToAssign : projectIndexesToAssign) {
             int projectIndex = projectIndexToAssign.getZeroBased();
             if (projectIndex >= globalProjectList.size()) {
-                throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
             }
             PersonProject personProject = new PersonProject(projectIndex);
             newPersonProjects.add(personProject);

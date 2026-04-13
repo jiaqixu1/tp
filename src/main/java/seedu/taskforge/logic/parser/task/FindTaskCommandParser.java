@@ -21,7 +21,7 @@ public class FindTaskCommandParser implements Parser<FindTaskCommand> {
 
         if (trimmedArgs.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    FindTaskCommand.MESSAGE_USAGE_FIND));
+                    FindTaskCommand.MESSAGE_USAGE));
         }
 
         List<String> keywords = Arrays.stream(trimmedArgs.split("\\s+"))

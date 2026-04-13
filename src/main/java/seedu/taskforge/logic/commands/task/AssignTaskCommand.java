@@ -1,6 +1,8 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
@@ -32,15 +34,17 @@ public class AssignTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "assign";
 
     public static final String MESSAGE_SUCCESS = "Task assigned to %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PERSON_INDEX "
-            + "[-pi PROJECT_INDEX -i TASK_INDEX]...";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Assigns one or more tasks from projects to a person.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " PERSON_INDEX "
+            + "{" + PREFIX_PROJECT + "PROJECT_INDEX " + PREFIX_INDEX + "TASK_INDEX}\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_PROJECT + "1 " + PREFIX_INDEX + "1 ";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this person!";
     public static final String MESSAGE_NOT_EDITED = "At least one task to assign must be provided";
-    public static final String MESSAGE_INVALID_TASK_DISPLAYED_INDEX = "Task index is out of bound";
-    public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "Project index is out of bound";
+    public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
+    public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
     public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
-            "Task to assigned does not exist in any person-assigned project.";
+            "The specified project is not among the person's assigned projects.";
 
     private final Index index;
     private final AssignTaskDescriptor assignTaskDescriptor;
@@ -63,7 +67,7 @@ public class AssignTaskCommand extends TaskCommand {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
@@ -113,13 +117,13 @@ public class AssignTaskCommand extends TaskCommand {
 
             // Validate project index
             if (projectIndex < 0 || projectIndex >= allProjects.size()) {
-                throw new CommandException(MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                throw new CommandException(MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
             }
 
             // Validate task index within the project
             List<seedu.taskforge.model.task.Task> tasksInProject = allProjects.get(projectIndex).getTasks();
             if (taskIndex < 0 || taskIndex >= tasksInProject.size()) {
-                throw new CommandException(MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
+                throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
             }
 
             for (PersonProject personProject : assignedPersonProjects) {

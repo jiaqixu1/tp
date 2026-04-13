@@ -74,7 +74,7 @@ public class AddTaskCommandTest {
         descriptor.setTasks(Arrays.asList(new Task(VALID_TASK_IMPLEMENT_X)));
         AddTaskCommand addTaskCommand = new AddTaskCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_INVALID_PROJECT_INDEX);
+        assertCommandFailure(addTaskCommand, model, AddTaskCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

@@ -10,6 +10,8 @@ public class RedoCommand extends Command {
 
     public static final String COMMAND_WORD = "redo";
     public static final String MESSAGE_SUCCESS = "Redo previous command: %s";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Cancels the previous undo command.\n"
+            + "Example: " + COMMAND_WORD;
     public static final String MESSAGE_FAILED = "Unable to redo!";
 
     @Override

@@ -1,7 +1,7 @@
 package seedu.taskforge.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+import static seedu.taskforge.logic.Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS;
 import static seedu.taskforge.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.taskforge.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.taskforge.logic.commands.CommandTestUtil.NAME_DESC_AMY;
@@ -60,7 +60,7 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandException(deleteCommand, MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

@@ -23,7 +23,7 @@ public class FindTaskCommandParserTest {
     @Test
     public void parse_emptyArgs_throwsParseException() {
         assertParseFailure(parser, "   ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTaskCommand.MESSAGE_USAGE_FIND));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTaskCommand.MESSAGE_USAGE));
     }
 
     @Test

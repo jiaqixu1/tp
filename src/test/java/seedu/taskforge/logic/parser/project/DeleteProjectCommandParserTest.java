@@ -8,6 +8,7 @@ import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PROJECT;
 import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
+import seedu.taskforge.logic.parser.ParserUtil;
 
 public class DeleteProjectCommandParserTest {
 
@@ -20,8 +21,12 @@ public class DeleteProjectCommandParserTest {
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        assertParseFailure(parser, "a",
+        assertParseFailure(parser, "a", ParserUtil.MESSAGE_INVALID_INDEX);
+    }
+
+    @Test
+    public void parse_emptyArgs_throwsParseException() {
+        assertParseFailure(parser, "",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteProjectCommand.MESSAGE_USAGE));
     }
 }
-

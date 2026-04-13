@@ -3,7 +3,8 @@ layout: page
 title: User Guide
 ---
 
-TaskForge is a **desktop app for managing contacts, projects, and tasks**, optimized for use via a Command Line Interface (CLI) while still providing the benefits of a Graphical User Interface (GUI). It integrates these into a single application, making it easier to manage them efficiently as the amount of information grows. If you can type fast, TaskForge can help you perform these management tasks faster than traditional GUI apps.
+TaskForge is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TaskForge can get your contact management tasks done faster than traditional GUI apps.
+
 * Table of Contents
 {:toc}
 

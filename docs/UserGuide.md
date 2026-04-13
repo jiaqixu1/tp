@@ -164,6 +164,9 @@ Format: `exit`
 
 ### Person
 There are 5 basic person commands that deal with adding, deleting, editing, listing, and finding persons in TaskForge.
+
+![Add command success](images/AddCommand.png)
+
 - [add](#adding-a-person-add)
 - [delete](#deleting-a-person--delete)
 - [edit](#editing-a-person--edit)
@@ -291,6 +294,8 @@ Examples:
 There are 4 basic project commands and 3 project management commands. Basic commands deal with adding, deleting, listing, and finding projects.
 While project management commands deal with assigning/unassigning projects to/from persons and viewing project members.
 
+![Project add command success](images/ProjectAddCommand.png)
+
 Basic commands:
 - [add](#adding-a-project--project-add)
 - [delete](#deleting-a-project--project-delete)
@@ -403,6 +408,8 @@ Format: `project members PROJECT_INDEX`
 ### Task
 There are 4 basic task commands and 5 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
 While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project/person.
+
+![Task add command success](images/TaskAddCommand.png)
 
 Basic commands:
 - [add](#adding-a-task-to-a-project--task-add)

@@ -32,12 +32,15 @@ public class AssignTaskCommandParser implements Parser<AssignTaskCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_PROJECT, PREFIX_INDEX);
 
+        if (argMultimap.getPreamble().trim().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    AssignTaskCommand.MESSAGE_USAGE));
+        }
         Index index;
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, AssignTaskCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(pe.getMessage());
         }
 
         AssignTaskDescriptor assignTaskDescriptor = new AssignTaskDescriptor();

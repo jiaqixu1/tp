@@ -1,7 +1,6 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.ArrayList;

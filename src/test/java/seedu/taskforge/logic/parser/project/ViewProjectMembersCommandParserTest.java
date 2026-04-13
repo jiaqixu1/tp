@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.project.ViewProjectMembersCommand;
+import seedu.taskforge.logic.parser.ParserUtil;
 
 public class ViewProjectMembersCommandParserTest {
 
@@ -31,16 +32,16 @@ public class ViewProjectMembersCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewProjectMembersCommand.MESSAGE_USAGE));
 
         assertParseFailure(parser, "a",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewProjectMembersCommand.MESSAGE_USAGE));
+                ParserUtil.MESSAGE_INVALID_INDEX);
 
         assertParseFailure(parser, "1 a",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewProjectMembersCommand.MESSAGE_USAGE));
+                ParserUtil.MESSAGE_INVALID_INDEX);
 
         assertParseFailure(parser, "-1",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewProjectMembersCommand.MESSAGE_USAGE));
+                ParserUtil.MESSAGE_INVALID_INDEX);
 
         assertParseFailure(parser, "0",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewProjectMembersCommand.MESSAGE_USAGE));
+                ParserUtil.MESSAGE_INVALID_INDEX);
     }
 
 }

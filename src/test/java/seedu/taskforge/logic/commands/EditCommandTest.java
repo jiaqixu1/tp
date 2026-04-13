@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.Messages;
+import seedu.taskforge.logic.commands.person.ClearCommand;
 import seedu.taskforge.logic.commands.person.EditCommand;
 import seedu.taskforge.logic.commands.person.EditCommand.EditPersonDescriptor;
 import seedu.taskforge.model.Model;

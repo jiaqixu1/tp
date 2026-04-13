@@ -36,10 +36,10 @@ public class DeleteTaskCommandParserTest {
 
     @Test
     public void parse_invalidPreamble_failure() {
-        assertParseFailure(parser, "-5" + TASK_DELETE_1, MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "0" + TASK_DELETE_1, MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "1 some random string", MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "1 i/ string", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "-5" + TASK_DELETE_1, ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "0" + TASK_DELETE_1, ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "1 some random string", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "1 i/ string", ParserUtil.MESSAGE_INVALID_INDEX);
     }
 
     @Test

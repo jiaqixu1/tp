@@ -25,13 +25,16 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_INDEX, PREFIX_NAME);
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_INDEX, PREFIX_NAME);
 
+        if (argMultimap.getPreamble().trim().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    EditTaskCommand.MESSAGE_USAGE));
+        }
         Index personIndex;
 
         try {
             personIndex = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    EditTaskCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(pe.getMessage());
         }
 
         if (argMultimap.getValue(PREFIX_INDEX).isEmpty() || argMultimap.getValue(PREFIX_NAME).isEmpty()) {

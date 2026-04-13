@@ -17,12 +17,15 @@ public class ViewTasksCommandParser implements Parser<ViewTasksCommand> {
     @Override
     public ViewTasksCommand parse(String args) throws ParseException {
         requireNonNull(args);
+        if (args.trim().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    ViewTasksCommand.MESSAGE_USAGE));
+        }
         try {
             Index index = ParserUtil.parseIndex(args);
             return new ViewTasksCommand(index);
         } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewTasksCommand.MESSAGE_USAGE_VIEW), pe);
+            throw new ParseException(pe.getMessage());
         }
     }
 }

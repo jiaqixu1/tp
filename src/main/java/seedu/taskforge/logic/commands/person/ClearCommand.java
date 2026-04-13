@@ -1,7 +1,9 @@
-package seedu.taskforge.logic.commands;
+package seedu.taskforge.logic.commands.person;
 
 import static java.util.Objects.requireNonNull;
 
+import seedu.taskforge.logic.commands.Command;
+import seedu.taskforge.logic.commands.CommandResult;
 import seedu.taskforge.model.Model;
 import seedu.taskforge.model.TaskForge;
 

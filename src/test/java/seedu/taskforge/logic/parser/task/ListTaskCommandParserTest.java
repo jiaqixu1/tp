@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.task.ListTaskCommand;
+import seedu.taskforge.logic.parser.ParserUtil;
 
 public class ListTaskCommandParserTest {
 
@@ -25,9 +26,9 @@ public class ListTaskCommandParserTest {
 
     @Test
     public void parse_invalidArgs_failure() {
-        assertParseFailure(parser, "alpha", MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "-1", MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "1 2", MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "alpha", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "-1", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "1 2", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListTaskCommand.MESSAGE_USAGE));
     }
 }

@@ -44,7 +44,7 @@ public class AssignTaskCommand extends TaskCommand {
     public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
     public static final String MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS = "Project index is out of bounds.";
     public static final String MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS =
-            "Task does not exist in any project assigned to the person.";
+            "The specified project is not among the person's assigned projects.";
 
     private final Index index;
     private final AssignTaskDescriptor assignTaskDescriptor;

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import seedu.taskforge.commons.core.LogsCenter;
+import seedu.taskforge.logic.commands.ExitCommand;
 import seedu.taskforge.logic.commands.HelpCommand;
 import seedu.taskforge.logic.commands.RedoCommand;
 import seedu.taskforge.logic.commands.UndoCommand;
@@ -74,6 +75,7 @@ public class HelpWindow extends UiPart<Stage> {
                     + ClearCommand.MESSAGE_USAGE + "\n\n"
                     + UndoCommand.MESSAGE_USAGE + "\n\n"
                     + RedoCommand.MESSAGE_USAGE + "\n\n"
+                    + ExitCommand.MESSAGE_USAGE + "\n\n"
                     + HelpCommand.MESSAGE_USAGE;
     public static final String USER_GUIDE_URL =
             "https://ay2526s2-cs2103t-w09-4.github.io/tp/UserGuide.html#quick-start";

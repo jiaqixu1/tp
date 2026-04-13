@@ -496,7 +496,7 @@ Action | Format | Example
 --------|--------|--------
 **[Add](#adding-a-task-to-a-project--task-add)** | `task add PROJECT_INDEX {-n TASK_NAME}` | `task add 1 -n Write report`
 **[Delete](#deleting-a-task-from-a-project--task-delete)** | `task delete PROJECT_INDEX {-i TASK_INDEX_FROM_PROJECT}` | `task delete 1 -i 2`
-**[Edit](#editing-a-task-in-a-project--task-edit)** | `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME` | `task edit 1 -i 1 -n Prepare sprint report`
+**[Edit](#editing-a-task-assigned-to-a-person--task-edit)** | `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME` | `task edit 1 -i 1 -n Prepare sprint report`
 **[Find](#finding-tasks-by-keyword--task-find)** | `task find KEYWORD [MORE_KEYWORDS]` | `task find report bug`
 
 #### Management

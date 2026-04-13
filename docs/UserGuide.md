@@ -15,24 +15,49 @@ TaskForge is a **desktop app for managing contacts, optimized for use via a Comm
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W09-4/tp/releases).
+1. Download the latest `taskforge.jar` file from [here](https://github.com/AY2526S2-CS2103T-W09-4/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your TaskForge.
+1. Create a new folder in your computer that you want to use as the **taskforge folder**.
+This **taskforge folder** will be used by TaskForge to store its data and configuration files.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar taskforge.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+1. Copy `taskforge.jar` file from your **Downloads folder** to the newly created **taskforge folder**.
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+1. Take note of the **path** to your newly created **taskforge folder**. You will need to use that path to change your directory before running the app in the next step. e.g. if you created the folder in your Desktop.
+    <br><br>For Windows, the path should be:
+    ```
+    C:\User\YourName\Desktop\taskforge
+    ```
+    For Mac and Linux, the path should be:
+    ```
+    /User/YourName/Desktop/taskforge
+    ```
+
+1. Open a command terminal <br>
+   **Windows users:** You can open Command Prompt by searching for `cmd` in the Start menu. <br>
+   **Mac users:** You can open Terminal by searching for `Terminal` in Spotlight Search (Cmd + Space). <br>
+   **Linux users:** You can open Terminal by searching for `Terminal` in your applications.
+
+1. Type the following commands in your terminal and press enter to change the directory:
+    ```
+    cd <path_to_your_taskforge_folder>
+    ```
+    Then type the following command and press enter to run TaskForge on your computer:
+    ```
+    java -jar taskforge.jar
+    ```
+    <br>A GUI similar to the below should appear in a few seconds. Note that the app will contain some sample data.<br>
+       ![Ui](images/Ui.png)
+
+1. Type the command in the command box and press Enter to execute it. e.g., typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list` : Lists all persons.
 
-   * `add -n John Doe -p 98765432 -e johnd@example.com` : Adds a contact named `John Doe` to TaskForge.
+   * `add -n John Doe -p 98765432 -e johnd@example.com` : Adds a person named `John Doe` to TaskForge.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `delete 3` : Deletes the third person shown in the current list.
 
-   * `clear` : Deletes all contacts.
+   * `clear` : Deletes all entries (persons, projects, and tasks) from TaskForge.
 
    * `exit` : Exits the app.
 
@@ -51,6 +76,9 @@ This section is split into 4 subsections:
 <div markdown="block" class="alert alert-info">
 
 **:information_source: Notes about the command format:**<br>
+
+* All command and subcommand words are case-sensitive and must be entered in lowercase.<br>
+  e.g.`task add` is valid while `Task Add` and `task Add` are not.
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
@@ -161,18 +189,17 @@ Examples:
 
 Edits an existing person in TaskForge.
 
-Format: `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-d TASK]…​ [-l PROJECT]…​`
+Format: `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL]`
 
 * Edits the person at the specified `PERSON_INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tasks/projects, the existing tasks/projects of the person will be removed i.e adding of tasks/projects is not cumulative.
-* You can remove all the person’s tasks/projects by typing `-d`/`-l` without
-    specifying any tasks/projects after it.
+> [!NOTE]
+> Project and task assignments are managed by the `project assign/unassign` and `task assign/unassign` commands.
 
 Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 -n Betsy Crower -d` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tasks.
+*  `edit 2 -n Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
 
 #### Listing all persons : `list`
 
@@ -183,6 +210,8 @@ Format: `list`
 #### Locating persons by multiple fields: `find`
 
 Finds persons whose fields (name, phone, email) match the given keywords.
+> [!IMPORTANT]
+> This command will update to show the filtered list of persons that match the search criteria. To restore the original list of all persons, use the `list` command.
 
 Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]`
 
@@ -325,7 +354,7 @@ While task management commands deal with assigning/unassigning tasks to/from per
 Basic commands:
 - [add](#adding-a-task-to-a-project--task-add)
 - [delete](#deleting-a-task-from-a-project--task-delete)
-- [edit](#editing-a-task-in-a-project--task-edit)
+- [edit](#editing-a-task-assigned-to-a-person--task-edit)
 - [find](#finding-tasks-by-keyword--task-find)
 
 Task management commands:
@@ -369,9 +398,11 @@ Examples:
 * `task delete 1 -i 2` deletes the 2nd task from the 1st project
 * `task delete 2 -i 1 -i 3` deletes the 1st and 3rd tasks from the 2nd project
 
-#### Editing a task in a project : `task edit`
+#### Editing a task assigned to a person : `task edit`
 
-Edits the name of an existing task in a project.
+Edits the name of a task assigned to a person.
+> [!IMPORTANT]
+> This will also update the task name in the project list and for all other persons who are assigned that task.
 
 Format: `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`
 
@@ -517,32 +548,75 @@ _Details coming soon ..._
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command summary
+This summary is split into 4 main sections:
+- [Person commands](#person-commands)
+- [Project commands](#project-commands)
+- [Task commands](#task-commands)
+- [General commands](#general-commands)
 
-Action | Format, Examples
---------|------------------
-**Add Person** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]…​ [-l PROJECT]…​` <br> e.g., `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
-**Add Task** | `task add PROJECT_INDEX {-n TASK_NAME}`<br> e.g., `task add 1 -n Write report`
-**Delete Task** | `task delete PROJECT_INDEX {-i TASK_INDEX_FROM_PROJECT}`<br> e.g., `task delete 1 -i 2`
-**Edit Task** | `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`<br> e.g., `task edit 1 -i 1 -n Prepare sprint report`
-**List Tasks by Project** | `task list PROJECT_INDEX`<br> e.g., `task list 1`
-**Find Tasks** | `task find KEYWORD [MORE_KEYWORDS]`<br> e.g., `task find report bug`
-**Assign Task** | `task assign PERSON_INDEX {-pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT}`<br> e.g., `task assign 1 -pi 1 -i 2`
-**Unassign Task** | `task unassign PERSON_INDEX {-i TASK_INDEX_FROM_PERSON}`<br> e.g., `task unassign 2 -i 1`
-**View Tasks** | `task view PERSON_INDEX`<br> e.g., `task view 1`
-**Mark Task** | `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`<br> e.g., `task mark 1 1`
-**Unmark Task** | `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`<br> e.g., `task unmark 1 1`
-**Add Project** | `project add PROJECT_TITLE`<br> e.g., `project add WebApp`
-**Assign Project** | `project assign PERSON_INDEX {-i PROJECT_INDEX}`<br> e.g., `project assign 1 -i 2`
-**Unassign Project** | `project unassign PERSON_INDEX {-i PROJECT_INDEX_FROM_PERSON}`<br> e.g., `project unassign 2 -i 1`
-**Delete Project** | `project delete PROJECT_INDEX`<br> e.g., `project delete 1`
-**Find Project** | `project find KEYWORD [MORE_KEYWORDS]`<br> e.g., `project find Alpha Web`
-**View Project Members** | `project members PROJECT_INDEX`<br> e.g., `project members 1`
-**View Projects** | `project list`
-**Delete Person** | `delete PERSON_INDEX`<br> e.g., `delete 3`
-**Edit Person** | `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-d TASK]…​ [-l PROJECT]…​` <br> e.g., `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
-**Find Person** | `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]`<br> e.g., `find -n James -p 91234567`
-**List Person** | `list`
-**Clear** | `clear`
-**Undo** | `undo`
-**Redo** | `redo`
-**Help** | `help`
+---
+
+### Person Commands
+
+Action | Format | Example
+--------|--------|--------
+**[Add](#adding-a-person-add)** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]… [-l PROJECT]…` | `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
+**[Delete](#deleting-a-person--delete)** | `delete PERSON_INDEX` | `delete 3`
+**[Edit](#editing-a-person--edit)** | `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL]` | `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
+**[List](#listing-all-persons--list)** | `list` |
+**[Find](#locating-persons-by-multiple-fields-find)** | `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]` | `find -n James -p 91234567`
+---
+
+### Project Commands
+
+#### Basic
+
+Action | Format | Example
+--------|--------|--------
+**[Add](#adding-a-project--project-add)** | `project add PROJECT_TITLE` | `project add WebApp`
+**[Delete](#deleting-a-project--project-delete)** | `project delete PROJECT_INDEX` | `project delete 1`
+**[List](#viewing-all-projects--project-list)** | `project list` |
+**[Find](#finding-projects-by-name--project-find)** | `project find KEYWORD [MORE_KEYWORDS]` | `project find Alpha Web`
+
+#### Management
+
+Action | Format | Example
+--------|--------|--------
+**[Assign](#assigning-a-project--project-assign)** | `project assign PERSON_INDEX {-i PROJECT_INDEX}` | `project assign 1 -i 2`
+**[Unassign](#unassigning-a-project--project-unassign)** | `project unassign PERSON_INDEX {-i PROJECT_INDEX_FROM_PERSON}` | `project unassign 2 -i 1`
+**[List members](#viewing-project-members--project-members)** | `project members PROJECT_INDEX` | `project members 1`
+
+---
+
+### Task Commands
+
+#### Basic
+
+Action | Format | Example
+--------|--------|--------
+**[Add](#adding-a-task-to-a-project--task-add)** | `task add PROJECT_INDEX {-n TASK_NAME}` | `task add 1 -n Write report`
+**[Delete](#deleting-a-task-from-a-project--task-delete)** | `task delete PROJECT_INDEX {-i TASK_INDEX_FROM_PROJECT}` | `task delete 1 -i 2`
+**[Edit](#editing-a-task-assigned-to-a-person--task-edit)** | `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME` | `task edit 1 -i 1 -n Prepare sprint report`
+**[Find](#finding-tasks-by-keyword--task-find)** | `task find KEYWORD [MORE_KEYWORDS]` | `task find report bug`
+
+#### Management
+
+Action | Format | Example
+--------|--------|--------
+**[Assign](#assigning-a-task--task-assign)** | `task assign PERSON_INDEX {-pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT}` | `task assign 1 -pi 1 -i 2`
+**[Unassign](#unassigning-a-task--task-unassign)** | `task unassign PERSON_INDEX {-i TASK_INDEX_FROM_PERSON}` | `task unassign 2 -i 1`
+**[Mark](#marking-a-task-as-done--task-mark)** | `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON` | `task mark 1 1`
+**[Unmark](#unmarking-a-task-as-done--task-unmark)** | `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON` | `task unmark 1 1`
+**[List by project](#listing-all-tasks-in-a-project--task-list)** | `task list PROJECT_INDEX` | `task list 1`
+
+---
+
+### General Commands
+
+Action | Format
+--------|--------
+**[Clear](#clearing-all-entries--clear)** | `clear`
+**[Undo](#undoing-previous-command--undo)** | `undo`
+**[Redo](#redoing-previous-command--redo)** | `redo`
+**[Help](#viewing-help--help)** | `help`
+**[Exit](#exiting-the-program--exit)** | `exit`

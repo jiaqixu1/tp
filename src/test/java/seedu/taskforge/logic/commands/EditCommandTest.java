@@ -7,17 +7,12 @@ import static seedu.taskforge.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.taskforge.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_ALPHA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_PROJECT_BETA;
-import static seedu.taskforge.logic.commands.CommandTestUtil.VALID_TASK_REFACTOR;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.taskforge.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.taskforge.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.taskforge.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.taskforge.testutil.TypicalPersons.getTypicalTaskForge;
-
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,10 +26,6 @@ import seedu.taskforge.model.ModelManager;
 import seedu.taskforge.model.TaskForge;
 import seedu.taskforge.model.UserPrefs;
 import seedu.taskforge.model.person.Person;
-import seedu.taskforge.model.person.PersonProject;
-import seedu.taskforge.model.person.PersonTask;
-import seedu.taskforge.model.project.Project;
-import seedu.taskforge.model.task.Task;
 import seedu.taskforge.testutil.EditPersonDescriptorBuilder;
 import seedu.taskforge.testutil.PersonBuilder;
 
@@ -71,11 +62,10 @@ public class EditCommandTest {
         Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
 
         PersonBuilder personInList = new PersonBuilder(lastPerson);
-        Person editedPerson = personInList.withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
-                .withProjects(VALID_PROJECT_ALPHA).withTasks(VALID_TASK_REFACTOR).build();
+        Person editedPerson = personInList.withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB).build();
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB).withProjects(VALID_PROJECT_ALPHA).withTasks(VALID_TASK_REFACTOR).build();
+                .withPhone(VALID_PHONE_BOB).build();
         EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
@@ -140,6 +130,24 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_duplicatePhoneUnfilteredList_failure() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON,
+                new EditPersonDescriptorBuilder().withPhone(firstPerson.getPhone().value).build());
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
+    public void execute_duplicateEmailUnfilteredList_failure() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON,
+                new EditPersonDescriptorBuilder().withEmail(firstPerson.getEmail().value).build());
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
@@ -165,59 +173,6 @@ public class EditCommandTest {
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
-    @Test
-    public void execute_assignProjectNotInTaskForge_failure() {
-        EditPersonDescriptor descriptor = new EditPersonDescriptor();
-        descriptor.setProjects(List.of(new Project("ghost project")));
-        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(editCommand, model, "The project to assign does not exist in the TaskForge.");
-    }
-
-    @Test
-    public void execute_assignDuplicateTasks_failure() {
-        EditPersonDescriptor descriptor = new EditPersonDescriptor();
-        descriptor.setProjects(List.of(new Project(VALID_PROJECT_ALPHA)));
-        descriptor.setTasks(List.of(new Task(VALID_TASK_REFACTOR), new Task(VALID_TASK_REFACTOR)));
-        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_TASK);
-    }
-
-    @Test
-    public void execute_assignTaskWithInvalidAssignedProjectIndex_failure() {
-        TaskForge taskForge = new TaskForge();
-        taskForge.addProject(new Project(VALID_PROJECT_ALPHA, List.of(new Task(VALID_TASK_REFACTOR))));
-        Person malformedPerson = new PersonBuilder()
-                .withName("Malformed Person")
-                .withPhone("99999999")
-                .withEmail("malformed@example.com")
-                .build();
-        Person malformedWithInvalidProject = new Person(
-                malformedPerson.getName(),
-                malformedPerson.getPhone(),
-                malformedPerson.getEmail(),
-                List.of(new PersonProject(-1)),
-                List.of(new PersonTask(0, 0)));
-        taskForge.addPerson(malformedWithInvalidProject);
-        Model malformedModel = new ModelManager(taskForge, new UserPrefs());
-
-        EditPersonDescriptor descriptor = new EditPersonDescriptor();
-        descriptor.setTasks(List.of(new Task(VALID_TASK_REFACTOR)));
-        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(editCommand, malformedModel, EditCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
-    }
-
-    @Test
-    public void execute_assignTaskWithMismatchedProjectTitle_failure() {
-        Model localModel = new ModelManager(getTypicalTaskForge(), new UserPrefs());
-        EditPersonDescriptor descriptor = new EditPersonDescriptor();
-        descriptor.setTasks(List.of(new Task(VALID_TASK_REFACTOR, VALID_PROJECT_BETA)));
-        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
-
-        assertCommandFailure(editCommand, localModel, EditCommand.MESSAGE_TASK_NOT_IN_ASSIGNED_PROJECTS);
-    }
 
     @Test
     public void equals() {

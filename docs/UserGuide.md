@@ -182,6 +182,8 @@ Format: `list`
 #### Locating persons by multiple fields: `find`
 
 Finds persons whose fields (name, phone, email, tasks, projects) match the given keywords.
+> [!IMPORTANT]
+> This command will update to show the filtered list of persons that match the search criteria. To restore the original list of all persons, use the `list` command.
 
 Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS] [-d TASK_KEYWORDS] [-l PROJECT_KEYWORDS]`
 

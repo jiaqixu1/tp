@@ -22,13 +22,14 @@ public class DeleteProjectCommandParser implements Parser<DeleteProjectCommand> 
      */
     @Override
     public DeleteProjectCommand parse(String args) throws ParseException {
+        if (args.trim().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteProjectCommand.MESSAGE_USAGE));
+        }
         try {
             Index index = ParserUtil.parseIndex(args);
             return new DeleteProjectCommand(index);
         } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                            DeleteProjectCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(pe.getMessage());
         }
     }
 

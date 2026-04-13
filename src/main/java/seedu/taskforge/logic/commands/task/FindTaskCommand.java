@@ -20,11 +20,11 @@ public class FindTaskCommand extends TaskCommand {
 
     public static final String SUBCOMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE_FIND = TaskCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
             + ": Finds all tasks whose names contain any of the specified keywords "
-            + "(case-insensitive) across all projects and displays them as text.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + TaskCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD + " report";
+            + "(case-insensitive, partial matches allowed) across all projects and filters the project list.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " KEYWORD [MORE_KEYWORDS]...\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " report";
 
     public static final String MESSAGE_NO_TASK_FOUND = "No matching tasks found.";
     public static final String MESSAGE_TASKS_FOUND = "Found tasks:";

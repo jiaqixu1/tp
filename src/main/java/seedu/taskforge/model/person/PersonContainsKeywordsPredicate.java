@@ -14,14 +14,10 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private List<String> nameKeywords;
     private List<String> phoneKeywords;
     private List<String> emailKeywords;
-    private List<String> taskKeywords;
-    private List<String> projectKeywords;
 
     public PersonContainsKeywordsPredicate() {
 
     }
-
-
 
     public PersonContainsKeywordsPredicate setNameKeywords(List<String> nameKeywords) {
         this.nameKeywords = nameKeywords;
@@ -38,16 +34,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         return this;
     }
 
-    public PersonContainsKeywordsPredicate setTaskKeywords(List<String> taskKeywords) {
-        this.taskKeywords = taskKeywords;
-        return this;
-    }
-
-    public PersonContainsKeywordsPredicate setProjectKeywords(List<String> projectKeywords) {
-        this.projectKeywords = projectKeywords;
-        return this;
-    }
-
     @Override
     public boolean test(Person person) {
         if (!isAnyFieldChecked()) {
@@ -56,24 +42,13 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
         return isKeywordMatch(person, nameKeywords, p -> p.getName().fullName)
                 && isKeywordMatch(person, phoneKeywords, p -> p.getPhone().value)
-                && isKeywordMatch(person, emailKeywords, p -> p.getEmail().value)
-                && isKeywordMatchForCollection(person, taskKeywords, p -> p.getTasks().stream()
-                    .map(PersonTask::toString).toList())
-                && isKeywordMatchForCollection(person, projectKeywords, p -> p.getProjects().stream()
-                        .map(project -> project.toString()).toList());
+                && isKeywordMatch(person, emailKeywords, p -> p.getEmail().value);
     }
 
     private boolean isKeywordMatch(Person person, List<String> keywords,
                                    java.util.function.Function<Person, String> fieldMapper) {
         return !isNonEmpty(keywords) || keywords.stream()
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(fieldMapper.apply(person), keyword));
-    }
-
-    private boolean isKeywordMatchForCollection(Person person, List<String> keywords,
-            java.util.function.Function<Person, List<String>> collectionMapper) {
-        return !isNonEmpty(keywords) || keywords.stream()
-                .anyMatch(keyword -> collectionMapper.apply(person).stream()
-                        .anyMatch(fieldValue -> StringUtil.containsWordIgnoreCase(fieldValue, keyword)));
     }
 
     @Override
@@ -90,9 +65,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         PersonContainsKeywordsPredicate otherPredicate = (PersonContainsKeywordsPredicate) other;
         return Objects.equals(nameKeywords, otherPredicate.nameKeywords)
                 && Objects.equals(phoneKeywords, otherPredicate.phoneKeywords)
-                && Objects.equals(emailKeywords, otherPredicate.emailKeywords)
-                && Objects.equals(taskKeywords, otherPredicate.taskKeywords)
-                && Objects.equals(projectKeywords, otherPredicate.projectKeywords);
+                && Objects.equals(emailKeywords, otherPredicate.emailKeywords);
     }
 
     @Override
@@ -101,14 +74,11 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 .add("nameKeywords", nameKeywords)
                 .add("phoneKeywords", phoneKeywords)
                 .add("emailKeywords", emailKeywords)
-                .add("taskKeywords", taskKeywords)
-                .add("projectKeywords", projectKeywords)
                 .toString();
     }
 
     public boolean isAnyFieldChecked() {
-        return isNonEmpty(nameKeywords) || isNonEmpty(phoneKeywords) || isNonEmpty(emailKeywords)
-                || isNonEmpty(taskKeywords) || isNonEmpty(projectKeywords);
+        return isNonEmpty(nameKeywords) || isNonEmpty(phoneKeywords) || isNonEmpty(emailKeywords);
     }
 
     private boolean isNonEmpty(List<String> keywords) {

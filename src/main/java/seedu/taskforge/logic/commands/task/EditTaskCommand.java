@@ -1,6 +1,8 @@
 package seedu.taskforge.logic.commands.task;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
@@ -24,9 +26,11 @@ public class EditTaskCommand extends TaskCommand {
     public static final String SUBCOMMAND_WORD = "edit";
 
     public static final String MESSAGE_SUCCESS = "Task edited in project: %1$s";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " "
-            + SUBCOMMAND_WORD + " PERSON_INDEX -i TASK_INDEX_FROM_PROJECT -n NEW_TASK_NAME";
-    public static final String MESSAGE_INDEX_OUT_OF_BOUND = "Task index is out of bound";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + ": Edits a task assigned to a person.\n" + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD
+            + " PERSON_INDEX " + PREFIX_INDEX + "TASK_INDEX " + PREFIX_NAME + "NEW_TASK_NAME\n" + "Example: "
+            + COMMAND_WORD + " " + SUBCOMMAND_WORD + " 1 " + PREFIX_INDEX + "1 " + PREFIX_NAME + "Implement search";
+    public static final String MESSAGE_TASK_INDEX_OUT_OF_BOUNDS = "Task index is out of bounds.";
     public static final String MESSAGE_INVALID_TASK_REFERENCE = "This task reference is invalid.";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists for this project!";
 
@@ -53,13 +57,13 @@ public class EditTaskCommand extends TaskCommand {
 
         List<Person> lastShownList = model.getFilteredPersonList();
         if (personIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
         }
 
         Person personToEdit = lastShownList.get(personIndex.getZeroBased());
         List<PersonTask> personTaskList = personToEdit.getTasks();
         if (taskIndex.getZeroBased() >= personTaskList.size()) {
-            throw new CommandException(MESSAGE_INDEX_OUT_OF_BOUND);
+            throw new CommandException(MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
         }
 
         PersonTask personTask = personTaskList.get(taskIndex.getZeroBased());
@@ -134,4 +138,3 @@ public class EditTaskCommand extends TaskCommand {
         return Objects.hash(personIndex, taskIndex, newTask);
     }
 }
-

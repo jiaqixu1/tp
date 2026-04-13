@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import seedu.taskforge.commons.core.index.Index;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand.AddTaskDescriptor;
+import seedu.taskforge.logic.parser.ParserUtil;
 import seedu.taskforge.model.task.Task;
 
 public class AddTaskCommandParserTest {
@@ -40,10 +41,10 @@ public class AddTaskCommandParserTest {
 
     @Test
     public void parse_invalidPreamble_failure() {
-        assertParseFailure(parser, "-5" + TASK_DESC_IMPLEMENT_X, MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "0" + TASK_DESC_IMPLEMENT_X, MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "1 some random string", MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, "1 i/ string", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "-5" + TASK_DESC_IMPLEMENT_X, ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "0" + TASK_DESC_IMPLEMENT_X, ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "1 some random string", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "1 i/ string", ParserUtil.MESSAGE_INVALID_INDEX);
     }
 
     @Test

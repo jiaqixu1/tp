@@ -18,8 +18,8 @@ Tech lead and project managers who prefer efficient keyboard-driven workflows, c
 - Add and manage project team members with contact information
 - Create and organize multiple projects, assign team members to each project
 - Add, track, and manage tasks assigned to team members across different projects
-- View all projects and contacts information
-- Search and filter contacts by name and project for quick team lookups
+- View all projects and persons information
+- Search and filter persons by name and project for quick team lookups
 
 ### Acknowledgement
 TaskForge is built upon the AddressBook Level-3 template from [SE-EDU](https://github.com/se-edu/addressbook-level3) and adapted for project team management workflows.

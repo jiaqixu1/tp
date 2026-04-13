@@ -9,6 +9,8 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import seedu.taskforge.commons.core.LogsCenter;
 import seedu.taskforge.logic.commands.HelpCommand;
+import seedu.taskforge.logic.commands.RedoCommand;
+import seedu.taskforge.logic.commands.UndoCommand;
 import seedu.taskforge.logic.commands.person.AddCommand;
 import seedu.taskforge.logic.commands.person.ClearCommand;
 import seedu.taskforge.logic.commands.person.DeleteCommand;
@@ -21,6 +23,7 @@ import seedu.taskforge.logic.commands.project.DeleteProjectCommand;
 import seedu.taskforge.logic.commands.project.FindProjectCommand;
 import seedu.taskforge.logic.commands.project.ListProjectCommand;
 import seedu.taskforge.logic.commands.project.UnassignProjectCommand;
+import seedu.taskforge.logic.commands.project.ViewProjectMembersCommand;
 import seedu.taskforge.logic.commands.task.AddTaskCommand;
 import seedu.taskforge.logic.commands.task.AssignTaskCommand;
 import seedu.taskforge.logic.commands.task.DeleteTaskCommand;
@@ -54,6 +57,7 @@ public class HelpWindow extends UiPart<Stage> {
                     + ListProjectCommand.MESSAGE_USAGE + "\n\n"
                     + AssignProjectCommand.MESSAGE_USAGE + "\n\n"
                     + UnassignProjectCommand.MESSAGE_USAGE + "\n\n"
+                    + ViewProjectMembersCommand.MESSAGE_USAGE + "\n\n"
                     + "TASK COMMANDS\n"
                     + "------------------------------\n"
                     + AddTaskCommand.MESSAGE_USAGE + "\n\n"
@@ -68,6 +72,8 @@ public class HelpWindow extends UiPart<Stage> {
                     + "GENERAL COMMANDS\n"
                     + "------------------------------\n"
                     + ClearCommand.MESSAGE_USAGE + "\n\n"
+                    + UndoCommand.MESSAGE_USAGE + "\n\n"
+                    + RedoCommand.MESSAGE_USAGE + "\n\n"
                     + HelpCommand.MESSAGE_USAGE;
     public static final String USER_GUIDE_URL =
             "https://ay2526s2-cs2103t-w09-4.github.io/tp/UserGuide.html#quick-start";

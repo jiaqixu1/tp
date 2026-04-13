@@ -17,12 +17,15 @@ public class ViewProjectMembersCommandParser implements Parser<ViewProjectMember
     @Override
     public ViewProjectMembersCommand parse(String args) throws ParseException {
         requireNonNull(args);
+        if (args.trim().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    ViewProjectMembersCommand.MESSAGE_USAGE));
+        }
         try {
             Index index = ParserUtil.parseIndex(args);
             return new ViewProjectMembersCommand(index);
         } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewProjectMembersCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(pe.getMessage());
         }
     }
 }

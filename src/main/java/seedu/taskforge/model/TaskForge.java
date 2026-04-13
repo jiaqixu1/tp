@@ -163,7 +163,7 @@ public class TaskForge implements ReadOnlyTaskForge {
     }
 
     /**
-     * Removes the given project from all contacts that have it in their project list.
+     * Removes the given project from all persons that have it in their project list.
      */
     private void cascadeRemoveProjectFromPersons(int removedProjectIndex) {
         List<Person> allPersons = new ArrayList<>(persons.asUnmodifiableObservableList());
@@ -209,7 +209,7 @@ public class TaskForge implements ReadOnlyTaskForge {
     }
 
     /**
-     * Removes the given tasks from all contacts that have the task in their task list
+     * Removes the given tasks from all persons that have the task in their task list
      * and shifts task indices accordingly.
      */
     private void cascadeRemoveDeletedProjectTasksFromPersons(int projectIndex, Project originalProject,

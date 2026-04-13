@@ -5,8 +5,6 @@ import static seedu.taskforge.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_PROJECT_TITLE;
-import static seedu.taskforge.logic.parser.CliSyntax.PREFIX_TASK;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,8 +30,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                        PREFIX_TASK, PREFIX_PROJECT_TITLE);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL);
 
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate();
 
@@ -61,21 +58,6 @@ public class FindCommandParser implements Parser<FindCommand> {
             predicate.setEmailKeywords(emailKeywords);
         }
 
-        if (argMultimap.getValue(PREFIX_TASK).isPresent()) {
-            List<String> taskKeywords = getKeywords(argMultimap.getAllValues(PREFIX_TASK));
-            if (taskKeywords.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            predicate.setTaskKeywords(taskKeywords);
-        }
-
-        if (argMultimap.getValue(PREFIX_PROJECT_TITLE).isPresent()) {
-            List<String> projectKeywords = getKeywords(argMultimap.getAllValues(PREFIX_PROJECT_TITLE));
-            if (projectKeywords.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            predicate.setProjectKeywords(projectKeywords);
-        }
 
         if (!predicate.isAnyFieldChecked() || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));

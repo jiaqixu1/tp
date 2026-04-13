@@ -18,11 +18,11 @@ public class FindProjectCommand extends ProjectCommand {
 
     public static final String SUBCOMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = ProjectCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD
             + ": Finds all projects whose titles contain any of the specified keywords "
-            + "(case-insensitive) and displays them as text.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + ProjectCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD + " alpha";
+            + "(case-insensitive, partial matches allowed) and displays them in project list.\n"
+            + "Format: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " KEYWORD [MORE_KEYWORDS]...\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD + " alpha";
 
     public static final String MESSAGE_NO_PROJECT_FOUND = "No matching projects found.";
     public static final String MESSAGE_PROJECTS_FOUND = "Found projects:";

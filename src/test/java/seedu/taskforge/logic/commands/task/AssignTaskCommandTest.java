@@ -198,7 +198,7 @@ public class AssignTaskCommandTest {
                 .withTaskIndexes("3").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(assignTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(assignTaskCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     /**
@@ -215,7 +215,7 @@ public class AssignTaskCommandTest {
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(outOfBoundIndex,
                 new AssignTaskDescriptorBuilder().withTaskIndexes("3").build());
 
-        assertCommandFailure(assignTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(assignTaskCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -224,7 +224,7 @@ public class AssignTaskCommandTest {
                 .withTaskIndexes("999").build();
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(assignTaskCommand, model, AssignTaskCommand.MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
+        assertCommandFailure(assignTaskCommand, model, AssignTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -363,7 +363,7 @@ public class AssignTaskCommandTest {
         AssignTaskCommand assignTaskCommand = new AssignTaskCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(assignTaskCommand, model,
-                AssignTaskCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                AssignTaskCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
 }

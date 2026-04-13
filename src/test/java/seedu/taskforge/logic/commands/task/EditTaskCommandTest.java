@@ -79,7 +79,7 @@ public class EditTaskCommandTest {
         EditTaskCommand editTaskCommand = new EditTaskCommand(outOfBoundPersonIndex, INDEX_FIRST_TASK,
                 new Task(VALID_TASK_IMPLEMENT_X));
 
-        assertCommandFailure(editTaskCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(editTaskCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class EditTaskCommandTest {
         EditTaskCommand editTaskCommand = new EditTaskCommand(INDEX_FIRST_PERSON,
                 Index.fromOneBased(99), new Task(VALID_TASK_IMPLEMENT_X));
 
-        assertCommandFailure(editTaskCommand, model, EditTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+        assertCommandFailure(editTaskCommand, model, EditTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -152,5 +152,4 @@ public class EditTaskCommandTest {
         assertEquals(firstCommand.hashCode(), sameValuesCommand.hashCode());
     }
 }
-
 

@@ -184,7 +184,7 @@ public class AssignProjectCommandTest {
                 .withProjectIndexes("3").build();
         AssignProjectCommand assignProjectCommand = new AssignProjectCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(assignProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(assignProjectCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     /**
@@ -201,7 +201,7 @@ public class AssignProjectCommandTest {
         AssignProjectCommand assignProjectCommand = new AssignProjectCommand(outOfBoundIndex,
                 new AssignProjectDescriptorBuilder().withProjectIndexes("3").build());
 
-        assertCommandFailure(assignProjectCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(assignProjectCommand, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -212,7 +212,7 @@ public class AssignProjectCommandTest {
         AssignProjectCommand assignProjectCommand = new AssignProjectCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(assignProjectCommand, model,
-                AssignProjectCommand.MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX);
+                AssignProjectCommand.MESSAGE_PROJECT_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test

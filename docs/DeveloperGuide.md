@@ -13,6 +13,7 @@ title: Developer Guide
 * Widespread code reuse of AI-generated work (GitHub Copilot) by Hsu, used for auto complete, generate alternative solutions, generate fixes/help with debugging, generate some code solutions.
 * Widespread code reuse of AI-generated work (Codex) by Kevin, used to generate some methods and solutions, help understand and decide relevant JavaFX features, UI color suggestions, generate potential fixes for bugs, and polish documentation. It was also used for generate and refine tests. I reviewed, adapted, and verified the final submitted work myself. 
 * Widespread code reuse of AI-generated work (GitHub Copilot) by Vu, used to plan the idea of some unit test cases, suggesting implementation solutions and generating some error log messages. All of the content generating by AI has been closely revised before committing and pushing to the repo.
+* Widespread code reuse of AI-generated work (ChatGPT) by Jiaqi, used for debugging, generating alternative solutions, improving code clarity. All generated content was carefully reviewed, adapted, and verified before committing and pushing to the repo.
 * Code reuse of AB3 UserGuide and DeveloperGuide sections.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -63,7 +64,7 @@ The *Sequence Diagram* below shows how the components interact with each other f
 Each of the four main components (also shown in the diagram above),
 
 * defines its *API* in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point).
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
@@ -415,7 +416,7 @@ TaskForge supports task management using 10 commands:
     - `MarkTaskCommand` marks a task as done for a specific person.
     - `UnmarkTaskCommand` marks a task as not done for a specific person.
     - `TaskForgeParser` routes task subcommands to their corresponding command parsers/commands.
-    - `TaskForgeParser` routes `task add`, `task delete`, `task list`, `task find`, `task assign`, and `task unassign` to their corresponding command parsers/commands.
+    - `TaskForgeParser` routes `task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task mark`, and `task unmark` to their corresponding command parsers/commands.
 
 3. **Parser flow**
    - `TaskForge#parseCommand` routes top-level `task` input to `TaskForgeParser#handleTask`.
@@ -522,7 +523,7 @@ The availability status is displayed in the `PersonCard` UI as a colored circle 
 
 - Model side: assigned projects/tasks are stored on `Person` as references (`PersonProject`, `PersonTask`) to Project and Task.
 - Storage side: JSON loading enforces that project and task references remain valid against the global project or project's task lists before data is accepted.
-- This ensure consistent when editting data from the database.
+- This ensure consistent when editing data from the database.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -556,20 +557,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​ | I want to …​                           | So that I can…​                                                              |
 |---------|------|----------------------------------------|------------------------------------------------------------------------------|
-| `* * *` | user | add a contact                          | keep track of project members.                                               |
-| `* * *` | user | delete a contact                       | remove outdated information or remove a member from the project.             |
+| `* * *` | user | add a person                          | keep track of project members.                                               |
+| `* * *` | user | delete a person                       | remove outdated information or remove a member from the project.             |
 | `* * *` | user | add a project                          | keep track of projects.                                                      |
 | `* * *` | user | remove a project                       | remove completed or discarded project.                                       |
-| `* * *` | user | assign a project to a contact          | assign member to the project                                                 |
-| `* * *` | user | unassign a project from a contact      | remove members from a project                                                |
-| `* * *` | user | add tasks to contact                   | clearly know about their responsibilities                                    |
-| `* * *` | user | delete tasks from a contact            | easily remove tasks that is falsely assigned to the contact or has been done |
-| `* * *` | user | view all contacts                      | see all the project members contacts                                         |
+| `* * *` | user | assign a project to a person          | assign member to the project                                                 |
+| `* * *` | user | unassign a project from a person      | remove members from a project                                                |
+| `* * *` | user | add tasks to person                   | clearly know about their responsibilities                                    |
+| `* * *` | user | delete tasks from a person            | easily remove tasks that is falsely assigned to the person or has been done |
+| `* * *` | user | view all persons                      | see all the project members persons                                         |
 | `* * *` | user | view all projects                      | easily have an overview of all projects                                      |
-| `* * *` | user | view all tasks assigned to the contact | see all the tasks assigned to a contact                                      |
+| `* * *` | user | view all tasks assigned to the person | see all the tasks assigned to a person                                      |
 | `* * *` | user | find projects by name                  | quickly locate relevant projects from the global project list                |
-| `* * *` | user | find contacts by any parameters        | quickly find someone                                                         |
-| `*`     | user | view team member's availability        | who is free to take on work                                                  |
+| `* * *` | user | find persons by any parameters        | quickly find someone                                                         |
+| `*`     | user | view person's availability        | who is free to take on work                                                  |
 | `* * `  | user | undo the last action                   | recover from mistakes                                                       |
 | `* * `  | user | redo the last action                   | restore changes if I undo by mistake                                     |
 
@@ -579,18 +580,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `TaskForge` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: UC01 Add a contact**
+**Use case: UC01 Add a person**
 
 **Guarantees**
 
-1. The new contact specified will be added to TaskForge if the command parameters are valid.
-2. The new contact will not be added to TaskForge if there is a missing or invalid parameter needed for the contact.
+1. The new person specified will be added to TaskForge if the command parameters are valid.
+2. The new person will not be added to TaskForge if there is a missing or invalid parameter needed for the person.
 
 **MSS**
 
-1.  User enters the command in the input to add a new contact.
+1.  User enters the command in the input to add a new person.
 2.  TaskForge displays a success message in the reply dialog.
-3.  TaskForge displays the new contact in the contact list.
+3.  TaskForge displays the new person in the person list.
 
     Use case ends.
 
@@ -605,20 +606,46 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case resumes at step 2.
   Use case ends.
 
-**Use case: UC02 Add a project to a contact**
+**Use case: UC02 Add a project**
 
 **Guarantees**
 
-1. The new project will be successfully added to the specified contact when the command is valid.
-2. The new project will not be added to non-existing or invalid contact.
+1. The new project specified will be added to TaskForge if the command parameters are valid.
+2. The new project will not be added to TaskForge if there is a missing or invalid parameter needed for the project.
 
 **MSS**
 
-1. User requests to view all contacts.
-2. TaskForge displays the list of contacts.
-3. User requests to add a project to a contact.
-4. TaskForge checks the existence of the contact.
-5. TaskForge adds a project to a contact and displays success message.
+1.  User enters the command in the input to add a new project.
+2.  TaskForge displays a success message in the reply dialog.
+3.  TaskForge displays the new project in the project list.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. TaskForge detects incorrect command input.
+
+    * 1a1. TaskForge displays an error message on the invalid parameter.
+    * 1a2. User enters the command again.
+    * Steps 1a1-1a2 are repeated until the command entered is valid.
+
+      Use case resumes at step 2.
+  Use case ends.
+
+**Use case: UC03 Add a task to a project**
+
+**Guarantees**
+
+1. The new task specified will be added to the specified project if the command parameters are valid.
+2. The new task will not be added to non-existing or invalid project.
+
+**MSS**
+
+1. User requests to view all projects.
+2. TaskForge displays the list of projects.
+3. User requests to add a task to a project.
+4. TaskForge checks the existence of the project.
+5. TaskForge adds a task to a project and displays success message.
 
    Use case ends.
 
@@ -631,32 +658,130 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
    Use case resumes from step 2.
 
-* 2a. TaskForge could not find the mentioned contact.
+* 2a. TaskForge could not find the mentioned project.
 	 * 2a1. TaskForge displays an error message.
 	 * 2a2. User enters the command again.
 	 * Steps 2a1-2a2 are repeated until the input entered are valid.
 
    Use case resumes from step 2.
 
-**Use case: UC03 Delete a task from a contact**
+**Use case: UC04 Assign a project to a person**
 
 **Guarantees**
 
-1. The task is deleted from the contact if successful.
-2. The task is not deleted if there is missing information or invalid input.
+1. The new project will be successfully assigned to the specified person when the command is valid.
+2. The new project will not be assigned to non-existing or invalid person.
 
 **MSS**
 
-1. User requests for a list of all tasks assigned to the contact.
-2. TaskForge displays the tasks assigned to the selected contact.
-3. User requests to delete the selected task.
-4. TaskForge deletes the task and shows a confirmation message.
+1. User requests to view all persons.
+2. TaskForge displays the list of persons.
+3. User requests to assign a project to a person.
+4. TaskForge checks the existence of the person.
+5. TaskForge assigns a project to a person and displays success message.
 
    Use case ends.
 
 **Extensions**
 
-* 1a. Contact does not exist.
+* 1a. TaskForge detects invalid command input.
+	 * 1a1. TaskForge displays an error message.
+	 * 1a2. User enters the command again.
+    * Steps 1a1-1a2 are repeated until the input entered are valid.
+
+   Use case resumes from step 2.
+
+* 2a. TaskForge could not find the mentioned person.
+	 * 2a1. TaskForge displays an error message.
+	 * 2a2. User enters the command again.
+	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+
+   Use case resumes from step 2.
+
+**Use case: UC05 Unassign a project from a person**
+
+**Guarantees**
+
+1. The project is unassigned from the person if successful.
+2. The project is not unassigned if there is missing information or invalid input.
+
+**MSS**
+
+1. User requests for a list of all projects assigned to the person.
+2. TaskForge displays the projects assigned to the selected person.
+3. User requests to unassign the selected project.
+4. TaskForge unassigns the project and shows a confirmation message.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. Person does not exist.
+	 * 1a1. TaskForge shows an error message.
+	 * 1a2. User enters new input.
+    * Steps 1a1-1a2 are repeated until the input entered are valid.
+
+   Use case ends.
+
+* 2a. Project does not exist.
+	 * 2a1. TaskForge shows an error message.
+	 * 2a2. User enters new input.
+	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+
+     * Use case ends.
+
+**Use case: UC06 Assign a task to a person**
+
+**Guarantees**
+
+1. The new task will be successfully assigned to the specified person when the command is valid.
+2. The new task will not be assigned to non-existing or invalid person.
+
+**MSS**
+
+1. User requests to view all persons.
+2. TaskForge displays the list of persons.
+3. User requests to assign a task to a person.
+4. TaskForge checks the existence of the person
+5. TaskForge assigns a project to a person and displays success message.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. TaskForge detects invalid command input.
+	 * 1a1. TaskForge displays an error message.
+	 * 1a2. User enters the command again.
+    * Steps 1a1-1a2 are repeated until the input entered are valid.
+
+   Use case resumes from step 2.
+
+* 2a. TaskForge could not find the mentioned person.
+	 * 2a1. TaskForge displays an error message.
+	 * 2a2. User enters the command again.
+	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+
+   Use case resumes from step 2.
+
+**Use case: UC07 Unassign a task from a person**
+
+**Guarantees**
+
+1. The task is unassigned from the person if successful.
+2. The task is not unassigned if there is missing information or invalid input.
+
+**MSS**
+
+1. User requests for a list of all tasks assigned to the person.
+2. TaskForge displays the tasks assigned to the selected person.
+3. User requests to unassign the selected task.
+4. TaskForge unassigns the task and shows a confirmation message.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. Person does not exist.
 	 * 1a1. TaskForge shows an error message.
 	 * 1a2. User enters new input.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
@@ -670,12 +795,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
      * Use case ends.
 
-**Use case: UC04 View all contacts**
+**Use case: UC08 List all persons**
 
 **MSS**
 
-1. User request to view all contacts.
-2. TaskForge return the list with all contacts.
+1. User request to list all persons.
+2. TaskForge return the list with all persons.
 
    Use case ends.
 
@@ -688,7 +813,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
    Use case ends.
 
-**Use case: UC05 Find projects by name**
+**Use case: UC09 Find projects by name**
 
 **Guarantees**
 
@@ -714,7 +839,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-**Use case: UC06 - Undo previous command**
+**Use case: UC10 - Undo previous command**
 
 **Actor**: User
 
@@ -771,7 +896,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - Starting the application requires less than 5 seconds.
 
 #### Capacity
-- The system should be able to handle at least 100 contacts and 1000 tasks without noticeable performance degradation.
+- The system should be able to handle at least 100 persons and 1000 tasks without noticeable performance degradation.
 - The product JAR/ZIP file should be at maximum 100MB and each document should be at maximum 15MB.
 
 #### Security
@@ -794,9 +919,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Contact**: A person who is involved in a project and can be assigned tasks
-* **Task**: A unit of project that needs to be completed by a contact
-* **Project**: A collection of tasks and contacts organized to achieve a specific goal
+* **Person**: A person who have a name, phone number, email and can be assigned to projects and tasks
+* **Task**: A unit of project that needs to be completed by a person
+* **Project**: A collection of tasks and can be assigned to person
 * **GUI**: Graphical user interface of the application
 * **Mainstream OS**: Mainstream OS stands for Mainstream Operating System which include MacOS, Linux and Windows
 * **PR**: Pull request in Github
@@ -830,7 +955,7 @@ testers are expected to do more *exploratory* testing.
 
    i. Download the jar file and copy into an empty folder
 
-   ii. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   ii. Double-click the jar file Expected: Shows the GUI with a set of sample persons. The window size may not be optimum.
 
 2. Saving window preferences
 
@@ -852,7 +977,7 @@ testers are expected to do more *exploratory* testing.
    - `list`
 
    ii. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First person is deleted from the list. Details of the deleted person shown in the status message. Timestamp in the status bar is updated.
 
    iii. Test case: `delete 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
@@ -885,10 +1010,10 @@ testers are expected to do more *exploratory* testing.
    - `project list`
 
     ii. Test case: `project find alpha`
-       Expected: All projects whose titles contain `alpha` are shown in the result display.
+       Expected: The matching project is shown in the result display. (case-insensitive)
 
     iii. Test case: `project find beta`
-       Expected: The matching project is shown in the result display.
+       Expected: The matching project is shown in the result display. (case-insensitive)
 
     iv. Test case: `project find gamma`
        Expected: A message is shown indicating that no matching projects were found.
@@ -944,13 +1069,13 @@ testers are expected to do more *exploratory* testing.
        `task add 1 -n Draft API`
        `task assign 1 -pi 1 -i 1`
    ii. Test case: `task edit 1 -i 1 -n Finalise API`<br>
-   Expected: Success message is shown. `task list 1` shows `Finalise API`, and `Draft API` is no longer shown.
+      Expected: Success message is shown. `task list 1` both show `Finalise API`, and `Draft API` is no longer shown.
    iii. Test case: `task edit 2 -i 1 -n Anything`<br>
-   Expected: No data is changed. An invalid person index error is shown.
+      Expected: No data is changed. An invalid person index error is shown.
    iv. Test case: `task edit 1 -i 2 -n Anything`<br>
-   Expected: No data is changed. A task index out-of-bound error is shown.
-   v. Test case: `task add 1 -n Prepare Demo`, then `task edit 1 -i 1 -n Prepare Demo`<br>
-   Expected: No data is changed. A duplicate task error is shown.
+      Expected: No data is changed. A task index out-of-bound error is shown.
+   v. Test case: `task add 1 -n Prepare Demo`, then execute `task edit 1 -i 1 -n Prepare Demo`<br>
+      Expected: No data is changed. A duplicate task error is shown.
 
 ### Marking and unmarking a task (`task mark`, `task unmark`)
 
@@ -996,7 +1121,7 @@ testers are expected to do more *exploratory* testing.
    - `project list`
 
    ii. Test case: `project delete 1`<br>
-      Expected: Project at index `1` is deleted. That project is deleted from every Persons/Contacts that have been assigned along with their tasks.
+      Expected: Project at index `1` is deleted. That project is deleted from every persons that have been assigned along with their tasks.
 
    iii. Test case: `project delete 0`<br>
       Expected: Invalid project index error. No data changed.
@@ -1033,7 +1158,7 @@ testers are expected to do more *exploratory* testing.
    - `task assign 1 -pi 1 -i 1`
 
    ii. Test case: `task delete 1 -i 1`<br>
-      Expected: Task at index `1` in project `1` is deleted. Any contact/person assignment of that task is deleted. The other remaining task assignments of that contacts/persons will get their index renumbered.
+      Expected: Task at index `1` in project `1` is deleted. Any person assignment of that task is deleted. The other remaining task assignments of that persons will get their index renumbered.
 
    iii. Test case: `task delete 1 -i 999`<br>
       Expected: Task index out of bound error. No task removed.
@@ -1063,7 +1188,7 @@ testers are expected to do more *exploratory* testing.
       Expected: Invalid task index error.
 
    vi. Test case: `task assign 1 -pi 2 -i 1` where person `1` is not assigned to project `2`<br>
-      Expected: Task does not exist in any contact/person's project assigned error.
+      Expected: Task does not exist in any person's project assigned error.
 
 ### Unassigning a task
 1. Unassigning task(s) from a person
@@ -1143,7 +1268,7 @@ testers are expected to do more *exploratory* testing.
    Expected: Help window remains stable or is brought to the front.
 
    iv. Test case: `help extra`<br>
-   Expected: Invalid command format error.
+   Expected: Help window opens and the extra parameters are ignored.
 
    v. Verification:
    Ensure the help window includes:
@@ -1277,3 +1402,9 @@ Team Size: 4
 3. **Improve error message for multiple task assignments**: The current behavior generates a general error message for every duplicate or invalid task assignment when executing the `assign` command. To tackle this, we plan to add the task details, such as the task name, in the error message so users can identify which assignment caused the issue.
 
 4. **Improve person name validation**: The current behaviour only accepts names containing alphabet characters. In the future, we plan to improve name validation to accept valid names containing special characters (for example: ', -).
+
+5. **Allow more phone numbers format**: The current implementation only support phone number entries with number only. We plan to improve our validator to accept more phone number formats.
+
+6. **Allow special characters in project names**: The current implementation only support alphanumerics and spaces project names. We plan to update it to accept special characters in project names also.
+
+7. **Allow special characters in task names**: The current implementation only support alphanumerics and spaces task names. We plan to update it to accept special characters in task names also.

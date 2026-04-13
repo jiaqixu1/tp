@@ -62,7 +62,7 @@ public class MarkTaskCommandTest {
         Index outOfBoundPersonIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         MarkTaskCommand command = new MarkTaskCommand(outOfBoundPersonIndex, Index.fromOneBased(1));
 
-        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(command, model, Messages.MESSAGE_PERSON_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class MarkTaskCommandTest {
         int outOfBounds = firstPerson.getTasks().size() + 1;
 
         MarkTaskCommand command = new MarkTaskCommand(INDEX_FIRST_PERSON, Index.fromOneBased(outOfBounds));
-        assertCommandFailure(command, model, DeleteTaskCommand.MESSAGE_INDEX_OUT_OF_BOUND);
+        assertCommandFailure(command, model, DeleteTaskCommand.MESSAGE_TASK_INDEX_OUT_OF_BOUNDS);
     }
 
     @Test
@@ -87,4 +87,3 @@ public class MarkTaskCommandTest {
         assertFalse(firstCommand.equals((Object) null));
     }
 }
-

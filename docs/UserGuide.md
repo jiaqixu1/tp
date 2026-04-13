@@ -98,7 +98,7 @@ This section is split into 4 subsections:
   e.g. in `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `-n NAME [-d TASK]` can be used as `-n John Doe -d task1` or as `-n John Doe`.
+  e.g `[-n NAME] [-e EMAIL]` can be used as `-n John Doe -e johndoe@gmail.com` or as `-n John Doe` or as `-e johndoe@gmail.com`.
 
 * Items with `…`​ after square brackets can be used multiple times including zero times.<br>
   e.g. `[-d TASK]…​` can be used as ` ` (i.e. 0 times), `-d task1`, `-d task2 -d task3` etc.
@@ -174,10 +174,9 @@ There are 5 basic person commands that deal with adding, deleting, editing, list
 
 Adds a person to TaskForge.
 
-Format: `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]…​ [-l PROJECT]…​`
+Format: `add -n NAME -p PHONE_NUMBER -e EMAIL
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tasks and projects (including 0)
 A person must have valid unique phone number and email.
 </div>
 
@@ -204,7 +203,6 @@ A person must have valid unique phone number and email.
 
 Examples:
 * `add -n John Doe -p 98765432 -e johnd@example.com`
-* `add -n Betsy Crowe -d newTask2 -e betsycrowe@example.com -p 1234567 -d newTask1`
 
 #### Deleting a person : `delete`
 
@@ -232,6 +230,27 @@ Format: `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL]`
 > [!NOTE]
 > Project and task assignments are managed by the `project assign/unassign` and `task assign/unassign` commands.
 
+**Input constraints:**
+* **Name**
+    * Can contain only alphanumeric characters and spaces.
+    * Cannot be blank.
+    * Duplicate names are allowed.
+
+* **Phone number**
+    * Must contain numbers only.
+    * Must be at least 3 digits long.
+    * Must be unique across all persons.
+
+* **Email**
+    * Must be in the format `local-part@domain`.
+    * The local-part may contain only alphanumeric characters and the special characters `+`, `_`, `.`, `-`.
+    * The local-part must not start or end with a special character.
+    * The domain consists of domain labels separated by periods.
+    * The domain must end with a label that is at least 2 characters long.
+    * Each domain label must start and end with an alphanumeric character.
+    * Each domain label may contain hyphens, but only between alphanumeric characters.
+    * Must be unique across all persons.
+
 Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -n Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
@@ -244,11 +263,11 @@ Format: `list`
 
 #### Locating persons by multiple fields: `find`
 
-Finds persons whose fields (name, phone, email, tasks, projects) match the given keywords.
+Finds persons whose fields (name, phone, email) match the given keywords.
 > [!IMPORTANT]
 > This command will update to show the filtered list of persons that match the search criteria. To restore the original list of all persons, use the `list` command.
 
-Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS] [-d TASK_KEYWORDS] [-l PROJECT_KEYWORDS]`
+Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`
 * For a specific field, persons matching at least one keyword will be returned (i.e. `OR` search).
@@ -262,7 +281,6 @@ Examples:
 * `find -n John` returns `john` and `John Doe`
 * `find -n alex david` returns `Alex Yeoh`, `David Li`
 * `find -n Alice -p 91234567` returns any person named `Alice` whose phone number is `91234567`.
-* `find -d "Task 1" -l ProjectA` returns any person who has a task containing "Task 1" and belongs to project `ProjectA`.
 
 [↑ Back to Features](#features)
 
@@ -318,7 +336,6 @@ Displays all projects currently available in TaskForge.
 
 Format: `project list`
 
-
 #### Finding projects by name : `project find`
 
 Finds projects whose names contain any of the given keywords.
@@ -370,14 +387,13 @@ Examples:
 
 #### Viewing project members : `project members`
 
-Displays all persons assigned to a project.
+Displays all persons assigned to a project, including name, phone number and email address.
 
 Format: `project members PROJECT_INDEX`
 
 * Shows all persons who are assigned to the specified project.
 * `PROJECT_INDEX` refers to the project index displayed in `project list`.
 * `PROJECT_INDEX` **must be a positive integer** `1, 2, 3, ...`
-* The result lists all members associated with the project.
 * If no persons are assigned to the project, an empty result or message is shown.
 
 [↑ Back to Features](#features)
@@ -385,7 +401,7 @@ Format: `project members PROJECT_INDEX`
 --------------------------------------------------------------------------------------------------------------------
 
 ### Task
-There are 4 basic task commands and 6 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
+There are 4 basic task commands and 5 task management commands. Basic commands deal with adding, deleting, editing, and finding tasks. 
 While task management commands deal with assigning/unassigning tasks to/from persons, marking/unmarking tasks as done, and listing tasks by project/person.
 
 Basic commands:
@@ -589,12 +605,11 @@ This summary is split into 4 main sections:
 
 Action | Format | Example
 --------|--------|--------
-**[Add](#adding-a-person-add)** | `add -n NAME -p PHONE_NUMBER -e EMAIL [-d TASK]… [-l PROJECT]…` | `add -n James Ho -p 22224444 -e jamesho@example.com -l ProjectX -d TaskY`
+**[Add](#adding-a-person-add)** | `add -n NAME -p PHONE_NUMBER -e EMAIL` | `add -n James Ho -p 22224444 -e jamesho@example.com`
 **[Delete](#deleting-a-person--delete)** | `delete PERSON_INDEX` | `delete 3`
 **[Edit](#editing-a-person--edit)** | `edit PERSON_INDEX [-n NAME] [-p PHONE] [-e EMAIL]` | `edit 1 -n James Ho -p 22224444 -e jamesho@example.com`
 **[List](#listing-all-persons--list)** | `list` |
-**[Find](#locating-persons-by-multiple-fields-find)** | `find KEYWORD [MORE_KEYWORDS]` | `find James Jake`
-
+**[Find](#locating-persons-by-multiple-fields-find)** | `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]` | `find -n James -p 91234567`
 ---
 
 ### Project Commands

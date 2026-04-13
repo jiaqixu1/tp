@@ -13,7 +13,8 @@ import seedu.taskforge.model.TaskForge;
 public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
-    public static final String MESSAGE_SUCCESS = "TaskForge has been cleared!";
+    public static final String MESSAGE_SUCCESS = "All data in TaskForge has been cleared. "
+            + "Type 'undo' to undo this action.";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Clears all entries.\n"
             + "Example: " + COMMAND_WORD;
 

@@ -19,6 +19,9 @@ public class ListProjectCommand extends ProjectCommand {
 
     public static final String SUBCOMMAND_WORD = "list";
 
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " " + SUBCOMMAND_WORD + ": Lists all projects.\n"
+            + "Example: " + COMMAND_WORD + " " + SUBCOMMAND_WORD;
+
     public static final String MESSAGE_SUCCESS = "Listed all projects:";
 
 

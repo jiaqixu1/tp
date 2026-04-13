@@ -36,7 +36,7 @@ public class EditTaskCommandParserTest {
     @Test
     public void parse_invalidValues_failure() {
         assertParseFailure(parser, "x " + PREFIX_INDEX + " 1" + TASK_DESC_IMPLEMENT_X,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditTaskCommand.MESSAGE_USAGE));
+                ParserUtil.MESSAGE_INVALID_INDEX);
         assertParseFailure(parser, "1 " + PREFIX_INDEX + " x" + TASK_DESC_IMPLEMENT_X,
                 ParserUtil.MESSAGE_INVALID_INDEX);
         assertParseFailure(parser, "1 " + PREFIX_INDEX + " 1" + INVALID_TASK_DESC_ADD,
@@ -59,5 +59,4 @@ public class EditTaskCommandParserTest {
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 }
-
 

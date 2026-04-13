@@ -17,7 +17,7 @@ It combines a fast Command Line Interface (CLI) with visual lists so you can ver
 - Users comfortable with basic command-line usage (e.g., running `java -jar ...`).
 > [!NOTE]
 > This guide is intended for users who are comfortable with basic command-line usage.
-> If you are new to command-line interfaces, you may need to familiarize themselves with Java installation and command syntax before using the application effectively.
+> If you are new to command-line interfaces, you may need to familiarize yourselves with Java installation and command syntax before using the application effectively.
 
 * Table of Contents
 {:toc}
@@ -39,11 +39,11 @@ This **taskforge folder** will be used by TaskForge to store its data and config
 1. Take note of the **path** to your newly created **taskforge folder**. You will need to use that path to change your directory before running the app in the next step. e.g. if you created the folder in your Desktop.
     <br><br>For Windows, the path should be:
     ```
-    C:\User\YourName\Desktop\taskforge
+    C:\Users\YourName\Desktop\taskforge
     ```
     For Mac and Linux, the path should be:
     ```
-    /User/YourName/Desktop/taskforge
+    /Users/YourName/Desktop/taskforge
     ```
 
 1. Open a command terminal <br>
@@ -275,7 +275,7 @@ Format: `find [-n NAME_KEYWORDS] [-p PHONE_KEYWORDS] [-e EMAIL_KEYWORDS]`
 * When multiple fields are specified, only persons matching ALL specified fields will be returned (i.e. `AND` search).
   e.g. `find -n Alice -p 91234567` will return only persons named Alice AND with the phone number 91234567.
 * Only full words will be matched e.g. `Han` will not match `Hans`.
-* If no one is found by the keywords searched, the message will display "0 persons. listed".
+* If no one is found by the keywords searched, the message will display "0 persons listed".
 
 Examples:
 * `find -n John` returns `john` and `John Doe`
@@ -310,12 +310,13 @@ Format: `project add PROJECT_TITLE`
 
 * Adds a new project with the specified project title.
 * `PROJECT_TITLE` must contain letters, numbers, and spaces only, and it should be between 1 to 64 characters.
-* Duplicate project title are not allowed.
-* Project titles are automatically normalized to title case, where for each word(separated by space) in the project name, the first letter is capitalized and the remaining letters are converted to lowercase.
+* Duplicate project titles are not allowed.
+* Project titles are automatically normalized to title case, where each word(separated by space) in the project name, the first letter is capitalized and the remaining letters are converted to lowercase.
 
 Examples:
 * `project add web app` adds a new project named `Web App`.
 * `project add MobileApp` adds a new project named `Mobileapp`.
+* `project add weB APPs` adds a new project named `Web Apps`.
 
 #### Deleting a project : `project delete`
 
@@ -344,7 +345,7 @@ Format: `project find KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g. `alpha` will match `Alpha`
 * The search is performed on project names only.
-* Projects matching at least one keyword will be shown (i.e. `OR` search). e.g. `web app` will return `Web Mobile`, `App building`
+* Projects matching at least one keyword will be shown (i.e. `OR` search). e.g. `web app` will return `Web Mobile`, `App building`, whose names contain either web or app.
 * The result is shown as plain text in the result display and filters the project list.
 * Partial words will be matched e.g. `bui` will match `build`
 
@@ -442,7 +443,7 @@ Deletes a task from a project in the project list.
 Format: `task delete PROJECT_INDEX {-i TASK_INDEX_FROM_PROJECT}`
 
 * Deletes task(s) from the project at the specified `PROJECT_INDEX`.
-* `TASK_INDEX_FROM_PROJECT` refers to the task ID shown in the specified project.
+* `TASK_INDEX_FROM_PROJECT` refers to the task index shown in the specified project.
 * `PROJECT_INDEX` and `TASK_INDEX_FROM_PROJECT` **must be positive integers** `1, 2, 3, ...`
 * To delete multiple tasks from the same project in one command, repeat the `-i` prefix.
 
@@ -459,7 +460,7 @@ Edits the name of a task assigned to a person.
 Format: `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`
 
 * Edits the task at `TASK_INDEX_FROM_PERSON` from person with index `PERSON_INDEX`.
-* `TASK_INDEX_FROM_PERSON` refers to the task ID shown for the specified person.
+* `TASK_INDEX_FROM_PERSON` refers to the task index shown for the specified person.
 * `TASK_INDEX_FROM_PERSON` **must be a positive integer** `1, 2, 3, ...`
 * `NEW_TASK_NAME` must follow the same naming constraints as `TASK_NAME` in `task add`.
 
@@ -492,7 +493,7 @@ Format: `task assign PERSON_INDEX {-pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT}
 * Adds task(s) to the person at the specified `PERSON_INDEX`.
 * `PERSON_INDEX` refers to the person index displayed in `list`.
 * `PROJECT_INDEX` refers to the project index displayed in `project list`.
-* `TASK_INDEX_FROM_PROJECT` refers to the task ID shown in the specified project.
+* `TASK_INDEX_FROM_PROJECT` refers to the task index shown in the specified project.
 * `PERSON_INDEX`, `PROJECT_INDEX`, and `TASK_INDEX_FROM_PROJECT` **must be a positive integer** `1, 2, 3, ...`
 * To assign multiple tasks to a person in one command, repeat each -pi and -i pair with the corresponding indexes.
 
@@ -507,7 +508,7 @@ Unassigns one or more tasks from a person by task index.
 Format: `task unassign PERSON_INDEX {-i TASK_INDEX_FROM_PERSON}`
 
 * Deletes task(s) from the person at the specified `PERSON_INDEX`.
-* `TASK_INDEX_FROM_PERSON` refers to the task ID shown for the specified person.
+* `TASK_INDEX_FROM_PERSON` refers to the task index shown for the specified person.
 * `PERSON_INDEX` and `TASK_INDEX_FROM_PERSON` **must be positive integers** `1, 2, 3, ...`
 * To unassign multiple tasks from a person in one command, repeat the `-i` prefix.
 
@@ -523,7 +524,7 @@ Format: `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 
 * Marks the task identified by `TASK_INDEX_FROM_PERSON` as done for the person identified by `PERSON_INDEX`.
 * `PERSON_INDEX` refers to the person index displayed in `list`.
-* `TASK_INDEX_FROM_PERSON` refers to the task ID shown for the specified person.
+* `TASK_INDEX_FROM_PERSON` refers to the task index shown for the specified person.
 * `PERSON_INDEX` and `TASK_INDEX_FROM_PERSON` **must be positive integers** `1, 2, 3, ...`
 
 Example:
@@ -537,7 +538,7 @@ Format: `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 
 * Unmarks the task identified by `TASK_INDEX_FROM_PERSON` as done for the person identified by `PERSON_INDEX`.
 * `PERSON_INDEX` refers to the person index displayed in `list`.
-* `TASK_INDEX_FROM_PERSON` refers to the task ID shown for the specified person.
+* `TASK_INDEX_FROM_PERSON` refers to the task index shown for the specified person.
 * `PERSON_INDEX` and `TASK_INDEX_FROM_PERSON` **must be positive integers** `1, 2, 3, ...`
 
 Example:

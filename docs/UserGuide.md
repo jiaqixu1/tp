@@ -98,7 +98,7 @@ This section is split into 4 subsections:
   e.g. in `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `[-n NAME] [-e EMAIL]` can be used as `-n John Doe -e johndoe@gmail.com` or as `-n John Doe`.
+  e.g `[-n NAME] [-e EMAIL]` can be used as `-n John Doe -e johndoe@gmail.com` or as `-n John Doe` or as `-e johndoe@gmail.com`.
 
 * Items with `…`​ after square brackets can be used multiple times including zero times.<br>
   e.g. `[-d TASK]…​` can be used as ` ` (i.e. 0 times), `-d task1`, `-d task2 -d task3` etc.

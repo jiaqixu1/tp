@@ -52,6 +52,9 @@ This section is split into 4 subsections:
 
 **:information_source: Notes about the command format:**<br>
 
+* All command and subcommand words are case-sensitive and must be entered in lowercase.<br>
+  e.g.`task add` is valid while `Task Add` and `task Add` are not.
+
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
 

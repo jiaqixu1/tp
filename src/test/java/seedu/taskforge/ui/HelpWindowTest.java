@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.taskforge.logic.commands.ExitCommand;
 import seedu.taskforge.logic.commands.HelpCommand;
 import seedu.taskforge.logic.commands.RedoCommand;
 import seedu.taskforge.logic.commands.UndoCommand;
@@ -69,6 +70,7 @@ public class HelpWindowTest {
                 + ClearCommand.MESSAGE_USAGE + "\n\n"
                 + UndoCommand.MESSAGE_USAGE + "\n\n"
                 + RedoCommand.MESSAGE_USAGE + "\n\n"
+                + ExitCommand.MESSAGE_USAGE + "\n\n"
                 + HelpCommand.MESSAGE_USAGE;
 
         assertEquals(expected, HelpWindow.HELP_MESSAGE);

@@ -569,7 +569,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *` | user | view all tasks assigned to the person | see all the tasks assigned to a person                                      |
 | `* * *` | user | find projects by name                  | quickly locate relevant projects from the global project list                |
 | `* * *` | user | find persons by any parameters        | quickly find someone                                                         |
-| `*`     | user | view team member's availability        | who is free to take on work                                                  |
+| `*`     | user | view person's availability        | who is free to take on work                                                  |
 | `* * `  | user | undo the last action                   | recover from mistakes                                                       |
 | `* * `  | user | redo the last action                   | restore changes if I undo by mistake                                     |
 

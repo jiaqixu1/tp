@@ -3,7 +3,7 @@ layout: page
 title: Developer Guide
 ---
 * Table of Contents
-{:toc}
+  {:toc}
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ title: Developer Guide
 
 * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
 * Widespread code reuse of AI-generated work (GitHub Copilot) by Hsu, used for auto complete, generate alternative solutions, generate fixes/help with debugging, generate some code solutions.
-* Widespread code reuse of AI-generated work (Codex) by Kevin, used to generate some methods and solutions, help understand and decide relevant JavaFX features, UI color suggestions, generate potential fixes for bugs, and polish documentation. It was also used for generate and refine tests. I reviewed, adapted, and verified the final submitted work myself. 
+* Widespread code reuse of AI-generated work (Codex) by Kevin, used to generate some methods and solutions, help understand and decide relevant JavaFX features, UI color suggestions, generate potential fixes for bugs, and polish documentation. It was also used for generate and refine tests. I reviewed, adapted, and verified the final submitted work myself.
 * Widespread code reuse of AI-generated work (GitHub Copilot) by Vu, used to plan the idea of some unit test cases, suggesting implementation solutions and generating some error log messages. All of the content generating by AI has been closely revised before committing and pushing to the repo.
 * Widespread code reuse of AI-generated work (ChatGPT) by Jiaqi, used for debugging, generating alternative solutions, improving code clarity. All generated content was carefully reviewed, adapted, and verified before committing and pushing to the repo.
 * Code reuse of AB3 UserGuide and DeveloperGuide sections.
@@ -41,7 +41,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103T-W09-4/tp/blob/master/src/main/java/seedu/taskforge/Main.java) 
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103T-W09-4/tp/blob/master/src/main/java/seedu/taskforge/Main.java)
 and [`MainApp`](https://github.com/AY2526S2-CS2103T-W09-4/tp/blob/master/src/main/java/seedu/taskforge/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
@@ -74,7 +74,7 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified 
+The **API** of this component is specified
 in [`Ui.java`](https://github.com/AY2526S2-CS2103T-W09-4/tp/blob/master/src/main/java/seedu/taskforge/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
@@ -90,8 +90,8 @@ command usage instructions to the user.
 
 The `UI` component uses the JavaFX UI framework. The layout of these UI parts
 are defined in matching `.fxml` files located in the `src/main/resources/view` folder.
-For example, the layout of the 
-[`MainWindow`](https://github.com/AY2526S2-CS2103T-W09-4/tp/blob/master/src/main/java/seedu/taskforge/ui/MainWindow.java) 
+For example, the layout of the
+[`MainWindow`](https://github.com/AY2526S2-CS2103T-W09-4/tp/blob/master/src/main/java/seedu/taskforge/ui/MainWindow.java)
 is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-W09-4/tp/blob/master/src/main/resources/view/MainWindow.fxml).
 
 The `UiManager` implements the `Ui` interface and is responsible for
@@ -261,13 +261,13 @@ The following activity diagram summarizes what happens when a user executes a ne
 **Aspect: How undo & redo executes:**
 
 * **Alternative 1 (current choice):** Saves the entire taskforge.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+    * Pros: Easy to implement.
+    * Cons: May have performance issues in terms of memory usage.
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+    * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+    * Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
 
@@ -280,17 +280,17 @@ TaskForge supports project management through the parent command `project` with 
 - `project list`
 - `project assign PERSON_INDEX -i PROJECT_INDEX`
 - `project unassign PERSON_INDEX -i PROJECT_INDEX`
-- `project find [KEYWORD]`
+- `project find KEYWORD [MORE_KEYWORDS]`
 - `project members PROJECT_INDEX`
 
 #### Implementation overview
 
 1. **Model layer**
-   - `UniqueProjectList` stores globally unique project entries.
+    - `UniqueProjectList` stores globally unique project entries.
     - `Person` stores assigned projects as `List<PersonProject>`, where each `PersonProject` stores a project index refers to the index of Project inside the global UniqueProjectList.
     - Project references are resolved against the global UniqueProjectList when rendering UI output or validating commands.
-   - `TaskForge` exposes project operations through methods such as
-     `hasProject`, `addProject`, `setProject`, `removeProject`, `cascadeRemoveProjectFromPersons`, and `getProjectList`.
+    - `TaskForge` exposes project operations through methods such as
+      `hasProject`, `addProject`, `setProject`, `removeProject`, `cascadeRemoveProjectFromPersons`, and `getProjectList`.
 
 2. **Logic layer**
     - `AddProjectCommand` adds a new project to the global `UniqueProjectList`.
@@ -303,16 +303,16 @@ TaskForge supports project management through the parent command `project` with 
     - `TaskForgeParser` routes `project add`, `project delete`, `project list`, `project assign`, `project unassign`, `project find`, and `project members` to their corresponding command parsers and commands.
 
 3. **Parser flow**
-   - `TaskForgeParser#parseCommand` routes top-level `project` input to `TaskForgeParser#handleProject`.
-   - `handleProject` extracts the project subcommand and dispatches as follows:
-      - `add` -> `AddProjectCommandParser`
-      - `delete` -> `DeleteProjectCommandParser`
-      - `list` -> `ListProjectCommandParser`
-      - `assign` -> `AssignProjectCommandParser`
-      - `unassign` -> `UnassignProjectCommandParser`
-      - `find` -> `FindProjectCommandParser`
-      - `members` -> `ViewProjectMembersCommandParser`
-   - Unknown or missing project subcommands throw a `ParseException` with `ProjectCommand.MESSAGE_USAGE`.
+    - `TaskForgeParser#parseCommand` routes top-level `project` input to `TaskForgeParser#handleProject`.
+    - `handleProject` extracts the project subcommand and dispatches as follows:
+        - `add` -> `AddProjectCommandParser`
+        - `delete` -> `DeleteProjectCommandParser`
+        - `list` -> `ListProjectCommandParser`
+        - `assign` -> `AssignProjectCommandParser`
+        - `unassign` -> `UnassignProjectCommandParser`
+        - `find` -> `FindProjectCommandParser`
+        - `members` -> `ViewProjectMembersCommandParser`
+    - Unknown or missing project subcommands throw a `ParseException` with `ProjectCommand.MESSAGE_USAGE`.
 
 4. **Storage layer**
     - `JsonSerializableTaskForge` persists project data in the `projects` JSON array.
@@ -348,7 +348,7 @@ TaskForge supports project management through the parent command `project` with 
 - `AssignProjectCommand` resolves each `PROJECT_INDEX` against the global project list.
 - Invalid `PROJECT_INDEX` values are rejected.
 - Each valid referenced project is converted into a `PersonProject` before being added to the person’s assigned project list, instead of storing the full `Project` object directly.
-- Duplicate assignments are rejected with `MESSAGE_DUPLICATE_PROJECT`. 
+- Duplicate assignments are rejected with `MESSAGE_DUPLICATE_PROJECT`.
 
 **Project unassignment from person (`project unassign`)**:
 - `UnassignProjectCommand` validates that the specified project(s) exist in the person’s assigned project list before unassignment.
@@ -385,25 +385,25 @@ This ensures a person can only be assigned to valid existing projects.
 
 ### Task management feature (`task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task mark`, `task unmark`)
 
-TaskForge supports task management using 10 commands:
+TaskForge supports task management using 9 commands:
 - `task add PROJECT_INDEX -n TASK_NAME`
 - `task delete PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`
 - `task edit PERSON_INDEX -i TASK_INDEX_FROM_PERSON -n NEW_TASK_NAME`
 - `task list PROJECT_INDEX`
 - `task find KEYWORD [MORE_KEYWORDS]`
 - `task assign PERSON_INDEX -pi PROJECT_INDEX -i TASK_INDEX_FROM_PROJECT`
-- `task unassign INDEX -i TASK_INDEX_FROM_PERSON`
+- `task unassign PERSON_INDEX -i TASK_INDEX_FROM_PERSON`
 - `task mark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 - `task unmark PERSON_INDEX TASK_INDEX_FROM_PERSON`
 
 #### Implementation overview
 
 1. **Model layer**
-   - `UniqueTaskList` stores task entries within each project.
-   - `Project` exposes task operations through methods such as `hasTask`, `addTask`, `removeTask`, and `getTasks`.
+    - `UniqueTaskList` stores task entries within each project.
+    - `Project` exposes task operations through methods such as `hasTask`, `addTask`, `removeTask`, and `getTasks`.
     - `Person` stores assigned tasks as `List<PersonTask>`, where each `PersonTask` stores `(projectIndex, taskIndex)` refers to the index of Project in the global UniqueProjectList and the index of task inside the UniqueTaskList of the Project.
-   - `TaskForge` provides cascade deletion from all task assignments when a task is deleted from a project.
-   - `Task` includes an `isDone` boolean field to track the completion status of a task. It provides `getStatus()`, `setDone()`, and `setNotDone()` methods.
+    - `TaskForge` provides cascade deletion from all task assignments when a task is deleted from a project.
+    - `Task` includes an `isDone` boolean field to track the completion status of a task. It provides `getStatus()`, `setDone()`, and `setNotDone()` methods.
 
 2. **Logic layer**
     - `AddTaskCommand` adds new task(s) to a project in the global project list.
@@ -419,24 +419,24 @@ TaskForge supports task management using 10 commands:
     - `TaskForgeParser` routes `task add`, `task delete`, `task edit`, `task list`, `task find`, `task assign`, `task unassign`, `task mark`, and `task unmark` to their corresponding command parsers/commands.
 
 3. **Parser flow**
-   - `TaskForge#parseCommand` routes top-level `task` input to `TaskForgeParser#handleTask`.
-   - `handleTask` extracts the task subcommand and dispatches as follows:
-      - `add` -> `AddTaskCommandParser`
-      - `delete` -> `DeleteTaskCommandParser`
-      - `edit` -> `EditTaskCommandParser`
-      - `list` -> `ListTaskCommandParser`
-      - `find` -> `FindTaskCommandParser`
-      - `assign` -> `AssignTaskCommandParser`
-      - `unassign` -> `UnassignTaskCommandParser`
-      - `mark` -> `MarkTaskCommandParser`
-      - `unmark` -> `UnmarkTaskCommandParser`
-   - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
+    - `TaskForgeParser#parseCommand` routes top-level `task` input to `TaskForgeParser#handleTask`.
+    - `handleTask` extracts the task subcommand and dispatches as follows:
+        - `add` -> `AddTaskCommandParser`
+        - `delete` -> `DeleteTaskCommandParser`
+        - `edit` -> `EditTaskCommandParser`
+        - `list` -> `ListTaskCommandParser`
+        - `find` -> `FindTaskCommandParser`
+        - `assign` -> `AssignTaskCommandParser`
+        - `unassign` -> `UnassignTaskCommandParser`
+        - `mark` -> `MarkTaskCommandParser`
+        - `unmark` -> `UnmarkTaskCommandParser`
+    - Unknown or missing task subcommands throw a `ParseException` with `TaskCommand.MESSAGE_USAGE`.
 
 4. **Storage layer**
-      - `JsonAdaptedTask` handles serialization/deserialization of task objects.
-      - Person-side task assignments are persisted as `PersonTask` references `(projectIndex, taskIndex)`.
+    - `JsonAdaptedTask` handles serialization/deserialization of task objects.
+    - Person-side task assignments are persisted as `PersonTask` references `(projectIndex, taskIndex)`.
     - During deserialization, tasks are restored into projects so task entries persist across application restarts.
-      - During deserialization, invalid task references (missing project index or task index) are rejected.
+        - During deserialization, invalid task references (missing project index or task index) are rejected.
 
 #### Validation and cascading behavior
 
@@ -449,7 +449,7 @@ TaskForge supports task management using 10 commands:
 - `DeleteTaskCommand` removes task(s) from a project by project index and task index.
 - `TaskForge#cascadeRemoveDeletedProjectTasksFromPersons()` automatically removes the deleted task from all persons who have it assigned.
 
-**Task editing in project (`task edit`)**:
+**Task editing from assigned person (`task edit`)**:
 - `EditTaskCommand` validates that the person index and task index is within bounds.
 - The command renames the selected project task and rejects duplicates via `MESSAGE_DUPLICATE_TASK`.
 - Before applying the rename, the command snapshots people currently assigned to the original task.
@@ -466,9 +466,9 @@ TaskForge supports task management using 10 commands:
 - Updates the filtered project list to show projects that contain matching tasks.
 
 **Task assignment to person (`task assign`)**:
-- `AssignTaskCommand` resolves each selected `TASK_INDEX` into a `(projectIndex, taskIndex)` pair based on tasks
+- AssignTaskCommand resolves each `(PROJECT_INDEX, TASK_INDEX_FROM_PROJECT)` pair against the global project list and the selected project's task list.
   available from the person's assigned projects.
-- Invalid `TASK_INDEX` values are rejected.
+- Invalid `TASK_INDEX_FROM_PROJECT` values are rejected.
 - Rejects duplicate assignments via `MESSAGE_DUPLICATE_TASK`.
 
 **Task unassignment from person (`task unassign`)**:
@@ -507,7 +507,7 @@ TaskForge supports task management using 10 commands:
 - If the person index is invalid, execution fails with `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX` or the command-specific invalid index message.
 - `AddTaskCommand` and `DeleteTaskCommand` resolve the target project from the list and validate the project index before executing.
 - `EditTaskCommand` resolves the target person by index and validates both the person index and task index before executing.
-- `ListTaskCommand` resolves the target project by project name and fails if the project does not exist.
+- `ListTaskCommand` resolves the target project by project index and fails if the project does not exist.
 - `FindTaskCommand` resolves across all project task lists and returns matching task entries in `taskName - projectName` format.
 - On success, `AddTaskCommand`, `DeleteTaskCommand`, `EditTaskCommand`, `AssignTaskCommand`, and `UnassignTaskCommand` update the model.
 - `ListTaskCommand` and `FindTaskCommand` only retrieve and display information without modifying model data.
@@ -523,7 +523,7 @@ The availability status is displayed in the `PersonCard` UI as a colored circle 
 
 - Model side: assigned projects/tasks are stored on `Person` as references (`PersonProject`, `PersonTask`) to Project and Task.
 - Storage side: JSON loading enforces that project and task references remain valid against the global project or project's task lists before data is accepted.
-- This ensure consistent when editing data from the database.
+- This ensures consistency when editing data directly in the JSON storage file.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -555,24 +555,25 @@ The availability status is displayed in the `PersonCard` UI as a colored circle 
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                           | So that I can…​                                                              |
-|---------|------|----------------------------------------|------------------------------------------------------------------------------|
-| `* * *` | user | add a person                          | keep track of project members.                                               |
-| `* * *` | user | delete a person                       | remove outdated information or remove a member from the project.             |
-| `* * *` | user | add a project                          | keep track of projects.                                                      |
-| `* * *` | user | remove a project                       | remove completed or discarded project.                                       |
-| `* * *` | user | assign a project to a person          | assign member to the project                                                 |
-| `* * *` | user | unassign a project from a person      | remove members from a project                                                |
-| `* * *` | user | add tasks to person                   | clearly know about their responsibilities                                    |
-| `* * *` | user | delete tasks from a person            | easily remove tasks that is falsely assigned to the person or has been done |
+| Priority | As a …​ | I want to …​                          | So that I can…​                                                             |
+|---------|------|---------------------------------------|-----------------------------------------------------------------------------|
+| `* * *` | user | add a person                          | keep track of project members.                                              |
+| `* * *` | user | delete a person                       | remove outdated information or remove a member from the project.            |
+| `* * *` | user | add a project                         | keep track of projects.                                                     |
+| `* * *` | user | remove a project                      | remove completed or discarded project.                                      |
+| `* * *` | user | assign a project to a person          | assign member to the project                                                |
+| `* * *` | user | unassign a project from a person      | remove members from a project                                               |
+| `* * *` | user | assign tasks to person                | clearly know about their responsibilities                                   |
+| `* * *` | user | unassign tasks from a person          | easily remove tasks that is falsely assigned to the person or has been done |
 | `* * *` | user | view all persons                      | see all the project members persons                                         |
-| `* * *` | user | view all projects                      | easily have an overview of all projects                                      |
+| `* * *` | user | view all projects                     | easily have an overview of all projects                                     |
+| `* * *` | user | view all persons under a project      | see all the members under a project                                         |
 | `* * *` | user | view all tasks assigned to the person | see all the tasks assigned to a person                                      |
-| `* * *` | user | find projects by name                  | quickly locate relevant projects from the global project list                |
-| `* * *` | user | find persons by any parameters        | quickly find someone                                                         |
-| `*`     | user | view person's availability        | who is free to take on work                                                  |
-| `* * `  | user | undo the last action                   | recover from mistakes                                                       |
-| `* * `  | user | redo the last action                   | restore changes if I undo by mistake                                     |
+| `* * *` | user | find projects by name                 | quickly locate relevant projects from the global project list               |
+| `* * *` | user | find persons by any parameters        | quickly find someone                                                        |
+| `*`     | user | view person's availability            | who is free to take on work                                                 |
+| `* * `  | user | undo the last action                  | recover from mistakes                                                       |
+| `* * `  | user | redo the last action                  | restore changes if I undo by mistake                                        |
 
 *{More to be added}*
 
@@ -604,7 +605,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * Steps 1a1-1a2 are repeated until the command entered is valid.
 
       Use case resumes at step 2.
-  Use case ends.
+      Use case ends.
 
 **Use case: UC02 Add a project**
 
@@ -630,7 +631,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * Steps 1a1-1a2 are repeated until the command entered is valid.
 
       Use case resumes at step 2.
-  Use case ends.
+      Use case ends.
 
 **Use case: UC03 Add a task to a project**
 
@@ -652,18 +653,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. TaskForge detects invalid command input.
-	 * 1a1. TaskForge displays an error message.
-	 * 1a2. User enters the command again.
+    * 1a1. TaskForge displays an error message.
+    * 1a2. User enters the command again.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
 
-   Use case resumes from step 2.
+  Use case resumes from step 2.
 
 * 2a. TaskForge could not find the mentioned project.
-	 * 2a1. TaskForge displays an error message.
-	 * 2a2. User enters the command again.
-	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+    * 2a1. TaskForge displays an error message.
+    * 2a2. User enters the command again.
+    * Steps 2a1-2a2 are repeated until the input entered are valid.
 
-   Use case resumes from step 2.
+  Use case resumes from step 2.
 
 **Use case: UC04 Assign a project to a person**
 
@@ -685,18 +686,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. TaskForge detects invalid command input.
-	 * 1a1. TaskForge displays an error message.
-	 * 1a2. User enters the command again.
+    * 1a1. TaskForge displays an error message.
+    * 1a2. User enters the command again.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
 
-   Use case resumes from step 2.
+  Use case resumes from step 2.
 
 * 2a. TaskForge could not find the mentioned person.
-	 * 2a1. TaskForge displays an error message.
-	 * 2a2. User enters the command again.
-	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+    * 2a1. TaskForge displays an error message.
+    * 2a2. User enters the command again.
+    * Steps 2a1-2a2 are repeated until the input entered are valid.
 
-   Use case resumes from step 2.
+  Use case resumes from step 2.
 
 **Use case: UC05 Unassign a project from a person**
 
@@ -717,18 +718,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. Person does not exist.
-	 * 1a1. TaskForge shows an error message.
-	 * 1a2. User enters new input.
+    * 1a1. TaskForge shows an error message.
+    * 1a2. User enters new input.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
 
-   Use case ends.
+  Use case ends.
 
 * 2a. Project does not exist.
-	 * 2a1. TaskForge shows an error message.
-	 * 2a2. User enters new input.
-	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+    * 2a1. TaskForge shows an error message.
+    * 2a2. User enters new input.
+    * Steps 2a1-2a2 are repeated until the input entered are valid.
 
-     * Use case ends.
+    * Use case ends.
 
 **Use case: UC06 Assign a task to a person**
 
@@ -743,25 +744,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2. TaskForge displays the list of persons.
 3. User requests to assign a task to a person.
 4. TaskForge checks the existence of the person
-5. TaskForge assigns a project to a person and displays success message.
+5. TaskForge assigns a task to a person and displays success message.
 
    Use case ends.
 
 **Extensions**
 
 * 1a. TaskForge detects invalid command input.
-	 * 1a1. TaskForge displays an error message.
-	 * 1a2. User enters the command again.
+    * 1a1. TaskForge displays an error message.
+    * 1a2. User enters the command again.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
 
-   Use case resumes from step 2.
+  Use case resumes from step 2.
 
 * 2a. TaskForge could not find the mentioned person.
-	 * 2a1. TaskForge displays an error message.
-	 * 2a2. User enters the command again.
-	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+    * 2a1. TaskForge displays an error message.
+    * 2a2. User enters the command again.
+    * Steps 2a1-2a2 are repeated until the input entered are valid.
 
-   Use case resumes from step 2.
+  Use case resumes from step 2.
 
 **Use case: UC07 Unassign a task from a person**
 
@@ -782,18 +783,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. Person does not exist.
-	 * 1a1. TaskForge shows an error message.
-	 * 1a2. User enters new input.
+    * 1a1. TaskForge shows an error message.
+    * 1a2. User enters new input.
     * Steps 1a1-1a2 are repeated until the input entered are valid.
 
-   Use case ends.
+  Use case ends.
 
 * 2a. Task does not exist.
-	 * 2a1. TaskForge shows an error message.
-	 * 2a2. User enters new input.
-	 * Steps 2a1-2a2 are repeated until the input entered are valid.
+    * 2a1. TaskForge shows an error message.
+    * 2a2. User enters new input.
+    * Steps 2a1-2a2 are repeated until the input entered are valid.
 
-     * Use case ends.
+    * Use case ends.
 
 **Use case: UC08 List all persons**
 
@@ -807,11 +808,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. TaskForge detects error in CLI command.
-	 * 1a1. TaskForge returns the error message.
-	 * 1a2. User input another command.
+    * 1a1. TaskForge returns the error message.
+    * 1a2. User input another command.
     * Steps 1a1 - 1a2 are repeated until the command is correct.
 
-   Use case ends.
+  Use case ends.
 
 **Use case: UC09 Find projects by name**
 
@@ -854,14 +855,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. TaskForge shifts the current state into the previous state.
 4. TaskForge confirms to the user that the last action has been undone and displays the previous state.
 
-    Use case ends.
+   Use case ends.
 
 **Extensions**
 
 * 2a. No previous state available.
     * 2a1. TaskForge displays error message.
 
-    Use case ends.
+  Use case ends.
 
 *{More to be added}*
 
@@ -962,7 +963,7 @@ testers are expected to do more *exploratory* testing.
    i. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
    ii. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+   Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
 
@@ -971,55 +972,55 @@ testers are expected to do more *exploratory* testing.
 1. Deleting a person while all persons are being shown
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `add -n Alice -p 11111111 -e alice@example.com`
-   - `add -n Bob -p 22222222 -e bob@example.com`
-   - `list`
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `add -n Bob -p 22222222 -e bob@example.com`
+    - `list`
 
    ii. Test case: `delete 1`<br>
-      Expected: First person is deleted from the list. Details of the deleted person shown in the status message. Timestamp in the status bar is updated.
+   Expected: First person is deleted from the list. Details of the deleted person shown in the status message. Timestamp in the status bar is updated.
 
    iii. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
    iv. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+   Expected: Similar to previous.
 
 ### Finding a person (`find`)
 
 1. Finding persons by prefixed keywords
 
-   1. Prerequisites: Prepare a minimal dataset using the following inputs:
-      `clear`
-      `add -n Alice Tan -p 91234567 -e alice@example.com`
-      `add -n Bob Lee -p 92345678 -e bob@example.com`
-   2. Test case: `find -n alice`<br>
-      Expected: One person is listed (`Alice Tan`).
-   3. Test case: `find -n carol`<br>
-      Expected: No person is listed (`0 persons listed!`).
+    1. Prerequisites: Prepare a minimal dataset using the following inputs:
+       `clear`
+       `add -n Alice Tan -p 91234567 -e alice@example.com`
+       `add -n Bob Lee -p 92345678 -e bob@example.com`
+    2. Test case: `find -n alice`<br>
+       Expected: One person is listed (`Alice Tan`).
+    3. Test case: `find -n carol`<br>
+       Expected: No person is listed (`0 persons listed!`).
 
 ### Finding a project
 
 1. Finding projects by name
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `project add Alpha`
-   - `project add Alpha Backend`
-   - `project add Beta`
-   - `project list`
+    - `clear`
+    - `project add Alpha`
+    - `project add Alpha Backend`
+    - `project add Beta`
+    - `project list`
 
-    ii. Test case: `project find alpha`
-       Expected: The matching project is shown in the result display. (case-insensitive)
+   ii. Test case: `project find alpha`
+   Expected: The matching project is shown in the result display. (case-insensitive)
 
-    iii. Test case: `project find beta`
-       Expected: The matching project is shown in the result display. (case-insensitive)
+   iii. Test case: `project find beta`
+   Expected: The matching project is shown in the result display. (case-insensitive)
 
-    iv. Test case: `project find gamma`
-       Expected: A message is shown indicating that no matching projects were found.
+   iv. Test case: `project find gamma`
+   Expected: A message is shown indicating that no matching projects were found.
 
-    v. Test case: `project find`
-       Expected: Invalid command format message is shown.
+   v. Test case: `project find`
+   Expected: Invalid command format message is shown.
 
 1. _{ more test cases …​ }_
 
@@ -1028,54 +1029,54 @@ testers are expected to do more *exploratory* testing.
 1. Assigning one or more projects to a person
 
    i. Prerequisites: Prepare a minimal dataset using the following inputs:
-      `clear`
-      `add -n Alice -p 91234567 -e alice@example.com`
-      `project add Alpha`
-      `project add Beta`
+   `clear`
+   `add -n Alice -p 91234567 -e alice@example.com`
+   `project add Alpha`
+   `project add Beta`
    ii. Test case: `project assign 1 -i 1`<br>
-      Expected: Success message is shown. `list` displays Alice with project `Alpha` assigned.
+   Expected: Success message is shown. `list` displays Alice with project `Alpha` assigned.
    iii. Test case: `project assign 1 -i 2`<br>
-      Expected: Success message is shown. Alice now has both `Alpha` and `Beta` assigned.
+   Expected: Success message is shown. Alice now has both `Alpha` and `Beta` assigned.
    iv. Test case: `project assign 1 -i 1` (run again)<br>
-      Expected: No data is changed. A duplicate project error is shown.
+   Expected: No data is changed. A duplicate project error is shown.
 
 ### Unassigning a project (`project unassign`)
 
 1. Unassigning project(s) from a person
 
    i. Prerequisites: Prepare a minimal dataset using the following inputs:
-      `clear`
-      `add -n Alice -p 91234567 -e alice@example.com`
-      `project add Alpha`
-      `project add Beta`
-      `project assign 1 -i 1 -i 2`
-      `task add 1 -n Draft API`
-      `task add 2 -n Prepare Demo`
-      `task assign 1 -pi 1 -i 1 -pi 2 -i 1`
+   `clear`
+   `add -n Alice -p 91234567 -e alice@example.com`
+   `project add Alpha`
+   `project add Beta`
+   `project assign 1 -i 1 -i 2`
+   `task add 1 -n Draft API`
+   `task add 2 -n Prepare Demo`
+   `task assign 1 -pi 1 -i 1 -pi 2 -i 1`
    ii. Test case: `project unassign 1 -i 2`<br>
-      Expected: Success message is shown. Alice no longer has the second assigned project.
+   Expected: Success message is shown. Alice no longer has the second assigned project.
    iii. Test case: `project unassign 1 -i 3`<br>
-      Expected: No data is changed. An invalid project index error is shown.
+   Expected: No data is changed. An invalid project index error is shown.
 
 ### Editing a task (`task edit`)
 
 1. Renaming a task from a person's assigned task list
 
    i. Prerequisites: Prepare a minimal dataset using the following inputs:
-       `clear`
-       `add -n Alice -p 91234567 -e alice@example.com`
-       `project add Alpha`
-       `project assign 1 -i 1`
-       `task add 1 -n Draft API`
-       `task assign 1 -pi 1 -i 1`
+   `clear`
+   `add -n Alice -p 91234567 -e alice@example.com`
+   `project add Alpha`
+   `project assign 1 -i 1`
+   `task add 1 -n Draft API`
+   `task assign 1 -pi 1 -i 1`
    ii. Test case: `task edit 1 -i 1 -n Finalise API`<br>
-      Expected: Success message is shown. `task list 1` both show `Finalise API`, and `Draft API` is no longer shown.
+   Expected: Success message is shown. `task list 1` both show `Finalise API`, and `Draft API` is no longer shown.
    iii. Test case: `task edit 2 -i 1 -n Anything`<br>
-      Expected: No data is changed. An invalid person index error is shown.
+   Expected: No data is changed. An invalid person index error is shown.
    iv. Test case: `task edit 1 -i 2 -n Anything`<br>
-      Expected: No data is changed. A task index out-of-bound error is shown.
+   Expected: No data is changed. A task index out-of-bound error is shown.
    v. Test case: `task add 1 -n Prepare Demo`, then execute `task edit 1 -i 1 -n Prepare Demo`<br>
-      Expected: No data is changed. A duplicate task error is shown.
+   Expected: No data is changed. A duplicate task error is shown.
 
 ### Marking and unmarking a task (`task mark`, `task unmark`)
 
@@ -1083,178 +1084,149 @@ testers are expected to do more *exploratory* testing.
 
    i. Prerequisites: Reuse the dataset from the `task edit` section above.
    ii. Test case: `task mark 1 1`<br>
-      Expected: Success message is shown.
+   Expected: Success message is shown.
    iii. Test case: `task mark 1 1` (run again)<br>
-      Expected: No data is changed. An error indicates that the task is already marked as done.
+   Expected: No data is changed. An error indicates that the task is already marked as done.
    iv. Test case: `task unmark 1 1`<br>
-      Expected: Success message is shown.
+   Expected: Success message is shown.
 ### Adding a project
 
 1. Adding a project and verifying project uniqueness
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `list`
-   - `project list`
+    - `clear`
+    - `list`
+    - `project list`
 
    ii. Test case: `project add Alpha`<br>
-      Expected: Project `Alpha` is added successfully and appears in project list.
+   Expected: Project `Alpha` is added successfully and appears in project list.
 
    iii. Test case: `project add Alpha` (run again)<br>
-      Expected: Command fails with duplicate-project error. No new project is added.
+   Expected: Command fails with duplicate-project error. No new project is added.
 
    iv. Test case: `project add 你好`<br>
-      Expected: Invalid format/constraint error shown. No project is added.
+   Expected: Invalid format/constraint error shown. No project is added.
 
 ### Deleting a project
 
 1. Deleting a project and cascade cleanup all project instances
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `add -n Alice -p 11111111 -e alice@example.com`
-   - `project add Alpha`
-   - `project add Beta`
-   - `task add 1 -n SeedTask`
-   - `project assign 1 -i 1`
-   - `task assign 1 -pi 1 -i 1`
-   - `project list`
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `project add Alpha`
+    - `project add Beta`
+    - `task add 1 -n SeedTask`
+    - `project assign 1 -i 1`
+    - `task assign 1 -pi 1 -i 1`
+    - `project list`
 
    ii. Test case: `project delete 1`<br>
-      Expected: Project at index `1` is deleted. That project is deleted from every persons that have been assigned along with their tasks.
+   Expected: Project at index `1` is deleted. That project is deleted from every persons that have been assigned along with their tasks.
 
    iii. Test case: `project delete 0`<br>
-      Expected: Invalid project index error. No data changed.
+   Expected: Invalid project index error. No data changed.
 
 ### Adding a task
 
 1. Adding a task to a project and verifying task uniqueness in the project's task list
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `project add Alpha`
-   - `project list`
-   - `task list 1`
+    - `clear`
+    - `project add Alpha`
+    - `project list`
+    - `task list 1`
 
    ii. Test case: `task add 1 -n Review API`<br>
-      Expected: Task is added under project `1`.
-   
+   Expected: Task is added under project `1`.
+
    iii. Test case: `task add 1 -n Review API` (run again)<br>
-      Expected: Duplicate-task error for that project. No second copy is added.
+   Expected: Duplicate-task error for that project. No second copy is added.
 
    iv. Test case: `task add 999 -n Review API`<br>
-      Expected: Project index out of bound error.
+   Expected: Project index out of bound error.
 
 ### Deleting a task
 1. Deleting task(s) from a project and cascade cleanup all task instances
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `add -n Alice -p 11111111 -e alice@example.com`
-   - `project add Alpha`
-   - `project assign 1 -i 1`
-   - `task add 1 -n TempA`
-   - `task add 1 -n TempB`
-   - `task assign 1 -pi 1 -i 1`
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `project add Alpha`
+    - `project assign 1 -i 1`
+    - `task add 1 -n TempA`
+    - `task add 1 -n TempB`
+    - `task assign 1 -pi 1 -i 1`
 
    ii. Test case: `task delete 1 -i 1`<br>
-      Expected: Task at index `1` in project `1` is deleted. Any person assignment of that task is deleted. The other remaining task assignments of that persons will get their index renumbered.
+   Expected: Task at index `1` in project `1` is deleted. Any person assignment of that task is deleted. The other remaining task assignments of that persons will get their index renumbered.
 
    iii. Test case: `task delete 1 -i 999`<br>
-      Expected: Task index out of bound error. No task removed.
+   Expected: Task index out of bound error. No task removed.
 
 ### Assigning a task
 1. Assigning task(s) to a person
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `add -n Alice -p 11111111 -e alice@example.com`
-   - `project add Alpha`
-   - `project add Beta`
-   - `project assign 1 -i 1`
-   - `task add 1 -n AssignMe`
-   - `task add 2 -n BetaTask`
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `project add Alpha`
+    - `project add Beta`
+    - `project assign 1 -i 1`
+    - `task add 1 -n AssignMe`
+    - `task add 2 -n BetaTask`
 
    ii. Test case: `task assign 1 -pi 1 -i 1`<br>
-      Expected: Task is assigned to person `1` successfully.
+   Expected: Task is assigned to person `1` successfully.
 
    iii. Test case: `task assign 1 -pi 1 -i 1` (run again)<br>
-      Expected: Duplicate-task-assignment error.
+   Expected: Duplicate-task-assignment error.
 
    iv. Test case: `task assign 1 -pi 0 -i 1`<br>
-      Expected: Invalid project index error.
+   Expected: Invalid project index error.
 
    v. Test case: `task assign 1 -pi 1 -i 0`<br>
-      Expected: Invalid task index error.
+   Expected: Invalid task index error.
 
    vi. Test case: `task assign 1 -pi 2 -i 1` where person `1` is not assigned to project `2`<br>
-      Expected: Task does not exist in any person's project assigned error.
+   Expected: Task does not exist in any person's project assigned error.
 
 ### Unassigning a task
 1. Unassigning task(s) from a person
 
    i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `add -n Alice -p 11111111 -e alice@example.com`
-   - `project add Alpha`
-   - `project assign 1 -i 1`
-   - `task add 1 -n RemoveMe`
-   - `task assign 1 -pi 1 -i 1`
+    - `clear`
+    - `add -n Alice -p 11111111 -e alice@example.com`
+    - `project add Alpha`
+    - `project assign 1 -i 1`
+    - `task add 1 -n RemoveMe`
+    - `task assign 1 -pi 1 -i 1`
 
    ii. Test case: `task unassign 1 -i 1`<br>
-      Expected: First task in that person's assigned-task view is removed.
+   Expected: First task in that person's assigned-task view is removed.
 
    iii. Test case: `task unassign 1 -i 999`<br>
-      Expected: Task index out of bound error. No task removed.
+   Expected: Task index out of bound error. No task removed.
 
 1. Verifying `UniqueProjectList` and `UniqueTaskList` behavior through commands
-
-   i. Prerequistes: Execute the following commands before testing:
-   - `clear`
-   - `project add Alpha`
-   - `project add Beta`
-
-   i. `UniqueProjectList` check:
-      Add project title `Alpha` 2 times in a row using `project add Alpha` command
-      Expected: Second command fails as duplicate.
-
-   ii. `UniqueTaskList` check:
-      Add task title `Beta` 2 times in a row using `task add 1 -n Beta` command
-      Expected: Second command fails as duplicate.
-
-   iii. Control check:
-      Add same task name to a different project.
-      Execeute `task add 1 -n Beta` and then `task add 2 -n Beta`.
-      Expected: Allowed, because uniqueness is enforced per project task list.
-
-### Finding a project
-1. Finding project(s) by keyword
 
    i. Prerequistes: Execute the following commands before testing:
     - `clear`
     - `project add Alpha`
     - `project add Beta`
-    - `project add AlphaWeb`
-    - `project add Gamma`
 
-   ii. Test case: `project find Alpha`<br>
-   Expected: Projects containing `Alpha` are displayed.
+   i. `UniqueProjectList` check:
+   Add project title `Alpha` 2 times in a row using `project add Alpha` command
+   Expected: Second command fails as duplicate.
 
-   iii. Test case: `project find Beta`<br>
-   Expected: Project `Beta` is displayed.
+   ii. `UniqueTaskList` check:
+   Add task title `Beta` 2 times in a row using `task add 1 -n Beta` command
+   Expected: Second command fails as duplicate.
 
-   iv. Test case: `project find alpha`<br>
-   Expected: Behaviour depends on implementation (case-sensitive or case-insensitive).
-
-   v. Test case: `project find Zeta`<br>
-   Expected: No matching project found message.
-
-   vi. Test case: `project find`<br>
-   Expected: Invalid command format error.
-
-   vii. Test case: `project find Alpha Web`<br>
-   Expected: Projects matching the keywords are displayed.
-
+   iii. Control check:
+   Add same task name to a different project.
+   Execeute `task add 1 -n Beta` and then `task add 2 -n Beta`.
+   Expected: Allowed, because uniqueness is enforced per project task list.
 
 ### Help command
 1. Opening the help window
@@ -1401,7 +1373,7 @@ Team Size: 4
 
 3. **Improve error message for multiple task assignments**: The current behavior generates a general error message for every duplicate or invalid task assignment when executing the `assign` command. To tackle this, we plan to add the task details, such as the task name, in the error message so users can identify which assignment caused the issue.
 
-4. **Improve person name validation**: The current behaviour only accepts names containing alphabet characters. In the future, we plan to improve name validation to accept valid names containing special characters (for example: ', -).
+4. **Improve person name validation**: The current behaviour only accepts names containing alphanumerics and spaces. In the future, we plan to improve name validation to accept valid names containing special characters (for example: ', -).
 
 5. **Allow more phone numbers format**: The current implementation only support phone number entries with number only. We plan to improve our validator to accept more phone number formats.
 

@@ -99,11 +99,9 @@ public class CommandTestUtil {
 
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
-                .withProjects(VALID_PROJECT_ALPHA).withTasks(VALID_TASK_FIX_ERROR).build();
+                .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
-                .withProjects(VALID_PROJECT_ALPHA).withTasks(VALID_TASK_REFACTOR, VALID_TASK_FIX_ERROR).build();
+                .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).build();
     }
 
     /**

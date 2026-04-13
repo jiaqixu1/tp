@@ -1401,3 +1401,9 @@ Team Size: 4
 3. **Improve error message for multiple task assignments**: The current behavior generates a general error message for every duplicate or invalid task assignment when executing the `assign` command. To tackle this, we plan to add the task details, such as the task name, in the error message so users can identify which assignment caused the issue.
 
 4. **Improve person name validation**: The current behaviour only accepts names containing alphabet characters. In the future, we plan to improve name validation to accept valid names containing special characters (for example: ', -).
+
+5. **Allow more phone numbers format**: The current implementation only support phone number entries with number only. We plan to improve our validator to accept more phone number formats.
+
+6. **Allow special characters in project names**: The current implementation only support alphanumerics and spaces project names. We plan to update it to accept special characters in project names also.
+
+7. **Allow special characters in task names**: The current implementation only support alphanumerics and spaces task names. We plan to update it to accept special characters in task names also.
